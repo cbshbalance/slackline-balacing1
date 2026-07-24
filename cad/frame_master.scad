@@ -358,7 +358,26 @@ robot_l1 = 259;            // ankle axis -> hip axis [mm]. v5.3: 250 -> 259,
                            // 42 mm AS5047P board; the printed lower spine
                            // is reused unchanged, so the hip moves up by
                            // the same 9 mm. Sim params_v19 L1 = 0.259.
-robot_l2 = 350;            // hip axis -> head top, battery included [mm]
+robot_l2 = 372;            // hip axis -> head top, battery included [mm].
+                           // v5.2 bodyB: 350 -> 372 (+22). The battery
+                           // shelf / head is RAISED so the shelf no
+                           // longer covers the OpenCR top edge: the
+                           // board-top clearance grows 3 -> 25 mm for
+                           // extra cable connections (user request
+                           // 2026-07-24). The board itself does NOT move
+                           // (ocr_center_z unchanged -> ELL_IMU same);
+                           // only everything above it rides +22.
+                           // Print check: bodyB piece = 221 mm < 256
+                           // (Bambu X1C). Sim/FW: update params L2
+                           // 0.350 -> 0.372 (+ mass re-measure).
+                           // TRADE-OFF (see assembly echo): inverted-
+                           // hang floor clearance 132.2 -> 110.2 mm
+                           // (still safe); the RIGID-ROD full-sweep
+                           // margin vs the bottom Y brace goes NEGATIVE
+                           // (-15.5 mm) -> violent hanging swings are
+                           // now only safe below the phi limit printed
+                           // in the assembly echo (~+-18.4 deg).
+                           // Upright balancing is unaffected.
 hip_z    = robot_l1;
 
 // XM430-W210-R outline. The motor BODY is attached to the upper body
@@ -474,22 +493,39 @@ bulk_t = 3;                // central bulkhead plate thickness
 // Board BACK face x, derived so the component tips just clear the wall:
 ocr_back_x = -usp_x/2 + usp_wall_x + ocr_door_gap + ocr_comp_h + ocr_t;
 
-// Snap-rivet board mount (ROBOTIS PCB-support style, MEASURED (*)):
-// barrel dia 3.8, snapped tip 4.3, barrel (grip) length 2.7. The rivets
-// push in from the door side through board (1.6) + web (1.0) = 2.6 grip,
-// slightly snug. Each mount = a 1.0 web disc on a hollow stand-off tube
-// on the bulkhead: the tube void takes the snapped-open legs, and a
-// 3.5 mm push-out hole through the bulkhead PLUS a 4 mm access hole
-// through the X+ wall lets a pin poke them free from outside.
-riv_hole_d = 4.0;          // web hole for the 3.8 barrel
-riv_web_t = 1.0;
-riv_leg_room = 3.5;        // void depth behind the web for the legs
-riv_tube_od = 9;
-riv_tube_id = 6;
-bulk_x0 = ocr_back_x + riv_web_t + riv_leg_room;  // bulkhead front face
-                           // (rear channel bulk_x0+bulk_t .. +15 free)
-// (90 body) interior is 85 wide vs the 75 board: no wall grooves
-// needed, the four rivet mounts alone locate the board.
+// v5.2 bodyB OpenCR mount = TAPE PAD + BOTTOM SEATING LEDGE (the snap
+// rivets are RETIRED - tongue/rivet era problems: leg breakage, blocked
+// insertion, wiring interference; see 06/07 project logs). The bulkhead
+// is ADVANCED so its FRONT FACE is the board back plane: the whole face
+// is one big taping pad (double-sided "monster" tape), and a small
+// ledge under the board bottom edge takes the weight + sets the height.
+// The board goes in through the OPEN X- face (no door anymore).
+bulk_x0 = ocr_back_x;      // bulkhead front face = board back plane (tape pad)
+seat_t = 6;                // seating ledge protrusion in front of the pad
+seat_h = 6;                // ledge height below the board bottom edge
+seat_w = 60;               // ledge width along Y (under the 75 board) (*)
+// (90 body) interior is 85 wide vs the 75 board: the ledge + tape pad
+// alone locate the board, no wall grooves needed.
+// v6-era OPEN X- FACE: the equipment-bay X- wall is fully removed and
+// replaced by narrow RETURN LIPS on the Y-wall edges (stiffens the cut
+// edge; opening 79 wide in the 90 zone vs the 75 board).
+lip_ret_y = 3;             // return lip width at the open X- face
+// v6-era POWER TOGGLE = front-open slot in the battery-shelf front edge
+// (the switch clicks into the slot, actuator reached from the open face).
+tsl_w = 13;                // (*) toggle slot width along Y - MEASURE switch
+tsl_back_x = 13;           // (*) slot depth from the shelf front edge
+tsl_y = -20;               // (*) slot center Y - clear of the strap slots
+                           // (y +-8) and the Y+ T-plug pass; put it on
+                           // the real harness side after measuring
+// v5-era A-B SPLICE = CLOSED TELESCOPING SLEEVE (replaces the two
+// X-side tongues, which broke at the roots). A closed thin-wall box on
+// the bottom of B slides down into A's interior; a flare above the
+// split welds the sleeve into all four B walls. Two cross bolts as
+// before. The OpenCR no longer passes through here (it enters through
+// the open X- face), so the closed section costs nothing.
+slv_clr  = 0.3;            // per-side telescoping clearance into A
+slv_wall = 2.5;            // sleeve wall thickness
+slv_flare = 8;             // flare weld height above the split
 
 // 3S lipo INSIDE the flared head on a shelf (mass on the very top).
 // MEASURED pack 84 x 34 x 25, fully internal. BOTH leads (charge + T-plug
@@ -514,9 +550,14 @@ shelf_z0 = bat_z0 - shelf_t;
 strap_slot_w = 3;
 strap_slot_l = 16;
 
-// Board as high as possible under the shelf.
-ocr_top_gap = 3;
+// v5.2 bodyB: the shelf used to sit 3 mm over the board top edge and
+// COVERED it - no room to land extra cables on the board top. The shelf
+// (and the whole head) is raised +22 via robot_l2, and the clearance
+// over the board top is opened to 25 mm. Net: ocr_center_z is UNCHANGED
+// (565+22-25 = 540-... same 509.5 center), so ELL_IMU stays put.
+ocr_top_gap = 25;          // cable room over the board top edge (was 3)
 ocr_center_z = shelf_z0 - ocr_top_gap - ocr_l/2;
+ocr_bot_z = ocr_center_z - ocr_l/2;   // board bottom edge (ledge top)
 
 // X- service door: one T-shaped plate over the whole bay. Top edge
 // tucks into a rebate under the top cap (no top screws - the cap edge is
@@ -823,10 +864,16 @@ module rear_pivot_encoder_mount() {
         // open frame (tip ~ axis+27 < top bar interior +30); DOWN would
         // stab the aluminum profile. The old wire slot is gone - the
         // cable exits upward, then loops down the rear diagonal path.
+        // v5.4+ THROUGH-HOLE guarantee: the four M3 clearance holes must
+        // fully pierce the encoder plate (screws pass the plate and
+        // thread into the module's rear 8 mm posts). The cut cylinder
+        // overshoots the plate by 2 mm on BOTH faces (pure air on either
+        // side at the hole grid), so the holes stay cleanly open even if
+        // the plate position/thickness shifts in a future edit.
         for (sx = [-1, 1]) for (sz = [-1, 1])
             translate([axis_x + sx * as_hole_dx/2, y1 - t/2,
                        axis_z + sz * as_hole_dy/2])
-                cyl_y(t + 0.4, as_hole_d);
+                cyl_y(t + 4, as_hole_d);
 
         // M5 rail bolts down through the BOTTOM bar into the rear rail top
         // slot (the bracket now sits on top of the profile).
@@ -1428,20 +1475,43 @@ module robot_ankle_carrier_part(cutaway=false) {
                 cube([carrier_flange_x, carrier_flange_y, carrier_flange_t]);
 
             // Gussets: housing tops -> flange, one per side per housing.
+            // v5.2 carrier FIX: the raw hull used to bulge INBOARD past
+            // the end-wall / housing inner face (|y|=31, down to |y|=29.6
+            // at z 5..9) - right into the swept volume of the rotating
+            // inner lock collar (max radial extent 12.8 over |y| 24.4..
+            // 30.4). Each gusset is now CLIPPED at the housing inner
+            // face plane: nothing protrudes past the end wall into the
+            // open center.
             for (sx = [-1, 1]) for (sy = [-1, 1])
-                hull() {
-                    translate([sx*(carrier_flange_x/2 - 5),
-                               sy*(carrier_len/2 - 6), carrier_flange_z0 + 2])
-                        sphere(d=6);
-                    translate([sx*12, sy*(carrier_len/2 - akc_hous_len/2), 8])
-                        sphere(d=12);
+                intersection() {
+                    hull() {
+                        translate([sx*(carrier_flange_x/2 - 5),
+                                   sy*(carrier_len/2 - 6), carrier_flange_z0 + 2])
+                            sphere(d=6);
+                        translate([sx*12, sy*(carrier_len/2 - akc_hous_len/2), 8])
+                            sphere(d=12);
+                    }
+                    // keep only the material outboard of |y| = akc_inner_wall
+                    translate([-60, sy == 1 ? akc_inner_wall : -akc_inner_wall - 60,
+                               -30])
+                        cube([120, 60, 90]);
                 }
         }
 
         // 608 pockets from the outer faces + land bores (outer-race stop).
         for (yoff = [-rb_spacing/2, rb_spacing/2])
             translate([0, yoff, 0]) cyl_y(brg_w + 0.35, brg_od + 0.35);
-        cyl_y(2*akc_ring_face - brg_w + 0.7, top_center_bore_d);
+        // v5.2 carrier FIX: the land bore must reach ALL THE WAY to the
+        // bearing inner-ring faces (|y| = akc_ring_face). The old cut
+        // (2*ring_face - brg_w) stopped at |y| = 29.85 and left the
+        // 31..33 land walls solid except for the 8.4 shaft bore, so the
+        // 11.4 OD collar nose could not pass - the collar clamped against
+        // the printed wall and RUBBED on it instead of seating on the
+        // inner ring. Bore d19 (= outer-race ID land bore, > inner ring
+        // OD 12, < bearing OD 22): the wall face near the ring is fully
+        // opened, the nose reaches the inner ring, the printed land
+        // touches only the stationary outer race.
+        cyl_y(2*akc_ring_face + 0.7, top_center_bore_d);
 
         cyl_y(carrier_len + 2, shaft_clearance_d);
 
@@ -1596,25 +1666,35 @@ module robot_upper_body_a_part() {
 }
 
 module robot_upper_body_b_part() {
-    // Upper half of the upper spine = v4 equipment bay:
-    //   - splice TONGUES below (X sides only - a full sleeve box would
-    //     block the 75 mm wide OpenCR sliding up through the open bottom),
-    //   - central bulkhead carrying the OpenCR vertically on the swing
-    //     centerline, components facing the X- service door,
+    // v5.2 bodyB = A/B-final equipment bay, DOOR RETIRED:
+    //   - CLOSED TELESCOPING SLEEVE below (replaces the two X-side
+    //     tongues that broke at the roots): a thin closed box slides
+    //     down into A's interior, a flare above the split welds it into
+    //     all four B walls, two cross bolts as before,
+    //   - OPEN X- FACE with return lips instead of a screwed door: the
+    //     whole equipment-bay X- wall is gone, board / battery / wiring
+    //     are reached directly (opening 79 wide vs the 75 board),
+    //   - OpenCR = TAPE PAD + BOTTOM LEDGE: bulkhead front face is the
+    //     board back plane (monster tape), a small ledge under the board
+    //     bottom edge takes the weight; snap rivets retired,
+    //   - shelf/head RAISED +22 (robot_l2 372): 25 mm of open cable room
+    //     over the board top edge (the shelf used to cover it at 3 mm),
     //   - battery shelf at the very top in the flared (98) head; the
-    //     84 mm pack butts on the Y- wall, its leads bend in the 8.5 mm
-    //     Y+ lead bay, the charge lead hangs out the charge window; the
-    //     pack slides in along X through the door's battery-bay opening,
-    //   - X- wall is one big door opening (robot_upper_body_door_part).
-    // Assembly: board up through the bottom along the Y-wall grooves,
-    // 4 snap rivets pushed in from the door side, wires, battery in
-    // along X onto the shelf, strap, door on, then splice onto part A
-    // (2 cross bolts).
-    // Print UPRIGHT, tongues down (closed hollow box: printed lying down
-    // the inner ceiling is an unreachable full-length bridge). Only the
-    // battery shelf bridges ~30 mm across X - allow bridging or supports.
-    sleeve_x = usp_x - 2*usp_wall_x - 0.6;
-    sleeve_y = usp_y_wide - 2*usp_wall_y - 0.6;
+    //     84 mm pack butts on the Y- wall, leads bend in the 8.5 mm Y+
+    //     lead bay, charge lead out the charge window, pack in along X
+    //     through the open face; POWER TOGGLE clicks into a front-open
+    //     slot in the shelf front edge.
+    // Assembly: sleeve into A (2 cross bolts) -> board in through the
+    // open face onto the ledge, tape to the pad -> wires (extra cables
+    // land on the board top edge, 25 mm room) -> battery in along X onto
+    // the shelf, strap -> toggle into the shelf slot.
+    // Print UPRIGHT as placed, sleeve down (~221 tall - fits X1C 256).
+    // The battery shelf bridges ~30 mm across X - allow bridging or a
+    // little support through the open face.
+    slv_ox = usp_x - 2*usp_wall_x - 2*slv_clr;        // 29.4
+    slv_oy = usp_y_wide - 2*usp_wall_y - 2*slv_clr;   // 84.4
+    open_w_body = usp_y_wide - 2*usp_wall_y - 2*lip_ret_y;   // 79
+    open_w_head = usp_y_head - 2*usp_wall_y - 2*lip_ret_y;   // 87
 
     color(c_rup)
     difference() {
@@ -1632,57 +1712,62 @@ module robot_upper_body_b_part() {
             translate([-usp_x/2, -usp_y_head/2, usp_z1 - usp_cap_t])
                 cube([usp_x, usp_y_head, usp_cap_t]);
 
-            // Splice tongues sliding down into part A (X sides only).
-            for (sx = [-1, 1])
-                translate([sx > 0 ? sleeve_x/2 - 4 : -sleeve_x/2,
-                           -sleeve_y/2, usp_split_z - usp_sleeve_len])
-                    cube([4, sleeve_y, usp_sleeve_len + 2]);
+            // v5.2: CLOSED telescoping splice sleeve into part A.
+            difference() {
+                translate([-slv_ox/2, -slv_oy/2, usp_split_z - usp_sleeve_len])
+                    cube([slv_ox, slv_oy, usp_sleeve_len]);
+                translate([-slv_ox/2 + slv_wall, -slv_oy/2 + slv_wall,
+                           usp_split_z - usp_sleeve_len - 1])
+                    cube([slv_ox - 2*slv_wall, slv_oy - 2*slv_wall,
+                          usp_sleeve_len + 2]);
+            }
+            // Flare weld: sleeve section grows to B's interior over
+            // slv_flare above the split (0.2 bite into each wall).
+            difference() {
+                hull() {
+                    translate([-slv_ox/2, -slv_oy/2, usp_split_z])
+                        cube([slv_ox, slv_oy, 0.01]);
+                    translate([-(usp_x - 2*usp_wall_x + 0.4)/2,
+                               -(usp_y_wide - 2*usp_wall_y + 0.4)/2,
+                               usp_split_z + slv_flare - 0.01])
+                        cube([usp_x - 2*usp_wall_x + 0.4,
+                              usp_y_wide - 2*usp_wall_y + 0.4, 0.01]);
+                }
+                translate([-slv_ox/2 + slv_wall, -slv_oy/2 + slv_wall,
+                           usp_split_z - 1])
+                    cube([slv_ox - 2*slv_wall, slv_oy - 2*slv_wall,
+                          slv_flare + 2]);
+            }
 
-            // Central bulkhead, welded into both Y walls; carries the
-            // board bosses and props the battery shelf from below.
-            translate([bulk_x0, -usp_y_wide/2 + 1,
-                       ocr_center_z - ocr_l/2 - 2])
-                cube([bulk_t, usp_y_wide - 2,
-                      shelf_z0 - (ocr_center_z - ocr_l/2 - 2)]);
+            // Central bulkhead, welded into both Y walls; its FRONT FACE
+            // (x = bulk_x0) is the board back plane = the taping pad; it
+            // also props the battery shelf from below.
+            translate([bulk_x0, -usp_y_wide/2 + 1, ocr_bot_z - 2])
+                cube([bulk_t, usp_y_wide - 2, shelf_z0 - (ocr_bot_z - 2)]);
 
-            // Snap-rivet board mounts on the bulkhead: 1.0 web disc on
-            // a hollow stand-off tube (legs snap open inside the tube).
-            for (sy = [-1, 1]) for (sz = [-1, 1])
-                translate([ocr_back_x, sy*ocr_hole_dy/2,
-                           ocr_center_z + sz*ocr_hole_dz/2])
-                    rotate([0, 90, 0]) {
-                        cylinder(h=riv_web_t, d=riv_tube_od);
-                        difference() {
-                            cylinder(h=riv_web_t + riv_leg_room + 0.1,
-                                     d=riv_tube_od);
-                            translate([0, 0, -0.1])
-                                cylinder(h=riv_web_t + riv_leg_room + 0.3,
-                                         d=riv_tube_id);
-                        }
-                    }
+            // v5.2: bottom seating ledge - the board rests on its top
+            // face (z = ocr_bot_z) while the tape holds it to the pad.
+            translate([bulk_x0 - seat_t, -seat_w/2, ocr_bot_z - seat_h])
+                cube([seat_t + 0.5, seat_w, seat_h]);
 
-            // Battery shelf, front edge flush with the door opening.
+            // Battery shelf, front edge at the open face line.
             translate([-usp_x/2 + usp_wall_x, -usp_y_head/2 + 1, shelf_z0])
                 cube([usp_x - usp_wall_x - 3, usp_y_head - 2, shelf_t]);
-
-            // Door-screw bosses behind the X- wall (self-tap engagement
-            // 4 mm wall + 5 mm boss; clear of the board plane at x>-0.5).
-            for (sy = [-1, 1])
-                for (zz = [door_z0 + 4, (door_z0 + shelf_z0)/2 - 2,
-                           shelf_z0 - 8])
-                    translate([-usp_x/2 + usp_wall_x - 1, sy*door_screw_y, zz])
-                        rotate([0, 90, 0]) cylinder(h=6, d=8);
         }
 
-        // Service door opening through the X- wall: 66 wide over the
-        // board zone, FULL interior width over the battery bay (the pack
-        // slides in through here along X onto the shelf).
-        translate([-usp_x/2 - 1, -door_open_y/2, door_z0])
-            cube([usp_wall_x + 2, door_open_y, shelf_z0 - door_z0]);
-        translate([-usp_x/2 - 1, -(usp_y_head/2 - usp_wall_y) - 0.01,
-                   shelf_z0])
-            cube([usp_wall_x + 2, usp_y_head - 2*usp_wall_y + 0.02,
-                  door_z1 - shelf_z0]);
+        // v5.2 OPEN X- FACE (door retired): remove the whole X- wall
+        // over the bay, leaving lip_ret_y return lips on the Y edges.
+        // 90 zone opening 79 (vs 75 board); flare/head zone opening 87.
+        translate([-usp_x/2 - 1, -open_w_body/2, usp_split_z + slv_flare])
+            cube([usp_wall_x + 2, open_w_body,
+                  head_flare_z1 - (usp_split_z + slv_flare)]);
+        translate([-usp_x/2 - 1, -open_w_head/2, head_flare_z1])
+            cube([usp_wall_x + 2, open_w_head,
+                  usp_z1 - usp_cap_t - head_flare_z1]);
+
+        // v5.2: front-open power-toggle slot in the shelf front edge.
+        translate([-usp_x/2 + usp_wall_x - 1, tsl_y - tsl_w/2, shelf_z0 - 1])
+            cube([tsl_back_x + 1, tsl_w, shelf_t + 2]);
 
         // Output-plug pass: the T plug (15 x 10 (*)) drops from the
         // lead bay through the shelf down to the board space.
@@ -1697,43 +1782,8 @@ module robot_upper_body_b_part() {
                    (bat_z0 + bat_z1)/2 - chg_win_z/2])
             cube([chg_win_x, usp_wall_y + 2, chg_win_z]);
 
-        // Rivet holes through the webs, and push-out holes through the
-        // bulkhead behind them (poke the legs to release the board).
-        for (sy = [-1, 1]) for (sz = [-1, 1]) {
-            translate([ocr_back_x - 1, sy*ocr_hole_dy/2,
-                       ocr_center_z + sz*ocr_hole_dz/2])
-                rotate([0, 90, 0])
-                    cylinder(h=riv_web_t + 2, d=riv_hole_d);
-            translate([bulk_x0 - 0.1, sy*ocr_hole_dy/2,
-                       ocr_center_z + sz*ocr_hole_dz/2])
-                rotate([0, 90, 0])
-                    cylinder(h=bulk_t + 0.2, d=3.5);
-            // Pin access through the X+ wall, coaxial with the push hole.
-            translate([usp_x/2 - usp_wall_x - 0.5, sy*ocr_hole_dy/2,
-                       ocr_center_z + sz*ocr_hole_dz/2])
-                rotate([0, 90, 0])
-                    cylinder(h=usp_wall_x + 1.5, d=4);
-        }
-
-        // Door screw pilots: 3 pairs into the X- wall side lands, each
-        // backed by an internal boss -> ~9 mm of self-tap engagement (a
-        // bare 4 mm wall is too shallow). NO screws at the top: the cap
-        // edge is too thin for a pilot, the door top edge tucks into the
-        // cap rebate instead.
-        for (sy = [-1, 1])
-            for (zz = [door_z0 + 4, (door_z0 + shelf_z0)/2 - 2,
-                       shelf_z0 - 8])
-                translate([-usp_x/2 - 1, sy*door_screw_y, zz])
-                    rotate([0, 90, 0])
-                        cylinder(h=usp_wall_x + 6.5, d=door_bolt_d);
-
-        // Rebate in the top cap X- edge: the door's top lip tucks in
-        // here (tilt the door top in first, swing flat, then screw).
-        translate([-usp_x/2 - 0.1, -44, usp_z1 - usp_cap_t - 0.4])
-            cube([2.9, 88, 2.4]);
-
         // Battery strap slots through the shelf (strap wraps the pack
-        // across X, buckle on the door side).
+        // across X, buckle on the open-face side).
         for (sx = [-1, 1])
             translate([sx*13, 0, shelf_z0 + shelf_t/2])
                 cube([strap_slot_w, strap_slot_l, shelf_t + 2], center=true);
@@ -1893,7 +1943,8 @@ module robot_assembly(p_ankle) {
                 // Battery on the shelf, butted on the Y- head wall.
                 translate([0, bat_y_mid, (bat_z0 + bat_z1)/2]) lipo_vis();
 
-                robot_upper_body_door_part();
+                // v5.2: NO door - the X- face is open (door retired,
+                // A/B-final configuration).
             }
         }
 
@@ -2067,8 +2118,8 @@ if (is_undef(part_mode) || part_mode == "assembly") {
     echo("Robot alpha: FREE (no stop). v5.2 retention: hub|ring|inner-collar per crank + top collars");
     echo(str("Inverted hang (alpha=180, phi=0) floor clearance [mm] = ",
              axis_z - sag - usp_z1));
-    robot_half_x = usp_x/2 + door_t + 2;  // v4: door face + screw heads
-                                          // (was 34: old top tray corner)
+    robot_half_x = usp_x/2 + 2;  // v5.2 bodyB: door retired (open face),
+                                 // margin for the wall + taped wiring
     robot_hang_len = usp_z1;   // ankle -> head cap top (battery now inside)
     phi_hit_x = asin((frame_x - profile - axis_x - robot_half_x) / sag);
     phi_hit_z = acos(max(-1, min(1,
@@ -2092,7 +2143,9 @@ if (is_undef(part_mode) || part_mode == "assembly") {
     echo(str("OpenCR (IMU) center above hip [mm] = ", ocr_center_z - hip_z,
              "  -> firmware ELL_IMU candidate (v4 internal mount: update FW)"));
     echo("Robot mass estimate: lower ~230 g / upper ~550 g+ (re-weigh: measured 84x34x25 pack) -> ~30:70");
-    echo("Printed robot parts v5.3: ankle_carrier(OPEN, raised bridge), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_body a/b");
+    echo("Printed robot parts: ankle_carrier v5.2 (OPEN, land bore THROUGH d19, clipped gussets), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_bodyA v5.1, upper_bodyB v5.2 (open X- face, tape mount, sleeve splice, +22 tall - NO door)");
+    echo(str("bodyB piece height [mm] = ", usp_z1 - (usp_split_z - usp_sleeve_len),
+             "  (X1C limit 256) | board-top cable room [mm] = ", ocr_top_gap));
     echo("Printed rope parts v5: lower_socket front/rear (WITH integrated axles), upper sockets (rear tip = magnet pocket)");
     echo("============================================================");
 } else if (part_mode == "lower_socket") {
@@ -2163,7 +2216,5 @@ if (is_undef(part_mode) || part_mode == "assembly") {
                 cube([50, 60, usp_z1 - usp_split_z + usp_sleeve_len + 2]);
     }
 } else if (part_mode == "upper_body_door") {
-    // Flat on the bed, outer face down.
-    translate([-(door_z0 + door_z1)/2, 0, -usp_x/2])
-        rotate([0, 90, 0]) robot_upper_body_door_part();
+    echo("DEPRECATED (v5.2 bodyB): upper_body_door is retired - the bodyB X- face is OPEN (no door). Do not print.");
 }

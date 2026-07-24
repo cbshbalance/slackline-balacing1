@@ -1,5 +1,5 @@
 // Standalone front bearing mount part.
-// Edit shared dimensions in frame_v3.scad so the assembly and this part stay linked.
+// Edit shared dimensions in frame_master.scad so the assembly and this part stay linked.
 
 part_mode = "bearing_mount";
 part_cutaway = false;     // true shows the two 608 pockets and center land
