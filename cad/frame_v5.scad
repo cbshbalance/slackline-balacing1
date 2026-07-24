@@ -177,6 +177,10 @@ inner_ring_contact_len = 1.2;
 lock_collar_t = 6;
 lock_collar_od = 15;
 lock_collar_shaft_clearance = 2.0;
+// v5.4 MEASURED: collar bore off the ACTUAL printed axle (shaft_print_d=7.8),
+// not the nominal 8. Was shaft_d+0.25 = 8.25 -> 0.45 loose on the 7.8 axle.
+// Snug clamp fit now; the split + bolt grips it. Raise +0.1 if the axle prints fat.
+lock_collar_bore = shaft_print_d + 0.1;   // 7.9 (down from 8.25)
 lock_bolt_d = 3.2;         // M3 clearance for the lock collar clamp bolt
 lock_slit_w = 1.2;
 lock_lug_w = 4.0;          // one top lug width across X
@@ -272,9 +276,11 @@ coupler_lug_inset = 1.0;
 as_pcb_w  = 42;    // PCB width across X (*)
 as_pcb_h  = 42;    // PCB height across Z (*)
 as_pcb_t  = 1.6;
-as_hole_dx = 37;   // 4-corner hole grid pitch across X (*)
-as_hole_dy = 37;   // 4-corner hole grid pitch across Z (*)
-as_hole_d  = 2.7;  // M3 SELF-TAP PILOT in printed plastic (*).
+as_hole_dx = 34;   // v5.4 MEASURED: 4-corner grid, holes 4 mm in from each
+as_hole_dy = 34;   //   edge => +-17 (was 37 assumed).
+as_hole_d  = 3.4;  // v5.4 MEASURED: M3 CLEARANCE (was 2.7 self-tap). The
+                   //   screw passes the bracket and threads into the
+                   //   module's rear post end, so the plate is clearance.
                    // Convention (v4-proven): pilot = bolt OD - 0.3.
                    // Corner holes on the photo look M3-sized - MEASURE.
                    // The PCB's own holes are on the module, not printed.
@@ -282,6 +288,10 @@ as_conn_out = 6;   // SMT connector protrusion beyond the PCB edge (*)
 as_conn_w   = 16;  // SMT connector width along the edge (*)
 as_conn_t   = 6;   // SMT connector height off the chip-side face (*)
 as_gap     = 1.5;  // magnet face -> chip/PCB face air gap (0.5..3 ok)
+as_back_post = 8;  // v5.4 MEASURED: the real module has four ~8 mm posts on
+                   // the PCB BACK (r3/d6), screw ends threaded. The mounting
+                   // plate is set back this far so the posts span the gap;
+                   // the chip<->magnet air gap (as_gap) is UNCHANGED.
 mag_d = 6;             // diametral magnet 6 x 2.5 (glued)
 mag_t = 2.5;
 mag_pocket_d = 6.15;   // glue fit
@@ -329,7 +339,7 @@ rear_shaft_tip_y     = rear_outer_bearing_y + rear_shaft_out;
 // face -> plate. The PCB screws to the plate inner face with 2 x M2
 // self-taps; nothing engages the shaft, so NO coupler and no axial chain
 // tolerance - the air gap is pure print geometry.
-enc_plate_in_y  = rear_shaft_tip_y + mag_proud + as_gap + as_pcb_t;
+enc_plate_in_y  = rear_shaft_tip_y + mag_proud + as_gap + as_pcb_t + as_back_post;  // v5.4 +8 standoff
 enc_plate_out_y = enc_plate_in_y + enc_bracket_t;
 as_pivot_pcb_y  = rear_shaft_tip_y + mag_proud + as_gap;  // PCB front face
 // legacy aliases still used by the service loop / echo:
@@ -1026,7 +1036,7 @@ module lock_collar_at_y_n(face_y, dir, nose_len) {
     total_y = face_y + dir * total_t/2;
     lug_x = lock_slit_w/2 + lock_lug_w/2 - lock_lug_inset;
     lug_z = lock_collar_od/2 - lock_lug_bite + lock_lug_h/2;
-    slit_bottom_z = (shaft_d + 0.25)/2 - 0.6;
+    slit_bottom_z = lock_collar_bore/2 - 0.6;
     slit_top_z = lug_z + lock_lug_h/2 + 0.3;
     slit_z = (slit_bottom_z + slit_top_z) / 2;
     slit_h = slit_top_z - slit_bottom_z;
@@ -1048,7 +1058,7 @@ module lock_collar_at_y_n(face_y, dir, nose_len) {
         }
 
         translate([0, face_y + dir * (nose_len + lock_collar_t)/2, 0])
-            cyl_y(nose_len + lock_collar_t + 0.4, shaft_d + 0.25);
+            cyl_y(nose_len + lock_collar_t + 0.4, lock_collar_bore);
 
         // Clamp bolt hole. It sits above the shaft bore and pulls the split
         // collar closed instead of passing through the shaft.
@@ -1379,7 +1389,7 @@ akc_brk_w    = 46;                               // v5.3 bracket width across X
 // board's top edge (z=+21) sweeps right under the bar zone. The bar now
 // begins exactly at the plate front plane (= board back plane) and runs
 // aft, so nothing hangs over the board.
-akc_brk_bar_y0 = akc_pcb_y + as_pcb_t;           // -16.6, plate front plane
+akc_brk_bar_y0 = akc_pcb_y + as_pcb_t + as_back_post;  // v5.4: +8 standoff
 akc_brk_bar_y1 = -4;
 // Screw row BEHIND the vertical plate: M3 CLEARANCE through-holes in the
 // bar, self-tap PILOTS in the bridge.
@@ -1461,7 +1471,7 @@ module ankle_pcb_bracket_part(with_pcb_vis=false) {
     // The board's SMT connector (P3, SPI) sits on the chip side at the
     // -X edge and exits SIDEWAYS through the open center - no slot
     // needed in the plate. PCB screws to the plate BEFORE mounting.
-    plate_y0 = akc_pcb_y + as_pcb_t;             // plate front face
+    plate_y0 = akc_pcb_y + as_pcb_t + as_back_post;  // plate front (+8 standoff)
     plate_z0 = -as_pcb_h/2 - 2;                  // -23, under board edge
     plate_z1 = akc_bridge_z0 - 0.2;              // 22.8, air to the bridge
     color([0.95, 0.62, 0.15])
