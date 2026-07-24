@@ -506,10 +506,17 @@ seat_h = 6;                // ledge height below the board bottom edge
 seat_w = 60;               // ledge width along Y (under the 75 board) (*)
 // (90 body) interior is 85 wide vs the 75 board: the ledge + tape pad
 // alone locate the board, no wall grooves needed.
-// v6-era OPEN X- FACE: the equipment-bay X- wall is fully removed and
-// replaced by narrow RETURN LIPS on the Y-wall edges (stiffens the cut
-// edge; opening 79 wide in the 90 zone vs the 75 board).
-lip_ret_y = 3;             // return lip width at the open X- face
+// v5.3 FULLY OPEN X- FACE: the return lips are removed (lip_ret_y = 0)
+// so the opening spans the FULL interior width - 85 in the 90 zone,
+// 93 in the head. Reason: the OpenCR connects not only along the board
+// normal (X-) but also along the board plane (power lead, USB and pin
+// headers on the board edges, pointing +-Y/+-Z) - those cables need to
+// bend out through the front, so the face is opened to the maximum.
+// Stiffness: the edge-stiffening job moves entirely to the advanced
+// bulkhead (welded across both Y walls over the full board height),
+// the closed X+ wall, the flare weld below and the cap/head above -
+// the lips were auxiliary (06 log: "주 보강은 전진시킨 격벽").
+lip_ret_y = 0;             // v5.3: no lips - fully open service face
 // v6-era POWER TOGGLE = front-open slot in the battery-shelf front edge
 // (the switch clicks into the slot, actuator reached from the open face).
 tsl_w = 13;                // (*) toggle slot width along Y - MEASURE switch
@@ -1671,9 +1678,11 @@ module robot_upper_body_b_part() {
     //     tongues that broke at the roots): a thin closed box slides
     //     down into A's interior, a flare above the split welds it into
     //     all four B walls, two cross bolts as before,
-    //   - OPEN X- FACE with return lips instead of a screwed door: the
-    //     whole equipment-bay X- wall is gone, board / battery / wiring
-    //     are reached directly (opening 79 wide vs the 75 board),
+    //   - FULLY OPEN X- FACE (v5.3, lips removed): the whole equipment-
+    //     bay X- wall is gone across the FULL interior width - board /
+    //     battery / wiring are reached directly, and edge cables (power,
+    //     USB, headers pointing along the board plane) bend out through
+    //     the front (opening 85 vs the 75 board; head zone 93),
     //   - OpenCR = TAPE PAD + BOTTOM LEDGE: bulkhead front face is the
     //     board back plane (monster tape), a small ledge under the board
     //     bottom edge takes the weight; snap rivets retired,
@@ -1755,9 +1764,9 @@ module robot_upper_body_b_part() {
                 cube([usp_x - usp_wall_x - 3, usp_y_head - 2, shelf_t]);
         }
 
-        // v5.2 OPEN X- FACE (door retired): remove the whole X- wall
-        // over the bay, leaving lip_ret_y return lips on the Y edges.
-        // 90 zone opening 79 (vs 75 board); flare/head zone opening 87.
+        // v5.3 FULLY OPEN X- FACE: remove the whole X- wall over the
+        // bay across the full interior width (no lips - see lip_ret_y).
+        // 90 zone opening 85 (vs 75 board); flare/head zone opening 93.
         translate([-usp_x/2 - 1, -open_w_body/2, usp_split_z + slv_flare])
             cube([usp_wall_x + 2, open_w_body,
                   head_flare_z1 - (usp_split_z + slv_flare)]);
@@ -2143,7 +2152,7 @@ if (is_undef(part_mode) || part_mode == "assembly") {
     echo(str("OpenCR (IMU) center above hip [mm] = ", ocr_center_z - hip_z,
              "  -> firmware ELL_IMU candidate (v4 internal mount: update FW)"));
     echo("Robot mass estimate: lower ~230 g / upper ~550 g+ (re-weigh: measured 84x34x25 pack) -> ~30:70");
-    echo("Printed robot parts: ankle_carrier v5.2 (OPEN, land bore THROUGH d19, clipped gussets), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_bodyA v5.1, upper_bodyB v5.2 (open X- face, tape mount, sleeve splice, +22 tall - NO door)");
+    echo("Printed robot parts: ankle_carrier v5.2 (OPEN, land bore THROUGH d19, clipped gussets), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_bodyA v5.1, upper_bodyB v5.3 (FULLY open X- face 85/93, tape mount, sleeve splice, +22 tall - NO door)");
     echo(str("bodyB piece height [mm] = ", usp_z1 - (usp_split_z - usp_sleeve_len),
              "  (X1C limit 256) | board-top cable room [mm] = ", ocr_top_gap));
     echo("Printed rope parts v5: lower_socket front/rear (WITH integrated axles), upper sockets (rear tip = magnet pocket)");
