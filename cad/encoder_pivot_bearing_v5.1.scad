@@ -5,4 +5,4 @@ part_mode = "bearing_mount";
 part_cutaway = false;     // true shows the two 608 pockets and center land
 print_export = true;      // use high quality $fn for STL export
 
-include <frame_v3.scad>
+include <frame_master.scad>

@@ -9,4 +9,4 @@ part_mode = "ankle_section";
 part_cutaway = true;       // true = half cut away, false = intact
 print_export = false;      // fast preview quality
 
-include <frame_v5.scad>
+include <frame_master.scad>

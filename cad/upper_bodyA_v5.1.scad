@@ -6,4 +6,4 @@ part_mode = "upper_body_a";
 part_cutaway = false;     // true removes a corner quarter to inspect the box interior
 print_export = true;      // use high quality $fn for STL export
 
-include <frame_v4.scad>
+include <frame_master.scad>
