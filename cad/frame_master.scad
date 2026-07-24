@@ -506,17 +506,27 @@ seat_h = 6;                // ledge height below the board bottom edge
 seat_w = 60;               // ledge width along Y (under the 75 board) (*)
 // (90 body) interior is 85 wide vs the 75 board: the ledge + tape pad
 // alone locate the board, no wall grooves needed.
-// v5.3 FULLY OPEN X- FACE: the return lips are removed (lip_ret_y = 0)
-// so the opening spans the FULL interior width - 85 in the 90 zone,
+// v5.3 FULLY OPEN X- FACE: the return lips were removed (lip_ret_y=0)
+// so the opening spans the full interior width - 85 in the 90 zone,
 // 93 in the head. Reason: the OpenCR connects not only along the board
 // normal (X-) but also along the board plane (power lead, USB and pin
-// headers on the board edges, pointing +-Y/+-Z) - those cables need to
-// bend out through the front, so the face is opened to the maximum.
-// Stiffness: the edge-stiffening job moves entirely to the advanced
-// bulkhead (welded across both Y walls over the full board height),
-// the closed X+ wall, the flare weld below and the cap/head above -
-// the lips were auxiliary (06 log: "주 보강은 전진시킨 격벽").
-lip_ret_y = 0;             // v5.3: no lips - fully open service face
+// headers on the board edges, pointing +-Y/+-Z).
+// v5.4 bodyB THREE-SIDE OPEN BAY (cable-face MAXIMIZED, user request
+// 2026-07-24/25): a full-width X- opening alone still leaves the Y
+// walls 5 mm off the 75 board's side edges - in-plane edge plugs
+// (power cable, micro-USB, switch) have no straight lateral insertion
+// path. So below the battery shelf EVERYTHING in front of the bulkhead
+// plane (x < bulk_x0) is removed over the full bay height: the X-
+// wall AND both Y-wall front strips. The board zone is open on X-,
+// Y- and Y+; every edge connector gets a straight, unobstructed
+// plug/cable path. Above the shelf the v5.3 full-width X- opening
+// (93, no lips) is kept for the battery zone.
+// Structure: bulkhead (welded into both Y walls) + rear Y-wall strips
+// + the full X+ wall form a CLOSED rear torsion cell over the whole
+// bay height - stiffer than the lipped C-section of v5.2 (06 log:
+// "주 보강은 전진시킨 격벽" - the bulkhead was the main stiffener all
+// along; v5.4 just makes that official).
+lip_ret_y = 0;             // v5.3+: no lips - fully open service face
 // v6-era POWER TOGGLE = front-open slot in the battery-shelf front edge
 // (the switch clicks into the slot, actuator reached from the open face).
 tsl_w = 13;                // (*) toggle slot width along Y - MEASURE switch
@@ -1673,16 +1683,23 @@ module robot_upper_body_a_part() {
 }
 
 module robot_upper_body_b_part() {
-    // v5.2 bodyB = A/B-final equipment bay, DOOR RETIRED:
+    // v5.4 bodyB = A/B-final equipment bay, DOOR RETIRED:
     //   - CLOSED TELESCOPING SLEEVE below (replaces the two X-side
     //     tongues that broke at the roots): a thin closed box slides
     //     down into A's interior, a flare above the split welds it into
     //     all four B walls, two cross bolts as before,
-    //   - FULLY OPEN X- FACE (v5.3, lips removed): the whole equipment-
-    //     bay X- wall is gone across the FULL interior width - board /
-    //     battery / wiring are reached directly, and edge cables (power,
-    //     USB, headers pointing along the board plane) bend out through
-    //     the front (opening 85 vs the 75 board; head zone 93),
+    //   - v5.4 THREE-SIDE OPEN BAY below the shelf (v5.3 had removed
+    //     the return lips for a full-width X- opening; v5.4 goes the
+    //     rest of the way): everything in front of the bulkhead plane
+    //     (x < bulk_x0) is removed over the whole bay height - X- wall
+    //     AND both Y-wall front strips. The OpenCR has in-plane edge
+    //     connectors (power cable, micro-USB, switch) besides the
+    //     face-normal ones, so the cable face is opened to the MAXIMUM:
+    //     every edge connector gets a straight lateral plug path.
+    //     Structure = bulkhead + rear Y-wall strips + X+ wall: a closed
+    //     rear torsion cell over the bay height (stiffer than the v5.2
+    //     lipped C-section). Battery zone above the shelf keeps the
+    //     v5.3 full-width X- opening (93, no lips),
     //   - OpenCR = TAPE PAD + BOTTOM LEDGE: bulkhead front face is the
     //     board back plane (monster tape), a small ledge under the board
     //     bottom edge takes the weight; snap rivets retired,
@@ -1694,18 +1711,19 @@ module robot_upper_body_b_part() {
     //     through the open face; POWER TOGGLE clicks into a front-open
     //     slot in the shelf front edge.
     // Assembly: sleeve into A (2 cross bolts) -> board in through the
-    // open face onto the ledge, tape to the pad -> wires (extra cables
-    // land on the board top edge, 25 mm room) -> battery in along X onto
-    // the shelf, strap -> toggle into the shelf slot.
+    // open bay onto the ledge, tape to the pad -> wires (edge plugs go
+    // straight in from Y-/Y+/X-, extra cables land on the board top
+    // edge, 25 mm room) -> battery in along X onto the shelf, strap ->
+    // toggle into the shelf slot.
     // Print UPRIGHT as placed, sleeve down (~221 tall - fits X1C 256).
-    // The battery shelf bridges ~30 mm across X - allow bridging or a
-    // little support through the open face.
+    // The battery shelf bridges/cantilevers over the open bay - allow
+    // bridging or a little support through the open face.
     slv_ox = usp_x - 2*usp_wall_x - 2*slv_clr;        // 29.4
     slv_oy = usp_y_wide - 2*usp_wall_y - 2*slv_clr;   // 84.4
-    open_w_body = usp_y_wide - 2*usp_wall_y - 2*lip_ret_y;   // 79
-    open_w_head = usp_y_head - 2*usp_wall_y - 2*lip_ret_y;   // 87
+    open_w_head = usp_y_head - 2*usp_wall_y - 2*lip_ret_y;   // 93
 
     color(c_rup)
+    union() {
     difference() {
         union() {
             box_col(usp_x, usp_y_wide, usp_split_z, head_flare_z0,
@@ -1754,25 +1772,28 @@ module robot_upper_body_b_part() {
             translate([bulk_x0, -usp_y_wide/2 + 1, ocr_bot_z - 2])
                 cube([bulk_t, usp_y_wide - 2, shelf_z0 - (ocr_bot_z - 2)]);
 
-            // v5.2: bottom seating ledge - the board rests on its top
-            // face (z = ocr_bot_z) while the tape holds it to the pad.
-            translate([bulk_x0 - seat_t, -seat_w/2, ocr_bot_z - seat_h])
-                cube([seat_t + 0.5, seat_w, seat_h]);
-
             // Battery shelf, front edge at the open face line.
             translate([-usp_x/2 + usp_wall_x, -usp_y_head/2 + 1, shelf_z0])
                 cube([usp_x - usp_wall_x - 3, usp_y_head - 2, shelf_t]);
         }
 
-        // v5.3 FULLY OPEN X- FACE: remove the whole X- wall over the
-        // bay across the full interior width (no lips - see lip_ret_y).
-        // 90 zone opening 85 (vs 75 board); flare/head zone opening 93.
-        translate([-usp_x/2 - 1, -open_w_body/2, usp_split_z + slv_flare])
-            cube([usp_wall_x + 2, open_w_body,
-                  head_flare_z1 - (usp_split_z + slv_flare)]);
-        translate([-usp_x/2 - 1, -open_w_head/2, head_flare_z1])
+        // v5.4 THREE-SIDE OPEN BAY (cable face maximized): remove
+        // EVERYTHING in front of the bulkhead plane (x < bulk_x0) from
+        // the flare weld up to the shelf underside - X- wall AND both
+        // Y-wall front strips, full interior width. The board zone is
+        // open on 3 sides; in-plane edge plugs (power / micro-USB /
+        // switch) go straight in. The bulkhead survives untouched (cut
+        // stops exactly at its front face = the tape pad); the seating
+        // ledge is re-added after this difference.
+        translate([-usp_x/2 - 1, -usp_y_head/2 - 1, usp_split_z + slv_flare])
+            cube([usp_x/2 + 1 + bulk_x0, usp_y_head + 2,
+                  shelf_z0 - (usp_split_z + slv_flare)]);
+
+        // Battery zone above the shelf: v5.3 full-width X- opening
+        // (93, no lips - see lip_ret_y).
+        translate([-usp_x/2 - 1, -open_w_head/2, shelf_z0])
             cube([usp_wall_x + 2, open_w_head,
-                  usp_z1 - usp_cap_t - head_flare_z1]);
+                  usp_z1 - usp_cap_t - shelf_z0]);
 
         // v5.2: front-open power-toggle slot in the shelf front edge.
         translate([-usp_x/2 + usp_wall_x - 1, tsl_y - tsl_w/2, shelf_z0 - 1])
@@ -1799,6 +1820,14 @@ module robot_upper_body_b_part() {
 
         for (zz = [usp_split_z - 12, usp_split_z - 26])
             translate([0, 0, zz]) cyl_x(usp_x + 2, splice_bolt_d);
+    }
+
+    // v5.2 bottom seating ledge - the board rests on its top face
+    // (z = ocr_bot_z) while the tape holds it to the pad. Added AFTER
+    // the bay cut (v5.3): it protrudes in front of the bulkhead plane,
+    // the one deliberate exception to the "nothing before bulk_x0" rule.
+    translate([bulk_x0 - seat_t, -seat_w/2, ocr_bot_z - seat_h])
+        cube([seat_t + 0.5, seat_w, seat_h]);
     }
 }
 
@@ -2152,7 +2181,7 @@ if (is_undef(part_mode) || part_mode == "assembly") {
     echo(str("OpenCR (IMU) center above hip [mm] = ", ocr_center_z - hip_z,
              "  -> firmware ELL_IMU candidate (v4 internal mount: update FW)"));
     echo("Robot mass estimate: lower ~230 g / upper ~550 g+ (re-weigh: measured 84x34x25 pack) -> ~30:70");
-    echo("Printed robot parts: ankle_carrier v5.2 (OPEN, land bore THROUGH d19, clipped gussets), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_bodyA v5.1, upper_bodyB v5.3 (FULLY open X- face 85/93, tape mount, sleeve splice, +22 tall - NO door)");
+    echo("Printed robot parts: ankle_carrier v5.2 (OPEN, land bore THROUGH d19, clipped gussets), ankle_pcb_bracket(42mm L), ankle_collar x2, lower_spine(REUSED PRINT, hip +9), upper_bodyA v5.1, upper_bodyB v5.4 (3-SIDE OPEN BAY below shelf - cable face maximized, battery zone 93, tape mount, sleeve splice, +22 tall - NO door)");
     echo(str("bodyB piece height [mm] = ", usp_z1 - (usp_split_z - usp_sleeve_len),
              "  (X1C limit 256) | board-top cable room [mm] = ", ocr_top_gap));
     echo("Printed rope parts v5: lower_socket front/rear (WITH integrated axles), upper sockets (rear tip = magnet pocket)");
@@ -2215,8 +2244,9 @@ if (is_undef(part_mode) || part_mode == "assembly") {
     }
 } else if (part_mode == "upper_body_b") {
     // part_cutaway removes the (x<0, y>0) corner quarter so the central
-    // bulkhead, OpenCR bosses, guide grooves and battery shelf show -
+    // bulkhead, tape pad, seating ledge and battery shelf show -
     // VIEWING ONLY, export the STL with part_cutaway=false.
+    // (v5.3: the bay is already open on 3 sides, cutaway rarely needed.)
     difference() {
         translate([0, 0, -(usp_split_z - usp_sleeve_len)])
             robot_upper_body_b_part();
