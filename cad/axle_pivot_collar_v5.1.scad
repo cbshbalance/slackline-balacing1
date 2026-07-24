@@ -5,4 +5,4 @@ part_mode = "lock_collar";
 collar_dir = 1;            // flip to -1 only for mirrored preview
 print_export = true;       // use high quality $fn for STL export
 
-include <frame_v3.scad>
+include <frame_master.scad>

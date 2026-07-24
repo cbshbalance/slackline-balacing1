@@ -10,4 +10,4 @@ part_cutaway = false;     // true removes a corner quarter: bulkhead, OpenCR
                           // Set back to false before exporting the STL!
 print_export = true;      // use high quality $fn for STL export
 
-include <frame_v4.scad>
+include <frame_master.scad>
