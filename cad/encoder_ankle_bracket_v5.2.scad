@@ -1,4 +1,9 @@
-// Standalone v5.3 ankle PCB L-bracket for the 42 mm AS5047P module
+// Standalone ankle PCB L-bracket for the 42 mm AS5047P module.
+// v5.2 FIX: the aft bar end and the screw row were hardcoded absolutes
+//   left over from before the v5.4 +8 mm standoff; the bar had collapsed
+//   12.6 -> 4.6 mm and the M3 clearance hole broke out of the bar's rear
+//   edge (and pierced the plate, blocking the driver). Both are now
+//   derived from the plate front plane in frame_master.scad.
 // (Coupang 하이제니스, magnet included, side SMT 6-pin SPI socket).
 // Vertical plate (46 wide) backs the full board and takes FOUR M3
 // self-taps on the 37 mm corner grid (pilot 2.7, (*) measure on

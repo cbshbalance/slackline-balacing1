@@ -1,4 +1,6 @@
-// Standalone robot ankle bearing carrier (lower_ankle_carrier v5.2).
+// Standalone robot ankle bearing carrier (lower_ankle_carrier v5.3).
+// v5.3: bridge screw pilots follow the corrected bracket screw row
+//   (y -8 -> -3.2, derived from the plate front plane). See CHANGELOG v5.11.
 // v5.3-frame OPEN carrier: two 608 bearing housings + top bridge raised
 // to z 23..31 (42 mm AS5047P board passes 2 mm under it), bridge end
 // walls weld the raised bridge onto the housings, flange z0 = 31.

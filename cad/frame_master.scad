@@ -1516,12 +1516,22 @@ akc_brk_w    = 46;                               // v5.3 bracket width across X
 // begins exactly at the plate front plane (= board back plane) and runs
 // aft, so nothing hangs over the board.
 akc_brk_bar_y0 = akc_pcb_y + as_pcb_t + as_back_post;  // v5.4: +8 standoff
-akc_brk_bar_y1 = -4;
-// Screw row BEHIND the vertical plate: M3 CLEARANCE through-holes in the
-// bar, self-tap PILOTS in the bridge.
-akc_brk_screw = [[-8, -8], [8, -8]];             // clear of the plate zone
+// v5.11 FIX: bar_y1 and the screw row used to be HARDCODED absolutes
+// (-4 and y=-8) chosen when the plate front sat at y=-16.6. The v5.4
+// `as_back_post = 8` standoff moved the plate front to -8.6 but those
+// two constants did not follow, so the bar collapsed 12.6 -> 4.6 mm and
+// the M3 clearance hole broke out through the bar's rear edge (and ran
+// through the plate, blocking the driver). Both are now DERIVED from the
+// plate front plane, so any future standoff change carries through.
+akc_brk_bar_len = 12.6;                          // bar length aft of the plate
+akc_brk_bar_y1 = akc_brk_bar_y0 + akc_brk_bar_len;
 akc_brk_pilot = 2.7;                             // pilot in the BRIDGE
 akc_brk_clr_d = 3.4;                             // clearance in the BAR
+// Screw row BEHIND the vertical plate: M3 CLEARANCE through-holes in the
+// bar, self-tap PILOTS in the bridge. Sits clear of the plate rear face
+// (plate_y0 + akc_brk_t) by half a hole plus a margin.
+akc_brk_screw_y = akc_brk_bar_y0 + akc_brk_t + akc_brk_clr_d/2 + 0.7;
+akc_brk_screw = [[-8, akc_brk_screw_y], [8, akc_brk_screw_y]];
 
 module robot_ankle_carrier_part(cutaway=false) {
     // v5.2 OPEN carrier: two short bearing housings (pocket + 2 mm land
