@@ -1224,12 +1224,16 @@ module upper_socket(is_front=true, include_lock_collar=true) {
             // engagement zone (glue-free tube retention). Local frame: +Y
             // along the cup axis u (u is in the Y-Z plane, so a single
             // X-rotation maps +Y onto u and the clamp bolt stays global X).
+            // v5.10: clamp_zf flips the rear clamp to local -Z so BOTH
+            // sockets carry the lugs on the OUTSIDE of the bridge-cup bend
+            // (away from the bearing side), matching the front.
             if (top_cup_clamp) {
+                clamp_zf = is_front ? 1 : -1;
                 lug_x = top_cup_slit_w/2 + top_cup_lug_w/2 - top_cup_lug_inset;
                 lug_z = top_socket_outer_d/2 - top_cup_lug_bite + top_cup_lug_h/2;
                 translate(p_top) rotate([atan2(u[2], u[1]), 0, 0])
                     for (sx = [-1, 1])
-                        translate([sx * lug_x, top_cup_clamp_s, lug_z])
+                        translate([sx * lug_x, top_cup_clamp_s, clamp_zf * lug_z])
                             cube([top_cup_lug_w, top_cup_lug_t, top_cup_lug_h],
                                  center=true);
             }
@@ -1250,17 +1254,20 @@ module upper_socket(is_front=true, include_lock_collar=true) {
         // v5.9: cup clamp cuts. Cross bolt above the cup OD pulls the split
         // mouth closed onto the carbon tube; the slit runs from the open
         // mouth back past the pipe stop so the clamped section can flex.
+        // v5.10: cuts follow clamp_zf so the rear clamp sits on the
+        // outside of the bend like the front.
         if (top_cup_clamp) {
+            clamp_zf = is_front ? 1 : -1;
             lug_z = top_socket_outer_d/2 - top_cup_lug_bite + top_cup_lug_h/2;
             slit_bottom_z = top_socket_bore_d/2 - 0.6;
             slit_top_z = lug_z + top_cup_lug_h/2 + 0.3;
             slit_s0 = top_pipe_stop_s - top_cup_slit_past_stop;
             slit_s1 = top_socket_cup_len + 1;   // overshoot past the mouth
             translate(p_top) rotate([atan2(u[2], u[1]), 0, 0]) {
-                translate([0, top_cup_clamp_s, top_cup_bolt_z])
+                translate([0, top_cup_clamp_s, clamp_zf * top_cup_bolt_z])
                     cyl_x(2 * top_cup_lug_w + top_cup_slit_w + 2, top_cup_bolt_d);
                 translate([0, (slit_s0 + slit_s1)/2,
-                           (slit_bottom_z + slit_top_z)/2])
+                           clamp_zf * (slit_bottom_z + slit_top_z)/2])
                     cube([top_cup_slit_w, slit_s1 - slit_s0,
                           slit_top_z - slit_bottom_z], center=true);
             }

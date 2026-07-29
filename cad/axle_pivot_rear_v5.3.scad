@@ -1,4 +1,6 @@
 // Standalone upper socket, REAR/encoder side.
+// v5.3: clamp flipped to the OUTSIDE of the bridge-cup bend (away from
+//   the bearing side), unified with the front socket.
 // v5.2: pipe-cup clamp fused in (omega lugs + top slit + M3 cross bolt) --
 //   the diagonal carbon tube is held mechanically, glue-free.
 // v5: shaft SHORTENED (rear_shaft_out 48 -> 13, no coupler) and the tip
