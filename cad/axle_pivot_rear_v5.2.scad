@@ -1,4 +1,6 @@
 // Standalone upper socket, REAR/encoder side.
+// v5.2: pipe-cup clamp fused in (omega lugs + top slit + M3 cross bolt) --
+//   the diagonal carbon tube is held mechanically, glue-free.
 // v5: shaft SHORTENED (rear_shaft_out 48 -> 13, no coupler) and the tip
 // gets a 6.15 x 2.2 magnet pocket (diametral 6x2.5 magnet, 0.3 proud).
 // Edit shared dimensions in frame_v5.scad so the assembly stays linked.

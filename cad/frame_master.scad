@@ -234,6 +234,22 @@ top_encoder_wire_side_hole_d = 5;
 top_encoder_wire_side_hole_lift_z = 1;
 top_encoder_wire_side_hole_len = top_socket_outer_d + 8;
 
+// v5.9: lock-collar style clamp fused into the upper pivot pipe cups so the
+// diagonal carbon tube is held mechanically (glue-free). Same omega-lug +
+// top-slit + M3 cross-bolt recipe as lock_collar_at_y_n, but built on the
+// cup itself around the pipe engagement zone (s = top_pipe_stop_s..cup_len).
+top_cup_clamp      = true;
+top_cup_slit_w     = 1.2;
+top_cup_lug_w      = 4.0;   // one lug width across local X
+top_cup_lug_t      = 6.0;   // lug thickness along the cup axis
+top_cup_lug_h      = 7.8;
+top_cup_lug_bite   = 3.0;   // how far the lugs sink into the cup OD
+top_cup_lug_inset  = 1.0;   // moves lugs inward so they blend into the cup
+top_cup_bolt_d     = 3.2;   // M3 clearance
+top_cup_bolt_z     = top_socket_outer_d/2 + top_cup_bolt_d/2 + 0.2;
+top_cup_clamp_s    = top_pipe_stop_s + top_pipe_insert_len/2; // lug center: mid pipe engagement
+top_cup_slit_past_stop = 2; // slit runs from the mouth to this far past the pipe stop
+
 dy_sag = (upper_w - lower_w) / 2;
 sag    = sqrt(pow(diag_len, 2) - pow(dy_sag, 2));
 
@@ -1203,6 +1219,20 @@ module upper_socket(is_front=true, include_lock_collar=true) {
                 positive=false,
                 overlap=top_socket_miter_overlap
             );
+
+            // v5.9: omega clamp lugs fused onto the cup around the pipe
+            // engagement zone (glue-free tube retention). Local frame: +Y
+            // along the cup axis u (u is in the Y-Z plane, so a single
+            // X-rotation maps +Y onto u and the clamp bolt stays global X).
+            if (top_cup_clamp) {
+                lug_x = top_cup_slit_w/2 + top_cup_lug_w/2 - top_cup_lug_inset;
+                lug_z = top_socket_outer_d/2 - top_cup_lug_bite + top_cup_lug_h/2;
+                translate(p_top) rotate([atan2(u[2], u[1]), 0, 0])
+                    for (sx = [-1, 1])
+                        translate([sx * lug_x, top_cup_clamp_s, lug_z])
+                            cube([top_cup_lug_w, top_cup_lug_t, top_cup_lug_h],
+                                 center=true);
+            }
         }
 
         // Blind upper carbon-pipe socket. The pipe enters only
@@ -1216,6 +1246,25 @@ module upper_socket(is_front=true, include_lock_collar=true) {
             p_top + u * (top_socket_cup_len + 4),
             d=top_socket_bore_d
         );
+
+        // v5.9: cup clamp cuts. Cross bolt above the cup OD pulls the split
+        // mouth closed onto the carbon tube; the slit runs from the open
+        // mouth back past the pipe stop so the clamped section can flex.
+        if (top_cup_clamp) {
+            lug_z = top_socket_outer_d/2 - top_cup_lug_bite + top_cup_lug_h/2;
+            slit_bottom_z = top_socket_bore_d/2 - 0.6;
+            slit_top_z = lug_z + top_cup_lug_h/2 + 0.3;
+            slit_s0 = top_pipe_stop_s - top_cup_slit_past_stop;
+            slit_s1 = top_socket_cup_len + 1;   // overshoot past the mouth
+            translate(p_top) rotate([atan2(u[2], u[1]), 0, 0]) {
+                translate([0, top_cup_clamp_s, top_cup_bolt_z])
+                    cyl_x(2 * top_cup_lug_w + top_cup_slit_w + 2, top_cup_bolt_d);
+                translate([0, (slit_s0 + slit_s1)/2,
+                           (slit_bottom_z + slit_top_z)/2])
+                    cube([top_cup_slit_w, slit_s1 - slit_s0,
+                          slit_top_z - slit_bottom_z], center=true);
+            }
+        }
 
         // v5: magnet pocket in the rear shaft tip (diametral 6x2.5,
         // glued, 0.3 proud). Front socket tip stays plain.
