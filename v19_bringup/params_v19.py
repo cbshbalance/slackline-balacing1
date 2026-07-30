@@ -54,13 +54,21 @@ BODY = dict(
 #     I_r: 상단 피벗 기준 스윙부 전체 관성 / S_r: 정적모멘트 Σmℓ / c_φ: 점성감쇠
 # ============================================================
 ROPE = dict(
-    R = dict(v=0.433, MEASURED=False, how="상단 베어링축 → 발축 거리 [m] 자 (설계 예측 43.3cm)"),
+    # ★부품명은 cad/CHANGELOG.md v5 명명법 기준(2026-07-30 갱신).
+    #   v5에서 '발축 바'는 사라졌다 — 발축(7.8 축)이 하단 소켓에 일체로 프린트되고,
+    #   전/후 소켓의 축이 발목 캐리어의 608 2개에 양쪽에서 꽂혀 사다리꼴 하단이 닫힌다.
+    R = dict(v=0.433, MEASURED=False, how="상단 베어링축 → 발축 거리 [m] 자 (설계 43.3cm — 07-30 방침: 설계값 사용)"),
     # 방법 A(권장): 부품별 질량·위치로 계산 → calc_rope_inertia() 가 I_r,S_r 산출
-    crank_m_each   = dict(v=0.022, MEASURED=False, how="카본 빗변 1개 질량 [kg] 저울 (8mm×50cm ≈ 20~25g)"),
-    crank_L        = dict(v=0.50,  MEASURED=False, how="빗변 길이 [m]"),
-    bottom_m       = dict(v=0.060, MEASURED=False, how="하단 하드웨어(발축 바+소켓2) 합 질량 [kg] — ★베어링 2개는 제외(07-30 하체 m1에 이미 포함)"),
-    top_socket_m   = dict(v=0.015, MEASURED=False, how="상단 소켓(회전부에 붙는 것만) 질량 [kg]"),
-    top_socket_ell = dict(v=0.02,  MEASURED=False, how="상단 소켓 CoM 의 피벗 거리 [m]"),
+    crank_m_each   = dict(v=0.022, MEASURED=False, how="카본 빗변(대각 튜브) 1개 질량 [kg]. 8mm OD x 530mm(diag_len) ≈ 20~25g"),
+    crank_L        = dict(v=0.530, MEASURED=False, how="빗변 길이 [m] = CAD diag_len 530"),
+    bottom_m       = dict(v=0.060, MEASURED=False,
+        how="하단 회전부 합 질량 [kg] = axle_ankle_socket_v5.1 x2 (축 일체, 자석 포함) "
+            "+ lower_ankle_collar_v5.1 x2 + 클램프 볼트. ★608 베어링 2개는 제외(하체 m1에 포함)"),
+    top_socket_m   = dict(v=0.015, MEASURED=False,
+        how="상단 회전부 합 질량 [kg] = axle_pivot_front_v5.2 + axle_pivot_rear_v5.3 "
+            "+ axle_pivot_collar_v5.1 x2 + 볼트. ★프레임 고정품(encoder_pivot_box/bearing)은 제외. "
+            "피벗축 근처(ℓ≈20mm)라 I_r 기여 0.2% — 개략 계량으로 충분"),
+    top_socket_ell = dict(v=0.02,  MEASURED=False, how="상단 소켓 CoM 의 피벗 거리 [m] (R의 5% → 영향 미미)"),
     # 방법 B(검증): 로봇 떼고 크랭크만 자유진동 → 주기로 I_r/S_r 비, 로그감쇠로 c_φ
     #   (calib/free_swing_log.ino + calib/calib_analysis.py)
     c_phi = dict(v=0.0, MEASURED=False, how="[N·m·s/rad] 크랭크 자유진동 로그감쇠법 — 실측 전 0"),
