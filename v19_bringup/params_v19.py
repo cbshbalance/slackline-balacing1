@@ -22,18 +22,21 @@ G_GRAV = 9.81
 #     m: 저울 / ell(CoM): 균형점(칼날받침) / I: 복합진자법(calib_analysis.py)
 # ============================================================
 BODY = dict(
-    m1   = dict(v=0.15,  MEASURED=False, how="하체(발축 베어링~힙, 프레임+발목하우징 포함) 저울"),
-    m2   = dict(v=0.55,  MEASURED=False, how="상체(힙~머리, XM430+OpenCR+배터리 매립 포함) 저울"),
+    # ★2026-07-30 실측 반영: m1/m2/ell1/ell2/I1_cm/I2_cm.
+    #   I는 2줄 매달기(bifilar, 몸통 수평 = 스윙축 일치): I = m·g·d²·T²/(16π²·L).
+    #   기록지의 2.47e-4 / 1.80e-3 은 계산 중 10배 슬립 — 주기 기준 보정값을 정본으로.
+    m1   = dict(v=0.190, MEASURED=True,  how="2026-07-30 저울 실측 (하체, 발목 포함)"),
+    m2   = dict(v=0.560, MEASURED=True,  how="2026-07-30 저울 실측 (상체 A+B 결합)"),
     # v5.3 CAD (2026-07-19): 발목 캐리어 플랜지 +9mm 상승(42mm AS5047P 보드
     # 수용) → 발축~힙축 250 → 259mm. 하체 스파인 출력물은 그대로 재사용,
     # 힙이 통째로 +9mm. 실측 전 공칭값만 갱신.
     L1   = dict(v=0.259, MEASURED=False, how="발축 중심 → 힙축 중심 [m] 자"),
-    L2   = dict(v=0.40,  MEASURED=False, how="힙축 중심 → 상체 끝 [m] 자"),
-    ell1 = dict(v=0.13,  MEASURED=False, how="발축 → 하체 CoM [m] 균형점"),
-    ell2 = dict(v=0.20,  MEASURED=False, how="힙축 → 상체 CoM [m] 균형점 (장비 매립 후!)"),
-    # 관성모멘트: None 이면 균일막대 근사 mL²/12 사용. 복합진자 실측 후 I_cm 값 입력.
-    I1_cm = dict(v=None, MEASURED=False, how="하체 복합진자: 발축에 매달아 미소진동 주기 T 측정"),
-    I2_cm = dict(v=None, MEASURED=False, how="상체 복합진자: 힙축에 매달아 T 측정 (장비 매립 후)"),
+    L2   = dict(v=0.372, MEASURED=False, how="힙축 중심 → 상체(body B) 맨위 [m]. CAD robot_l2=372 공칭 — 07-31 실측 예정"),
+    ell1 = dict(v=0.084, MEASURED=True,  how="2026-07-30: 하체 하부 사각창 아래변 = CoM 높이 → CAD 변환 발축 위 84mm"),
+    ell2 = dict(v=0.215, MEASURED=True,  how="2026-07-30: body B 맨위 157mm 아래 → CAD 372mm 기준 372-157 (L2 실측 후 재계산)"),
+    # 관성모멘트: None 이면 균일막대 근사 mL²/12 사용. 실측 후 I_cm 값 입력.
+    I1_cm = dict(v=2.48e-3, MEASURED=True, how="2026-07-30 bifilar: T=7.620s L=0.320 d=0.034 (기록지 2.47e-4는 10x 슬립 정정)"),
+    I2_cm = dict(v=1.81e-2, MEASURED=True, how="2026-07-30 bifilar: T=10.930s L=0.315 d=0.037 (기록지 1.80e-3은 10x 슬립 정정)"),
     ELL_IMU = dict(v=0.20, MEASURED=False, how="힙축 → OpenCR IMU 칩 [m] 자 (상체 상단 매립 위치)"),
     B_THETA = dict(v=0.01, MEASURED=False, how="힙 점성감쇠 [N·m·s/rad] — 서보 무전류 자유진동 감쇠로 추정(선택)"),
 )
