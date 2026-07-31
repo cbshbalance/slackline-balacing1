@@ -131,12 +131,18 @@ def main():
     ap.add_argument("--kt", type=float, default=1.304, help="토크상수 [N.m/A] (로그의 tau= 를 우선 사용)")
     ap.add_argument("--win", type=float, default=0.20, help="적합 구간 [s]")
     ap.add_argument("--nograv", action="store_true", help="중력토크 0 지그 (힙축 연직)")
+    ap.add_argument("--dir", choices=["both", "pos", "neg"], default="both",
+                    help="분석할 펄스 방향 (기본 both). 한쪽이 이상할 때 pos/neg 로 분리 확인")
     a = ap.parse_args()
 
     rows, marks = read_csv(a.csv)
     if not rows:
         print("D행이 없습니다. 로그 파일을 확인하세요."); sys.exit(1)
     segs = segments(rows, marks)
+    if a.dir == "pos":
+        segs = [(t, s) for t, s in segs if t > 0]
+    elif a.dir == "neg":
+        segs = [(t, s) for t, s in segs if t < 0]
     if len(segs) < 2:
         print(f"펄스 구간이 {len(segs)}개뿐입니다. 'i <unit>' 을 최소 4단계(예: 60/90/120/160/200) 실행하세요.")
         if not segs:
