@@ -29,22 +29,24 @@ BODY = dict(
     #   상체 실측 = bodyA+B + 배터리 + OpenCR + 상체 배선 + S101(모터↔상체) 브래킷.
     #     → XM430 모터(케이스가 상체 쪽) 미포함! 아래 m2/ell2/I2_cm 은 모터 공칭
     #       82 g(케이스 CoM ≈ 힙축 +9 mm, CAD xm_len 46.5/axis 14.25)을 합성한 값.
-    #       원시 실측: m=0.560, ell=0.215, I_cm=1.81e-2. 07-31 모터 단품 실측으로 확정.
+    #       원시 실측: m=0.560, ell(=L2-157)=0.218, I_cm=1.81e-2.
+    #       ※모터 단품 계량은 불필요 — 힙축 위 9mm라 ±10g이 관성 0.007%,
+    #         중력토크 0.07%만 바꾼다(감도 계산 2026-07-30).
     #   하체 실측 = 스파인 + 발목 캐리어 + 베어링 2 + 엔코더(브래킷·보드·배선)
-    #     + H101(모터↔하체) 브래킷. → 하체는 완결. 로봇 전체에서 남은 미계량은
-    #     XM430 모터(+혼·아이들러)뿐 — 07-31 단품 실측으로 확정.
+    #     + H101(모터↔하체) 브래킷. → 하체는 완결.
+    #   조립 로봇 전체 = 0.190 + 0.560 + 모터 0.082 = 0.832 kg (저울 교차확인용).
     m1   = dict(v=0.190, MEASURED=True,  how="2026-07-30 저울 실측 (H101 브래킷 포함, 하체 완결)"),
     m2   = dict(v=0.642, MEASURED=True,  how="2026-07-30 실측 0.560 + XM430 공칭 0.082 합성"),
     # v5.3 CAD (2026-07-19): 발목 캐리어 플랜지 +9mm 상승(42mm AS5047P 보드
     # 수용) → 발축~힙축 250 → 259mm. 하체 스파인 출력물은 그대로 재사용,
     # 힙이 통째로 +9mm. 실측 전 공칭값만 갱신.
-    L1   = dict(v=0.259, MEASURED=False, how="발축 중심 → 힙축 중심 [m] 자"),
-    L2   = dict(v=0.372, MEASURED=False, how="힙축 중심 → 상체(body B) 맨위 [m]. CAD robot_l2=372 공칭 — 07-31 실측 예정"),
-    ell1 = dict(v=0.084, MEASURED=True,  how="2026-07-30: 하체 하부 사각창 아래변 = CoM 높이 → CAD 변환 발축 위 84mm"),
-    ell2 = dict(v=0.189, MEASURED=True,  how="2026-07-30: 실측 0.215(B맨위-157, CAD 372 기준) + 모터 82g@+9mm 합성 (L2 실측 후 재계산)"),
+    L1   = dict(v=0.265, MEASURED=True,  how="2026-07-31 실측 265mm (CAD 공칭 259 대비 +6 — 조립 스택업)"),
+    L2   = dict(v=0.375, MEASURED=True,  how="2026-07-31 실측 375mm, 힙축 → bodyB 맨위 (CAD 공칭 372)"),
+    ell1 = dict(v=0.084, MEASURED=True,  how="2026-07-30: 하체 하부 사각창 아래변 = CoM 높이 → CAD 변환 발축 위 84mm. ★L1이 CAD 대비 +6 였으므로 ±6 불확실 — 발축~창 아래변을 자로 직접 재면 확정"),
+    ell2 = dict(v=0.191, MEASURED=True,  how="2026-07-31: 실측 0.218(=L2 375 - 157) + 모터 82g@+9mm 합성"),
     # 관성모멘트: None 이면 균일막대 근사 mL²/12 사용. 실측 후 I_cm 값 입력.
     I1_cm = dict(v=2.48e-3, MEASURED=True, how="2026-07-30 bifilar: T=7.620s L=0.320 d=0.034 (기록지 2.47e-4는 10x 슬립 정정)"),
-    I2_cm = dict(v=2.11e-2, MEASURED=True, how="2026-07-30 bifilar 1.81e-2 (T=10.930s L=0.315 d=0.037, 10x 슬립 정정) + 모터 합성(평행축)"),
+    I2_cm = dict(v=2.12e-2, MEASURED=True, how="2026-07-30 bifilar 1.81e-2 (T=10.930s L=0.315 d=0.037, 10x 슬립 정정) + 모터 합성(평행축, L2=375 반영)"),
     ELL_IMU = dict(v=0.20, MEASURED=False, how="힙축 → OpenCR IMU 칩 [m] 자 (상체 상단 매립 위치)"),
     B_THETA = dict(v=0.01, MEASURED=False, how="힙 점성감쇠 [N·m·s/rad] — 서보 무전류 자유진동 감쇠로 추정(선택)"),
 )
@@ -59,19 +61,27 @@ ROPE = dict(
     #   전/후 소켓의 축이 발목 캐리어의 608 2개에 양쪽에서 꽂혀 사다리꼴 하단이 닫힌다.
     R = dict(v=0.433, MEASURED=False, how="상단 베어링축 → 발축 거리 [m] 자 (설계 43.3cm — 07-30 방침: 설계값 사용)"),
     # 방법 A(권장): 부품별 질량·위치로 계산 → calc_rope_inertia() 가 I_r,S_r 산출
-    crank_m_each   = dict(v=0.022, MEASURED=False, how="카본 빗변(대각 튜브) 1개 질량 [kg]. 8mm OD x 530mm(diag_len) ≈ 20~25g"),
-    crank_L        = dict(v=0.530, MEASURED=False, how="빗변 길이 [m] = CAD diag_len 530"),
-    bottom_m       = dict(v=0.060, MEASURED=False,
-        how="하단 회전부 합 질량 [kg] = axle_ankle_socket_v5.1 x2 (축 일체, 자석 포함) "
-            "+ lower_ankle_collar_v5.1 x2 + 클램프 볼트. ★608 베어링 2개는 제외(하체 m1에 포함)"),
-    top_socket_m   = dict(v=0.015, MEASURED=False,
-        how="상단 회전부 합 질량 [kg] = axle_pivot_front_v5.2 + axle_pivot_rear_v5.3 "
-            "+ axle_pivot_collar_v5.1 x2 + 볼트. ★프레임 고정품(encoder_pivot_box/bearing)은 제외. "
-            "피벗축 근처(ℓ≈20mm)라 I_r 기여 0.2% — 개략 계량으로 충분"),
+    crank_m_each   = dict(v=0.015, MEASURED=True,  how="2026-07-31 저울 실측 15g (8mm OD x 530mm 카본 대각 튜브, 2개 사용)"),
+    crank_L        = dict(v=0.530, MEASURED=True,  how="빗변 길이 [m] = CAD diag_len 530"),
+    # ★07-31 미계량 → CAD 볼륨 × PLA 1.24 g/cm³ 로 추정(추정치, 저울 대기).
+    #   소켓 13.3cm³ x2 + 칼라 1.0cm³ x2 = 28.5cm³ -> 35g(솔리드) + 자석·볼트 ≈ 38g
+    bottom_m       = dict(v=0.038, MEASURED=False,
+        how="[CAD 추정] axle_ankle_socket_v5.1 x2 + lower_ankle_collar_v5.1 x2 + 자석·볼트. "
+            "★608 베어링·발목 캐리어는 제외(하체 m1 소속). I_r의 79%를 차지 — 저울 실측 권장"),
+    top_socket_m   = dict(v=0.024, MEASURED=False,
+        how="[CAD 추정] axle_pivot_front_v5.2 + axle_pivot_rear_v5.3 + axle_pivot_collar_v5.1 x2 "
+            "= 19.5cm³ -> 24g. 피벗축 근처라 I_r 기여 0.2%, 추정으로 충분"),
     top_socket_ell = dict(v=0.02,  MEASURED=False, how="상단 소켓 CoM 의 피벗 거리 [m] (R의 5% → 영향 미미)"),
     # 방법 B(검증): 로봇 떼고 크랭크만 자유진동 → 주기로 I_r/S_r 비, 로그감쇠로 c_φ
     #   (calib/free_swing_log.ino + calib/calib_analysis.py)
-    c_phi = dict(v=0.0, MEASURED=False, how="[N·m·s/rad] 크랭크 자유진동 로그감쇠법 — 실측 전 0"),
+    # ★2026-07-31 확정(실험① 2026-07-28 + 빗변 15g). 실험① 구성은 크랭크 + 발목
+    #   캐리어 어셈블리(하단 총 ≈143g)였고 그 총관성 I_exp=0.0287 kg·m².
+    #   c_phi = 2·ζ·ω·I_exp, ζ=0.0076, ω=4.852 rad/s. 피벗 베어링 마찰이므로
+    #   매다는 구성과 무관한 물리량 → 시뮬에 그대로 사용.
+    c_phi = dict(v=0.0021, MEASURED=True, how="2026-07-28 실험① ζ=0.0076 × ω=4.852 × I_exp=0.0287"),
+    # 건마찰(쿨롱): 실험① 반주기당 0.34° 감소 → τ_c ≈ 0.0020 N·m (일정). 소진폭에서
+    #   등가 점성감쇠 c_eq = 4τ_c/(π·ω·A) 가 지배: A=1° 에서 0.032, A=5° 에서 0.008.
+    tau_coulomb = dict(v=0.0020, MEASURED=True, how="2026-07-28 실험① 0.34°/반주기 → 0.069×I_exp"),
 )
 
 def calc_rope_inertia(rope=ROPE):
@@ -79,10 +89,11 @@ def calc_rope_inertia(rope=ROPE):
     mc, Lc = rope["crank_m_each"]["v"], rope["crank_L"]["v"]
     mb, R_ = rope["bottom_m"]["v"], rope["R"]["v"]
     ms, ls = rope["top_socket_m"]["v"], rope["top_socket_ell"]["v"]
-    # 빗변(균일막대, 피벗에서 끝까지): I = mL²/3, S = mL/2 — 2개
-    # 주의: 빗변 길이 Lc 를 따라 분포하지만 스윙 반경 방향 유효거리는 R 스케일.
-    #       사다리꼴 기하(빗변이 기울어짐)에서 정확값은 CAD가 주지만, 여기서는
-    #       '피벗→하단' 유효 길이 R 로 막대 근사(±10% 이내; CAD 값 나오면 교체).
+    # 빗변(균일막대): I = mR²/3, S = mR/2 — 2개.
+    # ★2026-07-31 정정: 이 막대식은 근사가 아니라 **엄밀식**이다. 스윙은 Y(피벗)축
+    #   회전이고 축까지의 수직거리는 r=√(x²+z²) — 빗변의 Y 오프셋(사다리꼴 폭)은
+    #   r에 들어가지 않는다. 빗변은 축 위 점(피벗)에서 하단(r=R)까지 r이 선형
+    #   증가하는 막대와 정확히 같다. (구 주석의 '±10%' 경고는 철회)
     I_cr = 2 * (mc * R_**2 / 3);  S_cr = 2 * (mc * R_ / 2)
     I_bt = mb * R_**2;            S_bt = mb * R_
     I_ts = ms * ls**2;            S_ts = ms * ls
