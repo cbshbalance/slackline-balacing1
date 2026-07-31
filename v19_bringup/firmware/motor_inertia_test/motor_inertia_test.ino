@@ -59,6 +59,7 @@ using namespace ControlTableItem;
 
 uint32_t dxl_baud = 0;
 bool  motor_ok = false;
+bool  torque_live = false;   // x(비상정지) 후 false — 'z' 가 다시 켠다
 float home_deg = 0;
 int   goal_cur = 0;
 bool  streaming = false;
@@ -96,6 +97,10 @@ float deltaDeg() {
 
 void setCur(int unit) {
   unit = constrain(unit, -CUR_SAFE, CUR_SAFE);
+  if (motor_ok && !torque_live && unit != 0) {
+    Serial.println("# torque OFF 상태 - 매달려 멈춘 자세에서 'z' 를 먼저 치세요");
+    return;
+  }
   goal_cur = unit;
   if (motor_ok) dxl.setGoalCurrent(DXL_ID, unit);
 }
@@ -136,6 +141,7 @@ void setup() {
     dxl.torqueOff(DXL_ID);
     dxl.setOperatingMode(DXL_ID, OP_CURRENT);      // ★전류(토크) 제어
     dxl.torqueOn(DXL_ID);
+    torque_live = true;
     setCur(0);                                     // 시작은 무토크
     home_deg = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
     Serial.println("전류제어 모드, Goal Current = 0 (자유). 매달려 멈춘 뒤 'z'.");
@@ -155,6 +161,14 @@ void loop() {
   if (Serial.available()) {
     char c = Serial.read();
     if (c == 'z' || c == 'Z') {
+      if (motor_ok && !torque_live) {              // x 이후 재활성
+        dxl.torqueOff(DXL_ID);
+        dxl.setOperatingMode(DXL_ID, OP_CURRENT);
+        dxl.torqueOn(DXL_ID);
+        dxl.setGoalCurrent(DXL_ID, 0);
+        torque_live = true;
+        Serial.println("# torque ON (전류제어 재활성)");
+      }
       if (motor_ok) home_deg = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
       if (USE_ENCODERS) { phi_zero = as5047_raw(PHI_CS); ank_zero = as5047_raw(ANK_CS); }
       Serial.println("# zero set (delta=0)");
@@ -195,7 +209,8 @@ void loop() {
     else if (c == 'x' || c == 'X') {
       setCur(0); pulsing = false;
       if (motor_ok) dxl.torqueOff(DXL_ID);
-      Serial.println(">>> EMERGENCY STOP (torque off)");
+      torque_live = false;
+      Serial.println(">>> EMERGENCY STOP (torque off) - 다시 시작은 멈춘 자세에서 'z'");
     }
   }
 
