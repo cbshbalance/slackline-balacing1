@@ -18,9 +18,13 @@ itest_logger.py — motor_inertia_test 전용 '대화형' 로거 (실험 ③, M2
 ⚠ Arduino IDE 시리얼 모니터가 열려 있으면 포트를 못 잡는다 — 먼저 닫을 것.
 """
 import argparse
+import re
 import sys
 import threading
 import time
+
+# 로봇이 이해하는 명령만 통과시킨다 (조각난 입력·오타가 그대로 전달되는 사고 방지)
+CMD_OK = re.compile(r"^([zskrpx]|[ci]\s*-?\d+|t\s*-?\d*\.?\d+)$", re.IGNORECASE)
 
 
 def main():
@@ -58,8 +62,12 @@ def main():
             if cmd.lower() in ("quit", "exit", "q"):
                 stop.set()
                 break
+            if not CMD_OK.match(cmd):
+                print(f"[logger] 무시함: '{cmd}'  (가능: z / p / c 50 / i 60 / k / r / x / quit)")
+                continue
             try:
                 ser.write((cmd + "\n").encode())
+                print(f"[logger] 전송: {cmd}")
             except Exception:
                 stop.set()
                 break
@@ -79,14 +87,13 @@ def main():
                     break
                 if not line:
                     continue
-                if line.startswith("D,") or line.startswith("E,"):
-                    f.write(line + "\n")
+                if line.startswith("D,"):
+                    f.write(line + "\n")            # 데이터는 조용히 저장만 (화면 도배 방지)
                     n += 1
-                    if line.startswith("E,"):
-                        f.flush()
-                        print("  " + line)          # 펄스 시작/종료 요약은 화면에도
-                    elif n % 300 == 0:
-                        print(f"  ... {n} 행 저장 중")
+                elif line.startswith("E,"):
+                    f.write(line + "\n")
+                    f.flush()
+                    print("  " + line)              # 펄스 시작/종료 요약만 화면에
                 else:
                     print("  " + line)              # 장치 안내 메시지
         except KeyboardInterrupt:
