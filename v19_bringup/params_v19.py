@@ -64,25 +64,27 @@ ROPE = dict(
     # 방법 A(권장): 부품별 질량·위치로 계산 → calc_rope_inertia() 가 I_r,S_r 산출
     crank_m_each   = dict(v=0.015, MEASURED=True,  how="2026-07-31 저울 실측 15g (8mm OD x 530mm 카본 대각 튜브, 2개 사용)"),
     crank_L        = dict(v=0.530, MEASURED=True,  how="빗변 길이 [m] = CAD diag_len 530"),
-    # ★07-31 미계량 → CAD 볼륨 × PLA 1.24 g/cm³ 로 추정(추정치, 저울 대기).
-    #   소켓 13.3cm³ x2 + 칼라 1.0cm³ x2 = 28.5cm³ -> 35g(솔리드) + 자석·볼트 ≈ 38g
-    bottom_m       = dict(v=0.038, MEASURED=False,
-        how="[CAD 추정] axle_ankle_socket_v5.1 x2 + lower_ankle_collar_v5.1 x2 + 자석·볼트. "
-            "★608 베어링·발목 캐리어는 제외(하체 m1 소속). I_r의 79%를 차지 — 저울 실측 권장"),
-    top_socket_m   = dict(v=0.024, MEASURED=False,
-        how="[CAD 추정] axle_pivot_front_v5.2 + axle_pivot_rear_v5.3 + axle_pivot_collar_v5.1 x2 "
-            "= 19.5cm³ -> 24g. 피벗축 근처라 I_r 기여 0.2%, 추정으로 충분"),
+    bottom_m       = dict(v=0.014, MEASURED=True,
+        how="2026-07-31 저울 실측 14g = axle_ankle_socket_v5.1 x2 + lower_ankle_collar_v5.1 x2 "
+            "(+자석·볼트). ★608 베어링·발목 캐리어는 제외(하체 m1 소속). "
+            "참고: CAD 볼륨 솔리드 환산 35g 대비 40% — 출력물 실효밀도 ~0.5 g/cm³"),
+    top_socket_m   = dict(v=0.010, MEASURED=False,
+        how="[추정] axle_pivot_front_v5.2 + rear_v5.3 + collar x2. CAD 솔리드 24g x 하단부에서 "
+            "얻은 실효밀도비 0.40 = 10g. 피벗축 근처라 I_r 기여 0.2%, 추정으로 충분"),
     top_socket_ell = dict(v=0.02,  MEASURED=False, how="상단 소켓 CoM 의 피벗 거리 [m] (R의 5% → 영향 미미)"),
     # 방법 B(검증): 로봇 떼고 크랭크만 자유진동 → 주기로 I_r/S_r 비, 로그감쇠로 c_φ
     #   (calib/free_swing_log.ino + calib/calib_analysis.py)
-    # ★2026-07-31 확정(실험① 2026-07-28 + 빗변 15g). 실험① 구성은 크랭크 + 발목
-    #   캐리어 어셈블리(하단 총 ≈143g)였고 그 총관성 I_exp=0.0287 kg·m².
-    #   c_phi = 2·ζ·ω·I_exp, ζ=0.0076, ω=4.852 rad/s. 피벗 베어링 마찰이므로
-    #   매다는 구성과 무관한 물리량 → 시뮬에 그대로 사용.
-    c_phi = dict(v=0.0021, MEASURED=True, how="2026-07-28 실험① ζ=0.0076 × ω=4.852 × I_exp=0.0287"),
-    # 건마찰(쿨롱): 실험① 반주기당 0.34° 감소 → τ_c ≈ 0.0020 N·m (일정). 소진폭에서
-    #   등가 점성감쇠 c_eq = 4τ_c/(π·ω·A) 가 지배: A=1° 에서 0.032, A=5° 에서 0.008.
-    tau_coulomb = dict(v=0.0020, MEASURED=True, how="2026-07-28 실험① 0.34°/반주기 → 0.069×I_exp"),
+    # ★2026-07-31 확정(실험① 2026-07-28 + 빗변 15g + 하단 14g).
+    #   실험① 당시 하단에 매달린 것 = 줄 부품 14g + 발목 캐리어 어셈블리(캐리어·608x2
+    #   ·엔코더). v5는 캐리어 없이는 사다리꼴이 닫히지 않으므로 반드시 함께 있었다.
+    #   실측 T=1.295s 를 만족하는 하단 총질량 ≈ 100±25 g (주기 감도가 낮아 폭이 넓음)
+    #   → 실험① 총관성 I_exp = 0.019 ± 0.004 kg·m².
+    #   c_phi = 2·ζ·ω·I_exp (ζ=0.0076, ω=4.852) = 0.0014 ± 0.0003.
+    #   피벗 베어링 마찰이라 매다는 구성과 무관한 물리량 → 시뮬에 그대로 사용.
+    c_phi = dict(v=0.0014, MEASURED=True, how="2026-07-28 실험① ζ=0.0076 × ω=4.852 × I_exp≈0.019 (±20%)"),
+    # 건마찰(쿨롱): 실험① 반주기당 0.34° 감소 → τ_c = 0.069×I_exp. 소진폭에서 등가
+    #   점성감쇠 c_eq = 4τ_c/(π·ω·A) 가 지배: A=1°→0.020, 2°→0.010, 5°→0.004.
+    tau_coulomb = dict(v=0.0013, MEASURED=True, how="2026-07-28 실험① 0.34°/반주기 → 0.069×I_exp≈0.019"),
 )
 
 def calc_rope_inertia(rope=ROPE):
