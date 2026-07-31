@@ -108,6 +108,50 @@ def fit_quad(seg, win):
     return alpha, dmean, n, pts[-1][0]
 
 
+def impulse_fit(segs, m2, ell2, g=9.81):
+    """충격량-운동량법: 펄스 전체에 대해 I·ω_end = ∫τ dt − mgl∫sinδ dt − τf·T·sgn.
+    δ(t)에 지그·결합부 진동이 섞여도 적분 과정에서 대부분 상쇄된다.
+    25° 컷으로 끝난 단조운동 펄스(T 0.15~0.8 s, |ω_end| 유의미)만 사용."""
+    MGL = m2 * g * ell2
+    rows = []
+    for tau, seg in segs:
+        T = seg[-1][0]
+        tail = [(t, d) for t, d in seg if t >= T - 0.08]
+        if len(tail) < 4:
+            continue
+        n = len(tail)
+        mt = sum(t for t, _ in tail) / n
+        md = sum(d for _, d in tail) / n
+        sxx = sum((t - mt) ** 2 for t, _ in tail)
+        if sxx == 0:
+            continue
+        w = sum((t - mt) * (d - md) for t, d in tail) / sxx
+        if not (0.15 <= T <= 0.8) or abs(w) < 0.3:
+            continue        # 중력 평형에 걸린 저토크 펄스 등은 제외
+        Jg = 0.0
+        for (t1, d1), (t2, d2) in zip(seg[:-1], seg[1:]):
+            Jg += 0.5 * (math.sin(d1) + math.sin(d2)) * (t2 - t1)
+        rows.append((tau, w, tau * T - MGL * Jg, T))
+    if len(rows) < 3:
+        return None
+    # 최소제곱 2변수: J_net = I·w + tauf·T·sgn(tau)
+    S11 = sum(r[1] ** 2 for r in rows)
+    S12 = sum(r[1] * r[3] * (1 if r[0] > 0 else -1) for r in rows)
+    S22 = sum(r[3] ** 2 for r in rows)
+    b1 = sum(r[1] * r[2] for r in rows)
+    b2 = sum(r[3] * (1 if r[0] > 0 else -1) * r[2] for r in rows)
+    det = S11 * S22 - S12 * S12
+    if abs(det) < 1e-12:
+        return None
+    I = (b1 * S22 - b2 * S12) / det
+    tauf = (S11 * b2 - S12 * b1) / det
+    ss = sum((r[2] - (I * r[1] + tauf * r[3] * (1 if r[0] > 0 else -1))) ** 2 for r in rows)
+    my = sum(r[2] for r in rows) / len(rows)
+    sst = sum((r[2] - my) ** 2 for r in rows)
+    r2 = 1 - ss / sst if sst else 0.0
+    return I, abs(tauf), r2, rows
+
+
 def linfit(xs, ys):
     n = len(xs)
     mx, my = sum(xs) / n, sum(ys) / n
@@ -133,6 +177,9 @@ def main():
     ap.add_argument("--nograv", action="store_true", help="중력토크 0 지그 (힙축 연직)")
     ap.add_argument("--dir", choices=["both", "pos", "neg"], default="both",
                     help="분석할 펄스 방향 (기본 both). 한쪽이 이상할 때 pos/neg 로 분리 확인")
+    ap.add_argument("--method", choices=["window", "impulse"], default="window",
+                    help="window: 초기 0.2s 2차식 적합(기본). impulse: 펄스 전체 충격량-운동량 "
+                         "(지그·결합부 진동이 δ(t)에 섞일 때 이쪽이 강건 — 진동이 적분되며 상쇄됨)")
     a = ap.parse_args()
 
     rows, marks = read_csv(a.csv)
@@ -147,6 +194,25 @@ def main():
         print(f"펄스 구간이 {len(segs)}개뿐입니다. 'i <unit>' 을 최소 4단계(예: 60/90/120/160/200) 실행하세요.")
         if not segs:
             sys.exit(1)
+
+    if a.method == "impulse":
+        r = impulse_fit(segs, a.m2, a.ell2)
+        if r is None:
+            print("impulse 법에 쓸 단조운동 펄스(0.15~0.8 s)가 3개 미만입니다."); sys.exit(1)
+        I, tauf, r2, used = r
+        print(f"{'tau_cmd':>9} {'T[s]':>6} {'w_end':>8} {'J_net':>9}")
+        print("-" * 40)
+        for tau, w, Jn, T in used:
+            print(f"{tau:9.4f} {T:6.2f} {w:8.2f} {Jn:9.4f}")
+        print("-" * 40)
+        print(f"충격량 적합 (펄스 {len(used)}개)    R^2 = {r2:.4f}")
+        print(f"\n  ★ I_delta   = {I:.5f} kg·m²   (armature 반영분 포함)")
+        print(f"  ★ 마찰토크  = {tauf:.4f} N·m   (쿨롱 등가)")
+        for cur, lbl in ((600, "CUR_SAFE 600u"), (855, "855u"), (1193, "하드상한 1193u")):
+            tau = cur * 2.69e-3 * a.kt
+            print(f"  권장 최대 각가속도 @{lbl}: {math.degrees(tau/I):8.0f} °/s²"
+                  f"  (Profile Acceleration ≈ {math.degrees(tau/I)/21.4577:.0f} unit)")
+        return
 
     g = 9.81
     xs, ys = [], []
