@@ -28,13 +28,10 @@ def build_plant(p):
     p3 = p["m2"] * p["L1"] * p["ell2"]
     g = 9.81
 
-    # ★armature 반영 관성 (실험③): T_arm = ½·I_ARM·(θ̇−α̇)² → M 에
-    #   [αα]+I_a, [θθ]+I_a, [αθ]−I_a 로 들어간다 (φ행 불변 — CoM 법칙 유지)
-    Ia = p.get("I_ARM", 0.0)
     M = np.array([
         [Mt * p["R"]**2 + p["I_r"], p["R"] * p1,                              p["R"] * p2],
-        [p["R"] * p1,               p["m1"]*p["ell1"]**2 + p["I1_cm"] + p["m2"]*p["L1"]**2 + Ia, p3 - Ia],
-        [p["R"] * p2,               p3 - Ia,                                  p["m2"]*p["ell2"]**2 + p["I2_cm"] + Ia],
+        [p["R"] * p1,               p["m1"]*p["ell1"]**2 + p["I1_cm"] + p["m2"]*p["L1"]**2, p3],
+        [p["R"] * p2,               p3,                                       p["m2"]*p["ell2"]**2 + p["I2_cm"]],
     ])
     G = np.array([
         [-(Mt * p["R"] + p["S_r"]) * g, 0,      0],

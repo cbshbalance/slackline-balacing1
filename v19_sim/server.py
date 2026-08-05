@@ -195,6 +195,39 @@ class SimServer:
         elif cmd == "servo_aware":
             e.servo_aware = bool(m["v"])
             await self.rebuild()
+        elif cmd == "fwe_async_preset":
+            # ★비동기 FWE 시연 (2026-08-01 신챔피언): 펴기 생략 + 증분 접기 + 저속 복귀.
+            #   기존 fwe_preset(완전 사이클)은 그대로 두고 별도 프리셋으로 추가한 것.
+            #   차이 둘: ① 줄 마찰이 **실측값**(점성 3.3e-4·건마찰 3.1e-4 — 기존 프리셋의
+            #   가정 0.008/0.002 가 아니다) ② 온라인 노브 없이 고정 γ_h=15.
+            #   실측 마찰 20케이스 분포: 전 케이스 120s 상한 도달 (완전사이클 중앙값 49.3s).
+            #   ⚠생존 레짐이 소각근사 밖(몸기울기 최대 ~19°, 유지각 표류 ±33°)이라
+            #     '이론 검증'이 아니라 '시뮬 발견'으로 다룰 것.
+            self.running = False
+            self.pending = []
+            from sim_engine import REAL_DEFAULT
+            e.nominal = dict(c_phi=3.3e-4, RHO=0.95)      # 실측 줄 점성 (자유흔들기 07-28)
+            e.mismatch = dict(m1=0.0, m2=0.0, L1=0.0, L2=0.0, R=0.0, kt=0.0)
+            e.real = dict(REAL_DEFAULT)
+            e.gain_scale = 1.0
+            e.real.update(enc_use_gyro=False, fwe_settle_s=0.0, fwe_adapt_T=False,
+                          fwe_ff=True, fwe_fast_L=False, w_noload_dps=462.0,
+                          f_phi=3.1e-4,                    # 실측 줄 건마찰
+                          fwe_pos_mode=True, pos_vel_dps=420.0, pos_acc_dps2=8000.0,
+                          fwe_async=True, fwe_async_gamma=15.0,
+                          fwe_async_vret_dps=3.0, fwe_async_hold_min_deg=1.0,
+                          fwe_online=False)                # 고정 γ — 학습 없음
+            e.kp_servo, e.kd_servo = 80.0, 1.3
+            e.estimator = "enc"
+            e.ctrl_mode = "fwe3"
+            jit = float(np.random.default_rng().uniform(-0.02, 0.02))
+            e.x0 = dict(phi0=0.0, alpha0=0.5 + jit, theta0=0.5 + jit)
+            e.build()
+            e.reset()
+            await self.broadcast(dict(type="clear"))
+            await self.broadcast(self.init_msg())
+            await self.broadcast(self.view_msg())
+            self.running = True
         elif cmd == "fwe_preset":
             # ★원클릭 FWE 시연: 스윕 최적 시간표(params 기본) + 발목엔코더 + c_φ=0.008
             #   + γ(T)×실행갭 + 온라인 노브. 설정 후 바로 재생 시작.

@@ -63,6 +63,8 @@ label.chk{display:flex;align-items:center;gap:6px;margin-bottom:5px;cursor:point
    <h3>시뮬레이션</h3>
    <div class="row"><button class="btn" id="bPreset" style="background:linear-gradient(135deg,#3a86ff,#8338ec);color:#fff;font-weight:bold">★ FWE 시연 (원클릭 최적설정)</button></div>
    <div class="hint">스윕 최적 시간표(60/20/90/60ms·0.6°) + 발목엔코더 + 줄감쇠 0.008 + γ 자동노브로 즉시 재생.</div>
+   <div class="row"><button class="btn" id="bPresetAsync" style="background:linear-gradient(135deg,#06d6a0,#118ab2);color:#fff;font-weight:bold">★ 비동기 FWE 시연 (펴기 생략)</button></div>
+   <div class="hint">접기-대기-펴기 대신 <b>증분 접기 + 저속 복귀(3°/s)</b>. 줄 마찰은 <b>실측값</b>, 고정 γ=15(노브 없음). 20케이스 전원 120s 상한 도달.</div>
    <div class="row"><button class="btn on" id="bRun">▶ 시작</button><button class="btn" id="bReset">⟲ 리셋</button></div>
    <div class="row"><button class="btn danger" id="bPL">← 교란</button><button class="btn danger" id="bPR">교란 →</button></div>
    <div class="sl"><div class="lab"><span>교란 강도 φ̇킥 (rad/s)</span><span class="v" id="vPert">0.30</span></div>
@@ -375,6 +377,7 @@ frame();
 // ============================== 컨트롤 배선 ==============================
 el("bRun").onclick=()=>{ send({cmd: running? "pause":"run"}); };
 el("bPreset").onclick=()=>send({cmd:"fwe_preset"});
+el("bPresetAsync").onclick=()=>send({cmd:"fwe_async_preset"});
 el("bReset").onclick=()=>send({cmd:"reset"});
 el("bStep").onclick=()=>send({cmd:"step",n:1});
 el("bBack").onclick=()=>send({cmd:"back",n:1});

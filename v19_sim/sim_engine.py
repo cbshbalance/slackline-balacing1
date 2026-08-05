@@ -91,6 +91,17 @@ REAL_DEFAULT = dict(
                           #   (2026-07-18: 3000~12000 스윕, 지도적합 rms 1.84° 최소·생존 최대.
                           #   물리: I_δ·a ≈ 중속 가용토크 0.9N·m — '가진 토크만큼만' 이 최적.
                           #   더 빠르면 추종 붕괴, 더 느리면 사이클 길어져 Gc(오차증폭) 폭증)
+    # --- 비동기 FWE (2026-08-01: 펴기 생략 + 증분 접기 + 저속 복귀) ---
+    fwe_async = False,    # ★True: 접기-대기-펴기 사이클 대신 '증분 접기 + 저속 복귀' (fwe3 전용)
+                          #   트리거마다 현재 유지각에서 Δδ=ρ·γ·A 만큼만 더 접는다(부호는 A 를 따름).
+                          #   펴서 0 으로 돌아가는 단계가 없어 사이클이 절반 이하 → Gc 15.8→2.7,
+                          #   ρ 허용창 ±6%→±37%. 실측 마찰 20케이스에서 전 케이스 120s 상한 도달.
+    fwe_async_gamma = 15.0,   # 증분 환산비 γ_h [rad 접기 / rad 위험도]. 고정(온라인 학습 없음).
+                          #   고원 8~15, 22 는 포화로 꺾임. 유지 자세의 증분 킥은 이론 접기맵과
+                          #   다르므로(도착 감속이 킥 일부를 되받음) 실물에선 시험 접기로 실측할 것.
+    fwe_async_vret_dps = 3.0, # [°/s] 저속 복귀 속도. 상한 v < λ·A_여유/킥계수 ≈ 6°/s —
+                          #   45°/s 로 되돌리면 복귀가 만든 위험도만으로 초당 수 회 재트리거(자기교란).
+    fwe_async_hold_min_deg = 1.0,  # 이 각도 이하로 복귀하면 멈춤(데드밴드)
     armature_plant_scale = 1.0,  # 플랜트측 armature 배율 (제어기 비공개 — 미지 모델오차 실험용)
     gear_eta = 1.0,       # ★기어 전달효율 η (부하 비례 마찰의 방향 비대칭).
                           #   모터가 일할 때(τ·δ̇>0) τ→η·τ, 역구동/제동 시 τ→τ/η (η_back=2−1/η 물리).
@@ -204,7 +215,8 @@ class SimEngine:
         self.zbuf = []          # 루프 지연 FIFO
         self.fwe = dict(phase=PH_IDLE, t=0.0, d0=0.0, df=0.0, armed=True, cycles=0,
                         settle=0.0, fastL=0.0,   # settle: idle 정착시간, fastL: 고대역 L 잔여시간
-                        A_pre=None)              # 온라인 RLS 용 직전 트리거 기록
+                        A_pre=None,              # 온라인 RLS 용 직전 트리거 기록
+                        hold=0.0, n_inc=0, n_sat=0)   # 비동기 FWE: 유지각·증분횟수·포화횟수
         # RLS 상태: 파라미터 [Gc, gc], 공분산 P (사전값: 캘리브 or 공칭)
         g0 = self.real.get("fwe_gamma_cal", 0.0) or self.g["mdl"]["fwe"]["GAMMA_CYCLE"]
         Gc0 = self.real.get("fwe_Gc_cal", self.g["mdl"]["fwe"]["G_cyc"])
@@ -468,6 +480,10 @@ class SimEngine:
         if mode != MODE_FWE1 and self.real.get("fwe_gamma_cal", 0.0) > 0:
             gamma = self.real["fwe_gamma_cal"]      # 실행 캘리브레이션 γ*
         dmax = np.deg2rad(p["DELTA_MAX_DEG"])
+        if mode == MODE_FWE3 and self.real.get("fwe_async"):
+            d_loc, dd_loc = getattr(self, "hip_local", (delta, deltad))
+            return self._fwe_async(fwe, A, d_loc, dd_loc)
+
         if mode == MODE_FWE3 and self.real.get("fwe_pos_mode"):
             # ★위치모드의 프로파일·PD·도달판정은 서보 내부(로컬 엔코더, 지연 0).
             #   외부 루프 지연은 트리거용 A 에만 걸린다 — 위치모드의 지연 내성 근원.
@@ -521,6 +537,72 @@ class SimEngine:
         if self.real.get("fwe_ff", False):
             tau += self._Idd() * dda
         return tau
+
+    def _fwe_async(self, fwe, A, delta, deltad):
+        """★비동기 FWE (2026-08-01): 접기-대기-펴기 순차 사이클을 버리고 두 규칙만 남긴 제어.
+
+        ① 위험도 |A| 가 트리거 문턱을 넘으면, 0 으로 돌아가지 않고 **현재 유지각에서**
+           Δδ = ρ·γ_h·A 만큼만 더 움직인다(부호는 A 를 따르므로 접는 방향/펴는 방향 모두 나옴).
+        ② 문턱의 절반 아래로 조용하면 유지각을 저속(기본 3°/s)으로 0 을 향해 되돌린다.
+
+        F·W·E 가 사라진 게 아니라 역할이 바뀐 것: F=사건(문턱마다 증분),
+        W=기본상태(문턱 아래 무개입), E=배경과정(저속 복귀).
+        펴기 단계가 없어 유효 사이클이 절반 이하 → 기다림의 비용 Gc 15.8→2.7,
+        ρ 허용창 ±6%→±37%. 그래서 온라인 노브 없이 고정 γ 로도 살고, γ 가 두 배
+        어긋나도(고원 8~15) 견딘다. 단 생존 레짐이 소각근사 밖(몸기울기 최대 ~19°)이라
+        '이론 검증'이 아니라 '시뮬 발견'으로 다뤄야 한다.
+        """
+        p, r = self.p, self.real
+        dmax = np.deg2rad(p["DELTA_MAX_DEG"])
+        vmax = np.deg2rad(min(r["pos_vel_dps"], r["w_noload_dps"]))
+        amax = np.deg2rad(r["pos_acc_dps2"])
+        tol = np.deg2rad(r["pos_tol_deg"])
+        ref = fwe.get("ref", 0.0); vref = fwe.get("vref", 0.0)
+        trig = np.deg2rad(p["A_TRIGGER_DEG"])
+
+        if fwe["phase"] == PH_IDLE:
+            if fwe["armed"] and abs(A) > trig:
+                inc = p["RHO"] * r["fwe_async_gamma"] * A
+                new = float(np.clip(fwe["hold"] + inc, -dmax, dmax))
+                if abs(new - (fwe["hold"] + inc)) > 1e-9:
+                    fwe["n_sat"] += 1                      # 관절 한계 포화
+                fwe["hold"] = new; fwe["n_inc"] += 1
+                fwe.update(phase=PH_FOLD, t=0.0)
+            elif (r["fwe_async_vret_dps"] > 0 and abs(A) < 0.5 * trig
+                  and abs(fwe["hold"]) > np.deg2rad(r["fwe_async_hold_min_deg"])):
+                # 저속 복귀 = 아주 느린 펴기. 이 자체가 불안정 성분을 연속 주입하므로
+                # 속도 상한(≈6°/s)을 넘기면 복귀가 만든 위험도로 자기교란이 된다.
+                fwe["hold"] -= np.sign(fwe["hold"]) * np.deg2rad(r["fwe_async_vret_dps"]) * p["DT"]
+        elif fwe["phase"] == PH_FOLD:
+            arrived = (abs(ref - fwe["hold"]) < 1e-9 and abs(vref) < 1e-9
+                       and abs(delta - fwe["hold"]) < tol)
+            if arrived or fwe["t"] > 0.6:
+                fwe.update(phase=PH_REST, t=0.0)
+        elif fwe["phase"] == PH_REST:
+            if fwe["t"] >= p["T_REST"]:
+                fwe["cycles"] += 1
+                fwe.update(phase=PH_IDLE, t=0.0, settle=0.0, fastL=0.0)
+        else:                                    # WAIT/EXTEND/HOLD/DONE 은 쓰지 않음
+            fwe.update(phase=PH_IDLE, t=0.0)
+        fwe["t"] += p["DT"]
+
+        # 사다리꼴 프로파일 발생기 (목표는 항상 유지각) — 위치모드와 동일
+        tgt = fwe["hold"]
+        err = tgt - ref
+        if abs(err) < 1e-9 and abs(vref) < amax * p["DT"]:
+            ref, vref = tgt, 0.0
+        else:
+            stop_d = vref * vref / (2.0 * amax)
+            if (vref * np.sign(err) > 0) and (abs(err) <= stop_d):
+                vref -= np.sign(vref) * amax * p["DT"]
+            else:
+                vref += np.sign(err) * amax * p["DT"]
+                vref = float(np.clip(vref, -vmax, vmax))
+            ref += vref * p["DT"]
+            if (tgt - ref) * err < 0:
+                ref, vref = tgt, 0.0
+        fwe["ref"], fwe["vref"] = ref, vref
+        return r["pos_kp"] * (ref - delta) + r["pos_kd"] * (vref - deltad)
 
     def _fwe_pos(self, fwe, A, delta, deltad):
         """★위치모드 FWE (2026-07-18 사용자 제안): 서보 내장 제어기에 '목표로 최대속도'.
