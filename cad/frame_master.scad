@@ -215,6 +215,24 @@ lower_side_wire_s = lower_socket_insert_len - lower_side_wire_from_mouth;
 lower_side_wire_bore_d = 5;
 lower_side_wire_hole_len = lower_socket_outer_d + 8;
 
+// v5.13: pipe-cup clamp on the ANKLE sockets too (same recipe as the top
+// pivot cups v5.12: omega lugs + M3 cross bolt + wide slit + living-hinge
+// relief). Bore stays 8.2; the clamp is placed on the OUTSIDE of the
+// trapezoid (away from the carrier) on both sides, derived from the
+// diagonal direction so the front/rear mirror-spare property is kept.
+low_cup_clamp      = true;
+low_cup_slit_w     = 2.2;
+low_cup_lug_w      = 4.0;
+low_cup_lug_t      = 6.0;
+low_cup_lug_h      = 7.8;
+low_cup_lug_bite   = 3.0;
+low_cup_lug_inset  = 1.0;
+low_cup_bolt_d     = 3.2;   // M3 clearance
+low_cup_bolt_z     = lower_socket_outer_d/2 + low_cup_bolt_d/2 + 0.2;
+low_cup_clamp_s    = lower_pipe_stop_s + lower_pipe_insert_len/2;  // = 22
+low_cup_slit_past_stop = 2; // slit: mouth .. stop-2 (s 15..28)
+low_cup_hinge_wall = 1.7;   // living-hinge wall left next to the bore
+
 top_socket_inset = 30;     // clearance between bearing center and tube entry [mm]
 top_front_y = front_pivot_y + top_socket_inset;
 top_rear_y  = rear_pivot_y  - top_socket_inset;
@@ -1400,6 +1418,22 @@ module lower_corner_socket(p_corner, p_top, p_other, cutaway=show_lower_socket_c
 
             // Slightly fuller corner node where the two cups meet.
             translate(p_corner) sphere(d=lower_socket_outer_d + 2);
+
+            // v5.13: omega clamp lugs on the diagonal cup (pipe engagement
+            // zone). Local frame: +Y along u_diag (u_diag is in the Y-Z
+            // plane, so one X-rotation aligns it and the bolt stays global
+            // X). clamp_zf puts the lugs on the OUTSIDE of the trapezoid
+            // for both mirror parts (front: u_diag.y<0 -> local +Z).
+            if (low_cup_clamp) {
+                clamp_zf = (u_diag[1] < 0) ? 1 : -1;
+                lug_x = low_cup_slit_w/2 + low_cup_lug_w/2 - low_cup_lug_inset;
+                lug_z = lower_socket_outer_d/2 - low_cup_lug_bite + low_cup_lug_h/2;
+                translate(p_corner) rotate([atan2(u_diag[2], u_diag[1]), 0, 0])
+                    for (sx = [-1, 1])
+                        translate([sx * lug_x, low_cup_clamp_s, clamp_zf * lug_z])
+                            cube([low_cup_lug_w, low_cup_lug_t, low_cup_lug_h],
+                                 center=true);
+            }
         }
 
         // v5: magnet pocket in the axle tip face.
@@ -1428,6 +1462,34 @@ module lower_corner_socket(p_corner, p_top, p_other, cutaway=show_lower_socket_c
         translate(p_corner + u_diag * lower_side_wire_s)
             rotate([0, 90, 0])
                 cylinder(h=lower_side_wire_hole_len, d=lower_side_wire_bore_d, center=true);
+
+        // v5.13: cup clamp cuts — cross-bolt hole, wide slit (clamp side),
+        // and the living-hinge relief on the opposite side (leaves a
+        // low_cup_hinge_wall arc next to the bore). Same recipe as the
+        // v5.12 top pivot cups. Side wire hole is at s=12, slit starts at
+        // s=15 — no overlap.
+        if (low_cup_clamp) {
+            clamp_zf = (u_diag[1] < 0) ? 1 : -1;
+            lug_z = lower_socket_outer_d/2 - low_cup_lug_bite + low_cup_lug_h/2;
+            slit_bottom_z = lower_socket_bore_d/2 - 0.6;
+            slit_top_z = lug_z + low_cup_lug_h/2 + 0.3;
+            slit_s0 = lower_pipe_stop_s - low_cup_slit_past_stop;
+            slit_s1 = lower_socket_insert_len + 1;
+            translate(p_corner) rotate([atan2(u_diag[2], u_diag[1]), 0, 0]) {
+                translate([0, low_cup_clamp_s, clamp_zf * low_cup_bolt_z])
+                    cyl_x(2 * low_cup_lug_w + low_cup_slit_w + 2, low_cup_bolt_d);
+                translate([0, (slit_s0 + slit_s1)/2,
+                           clamp_zf * (slit_bottom_z + slit_top_z)/2])
+                    cube([low_cup_slit_w, slit_s1 - slit_s0,
+                          slit_top_z - slit_bottom_z], center=true);
+                relief_out_z = lower_socket_bore_d/2 + low_cup_hinge_wall;
+                relief_span = lower_socket_outer_d/2 - relief_out_z + 1;
+                translate([0, (slit_s0 + slit_s1)/2,
+                           -clamp_zf * (relief_out_z + relief_span/2)])
+                    cube([lower_socket_outer_d + 2, slit_s1 - slit_s0,
+                          relief_span], center=true);
+            }
+        }
 
         // Inspection cutaway: remove the viewer-side half of the socket.
         if (cutaway) {
