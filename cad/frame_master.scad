@@ -239,7 +239,12 @@ top_encoder_wire_side_hole_len = top_socket_outer_d + 8;
 // top-slit + M3 cross-bolt recipe as lock_collar_at_y_n, but built on the
 // cup itself around the pipe engagement zone (s = top_pipe_stop_s..cup_len).
 top_cup_clamp      = true;
-top_cup_slit_w     = 1.2;
+// v5.12: the v5.9 clamp bottomed out before gripping -- slit gap 1.2 allows
+// only ~0.38 mm diametral squeeze and the solid 3.9 mm wall opposite the
+// slit is too stiff to flex. Fix (bore kept at 8.2): wider slit for more
+// closing travel + a hinge relief groove opposite the slit so the mouth
+// actually closes when the M3 is tightened.
+top_cup_slit_w     = 2.2;   // v5.12: 1.2 -> 2.2 (~0.7 mm diametral travel)
 top_cup_lug_w      = 4.0;   // one lug width across local X
 top_cup_lug_t      = 6.0;   // lug thickness along the cup axis
 top_cup_lug_h      = 7.8;
@@ -249,6 +254,8 @@ top_cup_bolt_d     = 3.2;   // M3 clearance
 top_cup_bolt_z     = top_socket_outer_d/2 + top_cup_bolt_d/2 + 0.2;
 top_cup_clamp_s    = top_pipe_stop_s + top_pipe_insert_len/2; // lug center: mid pipe engagement
 top_cup_slit_past_stop = 2; // slit runs from the mouth to this far past the pipe stop
+top_cup_hinge_relief = true; // v5.12: living-hinge groove opposite the slit
+top_cup_hinge_wall = 1.7;    // wall left next to the bore at the hinge [mm]
 
 dy_sag = (upper_w - lower_w) / 2;
 sag    = sqrt(pow(diag_len, 2) - pow(dy_sag, 2));
@@ -1270,6 +1277,19 @@ module upper_socket(is_front=true, include_lock_collar=true) {
                            clamp_zf * (slit_bottom_z + slit_top_z)/2])
                     cube([top_cup_slit_w, slit_s1 - slit_s0,
                           slit_top_z - slit_bottom_z], center=true);
+                // v5.12: hinge relief opposite the slit. Removes the outer
+                // part of the wall on the far side over the same s-range,
+                // leaving a top_cup_hinge_wall-thick arc next to the bore
+                // as a living hinge, so bolt torque closes the mouth
+                // instead of fighting the full 3.9 mm wall.
+                if (top_cup_hinge_relief) {
+                    relief_out_z = top_socket_bore_d/2 + top_cup_hinge_wall;
+                    relief_span = top_socket_outer_d/2 - relief_out_z + 1;
+                    translate([0, (slit_s0 + slit_s1)/2,
+                               -clamp_zf * (relief_out_z + relief_span/2)])
+                        cube([top_socket_outer_d + 2, slit_s1 - slit_s0,
+                              relief_span], center=true);
+                }
             }
         }
 
