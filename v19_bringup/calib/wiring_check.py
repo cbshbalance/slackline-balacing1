@@ -134,9 +134,21 @@ def collect(ser, secs):
 
 
 def peak_dev(rows, k, base):
-    """기준값 대비 절대편차 최대 지점의 부호 있는 편차"""
+    """기준값 대비 '유지 구간'의 부호 있는 편차 — 드롭아웃에 강건한 판정.
+
+    발목 엔코더는 간헐적으로 raw=0 드롭아웃이 나며, 이때 각도가 영점 기준
+    ±180° 근처로 튄다(8/5 데이터에서 확인). 최대편차를 그대로 쓰면 이 한 샘플이
+    결과를 지배하므로: |편차|>90°(살짝 밀기/기울이기에서 물리적으로 불가능)는
+    글리치로 버리고, 남은 샘플 중 |편차| 상위 25%의 **중앙값**을 쓴다
+    ('밀었다/기울였다 유지' 구간의 대표값). 글리치 개수도 함께 돌려준다."""
     dev = [r[k] - base for r in rows]
-    return max(dev, key=abs) if dev else 0.0
+    glitch = sum(1 for d in dev if abs(d) > 90.0)
+    clean = sorted((d for d in dev if abs(d) <= 90.0), key=abs)
+    if not clean:
+        return 0.0, glitch
+    top = clean[-max(1, len(clean) // 4):]          # |편차| 큰 쪽 25% = 유지 구간
+    top.sort()
+    return top[len(top) // 2], glitch
 
 
 # ---------------- 메인 ----------------
@@ -196,13 +208,17 @@ def main():
 
         input("  (a) 로봇은 세운 채 줄(크랭크)만 +방향으로 살짝 밀었다 유지 → Enter 후 4초 기록 ")
         r, _ = collect(ser, 4.0)
-        dphi = peak_dev(r, 1, 0.0)
+        dphi, g = peak_dev(r, 1, 0.0)
+        if g: print(f"      (φ 드롭아웃 {g}샘플 제외)")
         print(f"      Δphi = {dphi:+.2f}° → 이 방향이 화면상 φ{'+' if dphi >= 0 else '−'} 이다")
 
         cmd(ser, "z"); drain(ser, 0.3)
         input("  (b) 줄은 가운데 두고 로봇 몸 전체를 같은 +방향으로 살짝 기울여 유지 → Enter 후 4초 기록 ")
         r, _ = collect(ser, 4.0)
-        dank = peak_dev(r, 2, 0.0)
+        dank, g = peak_dev(r, 2, 0.0)
+        if g: print(f"      (발목 드롭아웃 {g}샘플 제외 — 많으면 커넥터 재점검)")
+        if abs(dank) < 0.3:
+            print("      ★Δank가 너무 작음 — 기울임 유지 상태에서 다시 시도하라")
         s_phi = 1.0 if dphi >= 0 else -1.0
         # φ+ 방향으로 몸을 기울였을 때 α(=몸기울기)가 +가 되도록 하는 조합 추정
         agree = (dank * s_phi) >= 0
@@ -212,7 +228,7 @@ def main():
         input("  (c) 허리 토크 끈 상태(u)에서 상체를 +방향으로 살짝 접기 → Enter 후 4초 기록 ")
         cmd(ser, "u"); drain(ser, 0.3)
         r, _ = collect(ser, 4.0)
-        ddl = peak_dev(r, 3, r[0][3] if r else 0.0)
+        ddl, _g = peak_dev(r, 3, r[0][3] if r else 0.0)
         print(f"      Δdelta = {ddl:+.2f}° → +방향 접기가 δ{'+' if ddl >= 0 else '−'} "
               f"(MOTOR_DIR={'+1 유지' if ddl >= 0 else '-1 로 수정 검토(torque_cal 재확인)'})")
         print("      ★위 세 결과를 절차서 8.3 정합점검 기록란과 프로젝트 문서에 옮겨 적을 것")
