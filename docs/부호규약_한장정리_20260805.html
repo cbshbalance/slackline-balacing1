@@ -122,8 +122,8 @@
 <table>
   <tr><th style="width:34%">동작 (모두 +방향으로)</th><th style="width:22%">기대</th><th>8/5 실측·상태</th></tr>
   <tr><td>(a) 로봇 세운 채 줄만 밀기</td><td>Δφ &gt; 0</td><td class="ok">+7.56° → φ+ 방향 확정</td></tr>
-  <tr><td>(b) 줄 가운데 두고 몸 전체 기울이기</td><td>α &gt; 0, 그리고 <b>분석 β &gt; 0</b><br>(Δank 부호로 <code>--alpha</code> 확정)</td><td class="warn">재측정 대기 — 1차값 −178°는 영점 뒤집힘. z를 직립 자세에서 다시 잡고 측정</td></tr>
-  <tr><td>(c) 토크 끄고 상체를 +쪽으로 접기</td><td>Δδ &gt; 0 (앞접기)</td><td class="ok">+58.10° → MOTOR_DIR=+1 확정</td></tr>
+  <tr><td>(b) 줄 가운데 두고 몸 전체 기울이기</td><td>α &gt; 0, 그리고 <b>분석 β &gt; 0</b><br>(Δank 부호로 <code>--alpha</code> 확정)</td><td class="ok">+5.60° (2차, 일자 잠금·직립 영점) → 부호 s=+1, ank = α−φ 형 → <b>--alpha = ank+phi 확정</b><br><span style="color:var(--sub)">※1차 −178°는 영점 뒤집힘으로 폐기. (b)는 φ≈0이라 조합 구분이 안 되므로 조합은 기하(발목각=α−φ)+부호로 결정</span></td></tr>
+  <tr><td>(c) 토크 끄고 상체를 +쪽으로 접기</td><td>Δδ &gt; 0 (앞접기)</td><td class="ok">+58.10° (1차) → MOTOR_DIR=+1 확정 (torque_cal 확정값과 일치)<br><span style="color:var(--sub)">※2차 −81.04°는 동작 실수로 폐기</span></td></tr>
 </table>
 <div class="cap">판정의 최종 목표는 단 하나: <b>"몸을 φ+ 쪽으로 기울였을 때 분석 스크립트의 β가 +로 나오게" --alpha를 고르는 것</b> (절차서 v19 §0 정합점검). λ_u 크기는 부호에 둔감하지만 w·위험도 A는 부호가 틀리면 무너진다.</div>
 
@@ -136,13 +136,13 @@
 </div>
 <table style="margin-top:8px">
   <tr><th style="width:30%">항목</th><th>규칙 / 주의</th></tr>
-  <tr><td>발목 엔코더 → α</td><td>발목 엔코더는 <b>상대각</b>이라 부호·조합이 자명하지 않음 → <code>exp_analysis_v19.py --alpha {ank-phi, ank+phi, ank}</code>로 흡수 (기본 <code>ank-phi</code>). (b) 재측정으로 확정</td></tr>
+  <tr><td>발목 엔코더 → α</td><td>발목 엔코더는 <b>상대각</b>: ank = s·(α−φ). 8/5 실측 s=+1 → <b>α = ank + φ, 분석 옵션 <code>--alpha ank+phi</code> 확정</b> (기본값 ank-phi 아님에 주의!)</td></tr>
   <tr><td>펌웨어 δ</td><td><code>δ = MOTOR_DIR × (서보각 − 잠금각) × 360/4096</code>, MOTOR_DIR=+1 확정(8/5). +전류 = 앞접기(torque_cal 규약)</td></tr>
   <tr><td>영점(z)</td><td><b>로봇 직립·정지 상태에서만</b> 누른다. 뒤집힌 자세에서 z → 모든 발목 읽기가 ±180° 근처로 이동(8/5 1차 (b)의 원인)</td></tr>
   <tr><td>MuJoCo 비교 시</td><td>⚠ MuJoCo는 <code>x_foot = −R·φ</code> (해석모델은 +R·φ) — φ 부호 반전 필수, 안 하면 가속도 ~10배·역방향</td></tr>
   <tr><td>줄·발</td><td>발은 줄 V꼭짓점에 <b>고정</b>(미끄럼 없음). 줄(φ)은 안정 요소, 불안정한 것은 β</td></tr>
 </table>
 
-<div class="cap" style="margin-top:14px">이 문서는 리포 <code>docs/부호규약_한장정리_20260805.html</code>. (b) 재측정 결과가 나오면 --alpha 확정값을 이 표에 추가할 것.</div>
+<div class="cap" style="margin-top:14px">이 문서는 리포 <code>docs/부호규약_한장정리_20260805.html</code>. <b>정합점검 완료(8/5): φ+ 방향 확정 · --alpha = ank+phi · MOTOR_DIR = +1.</b> 이후 분석 명령 예: <code>python exp_analysis_v19.py exp2 &lt;csv&gt; --params v19_bringup --alpha ank+phi</code></div>
 </body>
 </html>

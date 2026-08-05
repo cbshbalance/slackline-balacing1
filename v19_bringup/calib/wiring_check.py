@@ -220,10 +220,15 @@ def main():
         if abs(dank) < 0.3:
             print("      ★Δank가 너무 작음 — 기울임 유지 상태에서 다시 시도하라")
         s_phi = 1.0 if dphi >= 0 else -1.0
-        # φ+ 방향으로 몸을 기울였을 때 α(=몸기울기)가 +가 되도록 하는 조합 추정
+        # 발목 엔코더는 줄↔하체 상대각: ank = s·(α−φ). (b)는 φ≈0·α>0 조건이므로
+        # Δank 부호가 곧 s다. s=+1 → α = ank+φ (--alpha ank+phi), s=−1 → α = φ−ank.
         agree = (dank * s_phi) >= 0
-        print(f"      Δank = {dank:+.2f}° → 발목 부호가 φ와 {'일치' if agree else '반대'}")
-        print(f"      ⇒ --alpha 후보: {'ank-phi (기본값 유지)' if agree else 'ank-phi 로 두되 분석 β 부호 확인 필요 — 정합 안 맞으면 ank+phi 시험'}")
+        print(f"      Δank = {dank:+.2f}° → 발목 부호 s={'+1' if agree else '-1'}")
+        if agree:
+            print("      ⇒ ank = α−φ 형 → --alpha ank+phi 사용 (8/5 실측 확정 케이스)")
+            print("        검증: 몸 세운 채 줄만 +로 밀면 ank가 −로 가야 한다")
+        else:
+            print("      ⇒ ank = φ−α 형 → 표준 옵션에 없음: 분석에서 α=phi−ank 로 처리 필요(보고할 것)")
 
         input("  (c) 허리 토크 끈 상태(u)에서 상체를 +방향으로 살짝 접기 → Enter 후 4초 기록 ")
         cmd(ser, "u"); drain(ser, 0.3)
