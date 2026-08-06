@@ -58,8 +58,8 @@ float DCMD_CAP     = 40.0f;        // δ 명령 상한 [°] (기구한계 55 이
 float STEP_CAP     = 22.0f;        // 증분 1회 상한 [°] (8/6 r3: 12는 추격 실패 — 한 방에 잡게)
 uint32_t FOLD_LOCK_MS = 120;       // 증분 후 잠금 (8/6 r3: 큰 증분+짧은 주기 = 유효 접기속도 180°/s+)
 float FALL_ALPHA_DEG  = 25.0f;     // |α| 초과 시 낙하 판정 → 토크 컷
-int PROF_ACC_UNIT = 150;           // ≈3200°/s² (8/6 한 단계 상향 — 결합부 진동 주시)
-int PROF_VEL_UNIT = 250;           // ≈343°/s (8/6 상향)
+int PROF_ACC_UNIT = 250;           // ≈5360°/s² (8/6 r5: 접기=킥이 되려면 빠르게. 결합부 진동 주시)
+int PROF_VEL_UNIT = 300;           // ≈412°/s (8/6 상향)
 
 // ---------------- 검증판 SPI 엔코더 (tilt_release_test와 동일) ----------------
 static SPISettings ENC_SPI(1000000, MSBFIRST, SPI_MODE1);
@@ -88,7 +88,7 @@ float dcmd=0;                      // δ 명령 [°]
 uint32_t lock_until=0;
 float phi_f=0, ank_f=0, dphi=0, dbeta=0;
 float phi_hist[5]={0}, beta_hist[5]={0}; int hist_i=0; int hist_n=0;
-float A_f=0;
+float A_f=0, A_avg=0, A_trim=0;
 bool est_init=false;
 uint32_t drop_cnt=0;
 
@@ -162,11 +162,14 @@ void loop(){
 
   // ---- 무장 상태: 조용해지면(|A|<트리거 0.3초 유지) 자동 시작 ----
   if(armed && !ctrl_on){
-    if(fabs(A_f) < max(1.0f, A_TRIG_DEG)){
+    A_avg = 0.98f*A_avg + 0.02f*A_f;        // 잡고 있는 자세의 느린 평균 (τ≈0.25s)
+    if(fabs(A_f - A_avg) < 0.7f && fabs(A_avg) < 8.0f){ // 조용함 + 자세 정상범위일 때만
       if(quiet_since==0) quiet_since=millis();
       else if(millis()-quiet_since>250){
+        A_trim = constrain(A_avg, -8.0f, 8.0f);   // ★자동 트림: 이 자세가 기준점
         ctrl_on=true; armed=false; lock_until=millis();
-        ev("GO",NAN,0); Serial.println("# 제어 시작! 손 떼세요");
+        ev("GO", A_trim, 0); Serial.print("# 제어 시작! 손 떼세요 (트림 ");
+        Serial.print(A_trim,2); Serial.println("도)");
       }
     } else quiet_since=0;
   }
@@ -176,10 +179,12 @@ void loop(){
     if(fabs(alpha) > FALL_ALPHA_DEG){
       dxl.torqueOff(DXL_ID); ctrl_on=false; ev("FALL", alpha);
       Serial.println("# 낙하 감지 — 토크 컷. 재개: 로봇 직립으로 세우고 g (필요시 z 먼저)");
-    } else if(fabs(A_f) > A_TRIG_DEG && millis() > lock_until){
-      float step = K_FOLD * A_f;                     // 기운 쪽(+A→+δ 앞접기)
+    } else if(fabs(A_f - A_trim) > A_TRIG_DEG && millis() > lock_until
+              && fabs(dcmd - del) < 4.0f){           // 직전 접기 실행 완료 후에만 재평가
+      float step = K_FOLD * (A_f - A_trim);          // 기운 쪽(+A→+δ 앞접기)
       step = constrain(step, -STEP_CAP, STEP_CAP);
       bool was_rail = (fabs(dcmd) >= DCMD_CAP - 0.01f);
+      if(was_rail && ((dcmd>0)==(step>0))) return;   // 상한에서 같은 방향 반복 억제
       dcmd = constrain(dcmd + step, -DCMD_CAP, DCMD_CAP);
       sendDelta(dcmd);
       lock_until = millis() + FOLD_LOCK_MS;
@@ -224,7 +229,7 @@ void pollSerial(){
       dxl.writeControlTableItem(PROFILE_VELOCITY,     DXL_ID, PROF_VEL_UNIT);
       dxl.torqueOn(DXL_ID);
       dcmd = delDeg();                 // 현 자세에서 무점프 시작
-      armed=true; quiet_since=0;
+      armed=true; quiet_since=0; A_avg=A_f;
       ev("ARMED",NAN,0);
       Serial.println("# 무장 — 로봇을 직립으로 안정시키면 자동 시작(GO) 후 손 떼기");
     }
@@ -232,7 +237,7 @@ void pollSerial(){
   else if(c=='s'){ streaming=!streaming; ev(streaming?"STREAM_ON":"STREAM_OFF",NAN,0); }
   else if(c=='x'){ dxl.torqueOff(DXL_ID); ctrl_on=false; ev("ESTOP",NAN,0);
                    Serial.println("# 비상정지 — 재개: g"); }
-  else if(c=='r'){ dcmd=0; if(ctrl_on) sendDelta(0); ev("RET0",NAN,0); }
+  else if(c=='r'){ dcmd=0; sendDelta(0); ev("RET0",NAN,0); }   // 토크 ON이면 즉시 복귀
   else if(c=='+'){ K_FOLD+=1; ev("KFOLD",K_FOLD,0); }
   else if(c=='-'){ K_FOLD-=1; if(K_FOLD<1)K_FOLD=1; ev("KFOLD",K_FOLD,0); }
   else if(c=='['){ A_TRIG_DEG=max(0.2f,A_TRIG_DEG-0.1f); ev("TRIG",A_TRIG_DEG,0); }
@@ -245,6 +250,7 @@ void pollSerial(){
     Serial.print(" ret="); Serial.print(RET_DPS,1);
     Serial.print(" dcmd="); Serial.print(dcmd,2);
     Serial.print(" A="); Serial.print(A_f,2);
+    Serial.print(" trim="); Serial.print(A_trim,2);
     Serial.print(" armed="); Serial.print(armed);
     Serial.print(" drop="); Serial.println(drop_cnt);
   }
