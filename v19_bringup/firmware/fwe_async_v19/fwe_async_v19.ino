@@ -18,7 +18,7 @@
  *   g : 무장/해제 — 무장 후 |A|<트리거 0.3s 유지되면 자동 시작(GO). 다시 g = 해제
  *   s : 200Hz 로그 스트리밍 ON/OFF   x : 비상 — 토크 컷 + 제어 OFF
  *   r : δ 목표 즉시 0                 t : 상태 한 줄
- *   + - : K_FOLD ±1   [ ] : 트리거 ±0.1°   v : 복귀속도 1.5/3/6°/s 순환
+ *   + - : K_FOLD ±1   d : 접기방향 토글(FWE/역방향)   [ ] : 트리거 ±0.1°   v : 복귀속도 순환
  * CSV: D,t_ms,phi_deg,ank_deg,del_deg,A_deg,dcmd_deg
  *      E,t_ms,FOLD,<Δδ> | E,t_ms,FALL | E,0,CTRL_ON/OFF | E,0,ZERO
  *
@@ -53,6 +53,8 @@ float W0 = -0.3655f, W1 = 1.0f, W2 = -0.0690f, W3 = 0.1287f;   // 실측 w
 // ---------------- 제어 상수 (문서 28 시뮬 확정값 기반) ----------------
 float A_TRIG_DEG   = 0.6f;         // 트리거 문턱 [β-deg]
 float K_FOLD       = 12.0f;        // 증분 환산비 Δδ=K·A (시뮬 고원 8~15)
+int   FOLD_DIR     = +1;           // 8/6 r11: +1=FWE(기운 쪽 접기, 줄이 움직일 때 정답)
+                                   //          -1=역방향(CoM 되돌리기 — 줄이 정지마찰로 붙었을 때 가설)
 float RET_DPS      = 3.0f;         // 저속 복귀 [°/s] (상한 6 — v<λ·A여유/킥계수)
 float DCMD_CAP     = 40.0f;        // δ 명령 상한 [°] (기구한계 55 이내 안전)
 float STEP_CAP     = 22.0f;        // 증분 1회 상한 [°] (8/6 r3: 12는 추격 실패 — 한 방에 잡게)
@@ -194,7 +196,7 @@ void loop(){
       Serial.println("# 낙하 감지 — 토크 컷. 재개: 로봇 직립으로 세우고 g (필요시 z 먼저)");
     } else if(fabs(A_f - A_trim) > A_TRIG_DEG && millis() > lock_until
               && fabs(dcmd - del) < 4.0f){           // 직전 접기 실행 완료 후에만 재평가
-      float step = K_FOLD * (A_f - A_trim);          // 기운 쪽(+A→+δ 앞접기)
+      float step = FOLD_DIR * K_FOLD * (A_f - A_trim);   // d로 방향 토글
       step = constrain(step, -STEP_CAP, STEP_CAP);
       bool was_rail = (fabs(dcmd) >= DCMD_CAP - 0.01f);
       if(was_rail && ((dcmd>0)==(step>0))) return;   // 상한에서 같은 방향 반복 억제
@@ -251,6 +253,8 @@ void pollSerial(){
   else if(c=='x'){ dxl.torqueOff(DXL_ID); ctrl_on=false; ev("ESTOP",NAN,0);
                    Serial.println("# 비상정지 — 재개: g"); }
   else if(c=='r'){ dcmd=0; sendDelta(0); ev("RET0",NAN,0); }   // 토크 ON이면 즉시 복귀
+  else if(c=='d'){ FOLD_DIR=-FOLD_DIR; ev("FDIR",FOLD_DIR,0);
+                   Serial.println(FOLD_DIR>0?"# 접기방향: FWE(기운 쪽)":"# 접기방향: 역방향(CoM 되돌리기)"); }
   else if(c=='+'){ K_FOLD+=1; ev("KFOLD",K_FOLD,0); }
   else if(c=='-'){ K_FOLD-=1; if(K_FOLD<1)K_FOLD=1; ev("KFOLD",K_FOLD,0); }
   else if(c=='['){ A_TRIG_DEG=max(0.2f,A_TRIG_DEG-0.1f); ev("TRIG",A_TRIG_DEG,0); }
@@ -258,7 +262,7 @@ void pollSerial(){
   else if(c=='v'){ RET_DPS = (RET_DPS>=6.0f)?1.5f:(RET_DPS*2.0f); ev("RETDPS",RET_DPS,0); }
   else if(c=='t'){
     Serial.print("# ctrl="); Serial.print(ctrl_on);
-    Serial.print(" K="); Serial.print(K_FOLD,1);
+    Serial.print(" K="); Serial.print(FOLD_DIR*K_FOLD,1);
     Serial.print(" trig="); Serial.print(A_TRIG_DEG,2);
     Serial.print(" ret="); Serial.print(RET_DPS,1);
     Serial.print(" dcmd="); Serial.print(dcmd,2);
