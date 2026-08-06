@@ -86,7 +86,9 @@ uint32_t quiet_since=0;
 int32_t d_zero_raw=0;              // δ=0 기준 서보 raw
 float dcmd=0;                      // δ 명령 [°]
 uint32_t lock_until=0;
-float phi_f=0, ank_f=0, dphi=0, dbeta=0, beta_prev=0, phi_prev=0;
+float phi_f=0, ank_f=0, dphi=0, dbeta=0;
+float phi_hist[5]={0}, beta_hist[5]={0}; int hist_i=0; int hist_n=0;
+float A_f=0;
 bool est_init=false;
 uint32_t drop_cnt=0;
 
@@ -143,17 +145,26 @@ void loop(){
   float alpha = ank + phi;
   float theta = alpha + del;
   float beta  = P1R*alpha + P2R*theta;
-  if(!est_init){ phi_prev=phi; beta_prev=beta; est_init=true; }
-  dphi  = 0.8f*dphi  + 0.2f*((phi -phi_prev )/dt);
-  dbeta = 0.8f*dbeta + 0.2f*((beta-beta_prev)/dt);
-  phi_prev=phi; beta_prev=beta; phi_f=phi; ank_f=ank;
+  if(!est_init){
+    for(int i=0;i<5;i++){ phi_hist[i]=phi; beta_hist[i]=beta; }
+    est_init=true;
+  }
+  // 미분: 25ms(5샘플) 기저 차분 + EMA — 0.022° 양자화 잡음 억제 (8/6 r4 수정)
+  int old_i = hist_i;                       // 5샘플 전 값
+  float dphi_raw  = (phi  - phi_hist[old_i])  / (5*dt);
+  float dbeta_raw = (beta - beta_hist[old_i]) / (5*dt);
+  phi_hist[hist_i]=phi; beta_hist[hist_i]=beta; hist_i=(hist_i+1)%5;
+  dphi  = 0.85f*dphi  + 0.15f*dphi_raw;
+  dbeta = 0.85f*dbeta + 0.15f*dbeta_raw;
+  phi_f=phi; ank_f=ank;
   float A = W0*phi + W1*beta + W2*dphi + W3*dbeta;   // [β-deg]
+  A_f = 0.85f*A_f + 0.15f*A;                // 위험도 저역필터 (τ≈30ms ≪ 배가시간 150ms)
 
   // ---- 무장 상태: 조용해지면(|A|<트리거 0.3초 유지) 자동 시작 ----
   if(armed && !ctrl_on){
-    if(fabs(A) < A_TRIG_DEG){
+    if(fabs(A_f) < max(1.0f, A_TRIG_DEG)){
       if(quiet_since==0) quiet_since=millis();
-      else if(millis()-quiet_since>300){
+      else if(millis()-quiet_since>250){
         ctrl_on=true; armed=false; lock_until=millis();
         ev("GO",NAN,0); Serial.println("# 제어 시작! 손 떼세요");
       }
@@ -165,8 +176,8 @@ void loop(){
     if(fabs(alpha) > FALL_ALPHA_DEG){
       dxl.torqueOff(DXL_ID); ctrl_on=false; ev("FALL", alpha);
       Serial.println("# 낙하 감지 — 토크 컷. 재개: 로봇 직립으로 세우고 g (필요시 z 먼저)");
-    } else if(fabs(A) > A_TRIG_DEG && millis() > lock_until){
-      float step = K_FOLD * A;                       // 기운 쪽(+A→+δ 앞접기)
+    } else if(fabs(A_f) > A_TRIG_DEG && millis() > lock_until){
+      float step = K_FOLD * A_f;                     // 기운 쪽(+A→+δ 앞접기)
       step = constrain(step, -STEP_CAP, STEP_CAP);
       bool was_rail = (fabs(dcmd) >= DCMD_CAP - 0.01f);
       dcmd = constrain(dcmd + step, -DCMD_CAP, DCMD_CAP);
@@ -190,7 +201,7 @@ void loop(){
     Serial.print(","); Serial.print(phi,3);
     Serial.print(","); Serial.print(ank,3);
     Serial.print(","); Serial.print(del,3);
-    Serial.print(","); Serial.print(A,3);
+    Serial.print(","); Serial.print(A_f,3);
     Serial.print(","); Serial.println(dcmd,3);
   }
   pollSerial();
@@ -233,6 +244,7 @@ void pollSerial(){
     Serial.print(" trig="); Serial.print(A_TRIG_DEG,2);
     Serial.print(" ret="); Serial.print(RET_DPS,1);
     Serial.print(" dcmd="); Serial.print(dcmd,2);
+    Serial.print(" A="); Serial.print(A_f,2);
     Serial.print(" armed="); Serial.print(armed);
     Serial.print(" drop="); Serial.println(drop_cnt);
   }
