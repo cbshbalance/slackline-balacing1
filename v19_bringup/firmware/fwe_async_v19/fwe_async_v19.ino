@@ -23,7 +23,7 @@
  *      E,t_ms,FOLD,<Δδ> | E,t_ms,FALL | E,0,CTRL_ON/OFF | E,0,ZERO
  *
  * 안전: 잡을 사람 상시 배치. |α|>25° → 자동 토크 컷(E,FALL). δ 명령 ±40° 제한,
- *       증분 1회 ±12° 제한, 증분 후 100ms 잠금(접기 실행 시간).
+ *       증분 1회 ±12° 제한, 증분 후 150ms 잠금(≈배가시간).
  */
 #include <SPI.h>
 #include <Dynamixel2Arduino.h>
