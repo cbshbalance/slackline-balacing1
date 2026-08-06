@@ -15,7 +15,7 @@
  *
  * [명령] (115200)
  *   z : 영점 (로봇 직립·정지 잡고) — δ 기준도 현 위치로
- *   g : 제어 ON/OFF (켜기 전 반드시 z. 켜면 E,CTRL_ON)
+ *   g : 무장/해제 — 무장 후 |A|<트리거 0.3s 유지되면 자동 시작(GO). 다시 g = 해제
  *   s : 200Hz 로그 스트리밍 ON/OFF   x : 비상 — 토크 컷 + 제어 OFF
  *   r : δ 목표 즉시 0                 t : 상태 한 줄
  *   + - : K_FOLD ±1   [ ] : 트리거 ±0.1°   v : 복귀속도 1.5/3/6°/s 순환
@@ -55,11 +55,11 @@ float A_TRIG_DEG   = 0.6f;         // 트리거 문턱 [β-deg]
 float K_FOLD       = 12.0f;        // 증분 환산비 Δδ=K·A (시뮬 고원 8~15)
 float RET_DPS      = 3.0f;         // 저속 복귀 [°/s] (상한 6 — v<λ·A여유/킥계수)
 float DCMD_CAP     = 40.0f;        // δ 명령 상한 [°] (기구한계 55 이내 안전)
-float STEP_CAP     = 12.0f;        // 증분 1회 상한 [°]
-uint32_t FOLD_LOCK_MS = 150;       // 증분 후 잠금 ≈ 배가시간 1/λ (8/6: 100→150, 접기 효과가 A에 반영될 시간)
+float STEP_CAP     = 22.0f;        // 증분 1회 상한 [°] (8/6 r3: 12는 추격 실패 — 한 방에 잡게)
+uint32_t FOLD_LOCK_MS = 120;       // 증분 후 잠금 (8/6 r3: 큰 증분+짧은 주기 = 유효 접기속도 180°/s+)
 float FALL_ALPHA_DEG  = 25.0f;     // |α| 초과 시 낙하 판정 → 토크 컷
-int PROF_ACC_UNIT = 120;           // ≈2570°/s² (M2 잠정 안전권)
-int PROF_VEL_UNIT = 200;           // ≈275°/s
+int PROF_ACC_UNIT = 150;           // ≈3200°/s² (8/6 한 단계 상향 — 결합부 진동 주시)
+int PROF_VEL_UNIT = 250;           // ≈343°/s (8/6 상향)
 
 // ---------------- 검증판 SPI 엔코더 (tilt_release_test와 동일) ----------------
 static SPISettings ENC_SPI(1000000, MSBFIRST, SPI_MODE1);
@@ -81,7 +81,8 @@ float wrapDeg(uint16_t raw, uint16_t zero){
 }
 
 // ---------------- 상태 ----------------
-bool streaming=false, ctrl_on=false;
+bool streaming=false, ctrl_on=false, armed=false;
+uint32_t quiet_since=0;
 int32_t d_zero_raw=0;              // δ=0 기준 서보 raw
 float dcmd=0;                      // δ 명령 [°]
 uint32_t lock_until=0;
@@ -148,6 +149,17 @@ void loop(){
   phi_prev=phi; beta_prev=beta; phi_f=phi; ank_f=ank;
   float A = W0*phi + W1*beta + W2*dphi + W3*dbeta;   // [β-deg]
 
+  // ---- 무장 상태: 조용해지면(|A|<트리거 0.3초 유지) 자동 시작 ----
+  if(armed && !ctrl_on){
+    if(fabs(A) < A_TRIG_DEG){
+      if(quiet_since==0) quiet_since=millis();
+      else if(millis()-quiet_since>300){
+        ctrl_on=true; armed=false; lock_until=millis();
+        ev("GO",NAN,0); Serial.println("# 제어 시작! 손 떼세요");
+      }
+    } else quiet_since=0;
+  }
+
   // ---- 제어 ----
   if(ctrl_on){
     if(fabs(alpha) > FALL_ALPHA_DEG){
@@ -193,17 +205,18 @@ void pollSerial(){
     dcmd=0; est_init=false; ev("ZERO",NAN,0);
   }
   else if(c=='g'){
-    ctrl_on=!ctrl_on;
-    if(ctrl_on){
+    if(ctrl_on||armed){ ctrl_on=false; armed=false; ev("CTRL_OFF",NAN,0); }
+    else {
       dxl.torqueOff(DXL_ID); delay(10);
       dxl.setOperatingMode(DXL_ID, OP_EXTENDED_POSITION); delay(10);
       dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL_ID, PROF_ACC_UNIT);
       dxl.writeControlTableItem(PROFILE_VELOCITY,     DXL_ID, PROF_VEL_UNIT);
       dxl.torqueOn(DXL_ID);
       dcmd = delDeg();                 // 현 자세에서 무점프 시작
-      lock_until = millis()+200;
-      ev("CTRL_ON",NAN,0);
-    } else { ev("CTRL_OFF",NAN,0); }
+      armed=true; quiet_since=0;
+      ev("ARMED",NAN,0);
+      Serial.println("# 무장 — 로봇을 직립으로 안정시키면 자동 시작(GO) 후 손 떼기");
+    }
   }
   else if(c=='s'){ streaming=!streaming; ev(streaming?"STREAM_ON":"STREAM_OFF",NAN,0); }
   else if(c=='x'){ dxl.torqueOff(DXL_ID); ctrl_on=false; ev("ESTOP",NAN,0);
@@ -220,6 +233,7 @@ void pollSerial(){
     Serial.print(" trig="); Serial.print(A_TRIG_DEG,2);
     Serial.print(" ret="); Serial.print(RET_DPS,1);
     Serial.print(" dcmd="); Serial.print(dcmd,2);
+    Serial.print(" armed="); Serial.print(armed);
     Serial.print(" drop="); Serial.println(drop_cnt);
   }
 }
