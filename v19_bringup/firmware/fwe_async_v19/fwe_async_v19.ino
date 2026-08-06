@@ -56,7 +56,7 @@ float K_FOLD       = 12.0f;        // 증분 환산비 Δδ=K·A (시뮬 고원 
 float RET_DPS      = 3.0f;         // 저속 복귀 [°/s] (상한 6 — v<λ·A여유/킥계수)
 float DCMD_CAP     = 40.0f;        // δ 명령 상한 [°] (기구한계 55 이내 안전)
 float STEP_CAP     = 12.0f;        // 증분 1회 상한 [°]
-uint32_t FOLD_LOCK_MS = 100;       // 증분 후 잠금(접기 실행 시간)
+uint32_t FOLD_LOCK_MS = 150;       // 증분 후 잠금 ≈ 배가시간 1/λ (8/6: 100→150, 접기 효과가 A에 반영될 시간)
 float FALL_ALPHA_DEG  = 25.0f;     // |α| 초과 시 낙하 판정 → 토크 컷
 int PROF_ACC_UNIT = 120;           // ≈2570°/s² (M2 잠정 안전권)
 int PROF_VEL_UNIT = 200;           // ≈275°/s
@@ -152,13 +152,19 @@ void loop(){
   if(ctrl_on){
     if(fabs(alpha) > FALL_ALPHA_DEG){
       dxl.torqueOff(DXL_ID); ctrl_on=false; ev("FALL", alpha);
+      Serial.println("# 낙하 감지 — 토크 컷. 재개: 로봇 직립으로 세우고 g (필요시 z 먼저)");
     } else if(fabs(A) > A_TRIG_DEG && millis() > lock_until){
       float step = K_FOLD * A;                       // 기운 쪽(+A→+δ 앞접기)
       step = constrain(step, -STEP_CAP, STEP_CAP);
+      bool was_rail = (fabs(dcmd) >= DCMD_CAP - 0.01f);
       dcmd = constrain(dcmd + step, -DCMD_CAP, DCMD_CAP);
       sendDelta(dcmd);
       lock_until = millis() + FOLD_LOCK_MS;
       ev("FOLD", step);
+      if(!was_rail && fabs(dcmd) >= DCMD_CAP - 0.01f){
+        ev("RAIL", dcmd);   // 접기 상한 도달 — 잡혀 있거나 이미 회복 불능 신호
+        Serial.println("# δ 상한 도달 — 손으로 잡고 있다면 r(복귀) 또는 x. 줄 위라면 낙하 임박");
+      }
     } else if(millis() > lock_until && fabs(dcmd) > 0.01f){
       float dd = RET_DPS * dt;                       // 저속 복귀 (배경과정 E)
       dcmd += (dcmd > 0)? -min(dd, dcmd) : min(dd, -dcmd);
@@ -200,7 +206,8 @@ void pollSerial(){
     } else { ev("CTRL_OFF",NAN,0); }
   }
   else if(c=='s'){ streaming=!streaming; ev(streaming?"STREAM_ON":"STREAM_OFF",NAN,0); }
-  else if(c=='x'){ dxl.torqueOff(DXL_ID); ctrl_on=false; ev("ESTOP",NAN,0); }
+  else if(c=='x'){ dxl.torqueOff(DXL_ID); ctrl_on=false; ev("ESTOP",NAN,0);
+                   Serial.println("# 비상정지 — 재개: g"); }
   else if(c=='r'){ dcmd=0; if(ctrl_on) sendDelta(0); ev("RET0",NAN,0); }
   else if(c=='+'){ K_FOLD+=1; ev("KFOLD",K_FOLD,0); }
   else if(c=='-'){ K_FOLD-=1; if(K_FOLD<1)K_FOLD=1; ev("KFOLD",K_FOLD,0); }
