@@ -154,10 +154,23 @@ void loop(){
   float dphi_raw  = (phi  - phi_hist[old_i])  / (5*dt);
   float dbeta_raw = (beta - beta_hist[old_i]) / (5*dt);
   phi_hist[hist_i]=phi; beta_hist[hist_i]=beta; hist_i=(hist_i+1)%5;
+  // 물리 한계 클램프: 실물 각속도는 수백°/s를 넘을 수 없다 — 넘으면 센서 쓰레기
+  static uint16_t insane_cnt=0;
+  if(fabs(dphi_raw)>500 || fabs(dbeta_raw)>500){
+    dphi_raw=constrain(dphi_raw,-500.0f,500.0f);
+    dbeta_raw=constrain(dbeta_raw,-500.0f,500.0f);
+    if(insane_cnt<60000) insane_cnt++;
+  } else if(insane_cnt>0) insane_cnt--;
+  static uint32_t last_sensor_warn=0;
+  if(insane_cnt>100 && millis()-last_sensor_warn>2000){   // 0.5초 이상 지속되면 경고
+    last_sensor_warn=millis(); ev("SENSOR");
+    Serial.println("# ★센서 이상(발목/φ 각속도 비물리) — 배선·자석 점검. 제어 신뢰 불가");
+  }
   dphi  = 0.85f*dphi  + 0.15f*dphi_raw;
   dbeta = 0.85f*dbeta + 0.15f*dbeta_raw;
   phi_f=phi; ank_f=ank;
   float A = W0*phi + W1*beta + W2*dphi + W3*dbeta;   // [β-deg]
+  A = constrain(A, -60.0f, 60.0f);          // 표시·판정 한계 (이 밖은 어차피 낙하)
   A_f = 0.85f*A_f + 0.15f*A;                // 위험도 저역필터 (τ≈30ms ≪ 배가시간 150ms)
 
   // ---- 무장 상태: 조용해지면(|A|<트리거 0.3초 유지) 자동 시작 ----
