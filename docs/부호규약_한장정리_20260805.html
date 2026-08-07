@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>어름이 부호 규약 한 장 정리 (2026-08-05)</title>
+<style>
+  :root{
+    --ink:#1a1f27; --sub:#5a6472; --line:#d7dce3; --bg:#ffffff; --panel:#f6f8fa;
+    --rope:#2563b0; --lower:#b4552a; --upper:#d98324; --ok:#2e7d4f; --warn:#b3261e; --acc:#6b4fa0;
+  }
+  body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:var(--ink);background:var(--bg);
+       margin:24px auto;max-width:980px;padding:0 16px;line-height:1.55}
+  h1{font-size:21px;margin:0 0 4px} .sub{color:var(--sub);font-size:13px;margin-bottom:18px}
+  h2{font-size:15px;margin:22px 0 8px;border-left:4px solid var(--acc);padding-left:8px}
+  .row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
+  table{border-collapse:collapse;font-size:13px;width:100%}
+  th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  th{background:#eef1f5;font-weight:600}
+  .ok{color:var(--ok);font-weight:700} .warn{color:var(--warn);font-weight:700}
+  code{background:#eef1f5;border-radius:4px;padding:1px 5px;font-size:12.5px}
+  .formula{font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:8px;
+           padding:8px 12px;display:inline-block;margin:4px 6px 4px 0}
+  .cap{font-size:12px;color:var(--sub);margin-top:4px}
+  svg text{font-family:inherit}
+</style>
+</head>
+<body>
+
+<h1>어름이 부호 규약 — 한 장 정리</h1>
+<div class="sub">출처: CLAUDE.md §2·§9(권위), 실험절차서 v19, exp_analysis_v19.py · 2026-08-05 정합점검 반영 · <b>대원칙: 모든 각도는 연직(수직선) 기준, "+방향(오른쪽)으로 기운 것"이 +</b></div>
+
+<div class="row">
+  <!-- ══════════ 메인 다이어그램 ══════════ -->
+  <div class="panel" style="flex:1 1 460px">
+    <svg viewBox="0 0 470 480" width="100%">
+      <defs>
+        <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 z" fill="#3a4250"/></marker>
+        <marker id="arg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L7,3 L0,6 z" fill="var(--ok)"/></marker>
+      </defs>
+
+      <!-- 기둥/피벗 -->
+      <rect x="176" y="28" width="48" height="14" rx="3" fill="#8a93a0"/>
+      <circle cx="200" cy="50" r="5" fill="#3a4250"/>
+      <text x="232" y="38" font-size="11.5" fill="#5a6472">상단 피벗(베어링)</text>
+
+      <!-- 연직 기준선들 -->
+      <line x1="200" y1="50" x2="200" y2="430" stroke="#9aa3ae" stroke-dasharray="5 4"/>
+      <line x1="302" y1="364" x2="302" y2="205" stroke="#9aa3ae" stroke-dasharray="5 4"/>
+      <line x1="358" y1="258" x2="358" y2="145" stroke="#9aa3ae" stroke-dasharray="5 4"/>
+
+      <!-- 줄(크랭크): P(200,50)→F(302,364), φ=18° -->
+      <line x1="200" y1="50" x2="302" y2="364" stroke="var(--rope)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 200,130 A 80,80 0 0 0 224.7,126.1" fill="none" stroke="var(--rope)" stroke-width="1.8" marker-end="url(#ar)"/>
+      <text x="207" y="120" font-size="16" font-style="italic" fill="var(--rope)">φ</text>
+      <text x="120" y="215" font-size="12" fill="var(--rope)">줄+발 (반경 R)</text>
+      <text x="120" y="230" font-size="11" fill="#5a6472">= 안정 진자 (복원)</text>
+
+      <!-- 발 -->
+      <circle cx="302" cy="364" r="6" fill="#1a1f27"/>
+      <text x="252" y="392" font-size="11.5" fill="#1a1f27">발 = 줄 V꼭짓점에 고정</text>
+      <text x="252" y="406" font-size="11" fill="#5a6472">(줄 위를 미끄러지지 않음)</text>
+
+      <!-- 하체: F(302,364)→H(358,258), α=28° -->
+      <line x1="302" y1="364" x2="358" y2="258" stroke="var(--lower)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M 302,309 A 55,55 0 0 1 327.8,315.4" fill="none" stroke="var(--lower)" stroke-width="1.8" marker-end="url(#ar)"/>
+      <text x="308" y="300" font-size="16" font-style="italic" fill="var(--lower)">α</text>
+      <text x="238" y="285" font-size="12" fill="var(--lower)">하체 절대각</text>
+
+      <!-- 힙 -->
+      <circle cx="358" cy="258" r="6" fill="#6b4fa0"/>
+      <text x="368" y="272" font-size="11.5" fill="#6b4fa0">힙 (모터, 유일한 입력 τ)</text>
+
+      <!-- 하체 연장선 (δ 기준) -->
+      <line x1="358" y1="258" x2="390.9" y2="196.2" stroke="var(--lower)" stroke-dasharray="4 4" stroke-width="1.5"/>
+
+      <!-- 상체: H(358,258)→T(439,177), θ=45° -->
+      <line x1="358" y1="258" x2="439" y2="177" stroke="var(--upper)" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="439" cy="177" r="10" fill="none" stroke="var(--upper)" stroke-width="4"/>
+      <path d="M 358,213 A 45,45 0 0 1 389.8,226.2" fill="none" stroke="var(--upper)" stroke-width="1.8" marker-end="url(#ar)"/>
+      <text x="360" y="205" font-size="16" font-style="italic" fill="var(--upper)">θ</text>
+      <text x="415" y="160" font-size="12" fill="var(--upper)">상체 절대각</text>
+
+      <!-- δ 호: 연장선(379,218)→상체(389.8,226.2) -->
+      <path d="M 381.5,213.7 A 50,50 0 0 1 393.4,222.9" fill="none" stroke="var(--acc)" stroke-width="1.8" marker-end="url(#ar)"/>
+      <text x="397" y="207" font-size="15" font-style="italic" fill="var(--acc)">δ</text>
+      <text x="397" y="221" font-size="10.5" fill="var(--acc)">= θ − α</text>
+
+      <!-- +방향 -->
+      <line x1="180" y1="452" x2="330" y2="452" stroke="var(--ok)" stroke-width="2.5" marker-end="url(#arg)"/>
+      <text x="150" y="472" font-size="12.5" fill="var(--ok)" font-weight="bold">+방향 (이번에 정한 쪽) — Δφ=+7.56°로 "화면 φ+" 확정 (8/5)</text>
+    </svg>
+    <div class="cap">그림 1. 좌표 3개(φ, α, θ)는 <b>전부 연직 기준 절대각</b>이고, +방향으로 기울면 +. δ만 상대각(θ−α).</div>
+  </div>
+
+  <!-- ══════════ δ 함정 그림 ══════════ -->
+  <div class="panel" style="flex:0 1 300px">
+    <svg viewBox="0 0 300 250" width="100%">
+      <defs><marker id="arg2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L7,3 L0,6 z" fill="var(--ok)"/></marker></defs>
+      <text x="14" y="22" font-size="13.5" font-weight="bold" fill="#1a1f27">δ &gt; 0 = "앞으로 접기"의 올바른 그림</text>
+      <!-- V자 몸: 발(190,210) 힙(130,140) 머리(196,72) -->
+      <line x1="190" y1="210" x2="130" y2="140" stroke="var(--lower)" stroke-width="5" stroke-linecap="round"/>
+      <line x1="130" y1="140" x2="196" y2="72" stroke="var(--upper)" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="196" cy="72" r="9" fill="none" stroke="var(--upper)" stroke-width="4"/>
+      <circle cx="190" cy="210" r="5" fill="#1a1f27"/>
+      <circle cx="130" cy="140" r="6" fill="#6b4fa0"/>
+      <line x1="190" y1="210" x2="196" y2="72" stroke="#9aa3ae" stroke-dasharray="4 4"/>
+      <text x="205" y="215" font-size="11.5">발 → +쪽</text>
+      <text x="205" y="76" font-size="11.5">머리 → +쪽</text>
+      <text x="30" y="136" font-size="11.5" fill="#6b4fa0">엉덩이 → −쪽</text>
+      <line x1="120" y1="235" x2="230" y2="235" stroke="var(--ok)" stroke-width="2.2" marker-end="url(#arg2)"/>
+      <text x="90" y="239" font-size="11" fill="var(--ok)" font-weight="bold">+방향</text>
+    </svg>
+    <div class="cap">그림 2. ⚠<b>δ 해석 함정</b> — δ&gt;0은 "상체가 오른쪽으로 평행이동"이 아니라, <b>머리·발이 +쪽, 엉덩이가 −쪽으로 빠지며 힙을 꼭짓점으로 V자 접힘</b> (사람이 오른쪽 보고 허리 숙인 자세). 8/5 확인: +방향 접기 → Δδ=+58.1° → <b>MOTOR_DIR=+1 확정</b>. 위치모드 킥의 부호 = 기울어진 쪽.</div>
+  </div>
+</div>
+
+<h2>정합점검 3동작 — 무엇이 어떤 부호로 나와야 하나</h2>
+<table>
+  <tr><th style="width:34%">동작 (모두 +방향으로)</th><th style="width:22%">기대</th><th>8/5 실측·상태</th></tr>
+  <tr><td>(a) 로봇 세운 채 줄만 밀기</td><td>Δφ &gt; 0</td><td class="ok">+7.56° → φ+ 방향 확정</td></tr>
+  <tr><td>(b) 줄 가운데 두고 몸 전체 기울이기</td><td>α &gt; 0, 그리고 <b>분석 β &gt; 0</b><br>(Δank 부호로 <code>--alpha</code> 확정)</td><td class="ok">+5.60° (2차, 일자 잠금·직립 영점) → 부호 s=+1, ank = α−φ 형 → <b>--alpha = ank+phi 확정</b><br><span style="color:var(--sub)">※1차 −178°는 영점 뒤집힘으로 폐기. (b)는 φ≈0이라 조합 구분이 안 되므로 조합은 기하(발목각=α−φ)+부호로 결정</span></td></tr>
+  <tr><td>(c) 토크 끄고 상체를 +쪽으로 접기</td><td>Δδ &gt; 0 (앞접기)</td><td class="ok">+58.10° (1차) → MOTOR_DIR=+1 확정 (torque_cal 확정값과 일치)<br><span style="color:var(--sub)">※2차 −81.04°는 동작 실수로 폐기</span></td></tr>
+</table>
+<div class="cap">판정의 최종 목표는 단 하나: <b>"몸을 φ+ 쪽으로 기울였을 때 분석 스크립트의 β가 +로 나오게" --alpha를 고르는 것</b> (절차서 v19 §0 정합점검). λ_u 크기는 부호에 둔감하지만 w·위험도 A는 부호가 틀리면 무너진다.</div>
+
+<h2>수식 규약 (분석·시뮬과 일치해야 하는 것들)</h2>
+<div>
+  <span class="formula">δ = θ − α</span>
+  <span class="formula">β = (p₁α + p₂θ)/(p₁+p₂)</span>
+  <span class="formula">x_CoM = R·φ + h·β</span>
+  <span class="formula">τ 입력: E = [0, −1, +1] (α에 −τ, θ에 +τ)</span>
+</div>
+<table style="margin-top:8px">
+  <tr><th style="width:30%">항목</th><th>규칙 / 주의</th></tr>
+  <tr><td>발목 엔코더 → α</td><td>발목 엔코더는 <b>상대각</b>: ank = s·(α−φ). 8/5 실측 s=+1 → <b>α = ank + φ, 분석 옵션 <code>--alpha ank+phi</code> 확정</b> (기본값 ank-phi 아님에 주의!)</td></tr>
+  <tr><td>펌웨어 δ</td><td><code>δ = MOTOR_DIR × (서보각 − 잠금각) × 360/4096</code>, MOTOR_DIR=+1 확정(8/5). +전류 = 앞접기(torque_cal 규약)</td></tr>
+  <tr><td>영점(z)</td><td><b>로봇 직립·정지 상태에서만</b> 누른다. 뒤집힌 자세에서 z → 모든 발목 읽기가 ±180° 근처로 이동(8/5 1차 (b)의 원인)</td></tr>
+  <tr><td>MuJoCo 비교 시</td><td>⚠ MuJoCo는 <code>x_foot = −R·φ</code> (해석모델은 +R·φ) — φ 부호 반전 필수, 안 하면 가속도 ~10배·역방향</td></tr>
+  <tr><td>줄·발</td><td>발은 줄 V꼭짓점에 <b>고정</b>(미끄럼 없음). 줄(φ)은 안정 요소, 불안정한 것은 β</td></tr>
+</table>
+
+<div class="cap" style="margin-top:14px">이 문서는 리포 <code>docs/부호규약_한장정리_20260805.html</code>. <b>정합점검 완료(8/5): φ+ 방향 확정 · --alpha = ank+phi · MOTOR_DIR = +1.</b> 이후 분석 명령 예: <code>python exp_analysis_v19.py exp2 &lt;csv&gt; --params v19_bringup --alpha ank+phi</code></div>
+</body>
+</html>
