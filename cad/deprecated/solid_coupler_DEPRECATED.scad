@@ -7,4 +7,4 @@ part_mode = "solid_coupler";
 part_cutaway = false;      // true to inspect the bores and clamp slits
 print_export = true;       // use high quality $fn for STL export
 
-include <frame_v4.scad>
+include <../frame_master.scad>

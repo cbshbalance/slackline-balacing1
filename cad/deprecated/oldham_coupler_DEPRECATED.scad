@@ -4,4 +4,4 @@
 part_mode = "solid_coupler";
 part_cutaway = false;
 
-include <frame_v3.scad>
+include <../frame_master.scad>
