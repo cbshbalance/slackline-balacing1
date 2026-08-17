@@ -1,0 +1,6048 @@
+{
+  "tag_counts": {
+    "sec": 1,
+    "p": 633,
+    "run": 810,
+    "secPr": 1,
+    "grid": 1,
+    "startNum": 1,
+    "visibility": 1,
+    "lineNumberShape": 1,
+    "pagePr": 1,
+    "margin": 1,
+    "footNotePr": 1,
+    "autoNumFormat": 2,
+    "noteLine": 2,
+    "noteSpacing": 2,
+    "numbering": 2,
+    "placement": 2,
+    "endNotePr": 1,
+    "pageBorderFill": 3,
+    "offset": 66,
+    "ctrl": 15,
+    "colPr": 1,
+    "pageNum": 1,
+    "newNum": 6,
+    "tbl": 20,
+    "sz": 126,
+    "pos": 126,
+    "outMargin": 126,
+    "caption": 41,
+    "subList": 148,
+    "linesegarray": 633,
+    "lineseg": 988,
+    "inMargin": 73,
+    "tr": 50,
+    "tc": 97,
+    "t": 735,
+    "cellAddr": 97,
+    "cellSpan": 97,
+    "cellSz": 97,
+    "cellMargin": 97,
+    "tab": 32,
+    "pageHiding": 3,
+    "rect": 10,
+    "orgSz": 63,
+    "curSz": 63,
+    "flip": 63,
+    "rotationInfo": 63,
+    "renderingInfo": 63,
+    "transMatrix": 63,
+    "scaMatrix": 63,
+    "rotMatrix": 63,
+    "lineShape": 10,
+    "fillBrush": 10,
+    "winBrush": 6,
+    "shadow": 10,
+    "drawText": 10,
+    "textMargin": 10,
+    "pt0": 63,
+    "pt1": 63,
+    "pt2": 63,
+    "pt3": 63,
+    "shapeComment": 106,
+    "gradation": 4,
+    "color": 8,
+    "pic": 53,
+    "img": 53,
+    "imgRect": 53,
+    "imgClip": 53,
+    "imgDim": 53,
+    "effects": 53,
+    "lineBreak": 1,
+    "equation": 43,
+    "script": 43,
+    "fieldBegin": 2,
+    "parameters": 2,
+    "integerParam": 2,
+    "fieldEnd": 2
+  },
+  "paragraphs": [
+    {
+      "element_index": 0,
+      "text": "출품번호1167제72회 전국과학전람회한국 줄타기는 어떻게 장대 없이 균형을 잡는가? 처진 줄 진자 위 이중 역진자가 허리 접기 하나로 서는 원리의 규명과    로봇 실증2026.    8.    10.출품학생김지훈, 송주호, 이혜원지도교원정도일구    분학생부출품부문물리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 2,
+      "text": "출품번호1167",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 3,
+      "text": "출품번호",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 4,
+      "text": "1167",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 6,
+      "text": "제72회 전국과학전람회",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 10,
+      "text": "한국 줄타기는 어떻게 장대 없이 균형을 잡는가? 처진 줄 진자 위 이중 역진자가 허리 접기 하나로 서는 원리의 규명과    로봇 실증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 11,
+      "text": "한국 줄타기는",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 12,
+      "text": "어떻게 장대 없이 균형을 잡는가?",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 13,
+      "text": "처진 줄 진자 위 이중 역진자가",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 14,
+      "text": "허리 접기 하나로 서는 원리의 규명과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 15,
+      "text": "로봇 실증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 20,
+      "text": "2026.    8.    10.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 25,
+      "text": "출품학생김지훈, 송주호, 이혜원지도교원정도일구    분학생부출품부문물리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 26,
+      "text": "출품학생",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 27,
+      "text": "김지훈, 송주호, 이혜원",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 28,
+      "text": "지도교원",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 29,
+      "text": "정도일",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 30,
+      "text": "구    분",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 31,
+      "text": "학생부",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 32,
+      "text": "출품부문",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 33,
+      "text": "물리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 34,
+      "text": "【 차  례 】",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 35,
+      "text": "I. 탐구 동기 및 목적",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 36,
+      "text": "1. 탐구 동기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 37,
+      "text": "가. 문제 인식",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 38,
+      "text": "나. 역발상",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 40,
+      "text": "2. 탐구 목적",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 41,
+      "text": "가. 장대 없는 한국 줄타기의 균형 회복 원리를 물리 법칙으로 규명",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 42,
+      "text": "나. 원리를 수학적으로 유도하고 물리 엔진 시뮬레이션으로 검증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 43,
+      "text": "다. 자체 제작한 줄타기 로봇으로 실물 실증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 44,
+      "text": "II. 탐구 과정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 45,
+      "text": "1. 역설 – 떨어져야 하는데, 떨어지지 않는다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 46,
+      "text": "가. 장대가 없다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 47,
+      "text": "나. 얼음판 위의 사고실험 — 이건 불가능한 일이다",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 48,
+      "text": "다. 선행 연구 조사를 통해 찾은 것은 답이 아니라 공백이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 49,
+      "text": "1) 한국 줄타기 자료",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 50,
+      "text": "2) 역학 논문",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 51,
+      "text": "3) 슬랙라인 생체역학 연구들",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 52,
+      "text": "2. 첫 번쨰 열쇠 – 처진 줄은 받침이 아니라 변환기다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 53,
+      "text": "가. 결정적 관찰",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 54,
+      "text": "나. 얼음판과 줄의 차이",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 55,
+      "text": "다. 그렇다면 발은 무엇으로 옮기는가 — 2체 모델의 정의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 56,
+      "text": "1. 2체 모델의 제안",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 57,
+      "text": "가. 2체 모델의 설계",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 58,
+      "text": "1) 형태 제안",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 59,
+      "text": "2) 좌표축 설정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 60,
+      "text": "나. 라그랑지안 운동방정식",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 61,
+      "text": "다. LQR 알고리즘을 통한 균형 제어",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 62,
+      "text": "--- 여기까지 수정/첨언 해놓음",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 63,
+      "text": "2. FWE 메커니즘",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 64,
+      "text": "가. Fold(접기)-Wait(기다리기)-Extand(펴기)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 65,
+      "text": "다. 얼마나 접어야 할까? (Fold)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 66,
+      "text": "-> Epsilon (비례 접기) 정의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 67,
+      "text": "라. 얼마나 기다려야 할까? (Extand)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 68,
+      "text": "마. 분리가정의 실패와 커플링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 70,
+      "text": "3. 새로운 균형의 목표",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 71,
+      "text": "가. 후보 1,2,3",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 72,
+      "text": "φ(줄의 각도)와 β(무게중심 기울기)의 관계",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 73,
+      "text": "나. 모드 운동",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 74,
+      "text": "다. 균형의 목표 정의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 75,
+      "text": "-> p.11 이론부 초안 v3",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 77,
+      "text": "4. 동역학적 해석해 도출",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 78,
+      "text": "가. 모드 분석(고유 벡터)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 79,
+      "text": "-> 상태공간 정의 (φ, β) 평면",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 80,
+      "text": "-> 순간접기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 81,
+      "text": "(1. 무게중심 보존 2. 접기 전후 속도 보존(파이닷 베타닷) = 0)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 82,
+      "text": "출발",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 83,
+      "text": "+ 각운동량 보존",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 84,
+      "text": "-> 정지 상태는 접은 후에도 정지상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 86,
+      "text": "나. 닫힌 해 ε*의 유도(한 번 접으면 안 펴도됨)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 87,
+      "text": "﻿다. 운동을 하고 있는 상태로 확장",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 88,
+      "text": "-> 속도 고려",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 89,
+      "text": "(φ_pred, β_pred)— 속도를 반영한 예측점의 탄생과 차원 축소",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 90,
+      "text": "-> 단일 접기 완성",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 91,
+      "text": "라. FWE 사이클",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 92,
+      "text": "-> 41문서",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 93,
+      "text": "-> 접기량을 정했으니 얼마나 기다렸다 펼 것인가(T_w 구하기)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 94,
+      "text": "-> 과접기(이유 : 안정 모드 위에 착지 후 펴면 벗어남)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 95,
+      "text": "﻿1 + ε_FWE = (1 + ε*_gen) / (1 − e^(−λT_w))",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 96,
+      "text": "'많이 접으면 조금 기다렸다가 바로 펴줘야한다.'",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 97,
+      "text": "T_w는 자유롭게 선택 가능 -> 과접기량이 자동으로 결정됨",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 98,
+      "text": "T_w는 최소가 되는 게 현실에서 유리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 99,
+      "text": "속도항까지 추가된 입실론*(﻿ε*_gen)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 100,
+      "text": "/ ﻿λ(쓰러짐 배가시간 상수)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 101,
+      "text": "/ 과접기량(﻿ε_FWE) 과 T_w 만 변수 다른건 다 상수",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 102,
+      "text": "-> 순간 접기 완전 사이클이 완성됨(이상적 이론)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 105,
+      "text": "5. 시뮬레이션",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 106,
+      "text": "가. V1~V10 1체 모델 -> 2체모델 -＞LQR 제어까지",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 107,
+      "text": "나. V14 MuJoCo",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 108,
+      "text": "-> LQR",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 109,
+      "text": "다. V15~V17 FWE 제어기의 구현",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 110,
+      "text": "->유한 시간 접기(짧게)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 111,
+      "text": "-> 현실 : 순간 접기 불가",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 112,
+      "text": "-> gamma를 AI가 계산해줌",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 113,
+      "text": "-> 상태공간에서의 유한시간 접기(곡선)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 115,
+      "text": "-> 반복 사이클",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 116,
+      "text": "-> FWE 변형 메커니즘, 수치 변형 적용",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 117,
+      "text": "-> 핵심 변수-> '한 사이클 당 걸리는 시간'(영향 큼)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 119,
+      "text": "라. V18~V19 실측 파라미터 전물리 시뮬레이션",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 120,
+      "text": "(실측 내용 : 로봇, 베어링 마찰, 줄 감쇠, ...)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 121,
+      "text": "증분 접기(포인트)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 122,
+      "text": "-> 발단 : 사이클 시간을 단축 시키자!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 123,
+      "text": "-> 단일 접기 (메커니즘 완성)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 124,
+      "text": "-> 안 펴면 사이클에 걸리는 시간이 절반으로!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 125,
+      "text": "-> 최종 : 증분 접기 (단일 접기의 실전용)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 126,
+      "text": "(오차(=불안정도가 성장한 만큼)만큼 더 접기 -> 현실 반영)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 127,
+      "text": "-> 트리거 설정으로 인해",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 128,
+      "text": "-> 자연스럽게 0.2 초 주기로 증분 접기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 129,
+      "text": "-> 사람의 반응 속도와 유사!!! + 사람의 동작과 유사!!!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 130,
+      "text": "-> LQR에 수렴할수도 있었을 것",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 131,
+      "text": "27000초! 성공",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 133,
+      "text": "6. 로봇 구현",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 134,
+      "text": "가. 설계와 제작",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 135,
+      "text": "나. 실측 과정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 136,
+      "text": "다. 증분 접기 알고리즘 적용(가능성 확보)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 138,
+      "text": "III. 결론 및 향후 탐구 계획",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 140,
+      "text": "IV. 참고 문헌",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 143,
+      "text": "Ⅰ 탐구 동기 및 목적",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "1",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 144,
+      "text": "Ⅰ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 145,
+      "text": "탐구 동기 및 목적",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 148,
+      "text": "탐구 동기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 149,
+      "text": "가. 문제 의식 (서양 vs 한국 줄타기)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 150,
+      "text": "한국의 전통 줄타기 영상을 관찰하면서 가장 먼저 직관적인 의문이 들었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 151,
+      "text": "“장대도 없이 느슨한 줄 위에서 어찌 저렇게 이리저리 움직이며 균형을 잘 잡을 수 있을까?”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 153,
+      "text": "서양의 줄타기와 한국의 전통 줄타기는 겉보기에서부터 역학적 차이가 뚜렷하다. 서양 줄타기는 양끝을 팽팽하게 당긴 줄 위에서 길고 무거운 장대를 들고 천천히 이동한다. 몸이 기울어질 때 장대를 반대 방향으로 기울이거나 회전시켜 발생하는 외부 토크를 이용해 균형을 유지한다. 반면 한국 줄타기는 줄을 느슨하게 매어 V자로 크게 처지도록 만든다. 광대는 줄 위에서 걷고, 뛰며, 온갖 역동적인 장기와 묘기를 선보인다. 그들의 손에는 기다란 장대는커녕, 부채 한 자루가 전부이다. 서양의 줄타기는 장대를 기울여 토크를 만들고 무게중심을 정렬하지만, 부채는 그 역할을 할 수 없다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 155,
+      "text": "역학적으로 부채는 가벼운 종이와 대나무 구조물에 불과하므로, 기울어진 광대의 몸을 바로 세울 만큼의 회전관성이나 복원 토크를 만들어 낼 수 없다. 그렇다면 외부에서 토크를 가할 도구가 전혀 없는 상황에서, 광대는 어떻게 넘어지지 않고 지속해서 균형을 잡을 수 있는가에 대한 본질적인 문제 의식이 형성되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 156,
+      "text": "그림 1 서양 줄타기: 긴 장대를 활용하여 외력을 생성하고 무게중심을 제어하는 구조           그림 2 한국 전통 줄타기: 장대 없이 부채만을 들고 느슨한 줄 위에서 역동적인 동작을 수행하는 모습",
+      "pictures": [
+        "image1",
+        "image2"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 157,
+      "text": "그림 1 서양 줄타기: 긴 장대를 활용하여 외력을 생성하고 무게중심을 제어하는 구조",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 158,
+      "text": "그림 2 한국 전통 줄타기: 장대 없이 부채만을 들고 느슨한 줄 위에서 역동적인 동작을 수행하는 모습",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 160,
+      "text": "나. 역발상\n기존의 통념은 한국 줄타기의 요란하고 커다란 몸동작(몸을 굽히거나 접는 동작)을 단지 상연의 흥을 돋우기 위한 위험한 묘기이자, 광대의 타고난 감각과 숙련된 경험에만 의존하는 기예로 바라보았다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "1",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 162,
+      "text": "그러나 우리는 이 관점을 완전히 뒤집는 역발상에서 탐구를 시작하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 163,
+      "text": "“어려워 보이는 한국 줄타기의 요란한 몸동작들이, 방해 요소가 아니라 오히려 균형잡기를 더욱 쉽게 만드는 움직임이 아닐까?”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 165,
+      "text": "위와 같은 질문을 시작으로, 한국 줄타기가 장대 없이 균형을 잡는 메커니즘 규명을 위한 탐구를 시작하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 167,
+      "text": "2. 탐구 목적",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 168,
+      "text": "가. 장대 없는 한국 줄타기의 균형 회복 원리를 물리 법칙으로 규명",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 169,
+      "text": "선행 연구는 균형에 필요한 복원 토크를 장대나 팔의 회전이라는 외부 입력으로 다루었으나, 장대가 없는 한국 줄타기에는 이를 적용할 수 없다. 따라서 본 탐구는 광대가 실제로 가진 수단만으로 — 즉 처진 줄과 허리 관절만으로 — 기울어진 몸이 어떻게 균형을 되찾는지를 설명하는 인과 사슬을 세우는 것을 첫 번째 목적으로 한다. 여기에는 \"균형이란 무엇인가\"를 이 시스템에 맞게 다시 정의하는 일이 함께 포함된다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 171,
+      "text": "나. 원리를 수학적으로 유도하고 물리 엔진 시뮬레이션으로 검증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 172,
+      "text": "원리가 설명에 그치지 않으려면, 얼마나 접어야 하는지가 수식으로 결정되어야 한다. 따라서 라그랑주 역학으로 운동방정식을 세우고 모드 해석을 거쳐 최적 접기량을 닫힌 형태의 해로 유도하는 것, 그리고 그 결과를 로봇 물리 엔진(MuJoCo) 기반의 독립적인 시뮬레이션에서 수치적으로 대조하여 오차를 정량화하는 것을 두 번째 목적으로 한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 174,
+      "text": "다. 자체 제작한 줄타기 로봇으로 실물 실증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 175,
+      "text": "후술로 다루겠지만, 시뮬레이션은 우리가 세운 가정 안에서 옳다. 그러므로 이론이 실제 물체에서도 성립하는지를 확인하기 위해, 모델과 같은 구조(허리 관절 하나로 구동되는 이중 역진자)의 로봇을 직접 설계·제작하여 실제 줄 위에 올린다. 로봇의 무게중심·관성모멘트·줄 마찰을 실측하여 시뮬레이션에 되먹임하고, 센서로 기울기를 측정해 스스로 접는 폐루프 균형을 실증하는 것을 세 번째 목적으로 한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 177,
+      "text": "Ⅲ 탐구 과정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "1",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 178,
+      "text": "Ⅲ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 179,
+      "text": "탐구 과정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 181,
+      "text": "1. 역설 – 떨어져야 하는데, 떨어지지 않는다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 182,
+      "text": "가. 장대가 없다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 183,
+      "text": "서양의 줄타기 곡예사는 긴 장대를 든다. 몸이 오른쪽으로 기울면 장대를 왼쪽으로 돌리고, 그 큰 회전관성이 만드는 각운동량으로 몸을 다시 세운다. 장대는 말하자면 빌려온 평형추다. 물리적으로 정직한 장치이고, 원리도 명확하다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 184,
+      "text": "한국의 줄타기 광대에게는 그 장대가 없다. 손에는 부채 한 자루뿐이고, 부채는 기운 몸을 일으킬 만한 관성도 힘도 내지 못한다. 게다가 줄마저 다르다. 서양의 타이트로프가 팽팽하다면, 한국의 줄은 일부러 느슨하게 맨다. 발을 디디면 줄은 V자로 축 처진다. 그 위에서 광대는 걷고, 뛰고, 앉았다 일어서고, 심지어 노래하고 재담을 던진다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 185,
+      "text": "우리의 첫 질문은 단순했다. 저 사람은 대체 무엇으로 균형을 잡는가?",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 187,
+      "text": "나. 얼음판 위의 사고실험 — 이건 불가능한 일이다",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 188,
+      "text": "질문이 단순한 데 비해, 물리 사고실험을 통해 도달한 결론은 충격적이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 189,
+      "text": "마찰이 전혀 없는 얼음판 위에 사람이 서 있다고 하자. 이 사람이 팔을 휘두르든 몸을 비틀든 허리를 접든, 자기 무게중심의 수평 위치는 단 1 mm도 옮기지 못한다. 몸속에서 만들어지는 힘은 전부 내력이고, 내력은 무게중심을 움직이지 못하기 때문이다(운동량 보존). 몸속 동작으로 할 수 있는 일은 무게중심을 중심으로 부분들을 재배치하는 것뿐이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 190,
+      "text": "줄 위의 광대도 마찬가지 아닌가? 줄은 점처럼 좁아서 발목으로 바닥을 밀 수도 없다. 그렇다면 한 번 기운 몸은 영영 돌아오지 못하고 떨어져야 한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 191,
+      "text": "그런데 광대는 떨어지지 않는다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 192,
+      "text": "수백 년째 눈앞에서 벌어지고 있는 이 일이 우리의 물리적 사고와 충돌한다면, 답은 둘 중 하나라고 생각했다. 물리가 틀렸거나, 우리가 무언가를 빠뜨렸거나. 물리는 틀리지 않았을 것이다. 그러니 우리가 빠뜨린 것이 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 193,
+      "text": "“불가능해 보이는 일이 실제로 일어나고 있다면, 그 안에 우리가 아직 모르는 물리적 메커니즘이 숨어있을 것이다.”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 195,
+      "text": "다. 선행 연구 조사를 통해 찾은 것은 답이 아니라 공백이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 197,
+      "text": "답을 찾으러 자료부터 살펴보았다. 조사할수록 이상했다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 198,
+      "text": "1) 한국 줄타기 자료(국가무형문화재 제58호 기록물, 기술 분류 연구, 명인 인터뷰와 방송)는 풍부했다. 줄타기의 역사, 공연의 구성, 43가지【기술 가짓수 확정 필요 — 35 vs 43】 기술의 이름과 형태까지 상세히 기록되어 있었다. 그러나 ‘기울어진 몸이 어떻게 균형으로 돌아오는가’를 설명한 대목은 어디에도 없었다. 대중적 과학 기사(서울신문, 2006)의 설명도 “부채와 팔을 펼쳐 회전관성을 키워 넘어지는 것을 느리게 하고 시간을 번다”까지였다. 그것은 천천히 넘어지는 법이지, 되돌아오는 법이 아니다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 199,
+      "text": "Balancing on Tightropes and Slacklines (P. Paoletti & L. Mahadevan, Harvard University, Journal of the Royal Society Interface, 2012)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 200,
+      "text": "",
+      "pictures": [
+        "image3",
+        "image4"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 201,
+      "text": "그림 3 선행 연구 결과                                그림 4 선행 연구 결과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 202,
+      "text": "요약줄 위 균형을 정면으로 다룬 사실상 유일한 역학 연구다. 줄 위의 사람을 \"원호 트랙 위를 움직이는 카트(각 φ) + 그 위에 선 단일 강체 역진자(각 α)\"로 모델링하고, LQG 최적제어기로 안정화에 성공했다. 핵심 결과는 두 가지다. (i) 제어기가 있으면 균형이 가능하다. (ii) 제어 노력이 최소가 되는 최적의 줄 처짐(sag)이 존재한다. 또한 무차원화를 통해 스케일된 처짐 파라미터 R̄가 타이트로프 극한과 슬랙라인 극한을 하나의 이론으로 잇는다는 것을 보였다. 균형 토크 Fa의 출처는 팔 또는 장대로, 즉 몸 바깥에 두었고, 카트(줄·발)에는 힘을 주지 않는다(Ff ≡ 0).의의모델의 뼈대를 여기서 가져왔다. \"처진 줄 = 반경 R의 원호 트랙, 발 = 그 위의 카트\"라는 등가 추상화, φ·α 표기, sag 파라미터 R의 의미가 모두 이 논문에서 계승됐다.연구의 표적이 되는 두 공백을 남겼다. ① Fa를 만드는 몸이 모델에 없다 — 장대 없는 한국 광대에게는 Fa의 출처가 없다. ② \"제어기가 잡을 수 있다\"는 가능성(what)까지만 보였을 뿐, \"어떤 물리 과정으로 몸이 되돌아오는가\"라는 인과(how)는 다루지 않았다. 이 두 공백을 채우기 위해 우리는 몸을 상·하체 2링크로 확장하고(허리 관절 = 몸 안의 유일한 입력), FWE 메커니즘과 닫힌형 접기비율 ε*를 유도했다.결과가 서로를 보강한다. 이들의 \"최적 sag 존재\"와 우리가 독립적으로 얻은 적정 R ≈ 0.6~0.8 m(사람 스케일)는 같은 현상을 다른 경로로 가리키는 교차 검증이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 203,
+      "text": "요약",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 204,
+      "text": "줄 위 균형을 정면으로 다룬 사실상 유일한 역학 연구다. 줄 위의 사람을 \"원호 트랙 위를 움직이는 카트(각 φ) + 그 위에 선 단일 강체 역진자(각 α)\"로 모델링하고, LQG 최적제어기로 안정화에 성공했다. 핵심 결과는 두 가지다. (i) 제어기가 있으면 균형이 가능하다. (ii) 제어 노력이 최소가 되는 최적의 줄 처짐(sag)이 존재한다. 또한 무차원화를 통해 스케일된 처짐 파라미터 R̄가 타이트로프 극한과 슬랙라인 극한을 하나의 이론으로 잇는다는 것을 보였다. 균형 토크 Fa의 출처는 팔 또는 장대로, 즉 몸 바깥에 두었고, 카트(줄·발)에는 힘을 주지 않는다(Ff ≡ 0).",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 205,
+      "text": "의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 206,
+      "text": "모델의 뼈대를 여기서 가져왔다. \"처진 줄 = 반경 R의 원호 트랙, 발 = 그 위의 카트\"라는 등가 추상화, φ·α 표기, sag 파라미터 R의 의미가 모두 이 논문에서 계승됐다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 207,
+      "text": "연구의 표적이 되는 두 공백을 남겼다. ① Fa를 만드는 몸이 모델에 없다 — 장대 없는 한국 광대에게는 Fa의 출처가 없다. ② \"제어기가 잡을 수 있다\"는 가능성(what)까지만 보였을 뿐, \"어떤 물리 과정으로 몸이 되돌아오는가\"라는 인과(how)는 다루지 않았다. 이 두 공백을 채우기 위해 우리는 몸을 상·하체 2링크로 확장하고(허리 관절 = 몸 안의 유일한 입력), FWE 메커니즘과 닫힌형 접기비율 ε*를 유도했다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 208,
+      "text": "결과가 서로를 보강한다. 이들의 \"최적 sag 존재\"와 우리가 독립적으로 얻은 적정 R ≈ 0.6~0.8 m(사람 스케일)는 같은 현상을 다른 경로로 가리키는 교차 검증이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 209,
+      "text": "2) 역학 논문으로 넘어가자 사정이 조금 나았다. Paoletti & Mahadevan(2012, J. R. Soc. Interface)이 줄 위 균형을 정면으로 다룬 사실상 유일한 연구였다. 이들은 줄 위의 사람을 “원호 트랙 위를 움직이는 카트(각 φ) + 그 위에 선 단일 강체 역진자(각 α)”로 모델링하고, LQG 제어기로 안정화에 성공했다. 두 가지 결과가 중요하다. (i) 제어기가 있으면 균형이 가능하다. (ii) 제어 노력이ㄴ 최소가 되는 최적의 줄 처짐(sag)이 존재한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 210,
+      "text": "그러나 이 모델은 몸을 막대 하나로 보았고, 몸을 되세우는 복원 토크가 발목에서 나온다고 가정했다. 좁은 줄 위에서 발목은 그런 토크를 낼 수 없다. 그리고 결정적으로, 이 논문은 “제어기가 잡을 수 있다”는 가능성까지만 보였을 뿐",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 211,
+      "text": "그림 5 발목으로 일어서는 부정확한 움직임이 포착된 V1 시뮬레이션",
+      "pictures": [
+        "image5"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 212,
+      "text": "그림 5 발목으로 일어서는 부정확한 움직임이 포착된 V1 시뮬레이션",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 213,
+      "text": "제어 알고리즘 LQG를 써서 균형을 잡을 수 있다는 것은 확인했지만 현실에서 역진자 모델이",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 214,
+      "text": "“어떤 물리 과정을 거쳐 몸이 되돌아오는가”라는 인과는 다루지 않았다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 215,
+      "text": "3) 슬랙라인 생체역학 연구들(Kimmerle 2022, Serrien 2017, Mombaur 2020 등)은 측정 결과를 준다. 숙련자는 초보자보다 각운동량과 무게중심 가속도를 낮게 유지하고, 훈련될수록 균형 협응이 엉덩관절 쪽으로 이동한다. “사람이 몸통과 엉덩이를 균형에 쓴다”는 정황 증거는 되지만, 대부분 발을 고정한 조건의 실험이라 회복의 인과 과정 자체는 비어 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 216,
+      "text": "“우리가 문헌 조사에서 찾은 것은 답이 아니라 공백이었다. 천천히 넘어지는 법은 알려져 있어도, 되돌아오는 법은 아무도 설명하지 않았다. 광대는 몸으로 알지만 말로 알려주지 않는다 — 그렇다면 우리가 물리로 지어내는 수밖에 없다.”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 218,
+      "text": "2. 첫 번쨰 열쇠 – 처진 줄은 받침이 아니라 변환기다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 219,
+      "text": "가. 결정적 관찰",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 220,
+      "text": "파올레티 교수의 원호 모델을 보자.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 221,
+      "text": "여기서 발이 지나가는 자취의 모양이 ‘원호’로 정해진다. V자의 두 토막은 길이가 각각 L/2로 고정되어 있으므로, 꼭짓점이 놓일 수 있는 자리는 두 기둥을 잇는 선의 한가운데에서 일정한 거리만큼 떨어진 점들뿐이다. 즉 발은 그 한가운데를 중심으로 하는 원호 위를 움직인다 — 줄이 곧아도 그네가 원호를 그리는 것과 같다(원호를 그리는 것은 발의 자취이지 줄의 모양이 아니다). 반지름은 처짐의 깊이 R이고, 무질량 줄(직선 두 토막) 가정에서는 기둥 간격 D와 줄 길이 L로부터 피타고라스로 곧장 나온다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 222,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "{R}{=}sqrt { {LEFT ( {{L}{/}{2}}  RIGHT )} ^  {{2}} {−} {LEFT ( {{D}{/}{2}}  RIGHT )} ^  {{2}} } "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 223,
+      "text": "원호 위를 흔들리는 물체 — 그것은 정진자다. 가운데로 되돌아오려는, 안정한 진자.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 224,
+      "text": "그림 6 좌표축 및 원호의 정의",
+      "pictures": [
+        "image6"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 225,
+      "text": "그림 6 좌표축 및 원호의 정의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 226,
+      "text": "나. 얼음판과 줄의 차이",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 227,
+      "text": "여기서 역설이 풀리기 시작한다. 얼음판에는 무게중심을 옆으로 밀어 줄 바깥 힘이 없다. 그런데 처진 줄에는 있다. 줄은 발을 통해 몸 전체를 가운데로 끌어당기고, 그 힘의 방향과 크기는 오직 발의 위치가 정한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 228,
+      "text": "이것을 무게중심에 대한 운동방정식으로 쓰면 놀랍도록 깨끗한 한 줄이 된다. 무질량 줄은 줄 방향의 힘만 전달하므로,",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 229,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        " {ddot {{x}} } _  {{C}{o}{M}} {=}{−}{g}{ }{φ}LEFT ( {{t}}  RIGHT ){  }\" LEFT (무게중심~보존법칙 RIGHT )\""
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 230,
+      "text": "무게중심은 “발이 놓인 각 φ에 비례한 옆밀침을 받는 자유입자”다. 이 식의 무서운 점은, 허리를 어떻게 접든 토크를 얼마나 주든 정확히 성립한다는 것이다(기호 연산으로 검증 완료). 몸속에서 무슨 짓을 하든 무게중심을 직접 밀 수는 없다 — 얼음판의 교훈은 여전히 유효하다. 그러나 발의 위치는 바꿀 수 있고, 발의 위치만 바꿔 놓으면 나머지는 줄이 해 준다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 231,
+      "text": "“처진 줄은 단순한 받침이 아니라, 발의 위치를 무게중심을 되돌리는 힘으로 바꿔 주는 변환기였다. 무게중심을 직접 밀 수는 없어도 발의 위치는 바꿀 수 있다 — 여기에 균형의 열쇠가 있을 것이다.”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 233,
+      "text": "다. 그렇다면 발은 무엇으로 옮기는가 — 2체 모델의 정의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 235,
+      "text": "1) 선행 연구 논문에서 발전된 2체 모델",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 236,
+      "text": "열쇠를 찾았지만 아직 쓸 수가 없었다. 선행연구의 ‘막대 하나’ 모델에는 발을 옮길 몸속 동작이 없기 때문이다. 몸을 하나의 강체로 보면 몸속에서 아무리 움직여도 그 강체 안에서 끝난다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 237,
+      "text": "사람 몸에서 힘을 만들 수 있는 곳을 찾다가, 막대 중간에 관절을 달아 접었다 펴면 두 토막이 서로 반대로 회전한다는 데 생각이 닿았다 — 허리다. 그래서 모델을 이렇게 세웠다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 238,
+      "text": "그림 7 의 2체 모델",
+      "pictures": [
+        "image7"
+      ],
+      "equations": [
+        "(alpha, theta, phi)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 239,
+      "text": "그림 7 의 2체 모델",
+      "pictures": [],
+      "equations": [
+        "(alpha, theta, phi)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 240,
+      "text": "원호 위의 발(발목은 자유 회전) + 하체 막대 + 허리 관절(모터 1개) + 상체 막대",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 241,
+      "text": "각도는 셋: φ(줄+발이 함께 흔들리는 각, 발 위치 ), α(하체 절대 기울기), θ(상체 절대 기울기)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 242,
+      "text": "우리가 직접 명령할 수 있는 것은 하나: 허리 접힘각 δ = θ − α, 입력은 힙 토크 τ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 243,
+      "text": "자유도 3, 입력 1. 제어가 어렵기로 유명한 저구동(underactuated) 시스템이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 244,
+      "text": "소각 선형화한 운동방정식은 다음과 같다(라그랑주 역학, 기호 검증 완료).",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 246,
+      "text": "2) 좌표계 설정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 247,
+      "text": "좌표계는 다음과 같이 설정한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 248,
+      "text": "줄의 최저점(중앙)을 원점으로, 수평 방향을 x, 수직 방향을 y로 정한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 249,
+      "text": "각도의미줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)상체의 절대 기울기하체의 절대 기울기",
+      "pictures": [],
+      "equations": [
+        "phi ",
+        "- theta ",
+        "alpha "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 250,
+      "text": "각도",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 251,
+      "text": "의미",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 252,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "phi "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 253,
+      "text": "줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 254,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "- theta "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 255,
+      "text": "상체의 절대 기울기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 256,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "alpha "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 257,
+      "text": "하체의 절대 기울기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 258,
+      "text": "( : 줄의 쳐진 정도(=원호 반지름),  : 발에서부터 허리관절까지의 거리)",
+      "pictures": [],
+      "equations": [
+        "R",
+        "l"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 260,
+      "text": "3) 라그랑지안 운동 방정식",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 261,
+      "text": "세 좌표로 각 강체의 운동에너지T와 위치에너지V를 구해 라그랑지안L = T − V를 만들고, 오일러–라그랑주 방정식을 적용해 소각 선형화 운동방정식을 세웠다.(직접 유도와 기호 연산(sympy) 독립 유도가 일치함을 확인):",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 262,
+      "text": "",
+      "pictures": [
+        "image8"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 263,
+      "text": "여기서 중력 행렬G는 대각인데, 질량 행렬M은 비대각 항(Rp₁, Rp₂, J_αθ)을 갖는다. 본 시스템에서 변수들을 얽히게 하는 것은 힘(토크)이 아니라 관성이다. 하체가 회전하면 그 반작용이 발을 옆으로 밀고, 발이 밀리면 줄이 흔들린다. 입력은 관성 커플링을 통해 간접적으로줄에 도달한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 265,
+      "text": "라. 좌표를 물리적 의미가 분명해지도록 변환하자",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 266,
+      "text": "그림 8",
+      "pictures": [
+        "image9"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 267,
+      "text": "그림 8",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 268,
+      "text": "(φ, α, θ)는 측정하기는 좋지만 의미를 읽기에는 나쁘다. 그래서 물리적 의미가 분명한 좌표로 바꿨다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 269,
+      "text": "쓰러짐 각  — 상·하체 기울기를 질량 배분으로 가중평균한 것. “몸 전체가 실질적으로 얼마나 기울었나”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 270,
+      "text": "접힘각  — 우리가 명령하는 자세 변수",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 271,
+      "text": "이 좌표에서 무게중심의 수평 위치가 한 줄로 정리된다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 272,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        " {{x}} _  {{C}{o}{M}} {=}{R}{φ}{+}{h}{β}{  }\" LEFT (\"{h}{=}\"직립~무게중심~높이 RIGHT )\""
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 273,
+      "text": "줄이 발을 옮긴 거리 + 몸이 기운 효과. 이 공식이 핵심이다!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 274,
+      "text": "이 좌표는 세 가지 좋은 성질을 갖는다(전부 기호 검증 완료).",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 275,
+      "text": "① 토크는 δ에만 작용한다 — 서보가 δ를 추종하는 한, τ의 세부는 (φ, β) 동역학에 들어오지 않는다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 276,
+      "text": "② 접기 각가속도 δ̈가 (φ, β)로 들어오는 문은 단 하나 — β행의 관성항 μ 하나뿐이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 277,
+      "text": "③ 접힌 자세의 중력 효과는 φ, β에 전혀 들어오지 않는다 — β를 중력 가중평균으로 정의한 대가로 얻은 선물이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 278,
+      "text": "균형의 핵심은 발의 위치 이동이고, 발을 옮기는 유일한 수단은 ‘허리’다. 이제 허리를 어떻게 써야 하는가를 알면 균형을 정의할 수 있다!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 279,
+      "text": "균형의 핵심은 발의 위치 이동이고, 발을 옮기는 유일한 수단은 ‘허리’다. 이제 허리를 어떻게 써야 하는가를 알면 균형을 정의할 수 있다!",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 281,
+      "text": "2. 허리 관절의 쓰임을 찾아내다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 282,
+      "text": "가. 접기의 직접 효과와 진짜 효과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 283,
+      "text": "허리 토크의 구조를 뜯어 보다가 첫 통찰이 나왔다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 284,
+      "text": "허리를 접으면 상체와 하체가 서로 반대로 회전한다 — 이것이 접기의 직접 효과다. 그런데 하체가 회전하면 그 반작용이 발을 옆으로 민다. 발은 줄 위 원호에 올라앉아 있으므로, 발이 밀리면 줄이 흔들리고(φ가 변하고) 무게중심 보존법칙 의 우변이 바뀐다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 285,
+      "text": "“허리 토크의 직접적 효과는 ’몸을 접는 것’이지만, 물리적으로 의미 있는 효과는 ’발을 옮기는 것’이다.”",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 286,
+      "text": "간접 경로의 정체가 드러났다: 허리 → 하체 반작용 → 발 이동 → 줄의 복원력 변화 → 몸 전체.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 287,
+      "text": "이 경로를 쓰는 동작 규칙을, 광대의 동작 관찰(기울면 접고, 잠시 멈췄다가, 편다)에 맞춰 세 단계로 이름 붙였다. 접기(Fold) — 기다리기(Wait) — 펴기(Extend), 줄여서 FWE.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 289,
+      "text": "1) 허리 접음으로 균형을 복원하는 메커니즘의 3단계",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 290,
+      "text": "그림 9 초기 기울어짐 상태그립 10 몸을 접어 발을 이동시킨 상태",
+      "pictures": [
+        "image9",
+        "image10"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 291,
+      "text": "그림 9 초기 기울어짐 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 292,
+      "text": "그립 10 몸을 접어 발을 이동시킨 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 294,
+      "text": "그림 11 몸이 기울어지기를 기다림그림 12 다시 몸을 편 상태",
+      "pictures": [
+        "image11",
+        "image12"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 295,
+      "text": "그림 11 몸이 기울어지기를 기다림",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 296,
+      "text": "그림 12 다시 몸을 편 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 299,
+      "text": "나. FWE 메커니즘의 구체화",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 300,
+      "text": "그림 13 접은 후 상태에 대한 모식도     각도의미줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)초기 기울어짐 각도",
+      "pictures": [
+        "image13"
+      ],
+      "equations": [
+        "phi ",
+        "beta  _{0}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 301,
+      "text": "그림 13 접은 후 상태에 대한 모식도",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 302,
+      "text": "각도",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 303,
+      "text": "의미",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 304,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "phi "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 305,
+      "text": "줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 306,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "beta  _{0}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 307,
+      "text": "초기 기울어짐 각도",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 308,
+      "text": "( : 발에서부터 무게중심까지의 거리)",
+      "pictures": [],
+      "equations": [
+        "h"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 310,
+      "text": "1) 얼마나 접어야할까?(Fold)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 311,
+      "text": "초기 기울어짐 에 비례하게 몸을 더 접어 회전 방향을 바꾸면 쓰러지는 반대방향으로 중력이 일하기 때문에 쓰러짐을 복원할 수 있게 된다.",
+      "pictures": [],
+      "equations": [
+        "beta  _{0}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 312,
+      "text": "",
+      "pictures": [
+        "image14"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 314,
+      "text": "2) 얼마나 기다려야할까?(Wait)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 315,
+      "text": "무게중심이 센터라인에 왔을 때, 발도 센터라인에 오도록 펴면 된다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 316,
+      "text": "",
+      "pictures": [
+        "image15"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 317,
+      "text": "",
+      "pictures": [
+        "image16"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 318,
+      "text": "여기서 은 몸을 얼마나 접을지를 결정하는 비율인데 이 식의 의미는 줄의 처짐 깊이와 사",
+      "pictures": [],
+      "equations": [
+        "epsilon "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 319,
+      "text": "람의 무게 중심 위치에 따라 한번에 기울어짐을 복귀하기 위한 최적의 몸 접음 각도를 이 관계식으로 구할 수 있다는 점이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 320,
+      "text": "이 식에서 몸 접음 각도가 기울어짐에 비례하도록 설정하였는데 이는 선형 제어가 가능함을",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 321,
+      "text": "보여주는 것이며, 또한 초기 기울어짐 변수가 식 유도 과정에서 소거된 점이 흥미로운데 이는 초기 기울어짐 각도에 상관 없이 이 식이 성립하므로 반복적으로 이 메커니즘을 적용할 수 있다는 의미가 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 323,
+      "text": "라. 분리 가정의 도입과 커플링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 324,
+      "text": "이 메커니즘의 작동 여부를 손으로 계산해 보기 위해",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 325,
+      "text": "2체 모델의 무게중심의 이동과 발의 이동을 각각 이중역진자와 단진자의 운동으로 보고 두 운동은 영향을 미치지 않고 독립적으로 행동할 것이라는 분리가정을 세웠다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 326,
+      "text": "하지만, 두 운동은 서로 얽혀있고, 얽힘에 영향을 주는 행렬의 비대각 성분이 크기 때문에‘성급하게 분리하면 안된다.’는 결론을 얻을 수 있었다. 따라서 분리하려면 추가 조건이 더 필요했고, 때문에‘균형의 새로운 정의의 필요성’에 대해 생각해보는 계기가 되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 327,
+      "text": "하지만, 두 운동은 서로 얽혀있고, 얽힘에 영향을 주는 행렬의 비대각 성분이 크기 때문에‘성급하게 분리하면 안된다.’는 결론을 얻을 수 있었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 328,
+      "text": "따라서 분리하려면 추가 조건이 더 필요했고, 때문에",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 329,
+      "text": "‘균형의 새로운 정의의 필요성’에 대해 생각해보는 계기가 되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 331,
+      "text": "3. 새로운 균형의 목표",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 332,
+      "text": "분리가정의 실패로 근본적인 문제로 돌아왔다. 줄 위에서 ’균형이 잡혔다’는 것은 정확히 어떤",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 333,
+      "text": "가. φ(줄의 각도)와 β(무게중심 기울기)의 관",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 338,
+      "text": "2) φ = xx, β = 0기각했다. 흔들리는 발은 가속하고 있고, 가속하는 발 위에서 똑바로 서있으려면 발목에서 몸을 세우려는 토크가 있어야 하는데, 점접촉에서 그런 토크는 나올 수 없다. 즉, 발의 가속은 관성력이 되어 몸을 기울인다. 3) φ = -β  φ와 β가 반대 부호로 엇갈리고 그 비율이 일정하게 유지되는 운동이다.기각했다. 접은 직후에는, 중력토크와 관성력토크가 같아져 균형을 잡는것처럼 보인다. 하지만 진폭이 작아지며 가속도가 작아진다. 관성력의 크기가 작아지고, 중력토크가 더 커져 결국은 쓰러지게 된다.3) β = -xφ 보다 덜 기운 어딘가가 균형이라고 최종적으로 생각했다. 그러면 관성력 토크가 약해져도 운동하며 균형을 잡을 수 있을 것이다.나. 모드 운동선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다.",
+      "pictures": [
+        "image17",
+        "image18",
+        "image19"
+      ],
+      "equations": [
+        "beta= -phi "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 339,
+      "text": "2) φ = xx, β = 0",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 340,
+      "text": "",
+      "pictures": [
+        "image17"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 341,
+      "text": "기각했다. 흔들리는 발은 가속하고 있고, 가속하는 발 위에서 똑바로 서있으려면 발목에서 몸을 세우려는 토크가 있어야 하는데, 점접촉에서 그런 토크는 나올 수 없다. 즉, 발의 가속은 관성력이 되어 몸을 기울인다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 342,
+      "text": "3) φ = -β",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 343,
+      "text": "",
+      "pictures": [
+        "image18"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 344,
+      "text": "φ와 β가 반대 부호로 엇갈리고 그 비율이 일정하게 유지되는 운동이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 346,
+      "text": "기각했다. 접은 직후에는, 중력토크와 관성력토크가 같아져 균형을 잡는것처럼 보인다. 하지만 진폭이 작아지며 가속도가 작아진다. 관성력의 크기가 작아지고, 중력토크가 더 커져 결국은 쓰러지게 된다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 347,
+      "text": "3) β = -xφ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 348,
+      "text": "",
+      "pictures": [
+        "image19"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 349,
+      "text": "보다 덜 기운 어딘가가 균형이라고 최종적으로 생각했다. 그러면 관성력 토크가 약해져도 운동하며 균형을 잡을 수 있을 것이다.",
+      "pictures": [],
+      "equations": [
+        "beta= -phi "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 351,
+      "text": "나. 모드 운동",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 352,
+      "text": "선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 356,
+      "text": "나. 모드 운동",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 357,
+      "text": "선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 358,
+      "text": "선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 361,
+      "text": "4. 동역학적 해석해 도출",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 362,
+      "text": "가. 모드 분석",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 363,
+      "text": "이제 결합 된(φ, β) M₂₂q̈ = G₂₂q 의 고유값 문제를 풀면 부호가 반대인 두 모드가 나온다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 365,
+      "text": "1) 안정 모드(고유값−ω² < 0)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 366,
+      "text": "줄과 몸이 일정 비율 r = φ/β로 엇갈려 흔들리며 가운데로 되돌아오는 반진동이다. R = 0.7에서 r = −2.12이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 368,
+      "text": "2) 불안정 모드(고유값+λ² > 0)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 369,
+      "text": "줄과 몸이 같은 쪽으로 협력하며 지수적으로 발산하는 운동이다. 배가시간은 0.2초이다. 그림 14 안정모드의 진동과 불안정 모드의 발산",
+      "pictures": [
+        "image20"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 370,
+      "text": "그림 14 안정모드의 진동과 불안정 모드의 발산",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 372,
+      "text": "나. 균형의 새로운 정의(상태공간과 두 개의 평형)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 373,
+      "text": "이제 시스템의 상태는 로 표현할 수 있게 되었다. 따라서, 로 이루어진 좌표축에 점을 찍으면 시스템의 상태를 바로 알아볼 수 있도록 베타-파이 상태공간을 그렸다.",
+      "pictures": [],
+      "equations": [
+        "(beta, phi)",
+        "(beta, phi)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 374,
+      "text": "그림 15 상태공간, 초록선 = 안정모드선, 회색선 = 무게중심 등고선",
+      "pictures": [
+        "image21"
+      ],
+      "equations": [
+        "(phi, beta)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 375,
+      "text": "그림 15 상태공간, 초록선 = 안정모드선, 회색선 = 무게중심 등고선",
+      "pictures": [],
+      "equations": [
+        "(phi, beta)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 377,
+      "text": "R=0.7일때 베타, 파이 상태ㄴ공간에서의 안정모드선 기울기는 –2.12이므로 상태공간에 표현하면 안정모드선을 초록색 선으로 표현할 수 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 379,
+      "text": "용어영문의미안정 정적 평형statically stable equilibrium미소 변위에 복원 토크 — 줄 진자(φ)의 중앙점불안정 정적 평형statically unstable equilibrium미소 변위에 발산 토크 — 몸의 직립점(β = 0)(동적) 균형balance평형점 도달이 아니라 유계 상태 유지",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 380,
+      "text": "용어",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 381,
+      "text": "영문",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 382,
+      "text": "의미",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 383,
+      "text": "안정 정적 평형",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 384,
+      "text": "statically stable equilibrium",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 385,
+      "text": "미소 변위에 복원 토크 — 줄 진자(φ)의 중앙점",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 386,
+      "text": "불안정 정적 평형",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 387,
+      "text": "statically unstable equilibrium",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 388,
+      "text": "미소 변위에 발산 토크 — 몸의 직립점(β = 0)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 389,
+      "text": "(동적) 균형",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 390,
+      "text": "balance",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 391,
+      "text": "평형점 도달이 아니라 유계 상태 유지",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 392,
+      "text": "그림 16 정진자와 역진자의 성질",
+      "pictures": [
+        "image22"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 393,
+      "text": "그림 16 정진자와 역진자의 성질",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 394,
+      "text": "1) 안정 정적 평형",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 395,
+      "text": "정진자의 상황이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 396,
+      "text": "2) 불안정 정적 평형",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 397,
+      "text": "역진자의 상황이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 398,
+      "text": "균형 잡기란, 상태를 불안정 모드 성분 없이 안정모드 위에만 올려놓는 일이다.그리고 FWE란, 그 일을 접기 한 번으로 해내는 방법이다. 상태공간에서 표현하면, 안정선위에 있지 않은 어떤 점을 FWE라는 동작으로 이동시켜 안정모드선 위로 이동시키는 것이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 399,
+      "text": "균형 잡기란, 상태를 불안정 모드 성분 없이 안정모드 위에만 올려놓는 일이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 400,
+      "text": "그리고 FWE란, 그 일을 접기 한 번으로 해내는 방법이다. 상태공간에서 표현하면, 안정선위에 있지 않은 어떤 점을 FWE라는 동작으로 이동시켜 안정모드선 위로 이동시키는 것이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 403,
+      "text": "다. 순간 단일 접기 및  유도",
+      "pictures": [],
+      "equations": [
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 404,
+      "text": "먼저 쉽게 계산하기 위해 순간적으로 접는다고 가정하고, 지금은 접기만으로 균형을 잡는다고 해보자. 또한, 이라고 하자. 순간접기에서, 무게중심의 위치가 변하지 않고, 전후 속도가 보존되므로",
+      "pictures": [],
+      "equations": [
+        "{dot{beta }}, `dotphi = 0"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 405,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "R phi+h beta= R phi_{0} + h beta_{0} = const "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 406,
+      "text": "라는 식이 성립한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 407,
+      "text": "그림 17 접기전 무게중심의 위치(x의 위치)그림 18 펴기후 무게중심의 위치가 변하지 않는 모습(x의 위치 그대로)",
+      "pictures": [
+        "image23",
+        "image24"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 408,
+      "text": "그림 17 접기전 무게중심의 위치(x의 위치)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 409,
+      "text": "그림 18 펴기후 무게중심의 위치가 변하지 않는 모습(x의 위치 그대로)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 410,
+      "text": "시뮬레이션에서 볼 수 있듯이, 순간접기는 무게 중심의 위치를 변화시키지 않고, 무게중심 등고선 위를 이동하며 의 식을 만족시킨다.",
+      "pictures": [],
+      "equations": [
+        "R phi+h beta= R phi_{0} + h beta_{0} = const "
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 411,
+      "text": "접기량을 라고 정의했으므로",
+      "pictures": [],
+      "equations": [
+        "beta_{n ew} = -epsilonbeta_{0}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 412,
+      "text": "이다. () 균형은 안정모드선 위에 있어야 하므로 접은후의 베타, 파이의 상태가 안정모드선 위에 있어야한다. 즉,",
+      "pictures": [],
+      "equations": [
+        "phi_{n ew}= ({h}over{R}) *(1+epsilon)beta_{0}",
+        "phi_{0}= 0",
+        "phi_{n ew}= r beta_{n ew}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 413,
+      "text": "를 각각 대입하면",
+      "pictures": [],
+      "equations": [
+        "phi_{n ew},`beta_{n ew}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 414,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "epsilon  *={-h}over{rR+h}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 415,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "epsilon  *={-h}over{rR+h}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 417,
+      "text": "이다. 놀랍게도, 닫힌 식으로 최적접기량이 한번에 구해진 것이다. 더욱 놀라운 것은 초기기울기 가 소거되어 식에 없다는 것이다. 선형제어가 가능한 것이 맞았던 것이다.",
+      "pictures": [],
+      "equations": [
+        "beta_{0}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 418,
+      "text": "변수의미R원호 반지름r베타-파이 상태공간에서 안정선의 기울기h발부터 무게중심까지의 거리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 419,
+      "text": "변수",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 420,
+      "text": "의미",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 421,
+      "text": "R",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 422,
+      "text": "원호 반지름",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 423,
+      "text": "r",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 424,
+      "text": "베타-파이 상태공간에서 안정선의 기울기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 425,
+      "text": "h",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 426,
+      "text": "발부터 무게중심까지의 거리",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 428,
+      "text": "그리고, 상태공간에서 표현하면",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 429,
+      "text": "된다. 즉, 접기는 기울기가 인 직선 위를 움직이는 것이었다. 지금까지는 이론이고, 시뮬레이션으로 에 관한내용을 검증해보았다.",
+      "pictures": [],
+      "equations": [
+        "{-h}over{R}",
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 430,
+      "text": "그림 19 초기 기울어짐 상태",
+      "pictures": [
+        "image25"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 431,
+      "text": "그림 19 초기 기울어짐 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 432,
+      "text": "그림 20 계산한 만큼 몸을 접어 안정선 위에 올라간 상태",
+      "pictures": [
+        "image26"
+      ],
+      "equations": [
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 433,
+      "text": "그림 20 계산한 만큼 몸을 접어 안정선 위에 올라간 상태",
+      "pictures": [],
+      "equations": [
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 434,
+      "text": "여기서 재생을 눌러 안정선 위에서 운동하는 모습2개이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 435,
+      "text": "그림 21 안정선 위에서 균형을 잡으며 운동하는 상태그림 22 안정선 위에서 균형을 잡으며 운동하는 상태",
+      "pictures": [
+        "image27",
+        "image28"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 436,
+      "text": "그림 21 안정선 위에서 균형을 잡으며 운동하는 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 437,
+      "text": "그림 22 안정선 위에서 균형을 잡으며 운동하는 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 438,
+      "text": "시간이 지나도 안정모드선 위에서 운동하는 것을 볼 수 있으며, 공식이 맞았음을 시사한다.",
+      "pictures": [],
+      "equations": [
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 439,
+      "text": "그림 23 최적접기(좌) 안정모드선 위에서 운동(우)",
+      "pictures": [
+        "image29"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 440,
+      "text": "그림 23 최적접기(좌) 안정모드선 위에서 운동(우)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 442,
+      "text": "그런데 모델의 상태는 위치만으로 결정되지 않는다. 시스템은 처음부터 속도항에 귀속되어 있었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 444,
+      "text": "라. — 속도를 반영한 예측점의 탄생과 차원 축소",
+      "pictures": [],
+      "equations": [
+        "( phi  _{pred`} ,` beta  _{pred}  )"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 445,
+      "text": "이제 봐야하는 것은 로 4가지 이다. 속도항이 위치항에 미칠 영향을 계산하여 4차원을 2차원으로 투영하였다. 불안정 모드의 해는 A·e^(+λt) + B·e^(−λt) 꼴이다. 그런데 발산을 일으키는 것은 A·e^(+λt)이므로 A=0으로 만들면 된다. 이것을 불안정 좌고유벡터 u2라는 숫자로 사영하고, A를 표현한후, 예측점을 수식으로 나타내면,",
+      "pictures": [],
+      "equations": [
+        "(beta, phi, dotbeta, dotphi)"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 446,
+      "text": "",
+      "pictures": [],
+      "equations": [
+        "q_pred = q+{dotq}overlambda_{eff}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 447,
+      "text": "이다. 예측점 = 위치 + 속도에 불안정 모드의 시정수로 나누어준 값이다. 처음의 직관은 “속도가 있으면 잠시 뒤 위치를 예측해 그만큼 더 접자”는 근사였는데, 모드 대수로 정리하자 그 직관이 정확한 정리로 승격된 것이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 449,
+      "text": "속도까지 포함한 4차원 문제가, 고유공간이라는 올바른 축을 고르자 다시 2차원 그림으로 돌아온 것이다. 즉, 일반화의 본질은 위치를 정렬시키는 것이 아니라, 예측 상태를 정렬시키는 것이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 450,
+      "text": "속도까지 포함한 4차원 문제가, 고유공간이라는 올바른 축을 고르자 다시 2차원 그림으로 돌아온 것이다. 즉, 일반화의 본질은 위치를 정렬시키는 것이 아니라, 예측 상태를 정렬시키는 것이었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 451,
+      "text": "2) 순간 단일 접기 – F의 완성, 이제부터 속도항 prediction 포함",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 452,
+      "text": "예측점 평면 위에서 가장 단순한 장면은 단일접기이다. 정지 상태(β = 2°)에서 ε* = 1.834 만큼 한 번 접고 그대로 두면, 상태는 등고선을 따라 점프해 안정모드선 위에 착지하고, 이후 펴지 않아도 그 직선을 따라 영원히 유계 진동한다. 이 정리는 유도 당시에는“펴기는 균형이 아니라 자세 회복용”이라는 각주 취급이었다. 그러나Ⅴ장에서 이 정리가 실전 제어기의 이론적 뿌리로 승격된다. 접기만으로 균형이 닫힌다면, 펴기를 생략한 제어가 가능하다는 뜻이기 때문이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 453,
+      "text": "그림 25 S1 순간 단일접기— (좌) 예측점 평면에서 접기 한 번(빨강, 등고선을 따라)으로 안정모드선에 착지, 이후 직선 위를 영원히 미끄러진다(보라). (우) 시계열— δ는 접힌 채 유지(파선), β·φ는 유계 진동.",
+      "pictures": [
+        "image30"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 454,
+      "text": "그림 25 S1 순간 단일접기— (좌) 예측점 평면에서 접기 한 번(빨강, 등고선을 따라)으로 안정모드선에 착지, 이후 직선 위를 영원히 미끄러진다(보라). (우) 시계열— δ는 접힌 채 유지(파선), β·φ는 유계 진동.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 455,
+      "text": "3) FWE완전사이클",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 456,
+      "text": "메커니즘의 출발형은 접고–기다리고–편다였다. 이제 접기를 완벽하게 했으니 펴야한다. 그런데 사이클을 수식으로 닫는 과정에서 함정을 만났다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 457,
+      "text": "펴기는 접기의 정확한 역벡터다. 그러므로ε*로 불안정 성분을 정확히0으로 만든 뒤 펴면, 펴기의 고정 킥이 지웠던 발산 성분을 원래 크기로 되살린다. 정확히 소거하고 나서 편다는 가장 자연스러운 전략이 정확히 그 이유로 실패한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 458,
+      "text": "그림 26 불안정 모드를 정확히 소거하고 편 모습",
+      "pictures": [
+        "image31"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 459,
+      "text": "그림 26 불안정 모드를 정확히 소거하고 편 모습",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 461,
+      "text": "우리의 메커니즘올바른 순서는 과접기–대기–펴기다. ① ε*보다 더 접어A를 반대 부호의 잔여로 남기고, ② 그 잔여가e^(λT_w)로 자라기를 기다렸다가, ③ 잔여가 펴기 킥과 정확히 같아지는 순간 편다. 닫힌형은 다음과 같다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 462,
+      "text": "우리의 메커니즘",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 463,
+      "text": "올바른 순서는 과접기–대기–펴기다. ① ε*보다 더 접어A를 반대 부호의 잔여로 남기고, ② 그 잔여가e^(λT_w)로 자라기를 기다렸다가, ③ 잔여가 펴기 킥과 정확히 같아지는 순간 편다. 닫힌형은 다음과 같다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 466,
+      "text": "대기시간 T_w를 안정주기의 정수배(nT_osc)로 두면 접기 킥이 심은 안정 모드성분까지펴기가 함께 지운다. 즉, 기다림은 빈 시간이 아니라, 일부러 만들어 둔 빚을 갚을 만큼 키우는 시간이었다. 처음에 했던 질문들의 답이 나왔다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 467,
+      "text": "얼마나 접을까?즉, 기다리는 시간을 길게할거면 조금접어도 된다.얼마나 기다릴까?선택 가능 – 잔여진동 최소는 nT_osc어떻게 펼까?최대한 빠르게",
+      "pictures": [],
+      "equations": [
+        "{(1+e*_{g en})gamma(lambdaT_{f})}over{1-e^{-lambdaT_w}}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 468,
+      "text": "얼마나 접을까?",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 469,
+      "text": "즉, 기다리는 시간을 길게할거면 조금접어도 된다.",
+      "pictures": [],
+      "equations": [
+        "{(1+e*_{g en})gamma(lambdaT_{f})}over{1-e^{-lambdaT_w}}"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 470,
+      "text": "얼마나 기다릴까?",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 471,
+      "text": "선택 가능 – 잔여진동 최소는 nT_osc",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 472,
+      "text": "어떻게 펼까?",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 473,
+      "text": "최대한 빠르게",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 474,
+      "text": "다음은 아까의 시뮬레이션에서 까지 고려한 시뮬레이션이다. 이제는 속도까지 고려한 예측점으로 상태공간에서 표시된다. 의 초기조건은 같지만, 이 0이 아닌 상태로 출발하여, 초기조건이 다르다.",
+      "pictures": [],
+      "equations": [
+        "dotbeta, `` dotphi",
+        "beta, phi",
+        "dotbeta, `` dotphi"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 475,
+      "text": "를 구했을 때와 마찬가지로 과접기식도 검증을 해보았다.",
+      "pictures": [],
+      "equations": [
+        "epsilon*"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 476,
+      "text": "그림 27 초기 몸이 기울어진 상태",
+      "pictures": [
+        "image32"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 477,
+      "text": "그림 27 초기 몸이 기울어진 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 478,
+      "text": "그림 28 만큼 접은 상태그림 29 기다리는 상태그림 30 몸을 편 후 안정 모드선 위에 있는 상태",
+      "pictures": [
+        "image33",
+        "image34",
+        "image35"
+      ],
+      "equations": [
+        "epsilon_FWE"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 479,
+      "text": "그림 28 만큼 접은 상태",
+      "pictures": [],
+      "equations": [
+        "epsilon_FWE"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 480,
+      "text": "그림 29 기다리는 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 481,
+      "text": "그림 30 몸을 편 후 안정 모드선 위에 있는 상태",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 482,
+      "text": "이제 상태공간을 하나로 나타내 주면 다음과 같은 그림이 나오게 된다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 483,
+      "text": "그림 31 FWE완전 사이클을 위에 나타낸 상태",
+      "pictures": [
+        "image36"
+      ],
+      "equations": [
+        "beta_pred, ``phi_pred"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 484,
+      "text": "그림 31 FWE완전 사이클을 위에 나타낸 상태",
+      "pictures": [],
+      "equations": [
+        "beta_pred, ``phi_pred"
+      ],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 485,
+      "text": "우리의 이론식대로 기다리는 시간과 접기량을 따라갔더니, 균형이 잡혔다. 과접기 식도 맞았던 것이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 487,
+      "text": "4. 시뮬레이션 제작을 통한 메커니즘 발전",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 488,
+      "text": "메커니즘이 한 단계 발전할 때마다 그것을 검증할 시뮬레이션을 새로 제작하였고, 그 결과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 489,
+      "text": "현재까지 총 19개 버전(V1~V19)이 만들어졌다. 아래ㄴ는 그중 발전의 마디가 된 버전들이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 491,
+      "text": "가. 선행 연구 재현(V1)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 492,
+      "text": "탐구의 출발은 선행 연구를 그대로 구현해 보는 것이었다. 파올레티 논문의 원호 위 단일 역진자 모델을 시뮬레이션 V1으로 제작하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 493,
+      "text": "그러나 시뮬레이션으로 구현한 1체 모델은 몸이 쓰러졌을 때 발목의 힘으로 몸을 일으켜 세웠다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 494,
+      "text": "논문의 부록을 참고한 결과, 복원 토크를 \"팔 또는 장대 회전의 반작용\"이라는 외부 토크로 가정하고 있었다. 이는 장대가 없는 한국 줄타기에서는 존재할 수 없는 힘이기에 새로운 모델이 필요했다. 따라서, 허리 관절을 도입하게 되었고, 2체 모델로 발전하게 된 계기가 되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 496,
+      "text": "나. LQR 제어로 균형을 확인(V4)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 497,
+      "text": "1) 가제어성 판별",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 499,
+      "text": "2체 모델을 시뮬레이션에 올리고 먼저 물었다. 허리 토크는 줄에 직접 닿지 않는데, 발까지 제어할 수 있는가? 가제어성 행렬의 rank가 6(전체 상태 수)으로 나와, 관성 커플링이 단일 입력을 줄까지 전달함을 확인하였다. 하지만 가제어성은 \"가능하다\"는 존재성 진술일 뿐, 어떻게 잡는지는 알려주지 않는다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 501,
+      "text": "2) PID의 실패와 최적제어(LQR)의 성공",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 502,
+      "text": "그림 33 LQR제어 시뮬레이션",
+      "pictures": [
+        "image37"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 503,
+      "text": "그림 33 LQR제어 시뮬레이션",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 504,
+      "text": "단일 오차 기반 PID는 발산하였다. 이 시스템의 균형은 \"허리 토크 → 발 이동 → 중력 토크 반전 → 기울기 복원\"의 다단계 인과이고 각 단계에 지연이 있는데, PID는 그 지연을 기다리지 못하고 과조작하기 때문이다. 반면 여섯 상태(세 각도와 세 각속도)를 동시에 피드백하는 최적제어(LQR)는 발이 이미 올바른 방향으로 움직이고 있으면 토크를 줄여 방해하지 않았고, 허리 토크 하나만으로 균형과 외란 복원이 확인되었다. 모델이 설 수 있다는 사실이 여기서 확정되었다 — 다만 LQR은 어떻게 서는지를 설명하지 못하였고, 그것이 FWE 메커니즘 제안의 이유가 되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 507,
+      "text": "다. MuJoCo 프로그램을 통한 이론 검증(V14)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 508,
+      "text": "그림 34 MUJOCO 시뮬레이션(V14)",
+      "pictures": [
+        "image38"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 509,
+      "text": "그림 34 MUJOCO 시뮬레이션(V14)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 510,
+      "text": "이론에서 유도한 최적 접기 공식 ε* = −h/(r·R + h)는 소각 근사 위에 서 있다. 이 공식이 근사 밖의 현실에서도 옳은지 확인하기 위해, 자체 시뮬레이션과 독립적인 로봇 물리 엔진 MuJoCo에 동일 스펙을 이식하고, 접기 비율을 스캔하여 수치적 최적값을 찾아 공식과 대조하였다. 결과는 R ≥ 0.6 m 전 구간에서 오차 ±2% 이내의 일치였다. 흥미로운 것은 R = 0.3 m에서 오차가 10%로 벌어진다는 점인데, 이 조건에서는 진동 진폭이 커져 소각 근사 자체가 깨진다 — 공식이 자기의 유효 범위를 스스로 알려주는 것으로, 이론의 정당성과 한계가 함께 확보되었다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 512,
+      "text": "라. FWE 구현(V15~V17)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 513,
+      "text": "1) 유한시간 접기",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 514,
+      "text": "그림 35 유한시간접기의 시뮬레이션 검증",
+      "pictures": [
+        "image39"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 515,
+      "text": "그림 35 유한시간접기의 시뮬레이션 검증",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 516,
+      "text": "이론의 접기는 순간이지만 실제 서보는 시간이 걸린다. 접는 시간 T_f 동안에도 불안정 모드는 자라므로, 항상 더 접어야 한다. 얼마나 더 접어야 하는지는 시간에 따라 지수적으로 자라는 오차를 적분해야 하는 문제여서, 이 보정 계수 γ의 닫힌형 유도는 AI(Claude)에게 맡겼다. 대신 우리는 그 결과를 검증하는 책임을 맡았다 — T_f → 0의 극한에서 γ → 1로 순간 접기 공식이 정확히 복원되는지 검산하고, 시뮬레이션의 수치 최적값과 대조하였다. 사람 스케일의 T_f ≈ 0.25초에서 +53%의 과접기가 필요하다는 결과는 \"빠른 서보가 필수\"라는 하드웨어 요구의 정량적 근거가 되었다. 상태공간에서 보면 순간 접기의 직선 점프가 유한시간에서는 곡선 경로가 되고, 그만큼 밀리는 도착점을 접기량으로 미리 갚는 셈이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 518,
+      "text": "2) 완전 사이클에서 반복 제어로",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 519,
+      "text": "펴기까지 포함한 완전 사이클(접고–기다리고–펴기)을 닫힌 공식으로 완성하였으나, 단발의 완벽한 사이클에는 치명적 약점이 있었다. 대기 구간이 접기 오차를 지수적으로 증폭한다 — 대기가 줄 진동 한 박자면 오차는 최대 34배가 된다. 해법은 박자의 재배열이었다. 대기를 증폭 구간(접기–펴기 사이)에서 빼내어 사이클 바깥으로 옮기고, 매번 위험도를 다시 재서 다시 접는 반복 피드백으로 바꾸자, 접기에 20%의 오차를 섞어도 수렴하였다. 이 과정에서 수렴 조건 |G(1−ρ)| < 1이 가리키는 방향이 분명해졌다. 증폭 배수 G는 사이클 시간의 지수함수이므로, 성능의 핵심 변수는 접기의 정확도가 아니라 사이클 한 바퀴가 도는 시간이다. 사이클이 짧을수록 시스템은 오차에 관대해진다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 521,
+      "text": "마. 전물리와 실측을 통합하다",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 523,
+      "text": "1) 실측에서 드러난 문제점",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 524,
+      "text": "실물 로봇을 제작하고 그 실측값 — 질량, 무게중심, 관성모멘트, 그리고 줄의 마찰 — 을 모두 반영한 전물리 시뮬레이션 V19를 구축하였다. 그러자 실측된 줄 마찰이 가정값의 약 1/24에 불과하다는 사실과 함께, 실측 마찰의 세계에서 완전 사이클 계열의 성적이 절반 이하로 무너지는 것이 드러났다. 사이클 시간을 더 줄여야 했다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 526,
+      "text": "2) 처음의 접근에서 찾은 해법",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 527,
+      "text": "그런데 사이클 시간을 줄이는 궁극의 방법은, 사실 가장 처음의 단일 접기 정리 속에 이미 있었다. \"ε*로 정확히 접으면, 펴지 않아도 몸은 영원히 유계로 진동한다.\" 유도 당시에는 흥미로운 여담이었던 이 성질을 다시 꺼내 보자, 우리가 그동안 펴는 행위를 굳이 고집하고 있었음을 깨달았다 — 펴기는 균형의 필수 동작이 아니라 자세 회복의 편의였던 것이다. 그래서 펴기를 버렸다. 단일 접기 후, 불안정도가 성장한 만큼의 오차분만 현재 자세에서 더 접는다. 위험이 조용해지면 천천히 자세를 되돌릴 뿐이다. 이것이 증분 접기이며, 펴기가 사라져 사이클이 절반 이하로 줄면서 오차 허용폭은 ±6%에서 ±37%로 여섯 배 넓어졌다 — 실물의 부정확한 실행을 견디는 힘이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 529,
+      "text": "3) 제어에서 엿보이는 광대의 모습",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 530,
+      "text": "그림 36 증분접기의 시뮬레이션 검증(V19)",
+      "pictures": [
+        "image40"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 531,
+      "text": "그림 36 증분접기의 시뮬레이션 검증(V19)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 532,
+      "text": "증분 접기에는 정해진 박자가 없다. 위험도가 문턱을 넘을 때만 접는다. 그런데 시뮬레이션을 관찰하자, 트리거 조건만 두었을 뿐인데 접기가 저절로 약 0.2초 주기로 반복되는 것이 확인되었다 — 불안정 모드의 배가시간이 만드는 자연 리듬으로, 사람의 반응 속도와 같은 눈금이다. 동작의 모양도 사람을 닮았다. 크게 기울면 한 번에 크게 접고, 이후 미세조정을 거듭하며, 한가해지면 천천히 몸을 세운다 — 외란을 맞은 광대의 회복 동작 그대로다. 물리에서 유도한 제어기가 한국 줄타기의 균형잡기를 스스로 모사하게 된 것이다. 한편 이 제어는 개입 간격이라는 축 위에서 LQR과 연결된다. 간격을 줄여 매 순간 개입하게 만들면 연속 피드백(LQR)에 수렴하고, 간격을 늘리면 이산적인 접기 사건이 된다 — 둘은 별개의 제어기가 아니라 같은 기하(상태를 안정 모드로 보내기)의 양 끝이며, 광대는 그 축의 0.2초 지점에서 줄을 탄다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 534,
+      "text": "4) 결과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 535,
+      "text": "실측 마찰 조건에서 증분 접기 제어는 20개 초기 조건 전부가 시험 상한인 120초까지 생존하였다 — 최악의 케이스조차 완전 사이클 챔피언의 최고 기록(77.5초)보다 길다. 상한을 올린 후속 시험에서는 27,000초 이상의 균형까지 확인되었다. 실물의 물리량으로 채운 세계에서, 고정 환산비만으로, 환산비가 두 배 가까이 어긋나도(γ = 8~15 전 구간 생존) 균형이 유지된다는 것 — 이 메커니즘이 현실에서 작동할 가능성의 확보다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 537,
+      "text": "5. 로봇 구현과 실제 제작",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 538,
+      "text": "가. 설계와 제작",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 539,
+      "text": "1) 전체 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 540,
+      "text": "그림 37 로봇 모델링그림 38 실물로봇 어름이",
+      "pictures": [
+        "image41",
+        "image42"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 541,
+      "text": "그림 37 로봇 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 542,
+      "text": "그림 38 실물로봇 어름이",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 543,
+      "text": "로봇과 실험 장치는 OpenSCAD로 전체를 매개변수 모델링하였다. 좌우의 알루미늄 프로파일(2020, 400 × 600 × 1220 mm) 기둥이 두 개의 상단 피벗을 60 cm 간격으로 지지하고, 여기서 8 mm 카본 빗변 두 개가 내려와 하단의 10 cm 발축 바에서 만나 카본 사다리꼴 크랭크를 이룬다. 이것이 우리 모델의 \"처진 줄\"에 해당하며, 이 기하에서 발이ㄴ 그리는 원호의 반지름은 R = √(50² − 25²) = 43.3 cm로 설계값이 곧 물리값이 된다. 실제 밧줄 대신 강체 크랭크를 택한 이유가 여기에 있다. 밧줄은 좌우로도 비틀리고 처짐이 하중에 따라 변하지만, 크랭크는 운동을 평면으로 구속하고 R을 고정하므로, 모델의 전제인 평면 운동과 정해진 처짐을 실물이 그대로 만족한다. 하단 발축 바에는 베어링을 두어 하체 끝이 자유롭게 회전하게 하였는데, 이는 모델이 가정한 점접촉·발목 토크 없음을 기계적으로 구현한 것이다. 그 결과 이 장치는 4절 스윙(φ) — 발목(α) — 허리(δ)의 3자유도에 입력은 허리 토크 하나뿐인 저구동 구조를 그대로 실현하며, 우리 모델과 일대일로 대응한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 544,
+      "text": "2) 본체 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 545,
+      "text": "그림 39 상, 하체 모델링그림 40 상체 모델링 그림 41 하체 모델링",
+      "pictures": [
+        "image43",
+        "image44",
+        "image45"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 546,
+      "text": "그림 39 상, 하체 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 547,
+      "text": "그림 40 상체 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 548,
+      "text": "그림 41 하체 모델링",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 550,
+      "text": "본체는 하체(파랑) 25.9 cm와 상체(초록) 40 cm를 허리의 서보 하나로 연결한 2체 구조로, 3D 프린팅(PLA)으로 제작하였다. 제어 보드와 배터리는 상체 내부에 좌우 대칭으로 매립하였는데, 이는 형상 최적화 시뮬레이션에서 얻은 \"질량은 위로, 발끝은 비운다\"는 지침을 따른 배치다. 무게중심을 낮추면 안정될 것 같지만 실제로는 반대로, 무게중심이 낮아지면 접기로 발을 던질 수 있는 권한이 4~5배 붕괴한다 — 접기의 반작용 크기가 무게중심 높이에 달려 있기 때문이다. 좌우 대칭 매립은 평면 운동 가정을 지키기 위한 조치이기도 하다. 제작 과정에서는 설계와 실물의 차이를 여러 번 확인하고 되먹였다. 보드가ㄴ 수납부를 꽉 채워 삽입이 불가능해 상체를 세 부분(스플라이스–보드베이–배터리 뚜껑)으로 분할하였고, 축이 베어링을 무는 공차를 0.1 mm 단위로 수정하였으며, 엔코더 기판 규격은 실물 도착 후 실측하여 브래킷을 재설계하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 552,
+      "text": "3) 하드웨어 제원",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 553,
+      "text": "항목내용프레임알루미늄 프로파일 2020, 400 × 600 × 1220 mm (회전축 높이 1245 mm)줄(크랭크)8 mm 카본 사다리꼴 — 빗변 50 cm × 2 + 발축 바 10 cm, 처짐 R = 43.3 cm몸체제어 보드Robotis OpenCR (제어 주기 500 Hz, 전류 제어 모드)허리 모터각도 센서AS5047P 절대 엔코더 × 2 (상단 피벗 φ, 발목 α) + 서보 내장 엔코더 (허리 δ)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 554,
+      "text": "항목",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 555,
+      "text": "내용",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 556,
+      "text": "프레임",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 557,
+      "text": "알루미늄 프로파일 2020, 400 × 600 × 1220 mm (회전축 높이 1245 mm)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 558,
+      "text": "줄(크랭크)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 559,
+      "text": "8 mm 카본 사다리꼴 — 빗변 50 cm × 2 + 발축 바 10 cm, 처짐 R = 43.3 cm",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 560,
+      "text": "몸체",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 562,
+      "text": "제어 보드",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 563,
+      "text": "Robotis OpenCR (제어 주기 500 Hz, 전류 제어 모드)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 564,
+      "text": "허리 모터",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 566,
+      "text": "각도 센서",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 567,
+      "text": "AS5047P 절대 엔코더 × 2 (상단 피벗 φ, 발목 α) + 서보 내장 엔코더 (허리 δ)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 568,
+      "text": "나. 실측을 통한 시뮬레이션 정교화",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 569,
+      "text": "시뮬레이션이 아무리 정교해도, 그 안의 숫자가 실물과 다르면 검증이 아니라 상상이다. 그래서 로봇을 조립한 뒤 모델에 들어가는 모든 물리량을 하나씩 실제로 측정하여 시뮬레이션에 되먹이는 작업을 진행하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 571,
+      "text": "질량과 길이는 저울과 자로, 무게중심은 균형점을 찾아, 관성모멘트는 복합진자법으로 측정하였다 — 부품을 축에 매달아 미소진동 주기 T를 재면 I = mgd(T/2π)² 로 관성모멘트가 나온다. 상체는 반드시 보드와 배터리를 매립한 뒤에 쟀다. 줄의 진동수와 마찰은 자유 흔들기 실험으로 측정하였다. 로봇을 떼고 크랭크만 흔들어 φ를 200 Hz로 기록한 뒤 진폭이 줄어드는 양상을 분석한 것이다. 허리의 유효 관성은 모터에 전류 펄스를 주고 그 반응을 적분하는 방식으로 측정하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 572,
+      "text": "그림 42 모터 Servo 보정",
+      "pictures": [
+        "image46"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 573,
+      "text": "그림 42 모터 Servo 보정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 575,
+      "text": "다. 증분 접기 알고리즘 적용(가능성 확보)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 576,
+      "text": "그림 43 상, 하체 비틀림 실측   그림 44  무게중심 위치 측정",
+      "pictures": [
+        "image47",
+        "image48"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 577,
+      "text": "그림 43 상, 하체 비틀림 실측",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 578,
+      "text": "그림 44  무게중심 위치 측정",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 579,
+      "text": "증분 접기 알고리즘을 로봇에 이식하여 줄 위 시험에 들어갔다. 이를 통하여 폐루프 생존 기록을 얻었다 — 최고 12.8초(수동 개입 포함), 자율 최고 4.75초. 아직 시뮬레이션에 없던 큰 각도의 시소 운전이 나타나는 등 개선할 지점이 남아 있고, 균형 시작 시 로봇을 수직으로 잡아 줄 거치 장치도 필요함을 확인하였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 581,
+      "text": "아직 균형잡기가 어렵다고 판단되는 원인은 알고리즘이 아니라, 모델이 가정한 조건을 실물이 아직 충족하지 못한 데 있다고 판단하였다. 이에 세 가지를 보완하여 다시 시험할 계획이다. 첫째, 자립해 있는 프레임이 로봇의 움직임에 따라 함께 흔들려 정확한 각도 수신에 방해가 되어, 프레임을 책상 등에 거치·고정한다. 둘째, 실측 과정에서 탄성 진동이 발견된 몸체 결합부를 더욱 견고하게 보강하여, 접기 명령과 실제 동작 사이의 오차를 줄인다. 셋째, 손으로 세워 출발하면 초기 기울기와 속도가 매번 달라지므로, 균형 시작 시 로봇을 수직으로 잡아 주는 지지대를 설치하여 동일한 조건에서 출발하게 한다. 이 보완을 마친 뒤 다시 줄 위에서의 균형 유지를 시도할 예정이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 583,
+      "text": "Ⅳ 탐구 결론 및 의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 584,
+      "text": "Ⅳ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 585,
+      "text": "탐구 결론 및 의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 586,
+      "text": "1. 탐구 결론",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 587,
+      "text": "서양의 줄타기는 균형을 만들고, 한국의 줄타기는 균형을 찾아 들어간다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 588,
+      "text": "본 탐구가 밝힌 한국 줄타기의 균형 원리는 다음과 같다. 처진 줄은 발의 위치를 무게중심을 되돌리는 복원력으로 바꿔 주는 변환기이며, 광대는 허리 접기의 반작용으로 발을 무게중심 너머로 던져 중력 토크를 반전시킨다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 589,
+      "text": "이 원리를 서양의 줄타기와 나란히 놓으면 대조가 선명하다. 서양의 줄타기는 장대라는 외부 관성을 빌려 토크를 만들고, 기울어진 몸을 인위적으로 되세워 무게중심을 정렬한다 — 자연이 쓰러뜨리는 것을 힘으로 거슬러 바로잡는 방식이다. 반면 한국의 광대는 몸을 세우는 힘을 만들지 않는다. 처진 줄이 만드는 진자에는 줄과 몸이 일정 비율로 엇갈려 흔들리며 스스로 되돌아오는 운동인 안정모드가 이미 자연 속에 존재하며, 광대가 하는 일은 접기 한 번으로 자신의 상태를 그 운동 위에 올려놓는 것뿐이다. 허리는 상태를 옮길 뿐, 복원은 줄과 중력의 자연스러운 진동이 해 준다. 요란해 보이던 몸동작은 자연을 거스르는 힘이 아니라, 자연이 이미 갖고 있는 균형의 리듬에 올라타는 기술이었던 것이다. 자연을 극복의 대상이 아니라 협력의 자원으로 삼는 이 구조는 동양의 자연관과 닮은꼴로 읽히는데, 본 탐구의 기여는 그 닮음을 인상이 아니라 수식으로 보인 것이다 — 안정 모드의 직선과 그 위에 착지하는 접기의 공식이, \"자연을 따른다\"는 말의 물리적 내용이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 591,
+      "text": "2. 탐구 의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 592,
+      "text": "가. 한국 줄타기의 균형 원리를 검증 가능한 물리 가설로 최초 제시하였다",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 593,
+      "text": "줄 위의 균형을 다룬 유일한 선행 연구는 복원 토크의 출처를 팔이나 장대에 두었고, \"제어기로 잡을 수 있다\"는 가능성까지만 보였다. 본 탐구는 장대 없는 한국 줄타기를 위해 광대를 처진 줄 진자 위의 이중 역진자(3자유도 1입력의 저구동계)로 새롭게 모델링하고, 어떤 물리 과정으로 균형이 회복되는지를 처음으로 답하였다. 균형을 \"상태를 안정 모드 위에 올려놓는 일\"로 재정의하고 접기량의 닫힌 공식을 유도하였으며, \"접으면 펴지 않아도 유계\"라는 공식의 함의는 실측 세계의 최종 제어기인 증분 접기로 이어졌다. 물리에서 유도된 이 메커니즘이 광대의 오래된 몸의 지혜 — 눈대중의 비율 접기, 큰 회복 뒤의 느린 일어서기 — 와 두 번 합치한 것은, 가설이 옳은 방향에 있다는 정황 증거다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 595,
+      "text": "나. 가설의 수립과 기각, 층위를 구분한 검증으로 탐구의 전 과정을 스스로 수행하였다",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 596,
+      "text": "선행 연구가 없는 문제에서 분리 가설을 스스로 세우고, 질량 행렬의 비대각 성분을 근거로 스스로 기각하며 결합 모델에 도달하였다. LQR로 균형을 잡고도 \"이것은 설명이 아니다\"라며 스스로 기각하고 우리만의 메커니즘을 세웠으며, 균형의 정의를 후보 소거로 직접 재정의하는 과정에서 모드 해석이라는 도구의 필요성을 추론으로부터 이끌어냈다. 메커니즘은 네 번 모습을 바꾸었지만 매 전환은 문제가 강제한 것이었다. 유도한 공식은 수식과 전물리 시뮬레이션으로 ±2% 이내까지 검증하였고, 실물 로봇으로는 폐루프 접기 반응과 초 단위 생존까지의 부분 실증을 확인하였으며, 이론 검증과 시뮬레이션 발견, 실물 실증의 층위를 구분하여 정직하게 서술하였다. 답뿐 아니라 질문과 판단과 검증의 책임까지 스스로 감당한 것에 이 탐구의 방법론적 의의가 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 600,
+      "text": "Ⅵ 참고 문헌",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 601,
+      "text": "Ⅵ",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 602,
+      "text": "참고 문헌",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 603,
+      "text": "A Quantitative Comparison of Slackline Balancing Capabilities of Experts and Beginners (K. Stein & K. Mombaur, Heidelberg University, Frontiers in Sports and Active Living 4, 2022)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 604,
+      "text": "",
+      "pictures": [
+        "image49",
+        "image50"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 605,
+      "text": "그림 45 선행 연구 결과                            그림 46 선행 연구 결과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 606,
+      "text": "요약슬랙라인을 처음 타 보는 초보자와 프로 슬랙라인 선수를 비교하여, 20명의 참가자로부터 300회 이상의 균형 시도를 분석하고 30개 이상의 균형 지표를 정의·평가한 연구다. 정규화된 각운동량과 무게중심 가속도가 전체 안정성의 척도이며, 값이 낮을수록 안정성이 높고 회복 동작이 적다는 것을 밝혔다. 또한 숙련자는 초보자와 비교해 더 큰 관성과 곧은 머리 자세를 갖는 다른 평균 자세를 취한다는 것도 확인했다.의의불안정 변수의 선택을 실측이 지지한다. 숙련의 정도가 각운동량·무게중심 가속도로 측정된다는 결과는, 균형의 본질이 \"무게중심의 거동\"에 있다는 우리 모델의 관점 — 진짜 불안정 변수는 가중 무게중심 기울기 β라는 설정 — 과 방향이 일치한다.한계가 곧 우리 자리다. 이 연구는 숙련자와 초보자가 어떻게 다른가를 정밀하게 측정하지만, 기울어진 몸이 어떤 인과 과정으로 되돌아오는지는 다루지 않는다. 측정은 있으나 메커니즘이 없다 — 그 메커니즘을 물리로 세운 것이 우리의 FWE다.후속 검증의 방법론을 제공한다. 우리의 향후 계획(광대 동작의 모션 분석으로 접기–기다림–접기량 비례를 확인)은 이 연구가 쓴 종류의 지표·측정 체계를 그대로 활용할 수 있다.참고로 이 논문 자체가 슬랙라인 복원력의 성질을 설명하면서 Paoletti & Mahadevan(2012)을 인용하고 있어, 우리 문헌 계보(가 → 나)가 실제 학계의 인용 관계와도 일치한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 607,
+      "text": "요약",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 608,
+      "text": "슬랙라인을 처음 타 보는 초보자와 프로 슬랙라인 선수를 비교하여, 20명의 참가자로부터 300회 이상의 균형 시도를 분석하고 30개 이상의 균형 지표를 정의·평가한 연구다. 정규화된 각운동량과 무게중심 가속도가 전체 안정성의 척도이며, 값이 낮을수록 안정성이 높고 회복 동작이 적다는 것을 밝혔다. 또한 숙련자는 초보자와 비교해 더 큰 관성과 곧은 머리 자세를 갖는 다른 평균 자세를 취한다는 것도 확인했다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 609,
+      "text": "의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 610,
+      "text": "불안정 변수의 선택을 실측이 지지한다. 숙련의 정도가 각운동량·무게중심 가속도로 측정된다는 결과는, 균형의 본질이 \"무게중심의 거동\"에 있다는 우리 모델의 관점 — 진짜 불안정 변수는 가중 무게중심 기울기 β라는 설정 — 과 방향이 일치한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 611,
+      "text": "한계가 곧 우리 자리다. 이 연구는 숙련자와 초보자가 어떻게 다른가를 정밀하게 측정하지만, 기울어진 몸이 어떤 인과 과정으로 되돌아오는지는 다루지 않는다. 측정은 있으나 메커니즘이 없다 — 그 메커니즘을 물리로 세운 것이 우리의 FWE다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 612,
+      "text": "후속 검증의 방법론을 제공한다. 우리의 향후 계획(광대 동작의 모션 분석으로 접기–기다림–접기량 비례를 확인)은 이 연구가 쓴 종류의 지표·측정 체계를 그대로 활용할 수 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 613,
+      "text": "참고로 이 논문 자체가 슬랙라인 복원력의 성질을 설명하면서 Paoletti & Mahadevan(2012)을 인용하고 있어, 우리 문헌 계보(가 → 나)가 실제 학계의 인용 관계와도 일치한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 615,
+      "text": "다. Whole-Body Dynamic Analysis of Challenging Slackline Jumping (K. Stein & K. Mombaur, Applied Sciences 10(3), 2020)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 616,
+      "text": "",
+      "pictures": [
+        "image51",
+        "image52"
+      ],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 617,
+      "text": "그림 47 선행 연구 결과                                     그림 48 선행 연구 결과",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 618,
+      "text": "요약슬랙라인 위에서의 균형, 특히 점프와 회전 같은 고난도 동작을 이해하기 위해, 직접 측정할 수 없는 접촉력·토크와 압력중심 위치를 포함하는 슬랙라인 접촉 모델을 제안하고, 이를 최적화 틀 안에 넣어 약 180° 회전 점프의 완전 동역학적 운동 재구성을 수행한 연구다. 뉴턴 운동방정식을 최적화의 제약조건으로 구현해 재구성된 운동이 물리적으로 실현 가능하도록 했으며, 관례적인 운동학적 분석만으로는 동역학적 모순이 생긴다는 것을 보였다.의의\"발–줄 접촉을 물리로 모델링해야 한다\"는 문제의식을 공유한다. 이 연구가 접촉력을 모델 없이 알 수 없다고 지적한 것처럼, 우리도 줄이 발을 통해 몸에 주는 힘(무질량 줄은 줄 방향 힘만 전달)을 모델의 출발점으로 삼았다 — 다만 우리는 그것을 측정 재구성이 아니라 무게중심 보존법칙(ẍ_CoM = −g·φ)이라는 닫힌 구조로 끌어냈다.운동학만으로는 부족하다는 교훈. 겉으로 보이는 동작(운동학)을 기록하는 것과 그 동작을 만든 힘·토크(동역학)를 아는 것은 다르다는 이 논문의 결론은, \"광대의 동작을 영상으로 분류한 자료는 많지만 균형의 역학은 없다\"는 우리의 문헌 조사 결론과 같은 말을 하고 있다.정황 증거의 보강. 사람이 슬랙라인 위에서 몸통·관절을 능동적으로 써서 고난도 동작을 수행한다는 전신 분석은, \"균형의 입력이 몸속 관절에 있다\"는 우리 모델링 방향(허리 관절 1개)의 타당성을 간접 지지한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 619,
+      "text": "요약",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 620,
+      "text": "슬랙라인 위에서의 균형, 특히 점프와 회전 같은 고난도 동작을 이해하기 위해, 직접 측정할 수 없는 접촉력·토크와 압력중심 위치를 포함하는 슬랙라인 접촉 모델을 제안하고, 이를 최적화 틀 안에 넣어 약 180° 회전 점프의 완전 동역학적 운동 재구성을 수행한 연구다. 뉴턴 운동방정식을 최적화의 제약조건으로 구현해 재구성된 운동이 물리적으로 실현 가능하도록 했으며, 관례적인 운동학적 분석만으로는 동역학적 모순이 생긴다는 것을 보였다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 621,
+      "text": "의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 622,
+      "text": "\"발–줄 접촉을 물리로 모델링해야 한다\"는 문제의식을 공유한다. 이 연구가 접촉력을 모델 없이 알 수 없다고 지적한 것처럼, 우리도 줄이 발을 통해 몸에 주는 힘(무질량 줄은 줄 방향 힘만 전달)을 모델의 출발점으로 삼았다 — 다만 우리는 그것을 측정 재구성이 아니라 무게중심 보존법칙(ẍ_CoM = −g·φ)이라는 닫힌 구조로 끌어냈다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 623,
+      "text": "운동학만으로는 부족하다는 교훈. 겉으로 보이는 동작(운동학)을 기록하는 것과 그 동작을 만든 힘·토크(동역학)를 아는 것은 다르다는 이 논문의 결론은, \"광대의 동작을 영상으로 분류한 자료는 많지만 균형의 역학은 없다\"는 우리의 문헌 조사 결론과 같은 말을 하고 있다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 624,
+      "text": "정황 증거의 보강. 사람이 슬랙라인 위에서 몸통·관절을 능동적으로 써서 고난도 동작을 수행한다는 전신 분석은, \"균형의 입력이 몸속 관절에 있다\"는 우리 모델링 방향(허리 관절 1개)의 타당성을 간접 지지한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 626,
+      "text": "라. 한국 전통 줄타기 기술 분류 연구 및 국가무형문화재 제58호 줄타기 기록물 (국립무형유산원·줄타기보존회)",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 627,
+      "text": "요약줄타기의 역사, 공연의 구성, 수십 가지【가짓수 35 vs 43 확정 필요】 기술의 이름과 형태까지 상세히 기록되어 있다. 그러나 '기울어진 몸이 어떻게 균형으로 돌아오는가'를 설명한 대목은 어디에도 없다. 대중적 과학 기사(서울신문, 2006)의 설명도 \"부채와 팔을 펼쳐 회전관성을 키워 넘어지는 것을 느리게 하고 시간을 번다\"까지다.의의핵심 가설의 씨앗. 기술 분류 자료에서 \"처짐 자체를 균형의 도구로 쓴다\"는 착상을 얻었다 — 이것이 \"처진 줄 = 변환기\" 관점의 출발이다.공백의 증명. 회전관성 설명은 천천히 넘어지는 법이지 되돌아오는 법이 아니다. 문화 기록·대중 과학 어디에도 '회복'의 물리가 없다는 사실이, 이 탐구가 채워야 할 자리를 정의한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 628,
+      "text": "요약",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 629,
+      "text": "줄타기의 역사, 공연의 구성, 수십 가지【가짓수 35 vs 43 확정 필요】 기술의 이름과 형태까지 상세히 기록되어 있다. 그러나 '기울어진 몸이 어떻게 균형으로 돌아오는가'를 설명한 대목은 어디에도 없다. 대중적 과학 기사(서울신문, 2006)의 설명도 \"부채와 팔을 펼쳐 회전관성을 키워 넘어지는 것을 느리게 하고 시간을 번다\"까지다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 630,
+      "text": "의의",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 631,
+      "text": "핵심 가설의 씨앗. 기술 분류 자료에서 \"처짐 자체를 균형의 도구로 쓴다\"는 착상을 얻었다 — 이것이 \"처진 줄 = 변환기\" 관점의 출발이다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    },
+    {
+      "element_index": 632,
+      "text": "공백의 증명. 회전관성 설명은 천천히 넘어지는 법이지 되돌아오는 법이 아니다. 문화 기록·대중 과학 어디에도 '회복'의 물리가 없다는 사실이, 이 탐구가 채워야 할 자리를 정의한다.",
+      "pictures": [],
+      "equations": [],
+      "pageBreak": "0",
+      "columnBreak": "0"
+    }
+  ],
+  "equations": [
+    {
+      "index": 1,
+      "attributes": {
+        "id": "1164194933",
+        "zOrder": "76",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "90",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "{R}{=}sqrt { {LEFT ( {{L}{/}{2}}  RIGHT )} ^  {{2}} {−} {LEFT ( {{D}{/}{2}}  RIGHT )} ^  {{2}} } "
+      ]
+    },
+    {
+      "index": 2,
+      "attributes": {
+        "id": "1164194937",
+        "zOrder": "77",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "76",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        " {ddot {{x}} } _  {{C}{o}{M}} {=}{−}{g}{ }{φ}LEFT ( {{t}}  RIGHT ){  }\" LEFT (무게중심~보존법칙 RIGHT )\""
+      ]
+    },
+    {
+      "index": 3,
+      "attributes": {
+        "id": "1164470524",
+        "zOrder": "111",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "(alpha, theta, phi)"
+      ]
+    },
+    {
+      "index": 4,
+      "attributes": {
+        "id": "1164194941",
+        "zOrder": "60",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi "
+      ]
+    },
+    {
+      "index": 5,
+      "attributes": {
+        "id": "1164194942",
+        "zOrder": "61",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "- theta "
+      ]
+    },
+    {
+      "index": 6,
+      "attributes": {
+        "id": "1164194943",
+        "zOrder": "62",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "alpha "
+      ]
+    },
+    {
+      "index": 7,
+      "attributes": {
+        "id": "1164194944",
+        "zOrder": "63",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "R"
+      ]
+    },
+    {
+      "index": 8,
+      "attributes": {
+        "id": "1164194945",
+        "zOrder": "64",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "l"
+      ]
+    },
+    {
+      "index": 9,
+      "attributes": {
+        "id": "1164194950",
+        "zOrder": "79",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "72",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        " {{x}} _  {{C}{o}{M}} {=}{R}{φ}{+}{h}{β}{  }\" LEFT (\"{h}{=}\"직립~무게중심~높이 RIGHT )\""
+      ]
+    },
+    {
+      "index": 10,
+      "attributes": {
+        "id": "1164194965",
+        "zOrder": "67",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi "
+      ]
+    },
+    {
+      "index": 11,
+      "attributes": {
+        "id": "1164194966",
+        "zOrder": "68",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "71",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta  _{0}"
+      ]
+    },
+    {
+      "index": 12,
+      "attributes": {
+        "id": "1164194967",
+        "zOrder": "69",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "h"
+      ]
+    },
+    {
+      "index": 13,
+      "attributes": {
+        "id": "1164194968",
+        "zOrder": "71",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "71",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta  _{0}"
+      ]
+    },
+    {
+      "index": 14,
+      "attributes": {
+        "id": "1164194975",
+        "zOrder": "74",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon "
+      ]
+    },
+    {
+      "index": 15,
+      "attributes": {
+        "id": "1164194996",
+        "zOrder": "89",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "85",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta= -phi "
+      ]
+    },
+    {
+      "index": 16,
+      "attributes": {
+        "id": "1164194807",
+        "zOrder": "31",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "85",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "(beta, phi)"
+      ]
+    },
+    {
+      "index": 17,
+      "attributes": {
+        "id": "1164194808",
+        "zOrder": "32",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "85",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "(beta, phi)"
+      ]
+    },
+    {
+      "index": 18,
+      "attributes": {
+        "id": "1164470525",
+        "zOrder": "112",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "(phi, beta)"
+      ]
+    },
+    {
+      "index": 19,
+      "attributes": {
+        "id": "1164194829",
+        "zOrder": "39",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "85",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon*"
+      ]
+    },
+    {
+      "index": 20,
+      "attributes": {
+        "id": "1164194830",
+        "zOrder": "40",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "87",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "{dot{beta }}, `dotphi = 0"
+      ]
+    },
+    {
+      "index": 21,
+      "attributes": {
+        "id": "1164194831",
+        "zOrder": "33",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "R phi+h beta= R phi_{0} + h beta_{0} = const "
+      ]
+    },
+    {
+      "index": 22,
+      "attributes": {
+        "id": "1164500646",
+        "zOrder": "123",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "R phi+h beta= R phi_{0} + h beta_{0} = const "
+      ]
+    },
+    {
+      "index": 23,
+      "attributes": {
+        "id": "1164194832",
+        "zOrder": "34",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta_{n ew} = -epsilonbeta_{0}"
+      ]
+    },
+    {
+      "index": 24,
+      "attributes": {
+        "id": "1164194833",
+        "zOrder": "35",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "65",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi_{n ew}= ({h}over{R}) *(1+epsilon)beta_{0}"
+      ]
+    },
+    {
+      "index": 25,
+      "attributes": {
+        "id": "1164194834",
+        "zOrder": "36",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi_{0}= 0"
+      ]
+    },
+    {
+      "index": 26,
+      "attributes": {
+        "id": "1164194835",
+        "zOrder": "37",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi_{n ew}= r beta_{n ew}"
+      ]
+    },
+    {
+      "index": 27,
+      "attributes": {
+        "id": "1164194836",
+        "zOrder": "38",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "phi_{n ew},`beta_{n ew}"
+      ]
+    },
+    {
+      "index": 28,
+      "attributes": {
+        "id": "1164195001",
+        "zOrder": "93",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "65",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon  *={-h}over{rR+h}"
+      ]
+    },
+    {
+      "index": 29,
+      "attributes": {
+        "id": "1164194838",
+        "zOrder": "42",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "70",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta_{0}"
+      ]
+    },
+    {
+      "index": 30,
+      "attributes": {
+        "id": "1164194840",
+        "zOrder": "41",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "65",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "{-h}over{R}"
+      ]
+    },
+    {
+      "index": 31,
+      "attributes": {
+        "id": "1164500647",
+        "zOrder": "124",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon*"
+      ]
+    },
+    {
+      "index": 32,
+      "attributes": {
+        "id": "1164470543",
+        "zOrder": "117",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon*"
+      ]
+    },
+    {
+      "index": 33,
+      "attributes": {
+        "id": "1164500648",
+        "zOrder": "125",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon*"
+      ]
+    },
+    {
+      "index": 34,
+      "attributes": {
+        "id": "1164194848",
+        "zOrder": "44",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "71",
+        "textColor": "#000000",
+        "baseUnit": "1300",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "( phi  _{pred`} ,` beta  _{pred}  )"
+      ]
+    },
+    {
+      "index": 35,
+      "attributes": {
+        "id": "1164194849",
+        "zOrder": "45",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "87",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "(beta, phi, dotbeta, dotphi)"
+      ]
+    },
+    {
+      "index": 36,
+      "attributes": {
+        "id": "1164194850",
+        "zOrder": "46",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "63",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "q_pred = q+{dotq}overlambda_{eff}"
+      ]
+    },
+    {
+      "index": 37,
+      "attributes": {
+        "id": "1164194854",
+        "zOrder": "48",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "60",
+        "textColor": "#000000",
+        "baseUnit": "1400",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "{(1+e*_{g en})gamma(lambdaT_{f})}over{1-e^{-lambdaT_w}}"
+      ]
+    },
+    {
+      "index": 38,
+      "attributes": {
+        "id": "1164500634",
+        "zOrder": "120",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "88",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "dotbeta, `` dotphi"
+      ]
+    },
+    {
+      "index": 39,
+      "attributes": {
+        "id": "1164500638",
+        "zOrder": "122",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta, phi"
+      ]
+    },
+    {
+      "index": 40,
+      "attributes": {
+        "id": "1164500636",
+        "zOrder": "121",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "88",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "dotbeta, `` dotphi"
+      ]
+    },
+    {
+      "index": 41,
+      "attributes": {
+        "id": "1164500649",
+        "zOrder": "126",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "86",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon*"
+      ]
+    },
+    {
+      "index": 42,
+      "attributes": {
+        "id": "1164470544",
+        "zOrder": "118",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "72",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "epsilon_FWE"
+      ]
+    },
+    {
+      "index": 43,
+      "attributes": {
+        "id": "1164470545",
+        "zOrder": "119",
+        "numberingType": "EQUATION",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "version": "Equation Version 60",
+        "baseLine": "72",
+        "textColor": "#000000",
+        "baseUnit": "1000",
+        "lineMode": "CHAR",
+        "font": "HancomEQN"
+      },
+      "scripts": [
+        "beta_pred, ``phi_pred"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "index": 1,
+      "attributes": {
+        "id": "1162294971",
+        "zOrder": "0",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "출품번호1167제72회 전국과학전람회한국 줄타기는 어떻게 장대 없이 균형을 잡는가? 처진 줄 진자 위 이중 역진자가 허리 접기 하나로 서는 원리의 규명과    로봇 실증2026.    8.    10.출품학생김지훈, 송주호, 이혜원지도교원정도일구    분학생부출품부문물리"
+        ]
+      ]
+    },
+    {
+      "index": 2,
+      "attributes": {
+        "id": "1162294972",
+        "zOrder": "1",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "NONE",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "6",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "출품번호"
+        ],
+        [
+          "1167"
+        ]
+      ]
+    },
+    {
+      "index": 3,
+      "attributes": {
+        "id": "1162294973",
+        "zOrder": "2",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "NONE",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "6",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "한국 줄타기는 어떻게 장대 없이 균형을 잡는가? 처진 줄 진자 위 이중 역진자가 허리 접기 하나로 서는 원리의 규명과    로봇 실증"
+        ]
+      ]
+    },
+    {
+      "index": 4,
+      "attributes": {
+        "id": "1162294974",
+        "zOrder": "3",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "NONE",
+        "repeatHeader": "1",
+        "rowCnt": "4",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "6",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "출품학생",
+          "김지훈, 송주호, 이혜원"
+        ],
+        [
+          "지도교원",
+          "정도일"
+        ],
+        [
+          "구    분",
+          "학생부"
+        ],
+        [
+          "출품부문",
+          "물리"
+        ]
+      ]
+    },
+    {
+      "index": 5,
+      "attributes": {
+        "id": "1164194930",
+        "zOrder": "83",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "요약",
+          "줄 위 균형을 정면으로 다룬 사실상 유일한 역학 연구다. 줄 위의 사람을 \"원호 트랙 위를 움직이는 카트(각 φ) + 그 위에 선 단일 강체 역진자(각 α)\"로 모델링하고, LQG 최적제어기로 안정화에 성공했다. 핵심 결과는 두 가지다. (i) 제어기가 있으면 균형이 가능하다. (ii) 제어 노력이 최소가 되는 최적의 줄 처짐(sag)이 존재한다. 또한 무차원화를 통해 스케일된 처짐 파라미터 R̄가 타이트로프 극한과 슬랙라인 극한을 하나의 이론으로 잇는다는 것을 보였다. 균형 토크 Fa의 출처는 팔 또는 장대로, 즉 몸 바깥에 두었고, 카트(줄·발)에는 힘을 주지 않는다(Ff ≡ 0)."
+        ],
+        [
+          "의의",
+          "모델의 뼈대를 여기서 가져왔다. \"처진 줄 = 반경 R의 원호 트랙, 발 = 그 위의 카트\"라는 등가 추상화, φ·α 표기, sag 파라미터 R의 의미가 모두 이 논문에서 계승됐다.연구의 표적이 되는 두 공백을 남겼다. ① Fa를 만드는 몸이 모델에 없다 — 장대 없는 한국 광대에게는 Fa의 출처가 없다. ② \"제어기가 잡을 수 있다\"는 가능성(what)까지만 보였을 뿐, \"어떤 물리 과정으로 몸이 되돌아오는가\"라는 인과(how)는 다루지 않았다. 이 두 공백을 채우기 위해 우리는 몸을 상·하체 2링크로 확장하고(허리 관절 = 몸 안의 유일한 입력), FWE 메커니즘과 닫힌형 접기비율 ε*를 유도했다.결과가 서로를 보강한다. 이들의 \"최적 sag 존재\"와 우리가 독립적으로 얻은 적정 R ≈ 0.6~0.8 m(사람 스케일)는 같은 현상을 다른 경로로 가리키는 교차 검증이다."
+        ]
+      ]
+    },
+    {
+      "index": 6,
+      "attributes": {
+        "id": "1164194940",
+        "zOrder": "59",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "4",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "각도",
+          "의미"
+        ],
+        [
+          "",
+          "줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)"
+        ],
+        [
+          "",
+          "상체의 절대 기울기"
+        ],
+        [
+          "",
+          "하체의 절대 기울기"
+        ]
+      ]
+    },
+    {
+      "index": 7,
+      "attributes": {
+        "id": "1164194964",
+        "zOrder": "66",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "3",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "각도",
+          "의미"
+        ],
+        [
+          "",
+          "줄과 발이 함께 흔들리는 각 (발 위치 x_foot = R·φ)"
+        ],
+        [
+          "",
+          "초기 기울어짐 각도"
+        ]
+      ]
+    },
+    {
+      "index": 8,
+      "attributes": {
+        "id": "1164194991",
+        "zOrder": "88",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "3",
+        "colCnt": "3",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "2) φ = xx, β = 0",
+          "",
+          "기각했다. 흔들리는 발은 가속하고 있고, 가속하는 발 위에서 똑바로 서있으려면 발목에서 몸을 세우려는 토크가 있어야 하는데, 점접촉에서 그런 토크는 나올 수 없다. 즉, 발의 가속은 관성력이 되어 몸을 기울인다."
+        ],
+        [
+          "3) φ = -β",
+          "",
+          "φ와 β가 반대 부호로 엇갈리고 그 비율이 일정하게 유지되는 운동이다.기각했다. 접은 직후에는, 중력토크와 관성력토크가 같아져 균형을 잡는것처럼 보인다. 하지만 진폭이 작아지며 가속도가 작아진다. 관성력의 크기가 작아지고, 중력토크가 더 커져 결국은 쓰러지게 된다."
+        ],
+        [
+          "3) β = -xφ",
+          "",
+          "보다 덜 기운 어딘가가 균형이라고 최종적으로 생각했다. 그러면 관성력 토크가 약해져도 운동하며 균형을 잡을 수 있을 것이다.나. 모드 운동선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다."
+        ]
+      ]
+    },
+    {
+      "index": 9,
+      "attributes": {
+        "id": "1164194997",
+        "zOrder": "90",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "선형 연립 진동계에는 두 변수가 일정한 비율을 유지한 채 하나의 시간 함수로 움직이는 특별한 해가 언제나 존재한다. 이를 ‘모드(mode)’라고 부르는데 이전에 우리가 놓친 것은 ‘관성력이 약해질 때 중력 토크도 정확히 같은 박자로 약해진다.’는 것이었다."
+        ]
+      ]
+    },
+    {
+      "index": 10,
+      "attributes": {
+        "id": "1162587436",
+        "zOrder": "10",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "4",
+        "colCnt": "3",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "용어",
+          "영문",
+          "의미"
+        ],
+        [
+          "안정 정적 평형",
+          "statically stable equilibrium",
+          "미소 변위에 복원 토크 — 줄 진자(φ)의 중앙점"
+        ],
+        [
+          "불안정 정적 평형",
+          "statically unstable equilibrium",
+          "미소 변위에 발산 토크 — 몸의 직립점(β = 0)"
+        ],
+        [
+          "(동적) 균형",
+          "balance",
+          "평형점 도달이 아니라 유계 상태 유지"
+        ]
+      ]
+    },
+    {
+      "index": 11,
+      "attributes": {
+        "id": "1164194998",
+        "zOrder": "91",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "균형 잡기란, 상태를 불안정 모드 성분 없이 안정모드 위에만 올려놓는 일이다.그리고 FWE란, 그 일을 접기 한 번으로 해내는 방법이다. 상태공간에서 표현하면, 안정선위에 있지 않은 어떤 점을 FWE라는 동작으로 이동시켜 안정모드선 위로 이동시키는 것이다."
+        ]
+      ]
+    },
+    {
+      "index": 12,
+      "attributes": {
+        "id": "1164194999",
+        "zOrder": "92",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          ""
+        ]
+      ]
+    },
+    {
+      "index": 13,
+      "attributes": {
+        "id": "1164194839",
+        "zOrder": "43",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "4",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "변수",
+          "의미"
+        ],
+        [
+          "R",
+          "원호 반지름"
+        ],
+        [
+          "r",
+          "베타-파이 상태공간에서 안정선의 기울기"
+        ],
+        [
+          "h",
+          "발부터 무게중심까지의 거리"
+        ]
+      ]
+    },
+    {
+      "index": 14,
+      "attributes": {
+        "id": "1164195002",
+        "zOrder": "94",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "1",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "속도까지 포함한 4차원 문제가, 고유공간이라는 올바른 축을 고르자 다시 2차원 그림으로 돌아온 것이다. 즉, 일반화의 본질은 위치를 정렬시키는 것이 아니라, 예측 상태를 정렬시키는 것이었다."
+        ]
+      ]
+    },
+    {
+      "index": 15,
+      "attributes": {
+        "id": "1164195003",
+        "zOrder": "95",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "1",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "우리의 메커니즘"
+        ],
+        [
+          "올바른 순서는 과접기–대기–펴기다. ① ε*보다 더 접어A를 반대 부호의 잔여로 남기고, ② 그 잔여가e^(λT_w)로 자라기를 기다렸다가, ③ 잔여가 펴기 킥과 정확히 같아지는 순간 편다. 닫힌형은 다음과 같다."
+        ]
+      ]
+    },
+    {
+      "index": 16,
+      "attributes": {
+        "id": "1164194853",
+        "zOrder": "47",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "3",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "얼마나 접을까?",
+          "즉, 기다리는 시간을 길게할거면 조금접어도 된다."
+        ],
+        [
+          "얼마나 기다릴까?",
+          "선택 가능 – 잔여진동 최소는 nT_osc"
+        ],
+        [
+          "어떻게 펼까?",
+          "최대한 빠르게"
+        ]
+      ]
+    },
+    {
+      "index": 17,
+      "attributes": {
+        "id": "1161947283",
+        "zOrder": "25",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "7",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "항목",
+          "내용"
+        ],
+        [
+          "프레임",
+          "알루미늄 프로파일 2020, 400 × 600 × 1220 mm (회전축 높이 1245 mm)"
+        ],
+        [
+          "줄(크랭크)",
+          "8 mm 카본 사다리꼴 — 빗변 50 cm × 2 + 발축 바 10 cm, 처짐 R = 43.3 cm"
+        ],
+        [
+          "몸체",
+          ""
+        ],
+        [
+          "제어 보드",
+          "Robotis OpenCR (제어 주기 500 Hz, 전류 제어 모드)"
+        ],
+        [
+          "허리 모터",
+          ""
+        ],
+        [
+          "각도 센서",
+          "AS5047P 절대 엔코더 × 2 (상단 피벗 φ, 발목 α) + 서보 내장 엔코더 (허리 δ)"
+        ]
+      ]
+    },
+    {
+      "index": 18,
+      "attributes": {
+        "id": "1161947200",
+        "zOrder": "12",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "요약",
+          "슬랙라인을 처음 타 보는 초보자와 프로 슬랙라인 선수를 비교하여, 20명의 참가자로부터 300회 이상의 균형 시도를 분석하고 30개 이상의 균형 지표를 정의·평가한 연구다. 정규화된 각운동량과 무게중심 가속도가 전체 안정성의 척도이며, 값이 낮을수록 안정성이 높고 회복 동작이 적다는 것을 밝혔다. 또한 숙련자는 초보자와 비교해 더 큰 관성과 곧은 머리 자세를 갖는 다른 평균 자세를 취한다는 것도 확인했다."
+        ],
+        [
+          "의의",
+          "불안정 변수의 선택을 실측이 지지한다. 숙련의 정도가 각운동량·무게중심 가속도로 측정된다는 결과는, 균형의 본질이 \"무게중심의 거동\"에 있다는 우리 모델의 관점 — 진짜 불안정 변수는 가중 무게중심 기울기 β라는 설정 — 과 방향이 일치한다.한계가 곧 우리 자리다. 이 연구는 숙련자와 초보자가 어떻게 다른가를 정밀하게 측정하지만, 기울어진 몸이 어떤 인과 과정으로 되돌아오는지는 다루지 않는다. 측정은 있으나 메커니즘이 없다 — 그 메커니즘을 물리로 세운 것이 우리의 FWE다.후속 검증의 방법론을 제공한다. 우리의 향후 계획(광대 동작의 모션 분석으로 접기–기다림–접기량 비례를 확인)은 이 연구가 쓴 종류의 지표·측정 체계를 그대로 활용할 수 있다.참고로 이 논문 자체가 슬랙라인 복원력의 성질을 설명하면서 Paoletti & Mahadevan(2012)을 인용하고 있어, 우리 문헌 계보(가 → 나)가 실제 학계의 인용 관계와도 일치한다."
+        ]
+      ]
+    },
+    {
+      "index": 19,
+      "attributes": {
+        "id": "1161947205",
+        "zOrder": "13",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "요약",
+          "슬랙라인 위에서의 균형, 특히 점프와 회전 같은 고난도 동작을 이해하기 위해, 직접 측정할 수 없는 접촉력·토크와 압력중심 위치를 포함하는 슬랙라인 접촉 모델을 제안하고, 이를 최적화 틀 안에 넣어 약 180° 회전 점프의 완전 동역학적 운동 재구성을 수행한 연구다. 뉴턴 운동방정식을 최적화의 제약조건으로 구현해 재구성된 운동이 물리적으로 실현 가능하도록 했으며, 관례적인 운동학적 분석만으로는 동역학적 모순이 생긴다는 것을 보였다."
+        ],
+        [
+          "의의",
+          "\"발–줄 접촉을 물리로 모델링해야 한다\"는 문제의식을 공유한다. 이 연구가 접촉력을 모델 없이 알 수 없다고 지적한 것처럼, 우리도 줄이 발을 통해 몸에 주는 힘(무질량 줄은 줄 방향 힘만 전달)을 모델의 출발점으로 삼았다 — 다만 우리는 그것을 측정 재구성이 아니라 무게중심 보존법칙(ẍ_CoM = −g·φ)이라는 닫힌 구조로 끌어냈다.운동학만으로는 부족하다는 교훈. 겉으로 보이는 동작(운동학)을 기록하는 것과 그 동작을 만든 힘·토크(동역학)를 아는 것은 다르다는 이 논문의 결론은, \"광대의 동작을 영상으로 분류한 자료는 많지만 균형의 역학은 없다\"는 우리의 문헌 조사 결론과 같은 말을 하고 있다.정황 증거의 보강. 사람이 슬랙라인 위에서 몸통·관절을 능동적으로 써서 고난도 동작을 수행한다는 전신 분석은, \"균형의 입력이 몸속 관절에 있다\"는 우리 모델링 방향(허리 관절 1개)의 타당성을 간접 지지한다."
+        ]
+      ]
+    },
+    {
+      "index": 20,
+      "attributes": {
+        "id": "1161947206",
+        "zOrder": "14",
+        "numberingType": "TABLE",
+        "textWrap": "TOP_AND_BOTTOM",
+        "textFlow": "BOTH_SIDES",
+        "lock": "0",
+        "dropcapstyle": "None",
+        "pageBreak": "CELL",
+        "repeatHeader": "1",
+        "rowCnt": "2",
+        "colCnt": "2",
+        "cellSpacing": "0",
+        "borderFillIDRef": "5",
+        "noAdjust": "0"
+      },
+      "rows": [
+        [
+          "요약",
+          "줄타기의 역사, 공연의 구성, 수십 가지【가짓수 35 vs 43 확정 필요】 기술의 이름과 형태까지 상세히 기록되어 있다. 그러나 '기울어진 몸이 어떻게 균형으로 돌아오는가'를 설명한 대목은 어디에도 없다. 대중적 과학 기사(서울신문, 2006)의 설명도 \"부채와 팔을 펼쳐 회전관성을 키워 넘어지는 것을 느리게 하고 시간을 번다\"까지다."
+        ],
+        [
+          "의의",
+          "핵심 가설의 씨앗. 기술 분류 자료에서 \"처짐 자체를 균형의 도구로 쓴다\"는 착상을 얻었다 — 이것이 \"처진 줄 = 변환기\" 관점의 출발이다.공백의 증명. 회전관성 설명은 천천히 넘어지는 법이지 되돌아오는 법이 아니다. 문화 기록·대중 과학 어디에도 '회복'의 물리가 없다는 사실이, 이 탐구가 채워야 할 자리를 정의한다."
+        ]
+      ]
+    }
+  ],
+  "secPr": [
+    {
+      "id": "",
+      "textDirection": "HORIZONTAL",
+      "spaceColumns": "1134",
+      "tabStop": "8000",
+      "tabStopVal": "4000",
+      "tabStopUnit": "HWPUNIT",
+      "outlineShapeIDRef": "1",
+      "memoShapeIDRef": "0",
+      "textVerticalWidthHead": "0",
+      "masterPageCnt": "0"
+    }
+  ],
+  "startNum": [
+    {
+      "pageStartsOn": "BOTH",
+      "page": "0",
+      "pic": "0",
+      "tbl": "0",
+      "equation": "0"
+    }
+  ],
+  "pageNum": [
+    {
+      "pos": "NONE",
+      "formatType": "DIGIT",
+      "sideChar": "-"
+    }
+  ],
+  "fields": [
+    {
+      "tag": "fieldBegin",
+      "attributes": {
+        "id": "1164194936",
+        "type": "BOOKMARK",
+        "name": "얼음판과-줄의-차이",
+        "editable": "0",
+        "dirty": "0",
+        "zorder": "-1",
+        "fieldid": "627207531",
+        "metaTag": ""
+      },
+      "text": ""
+    },
+    {
+      "tag": "fieldEnd",
+      "attributes": {
+        "beginIDRef": "1164194936",
+        "fieldid": "627207531"
+      },
+      "text": ""
+    },
+    {
+      "tag": "fieldBegin",
+      "attributes": {
+        "id": "1164194953",
+        "type": "BOOKMARK",
+        "name": "접기의-직접-효과와-진짜-효과-5월-8일",
+        "editable": "0",
+        "dirty": "0",
+        "zorder": "-1",
+        "fieldid": "627207531",
+        "metaTag": ""
+      },
+      "text": ""
+    },
+    {
+      "tag": "fieldEnd",
+      "attributes": {
+        "beginIDRef": "1164194953",
+        "fieldid": "627207531"
+      },
+      "text": ""
+    }
+  ]
+}

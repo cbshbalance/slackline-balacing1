@@ -228,6 +228,41 @@ class SimServer:
             await self.broadcast(self.init_msg())
             await self.broadcast(self.view_msg())
             self.running = True
+        elif cmd == "fwe_async_preset_measured":
+            # ★★[2026-08-14] 비동기 FWE — **실측 정본 파라미터** 판.
+            #   위 fwe_async_preset 은 params_v19.py 의 설계추정치(placeholder) 위에서 돈다.
+            #   이 버튼은 2026-07-30~08-06 실측값(params_v19.MEASURED_SET)을 얹는다.
+            #     · 질량표 실측 -> p1=0.17510 p2=0.12280 h=0.3972 (문서 38 파생값 재현)
+            #     · I_r=4.50e-3(저울) / S_r=1.0835e-2(자유흔들기 omega_n=4.86 실측)
+            #     · c_phi=3.33e-4, 줄 건마찰 f_phi=3.105e-4
+            #   결과: lam_u 6.448(추정치) -> 5.922(실측). 배가시간이 느려져 deadbeat gamma 가
+            #   내려가므로 **작동 gamma 가 15 -> 4~12 로 이동**한다(60s 4/4 스캔, 08-14).
+            #   기본 gamma=10 (고원 중앙, 유지각 표류가 가장 작음 ~19deg).
+            self.running = False
+            self.pending = []
+            from sim_engine import REAL_DEFAULT
+            import params_v19 as _P
+            e.nominal = dict(_P.MEASURED_SET); e.nominal["RHO"] = 0.95
+            e.mismatch = dict(m1=0.0, m2=0.0, L1=0.0, L2=0.0, R=0.0, kt=0.0)
+            e.real = dict(REAL_DEFAULT)
+            e.gain_scale = 1.0
+            e.real.update(enc_use_gyro=False, fwe_settle_s=0.0, fwe_adapt_T=False,
+                          fwe_ff=True, fwe_fast_L=False, w_noload_dps=462.0,
+                          fwe_pos_mode=True, pos_vel_dps=420.0, pos_acc_dps2=8000.0,
+                          fwe_async=True, fwe_async_gamma=10.0,
+                          fwe_async_vret_dps=3.0, fwe_async_hold_min_deg=1.0,
+                          fwe_online=False, **_P.MEASURED_REAL)
+            e.kp_servo, e.kd_servo = 80.0, 1.3
+            e.estimator = "enc"
+            e.ctrl_mode = "fwe3"
+            jit = float(np.random.default_rng().uniform(-0.02, 0.02))
+            e.x0 = dict(phi0=0.0, alpha0=0.5 + jit, theta0=0.5 + jit)
+            e.build()
+            e.reset()
+            await self.broadcast(dict(type="clear"))
+            await self.broadcast(self.init_msg())
+            await self.broadcast(self.view_msg())
+            self.running = True
         elif cmd == "fwe_preset":
             # ★원클릭 FWE 시연: 스윕 최적 시간표(params 기본) + 발목엔코더 + c_φ=0.008
             #   + γ(T)×실행갭 + 온라인 노브. 설정 후 바로 재생 시작.

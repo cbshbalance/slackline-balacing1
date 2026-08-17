@@ -65,6 +65,8 @@ label.chk{display:flex;align-items:center;gap:6px;margin-bottom:5px;cursor:point
    <div class="hint">스윕 최적 시간표(60/20/90/60ms·0.6°) + 발목엔코더 + 줄감쇠 0.008 + γ 자동노브로 즉시 재생.</div>
    <div class="row"><button class="btn" id="bPresetAsync" style="background:linear-gradient(135deg,#06d6a0,#118ab2);color:#fff;font-weight:bold">★ 비동기 FWE 시연 (펴기 생략)</button></div>
    <div class="hint">접기-대기-펴기 대신 <b>증분 접기 + 저속 복귀(3°/s)</b>. 줄 마찰은 <b>실측값</b>, 고정 γ=15(노브 없음). 20케이스 전원 120s 상한 도달.</div>
+   <div class="row"><button class="btn" id="bPresetAsyncM" style="background:linear-gradient(135deg,#ef476f,#f78c6b);color:#fff;font-weight:bold">★★ 비동기 FWE — 실측 파라미터</button></div>
+   <div class="hint">위 버튼과 같은 제어인데 <b>로봇 물리값이 실측값</b>(질량표·I_r·S_r·c_φ·줄 건마찰). λ_u 6.45→<b>5.92</b>, 그래서 고정 γ=<b>10</b>(고원 4~12). 설계추정치 위에서 서는 게 아니라는 확인용.</div>
    <div class="row"><button class="btn on" id="bRun">▶ 시작</button><button class="btn" id="bReset">⟲ 리셋</button></div>
    <div class="row"><button class="btn danger" id="bPL">← 교란</button><button class="btn danger" id="bPR">교란 →</button></div>
    <div class="sl"><div class="lab"><span>교란 강도 φ̇킥 (rad/s)</span><span class="v" id="vPert">0.30</span></div>
@@ -378,6 +380,7 @@ frame();
 el("bRun").onclick=()=>{ send({cmd: running? "pause":"run"}); };
 el("bPreset").onclick=()=>send({cmd:"fwe_preset"});
 el("bPresetAsync").onclick=()=>send({cmd:"fwe_async_preset"});
+el("bPresetAsyncM").onclick=()=>send({cmd:"fwe_async_preset_measured"});
 el("bReset").onclick=()=>send({cmd:"reset"});
 el("bStep").onclick=()=>send({cmd:"step",n:1});
 el("bBack").onclick=()=>send({cmd:"back",n:1});

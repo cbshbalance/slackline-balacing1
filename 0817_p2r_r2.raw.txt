@@ -1,0 +1,1140 @@
+# 형식: 읽기용 4Hz
+E,169387,MOVE,0
+E,171612,MOVE,10
+E,173059,MOVE,0
+# 출력 재개 (s 로 다시 정지)
+dcmd=+0  d=-0.09 | phi=+0.00  ank=+0.07  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+0.04  ank=+0.33  alpha=+0.37
+dcmd=+0  d=-0.09 | phi=+0.09  ank=+0.24  alpha=+0.33
+dcmd=+0  d=-0.18 | phi=+0.00  ank=+0.11  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.18  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=-0.13  ank=-0.42  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.29  alpha=-0.35
+dcmd=+0  d=-0.09 | phi=+0.00  ank=-0.15  alpha=-0.15
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.07  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.04  ank=+0.15  alpha=+0.20
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.37  alpha=-0.33
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.40  alpha=-0.35
+dcmd=+0  d=-0.09 | phi=-0.09  ank=+0.24  alpha=+0.15
+dcmd=+0  d=-0.09 | phi=-0.07  ank=-0.02  alpha=-0.09
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.07  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.40  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=+0.07  ank=+0.04  alpha=+0.11
+dcmd=+0  d=-0.09 | phi=+0.00  ank=-0.46  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.00  ank=+0.02  alpha=+0.02
+dcmd=+0  d=-0.18 | phi=-0.09  ank=+0.07  alpha=-0.02
+dcmd=+0  d=-0.09 | phi=-0.11  ank=+0.15  alpha=+0.04
+dcmd=+0  d=-0.09 | phi=-0.11  ank=-0.35  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.00  ank=-0.02  alpha=-0.02
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.24  alpha=-0.18
+dcmd=+0  d=-0.09 | phi=-0.04  ank=-0.24  alpha=-0.29
+dcmd=+0  d=-0.09 | phi=-0.02  ank=-0.11  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=-0.04  ank=+0.24  alpha=+0.20
+dcmd=+0  d=-0.09 | phi=-0.13  ank=-0.07  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.02  ank=+0.18  alpha=+0.20
+dcmd=+0  d=-0.18 | phi=+0.00  ank=-0.09  alpha=-0.09
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.13  alpha=-0.09
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.04  alpha=+0.00
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.18  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.37  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+3.52  ank=-1.01  alpha=+2.50
+dcmd=+0  d=+0.09 | phi=+6.44  ank=-2.59  alpha=+3.85
+dcmd=+0  d=-0.09 | phi=+8.00  ank=-4.33  alpha=+3.67
+dcmd=+0  d=-0.18 | phi=+10.94  ank=-3.52  alpha=+7.43
+dcmd=+0  d=-0.18 | phi=+11.51  ank=-5.69  alpha=+5.82
+dcmd=+0  d=-0.09 | phi=+12.02  ank=-16.48  alpha=-4.46
+dcmd=+0  d=+0.18 | phi=+18.52  ank=-17.64  alpha=+0.88
+dcmd=+0  d=+0.26 | phi=+18.87  ank=-24.54  alpha=-5.67
+dcmd=+0  d=+0.26 | phi=+19.69  ank=-31.16  alpha=-11.47
+dcmd=+0  d=+0.26 | phi=+19.56  ank=-44.25  alpha=-24.70
+dcmd=+0  d=+0.26 | phi=+18.98  ank=-61.55  alpha=-42.56
+dcmd=+0  d=+0.26 | phi=+18.35  ank=-81.01  alpha=-62.67
+dcmd=+0  d=-0.18 | phi=+16.48  ank=-106.06  alpha=-89.58
+dcmd=+0  d=-0.26 | phi=+12.96  ank=-126.89  alpha=-113.93
+dcmd=+0  d=-0.26 | phi=+9.23  ank=-142.29  alpha=-133.07
+dcmd=+0  d=-0.09 | phi=+5.16  ank=-148.95  alpha=-143.79
+dcmd=+0  d=+0.18 | phi=+2.57  ank=-155.54  alpha=-152.97
+dcmd=+0  d=+0.18 | phi=+4.26  ank=-154.07  alpha=-149.81
+dcmd=+0  d=+0.09 | phi=+4.39  ank=-149.96  alpha=-145.57
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-150.69  alpha=-146.29   << phi raw=10799 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-149.39  alpha=-145.00   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-150.01  alpha=-145.61   << phi raw=10610 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-153.00  alpha=-148.60   << phi raw=10629 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-154.01  alpha=-149.61   << phi raw=10612 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-152.91  alpha=-148.51   << phi raw=10592 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-152.45  alpha=-148.05   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-153.63  alpha=-149.24   << phi raw=10512 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-153.59  alpha=-149.19   << phi raw=10577 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-157.17  alpha=-152.78   << phi raw=10632 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.38  alpha=-155.98   << phi raw=10628 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.33  alpha=-157.94   << phi raw=10653 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.73  alpha=-158.33   << phi raw=10707 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.20  alpha=-157.81   << phi raw=10747 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.44  alpha=-158.05   << phi raw=10752 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.99  alpha=-158.60   << phi raw=10740 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.66  alpha=-158.27   << phi raw=10757 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.84  alpha=-158.44   << phi raw=10767 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.55  alpha=-158.16   << phi raw=10751 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-161.65  alpha=-157.26   << phi raw=10744 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.60  alpha=-158.20   << phi raw=10756 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-162.20  alpha=-157.81   << phi raw=10767 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-161.70  alpha=-157.30   << phi raw=10799 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.69  alpha=-156.29   << phi raw=10810 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.25  alpha=-155.85   << phi raw=10802 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.00  alpha=-155.61   << phi raw=10809 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.73  alpha=-156.34   << phi raw=10818 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.33  alpha=-155.94   << phi raw=10806 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-159.39  alpha=-155.00   << phi raw=10822 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-159.81  alpha=-155.41   << phi raw=10826 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.51  alpha=-156.12   << phi raw=10819 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.22  alpha=-155.83   << phi raw=10799 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-160.14  alpha=-155.74   << phi raw=10768 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-158.23  alpha=-153.83   << phi raw=10694 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-153.90  alpha=-149.50   << phi raw=10652 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-146.10  alpha=-141.70   << phi raw=10651 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-138.87  alpha=-134.47   << phi raw=10667 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-132.41  alpha=-128.01   << phi raw=10649 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-123.20  alpha=-118.81   << phi raw=10659 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-116.37  alpha=-111.97   << phi raw=10791 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-108.90  alpha=-104.50   << phi raw=10856 >>
+dcmd=+0  d=+0.18 | phi=+4.39!  ank=-106.48  alpha=-102.08   << phi raw=10905 >>
+dcmd=+0  d=+0.09 | phi=+4.39!  ank=-111.01  alpha=-106.61   << phi raw=10920 >>
+dcmd=+0  d=-0.18 | phi=+4.39!  ank=-126.32  alpha=-121.93   << phi raw=10923 >>
+dcmd=+0  d=-0.26 | phi=+4.39!  ank=-141.86  alpha=-137.46   << phi raw=10971 >>
+dcmd=+0  d=-0.09 | phi=+6.46  ank=-145.44  alpha=-138.98
+dcmd=+0  d=-0.09 | phi=+3.76  ank=-145.00  alpha=-141.24
+dcmd=+0  d=-0.18 | phi=+3.60  ank=-143.44  alpha=-139.83
+dcmd=+0  d=-0.18 | phi=+2.11  ank=-142.36  alpha=-140.25
+dcmd=+0  d=-0.18 | phi=+0.90  ank=-142.36  alpha=-141.46
+dcmd=+0  d=-0.09 | phi=+0.79  ank=-141.77  alpha=-140.98
+dcmd=+0  d=-0.09 | phi=-0.04  ank=-139.81  alpha=-139.86
+dcmd=+0  d=-0.26 | phi=+0.68  ank=-141.00  alpha=-140.32
+dcmd=+0  d=-0.26 | phi=+0.59  ank=-142.56  alpha=-141.97
+dcmd=+0  d=-0.26 | phi=+0.70  ank=-143.35  alpha=-142.65
+dcmd=+0  d=-0.26 | phi=+0.70  ank=-142.34  alpha=-141.64
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-142.27  alpha=-142.21
+dcmd=+0  d=-0.18 | phi=-0.92  ank=-142.32  alpha=-143.24
+dcmd=+0  d=-0.26 | phi=-1.16  ank=-141.83  alpha=-143.00
+dcmd=+0  d=-0.26 | phi=-1.49  ank=-140.47  alpha=-141.97
+dcmd=+0  d=-0.18 | phi=+0.37  ank=-138.14  alpha=-137.77
+dcmd=+0  d=-0.18 | phi=+3.91  ank=-138.52  alpha=-134.60
+dcmd=+0  d=-0.18 | phi=+6.75  ank=-141.13  alpha=-134.38
+dcmd=+0  d=-0.09 | phi=+5.36  ank=-143.57  alpha=-138.21
+dcmd=+0  d=-0.09 | phi=+6.28  ank=-150.05  alpha=-143.77
+dcmd=+0  d=+0.26 | phi=+9.23  ank=-158.14  alpha=-148.91
+dcmd=+0  d=+0.26 | phi=+11.56  ank=-168.09  alpha=-156.53
+dcmd=+0  d=+0.18 | phi=+8.48  ank=-172.09  alpha=-163.61
+dcmd=+0  d=+0.26 | phi=+5.43  ank=-173.80  alpha=-168.38
+dcmd=+0  d=+0.26 | phi=+5.91  ank=-175.78  alpha=-169.87
+dcmd=+0  d=+0.26 | phi=+5.93  ank=-177.28  alpha=-171.34
+dcmd=+0  d=+0.18 | phi=+4.88  ank=-177.12  alpha=-172.24
+dcmd=+0  d=+0.26 | phi=+4.70  ank=-178.57  alpha=-173.87
+dcmd=+0  d=+0.26 | phi=+4.31  ank=-179.74  alpha=-175.43
+dcmd=+0  d=+0.26 | phi=+3.16  ank=-179.06  alpha=-175.89
+dcmd=+0  d=+0.26 | phi=+3.45  ank=-179.58  alpha=-176.13
+dcmd=+0  d=+0.18 | phi=+3.16  ank=-179.74  alpha=-176.57
+dcmd=+0  d=+0.26 | phi=+2.53  ank=-179.27  alpha=-176.75
+dcmd=+0  d=+0.26 | phi=+2.68  ank=-179.01  alpha=-176.33
+dcmd=+0  d=+0.18 | phi=+2.37  ank=-178.95  alpha=-176.57
+dcmd=+0  d=+0.26 | phi=+0.02  ank=-178.42  alpha=-178.40
+dcmd=+0  d=+0.18 | phi=-1.08  ank=-179.36  alpha=-180.44
+dcmd=+0  d=-0.18 | phi=-2.77  ank=+177.47  alpha=+174.70
+dcmd=+0  d=-0.18 | phi=-5.49  ank=+177.74  alpha=+172.24
+dcmd=+0  d=-0.35 | phi=-7.84  ank=+177.54  alpha=+169.69
+dcmd=+0  d=-0.35 | phi=-18.39  ank=+179.19  alpha=+160.80
+dcmd=+0  d=-0.35 | phi=-22.59  ank=+179.65  alpha=+157.06
+dcmd=+0  d=-0.35 | phi=-21.14  ank=+179.52  alpha=+158.38
+dcmd=+0  d=-0.35 | phi=-22.19  ank=-178.62  alpha=-200.81
+dcmd=+0  d=-0.35 | phi=-20.94  ank=-179.65  alpha=-200.59
+dcmd=+0  d=-0.44 | phi=-18.61  ank=-179.78  alpha=-198.39
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-178.92  alpha=-197.53   << phi raw=9727 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-179.14  alpha=-197.75   << phi raw=9686 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-178.81  alpha=-197.42   << phi raw=9658 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-179.12  alpha=-197.73   << phi raw=0 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-178.64  alpha=-197.25   << phi raw=0 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-178.55  alpha=-197.16   << phi raw=0 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-178.09  alpha=-196.70   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-178.13  alpha=-196.74   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-178.07  alpha=-196.68   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-177.98  alpha=-196.59   << phi raw=0 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-178.37  alpha=-196.98   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-177.82  alpha=-196.44   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-177.14  alpha=-195.75   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-175.98  alpha=-194.59   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-174.51  alpha=-193.12   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-169.54  alpha=-188.15   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-164.69  alpha=-183.30   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-162.51  alpha=-181.12   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-161.98  alpha=-180.59   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-160.95  alpha=-179.56   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-160.58  alpha=-179.19   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=-18.61!  ank=-159.81  alpha=-178.42   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=-18.61!  ank=-159.76  alpha=-178.37   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-158.97  alpha=-177.58   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-158.62  alpha=-177.23   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-158.99  alpha=-177.60   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-160.47  alpha=-179.08   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-160.55  alpha=-179.17   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-160.27  alpha=-178.88   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-160.33  alpha=-178.95   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-160.55  alpha=-179.17   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-160.14  alpha=-178.75   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-158.64  alpha=-177.25   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-161.13  alpha=-179.74   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-162.29  alpha=-180.90   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.95  alpha=-181.56   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.93  alpha=-181.54   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.62  alpha=-181.23   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-161.92  alpha=-180.53   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.51  alpha=-181.12   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.42  alpha=-181.03   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.25  alpha=-180.86   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-160.99  alpha=-179.60   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-161.30  alpha=-179.91   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-161.48  alpha=-180.09   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-161.08  alpha=-179.69   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-161.02  alpha=-179.63   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-160.27  alpha=-178.88   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-160.86  alpha=-179.47   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-160.31  alpha=-178.92   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-160.44  alpha=-179.06   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-160.09  alpha=-178.70   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-18.61!  ank=-159.87  alpha=-178.48   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=-18.61!  ank=-158.95  alpha=-177.56   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-18.61!  ank=-159.48  alpha=-178.09   << phi raw=0 >>
+dcmd=+0  d=-0.26 | phi=-18.61!  ank=-160.47  alpha=-179.08   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-160.62  alpha=-179.23   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-161.06  alpha=-179.67   << phi raw=0 >>
+dcmd=+0  d=-0.44 | phi=-18.61!  ank=-161.83  alpha=-180.44   << phi raw=0 >>
+dcmd=+0  d=-0.35 | phi=-18.61!  ank=-162.55  alpha=-181.16   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=-7.84  ank=-162.60  alpha=-170.44
+dcmd=+0  d=+0.35 | phi=-7.84!  ank=-159.65  alpha=-167.50   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=-7.84!  ank=-161.98  alpha=-169.83   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+5.52  ank=-161.26  alpha=-155.74
+dcmd=+0  d=+0.26 | phi=+8.17  ank=-160.55  alpha=-152.38
+dcmd=+0  d=+0.26 | phi=+10.92  ank=-163.15  alpha=-152.23
+dcmd=+0  d=+0.26 | phi=+13.67  ank=-164.16  alpha=-150.49
+dcmd=+0  d=+0.18 | phi=+15.93  ank=-166.93  alpha=-151.00
+dcmd=+0  d=-0.18 | phi=+16.72  ank=-170.86  alpha=-154.14
+dcmd=+0  d=-0.09 | phi=+14.77  ank=-174.51  alpha=-159.74
+dcmd=+0  d=-0.18 | phi=+14.50  ank=-177.96  alpha=-163.45
+dcmd=+0  d=-0.09 | phi=+17.25  ank=+177.56  alpha=+194.81
+dcmd=+0  d=-0.09 | phi=+18.41  ank=+176.29  alpha=+194.70
+dcmd=+0  d=-0.09 | phi=+19.91  ank=+176.07  alpha=+195.97
+dcmd=+0  d=-0.09 | phi=+21.82  ank=+176.51  alpha=+198.33
+dcmd=+0  d=+0.09 | phi=+21.53  ank=+176.73  alpha=+198.26
+dcmd=+0  d=-0.18 | phi=+22.74  ank=+174.79  alpha=+197.53
+dcmd=+0  d=-0.09 | phi=+21.25  ank=+175.23  alpha=+196.48
+dcmd=+0  d=-0.18 | phi=+19.27  ank=+176.18  alpha=+195.45
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+176.42  alpha=+195.69   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.56  alpha=+194.83   << phi raw=11463 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+174.46  alpha=+193.73   << phi raw=11454 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+174.75  alpha=+194.02   << phi raw=11430 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.14  alpha=+194.41   << phi raw=11406 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.25  alpha=+194.52   << phi raw=11425 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.69  alpha=+194.96   << phi raw=11412 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.72  alpha=+194.99   << phi raw=11405 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.94  alpha=+195.21   << phi raw=11404 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.74  alpha=+195.01   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.56  alpha=+194.83   << phi raw=11376 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.69  alpha=+194.96   << phi raw=11356 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+176.53  alpha=+195.80   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+174.59  alpha=+193.86   << phi raw=11319 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+174.68  alpha=+193.95   << phi raw=11332 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+175.32  alpha=+194.59   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=+19.27!  ank=+176.73  alpha=+196.00   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=+19.27!  ank=+176.66  alpha=+195.93   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+176.46  alpha=+195.73   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=+19.27!  ank=+177.03  alpha=+196.30   << phi raw=0 >>
+dcmd=+0  d=+0.00 | phi=+19.27!  ank=+177.80  alpha=+197.07   << phi raw=0 >>
+dcmd=+0  d=+0.09 | phi=+19.27!  ank=+178.51  alpha=+197.78   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+179.01  alpha=+198.28   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+179.54  alpha=+198.81   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=+19.27!  ank=+179.23  alpha=+198.50   << phi raw=0 >>
+dcmd=+0  d=-0.09 | phi=+19.27!  ank=+178.88  alpha=+198.15   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+19.27!  ank=+177.10  alpha=+196.37   << phi raw=0 >>
+dcmd=+0  d=-0.97 | phi=+19.27!  ank=+151.83  alpha=+171.10 | alpha/d=-176.977   << phi raw=10925 >>
+dcmd=+0  d=+4.48 | phi=+19.27!  ank=+133.00  alpha=+152.27 | alpha/d=33.971   << phi raw=10935 >>
+dcmd=+0  d=+4.04 | phi=+19.27!  ank=+136.38  alpha=+155.65 | alpha/d=38.500   << phi raw=10817 >>
+dcmd=+0  d=+2.90 | phi=+19.27!  ank=+141.57  alpha=+160.84 | alpha/d=55.455   << phi raw=10858 >>
+dcmd=+0  d=+4.04 | phi=+19.27!  ank=+149.90  alpha=+169.17 | alpha/d=41.842   << phi raw=10934 >>
+dcmd=+0  d=+2.02 | phi=+19.27!  ank=+160.82  alpha=+180.09 | alpha/d=89.087   << phi raw=10973 >>
+dcmd=+0  d=+4.04 | phi=+19.27!  ank=+168.60  alpha=+187.87 | alpha/d=46.467   << phi raw=11076 >>
+dcmd=+0  d=+0.88 | phi=+19.27!  ank=+174.99  alpha=+194.26 | alpha/d=221.025   << phi raw=11189 >>
+dcmd=+0  d=+4.04 | phi=+19.27!  ank=-179.43  alpha=-160.16 | alpha/d=-39.614   << phi raw=11055 >>
+dcmd=+0  d=+0.18 | phi=+6.81  ank=-175.96  alpha=-169.15
+dcmd=+0  d=+4.04 | phi=+5.52  ank=-176.09  alpha=-170.57 | alpha/d=-42.190
+dcmd=+0  d=+0.44 | phi=+1.27  ank=-170.90  alpha=-169.63
+dcmd=+0  d=+4.04 | phi=-5.01  ank=-170.13  alpha=-175.14 | alpha/d=-43.321
+dcmd=+0  d=-0.35 | phi=-5.87  ank=-172.00  alpha=-177.87
+dcmd=+0  d=+4.04 | phi=-6.42  ank=-172.33  alpha=-178.75 | alpha/d=-44.212
+dcmd=+0  d=-0.26 | phi=-7.16  ank=-172.20  alpha=-179.36
+dcmd=+0  d=+4.04 | phi=-8.31  ank=-170.64  alpha=-178.95 | alpha/d=-44.261
+dcmd=+0  d=+0.18 | phi=-10.26  ank=-169.98  alpha=-180.24
+dcmd=+0  d=+4.04 | phi=-11.14  ank=-170.90  alpha=-182.04 | alpha/d=-45.027
+dcmd=+0  d=+0.35 | phi=-11.49  ank=-164.33  alpha=-175.83
+dcmd=+0  d=-0.26 | phi=-13.91  ank=-156.97  alpha=-170.88
+dcmd=+0  d=-0.18 | phi=-12.24  ank=-149.50  alpha=-161.74
+dcmd=+0  d=+0.00 | phi=-9.47  ank=-146.98  alpha=-156.45
+dcmd=+0  d=+0.26 | phi=-12.35  ank=-147.02  alpha=-159.37
+dcmd=+0  d=+0.09 | phi=-14.00  ank=-145.83  alpha=-159.83
+dcmd=+0  d=+0.18 | phi=-13.89  ank=-144.76  alpha=-158.64
+# 출력 정지 — s 로 재개 (명령은 계속 먹음)
+# D,t_ms,phi_deg,ank_deg,alpha_deg,del_cmd_deg,del_now_deg
+# 형식: 100Hz CSV (로거용)
+# 형식: 읽기용 4Hz
+# 출력 재개 (s 로 다시 정지)
+dcmd=+0  d=-0.18 | phi=+0.40  ank=-1.56  alpha=-1.16
+dcmd=+0  d=-0.09 | phi=+0.59  ank=-1.05  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.57  ank=-0.77  alpha=-0.20
+dcmd=+0  d=-0.18 | phi=+0.53  ank=-0.90  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.22  ank=-1.38  alpha=-1.16
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.92  alpha=-0.90
+dcmd=+0  d=-0.09 | phi=-0.07  ank=-1.14  alpha=-1.21
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-1.10  alpha=-0.94
+dcmd=+0  d=-0.18 | phi=+0.42  ank=-1.21  alpha=-0.79
+dcmd=+0  d=-0.18 | phi=+0.55  ank=-1.23  alpha=-0.68
+dcmd=+0  d=-0.09 | phi=+0.53  ank=-0.92  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.46  ank=-1.16  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-1.19  alpha=-1.08
+dcmd=+0  d=-0.18 | phi=+1.69  ank=+0.37  alpha=+2.07
+dcmd=+0  d=-0.18 | phi=+2.61  ank=-2.53  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+2.97  ank=-5.30  alpha=-2.33
+dcmd=+0  d=+0.35 | phi=+1.69  ank=-5.12  alpha=-3.43
+dcmd=+0  d=+0.00 | phi=+2.35  ank=-5.93  alpha=-3.58
+dcmd=+0  d=-0.35 | phi=+3.12  ank=-5.58  alpha=-2.46
+dcmd=+0  d=-0.18 | phi=+1.98  ank=-5.65  alpha=-3.67
+dcmd=+0  d=+0.26 | phi=-1.43  ank=-12.83  alpha=-14.26
+dcmd=+0  d=-0.18 | phi=-0.26  ank=-17.84  alpha=-18.11
+dcmd=+0  d=-0.18 | phi=+3.25  ank=-19.53  alpha=-16.28
+dcmd=+0  d=-0.26 | phi=+6.24  ank=-26.96  alpha=-20.72
+dcmd=+0  d=-0.18 | phi=+7.67  ank=-35.93  alpha=-28.26
+dcmd=+0  d=-0.35 | phi=+8.20  ank=-46.78  alpha=-38.58
+dcmd=+0  d=-0.26 | phi=+9.89  ank=-49.57  alpha=-39.68
+dcmd=+0  d=+0.09 | phi=+9.58  ank=-58.71  alpha=-49.13
+dcmd=+0  d=+0.18 | phi=+11.89  ank=-65.83  alpha=-53.94
+dcmd=+0  d=+0.00 | phi=+12.70  ank=-79.98  alpha=-67.28
+dcmd=+0  d=-0.18 | phi=+12.11  ank=-99.47  alpha=-87.36
+dcmd=+0  d=-0.35 | phi=+11.40  ank=-116.43  alpha=-105.03
+dcmd=+0  d=-0.44 | phi=+10.77  ank=-127.75  alpha=-116.98
+dcmd=+0  d=-0.35 | phi=+9.34  ank=-140.30  alpha=-130.96
+dcmd=+0  d=-0.18 | phi=+9.18  ank=-152.86  alpha=-143.68
+dcmd=+0  d=+0.26 | phi=+8.35  ank=-156.03  alpha=-147.68
+dcmd=+0  d=-0.35 | phi=+7.54  ank=-159.59  alpha=-152.05
+dcmd=+0  d=-0.26 | phi=+7.19  ank=-162.88  alpha=-155.70
+dcmd=+0  d=-0.09 | phi=+7.98  ank=-171.21  alpha=-163.23
+dcmd=+0  d=+0.26 | phi=+2.86  ank=-174.97  alpha=-172.11
+dcmd=+0  d=+0.18 | phi=+2.86!  ank=-176.15  alpha=-173.30   << phi raw=10516 >>
+dcmd=+0  d=+0.09 | phi=+2.86!  ank=-174.66  alpha=-171.80   << phi raw=10566 >>
+dcmd=+0  d=-0.35 | phi=+2.86!  ank=-173.34  alpha=-170.49   << phi raw=10627 >>
+dcmd=+0  d=-0.18 | phi=+2.86!  ank=-167.21  alpha=-164.36   << phi raw=0 >>
+dcmd=+0  d=-0.18 | phi=-2.20  ank=-167.76  alpha=-169.96
+dcmd=+0  d=-0.09 | phi=-0.83  ank=-170.09  alpha=-170.93
+dcmd=+0  d=-0.09 | phi=+2.24  ank=-171.74  alpha=-169.50
+dcmd=+0  d=-0.09 | phi=+8.22  ank=-173.67  alpha=-165.45
+dcmd=+0  d=+0.09 | phi=+15.93  ank=-175.67  alpha=-159.74
+dcmd=+0  d=+0.18 | phi=+21.67  ank=-176.18  alpha=-154.51
+dcmd=+0  d=+0.09 | phi=+23.23  ank=+179.38  alpha=+202.61
+dcmd=+0  d=-0.09 | phi=+23.23!  ank=+175.58  alpha=+198.81   << phi raw=11644 >>
+dcmd=+0  d=+0.00 | phi=+23.23!  ank=+174.09  alpha=+197.31   << phi raw=11620 >>
+dcmd=+0  d=-0.18 | phi=+23.23!  ank=+172.20  alpha=+195.42   << phi raw=11702 >>
+dcmd=+0  d=+0.00 | phi=+23.23!  ank=+173.01  alpha=+196.24   << phi raw=11667 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+176.77  alpha=+200.00   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=+176.31  alpha=+199.53   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=+175.94  alpha=+199.16   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=+175.34  alpha=+198.57   << phi raw=0 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=+175.80  alpha=+199.03   << phi raw=11501 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=+176.02  alpha=+199.25   << phi raw=11499 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.34  alpha=+200.57   << phi raw=11410 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.19  alpha=+200.41   << phi raw=11406 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+176.55  alpha=+199.78   << phi raw=11504 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.43  alpha=+200.65   << phi raw=11437 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.12  alpha=+200.35   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.08  alpha=+200.30   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+177.10  alpha=+200.32   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=+179.21  alpha=+202.43   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=-178.33  alpha=-155.10   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=-173.17  alpha=-149.94   << phi raw=0 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=-168.79  alpha=-145.57   << phi raw=10294 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=-166.42  alpha=-143.20   << phi raw=10028 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=-167.98  alpha=-144.76   << phi raw=9999 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=-167.63  alpha=-144.40   << phi raw=10030 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=-164.90  alpha=-141.68   << phi raw=10080 >>
+dcmd=+0  d=+0.26 | phi=+23.23!  ank=-163.89  alpha=-140.67   << phi raw=10104 >>
+dcmd=+0  d=+0.18 | phi=+23.23!  ank=-163.56  alpha=-140.34   << phi raw=10186 >>
+dcmd=+0  d=+0.18 | phi=-5.25  ank=-163.96  alpha=-169.21
+dcmd=+0  d=+0.18 | phi=-2.42  ank=-165.41  alpha=-167.83
+dcmd=+0  d=+0.18 | phi=-2.20  ank=-163.98  alpha=-166.18
+dcmd=+0  d=+0.18 | phi=-2.20!  ank=-164.14  alpha=-166.33   << phi raw=16383 >>
+dcmd=+0  d=+0.18 | phi=+2.40  ank=-164.64  alpha=-162.25
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-162.18  alpha=-159.79   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-161.28  alpha=-158.88   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-161.13  alpha=-158.73   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-160.95  alpha=-158.55   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-160.71  alpha=-158.31   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-160.80  alpha=-158.40   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-160.73  alpha=-158.33   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-160.82  alpha=-158.42   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-162.38  alpha=-159.98   << phi raw=16383 >>
+dcmd=+0  d=+0.26 | phi=+2.40!  ank=-161.48  alpha=-159.08   << phi raw=16383 >>
+dcmd=+0  d=+0.35 | phi=+5.60  ank=-161.85  alpha=-156.25
+dcmd=+0  d=+0.35 | phi=+4.39  ank=-161.65  alpha=-157.26
+dcmd=+0  d=+0.35 | phi=+3.58  ank=-160.42  alpha=-156.84
+dcmd=+0  d=+0.35 | phi=+4.86  ank=-159.63  alpha=-154.78
+dcmd=+0  d=+0.26 | phi=+4.50  ank=-158.07  alpha=-153.57
+dcmd=+0  d=+0.35 | phi=+2.26  ank=-153.63  alpha=-151.37
+dcmd=+0  d=+0.35 | phi=+0.83  ank=-150.80  alpha=-149.96
+dcmd=+0  d=+0.26 | phi=-0.66  ank=-147.96  alpha=-148.62
+dcmd=+0  d=+0.26 | phi=-1.01  ank=-145.55  alpha=-146.56
+dcmd=+0  d=+0.26 | phi=-0.70  ank=-144.58  alpha=-145.28
+dcmd=+0  d=+0.26 | phi=-0.57  ank=-144.89  alpha=-145.46
+dcmd=+0  d=+0.18 | phi=-0.07  ank=-144.21  alpha=-144.27
+dcmd=+0  d=+0.18 | phi=-0.22  ank=-142.51  alpha=-142.73
+dcmd=+0  d=+0.18 | phi=+3.43  ank=-142.93  alpha=-139.50
+dcmd=+0  d=+0.00 | phi=+6.66  ank=-143.33  alpha=-136.67
+dcmd=+0  d=-0.26 | phi=+8.37  ank=-146.38  alpha=-138.01
+dcmd=+0  d=-0.44 | phi=+8.70  ank=-145.61  alpha=-136.91
+dcmd=+0  d=-0.44 | phi=+8.55  ank=-144.84  alpha=-136.30
+dcmd=+0  d=-0.26 | phi=+8.28  ank=-145.52  alpha=-137.24
+dcmd=+0  d=+0.18 | phi=+5.71  ank=-135.86  alpha=-130.14
+dcmd=+0  d=-0.26 | phi=+3.54  ank=-121.62  alpha=-118.08
+dcmd=+0  d=-0.09 | phi=+3.80  ank=-102.68  alpha=-98.88
+dcmd=+0  d=+0.26 | phi=+4.57  ank=-85.96  alpha=-81.39
+dcmd=+0  d=+0.26 | phi=+6.06  ank=-72.82  alpha=-66.75
+dcmd=+0  d=+0.26 | phi=+7.71  ank=-60.40  alpha=-52.69
+dcmd=+0  d=+0.18 | phi=+9.84  ank=-45.68  alpha=-35.84
+dcmd=+0  d=+0.26 | phi=+15.47  ank=-18.94  alpha=-3.47
+dcmd=+0  d=-0.18 | phi=+18.26  ank=-4.02  alpha=+14.24
+dcmd=+0  d=+0.18 | phi=+10.72  ank=-14.79  alpha=-4.06
+dcmd=+0  d=-0.09 | phi=+11.43  ank=-7.82  alpha=+3.60
+dcmd=+0  d=-0.26 | phi=+12.68  ank=-2.13  alpha=+10.55
+dcmd=+0  d=-0.18 | phi=+10.20  ank=-5.49  alpha=+4.70
+dcmd=+0  d=-0.18 | phi=+11.07  ank=-1.91  alpha=+9.16
+dcmd=+0  d=-0.09 | phi=+7.23  ank=-2.92  alpha=+4.31
+dcmd=+0  d=-0.18 | phi=+0.79  ank=-2.04  alpha=-1.25
+dcmd=+0  d=-0.18 | phi=-7.71  ank=-0.66  alpha=-8.37
+dcmd=+0  d=-0.18 | phi=-9.93  ank=+0.15  alpha=-9.78
+dcmd=+0  d=-0.18 | phi=-6.39  ank=-1.54  alpha=-7.93
+dcmd=+0  d=-0.18 | phi=+1.32  ank=-1.80  alpha=-0.48
+dcmd=+0  d=-0.09 | phi=+8.64  ank=-2.57  alpha=+6.06
+dcmd=+0  d=-0.09 | phi=+10.17  ank=-3.41  alpha=+6.77
+dcmd=+0  d=-0.18 | phi=+6.11  ank=-2.44  alpha=+3.67
+dcmd=+0  d=-0.18 | phi=-1.65  ank=-1.65  alpha=-3.30
+dcmd=+0  d=-0.18 | phi=-8.17  ank=-0.62  alpha=-8.79
+dcmd=+0  d=-0.18 | phi=-9.29  ank=-0.44  alpha=-9.73
+dcmd=+0  d=-0.09 | phi=-4.37  ank=-1.23  alpha=-5.60
+dcmd=+0  d=-0.18 | phi=+3.25  ank=-2.20  alpha=+1.05
+dcmd=+0  d=-0.18 | phi=+9.16  ank=-3.30  alpha=+5.87
+dcmd=+0  d=-0.18 | phi=+9.23  ank=-3.52  alpha=+5.71
+dcmd=+0  d=-0.09 | phi=+4.20  ank=-1.69  alpha=+2.50
+dcmd=+0  d=-0.09 | phi=-3.56  ank=-0.99  alpha=-4.55
+dcmd=+0  d=-0.09 | phi=-8.57  ank=-0.66  alpha=-9.23
+dcmd=+0  d=-0.09 | phi=-8.00  ank=-0.15  alpha=-8.15
+dcmd=+0  d=-0.18 | phi=-2.50  ank=-1.78  alpha=-4.28
+dcmd=+0  d=-0.18 | phi=+4.86  ank=-2.24  alpha=+2.61
+dcmd=+0  d=-0.18 | phi=+9.23  ank=-3.45  alpha=+5.78
+dcmd=+0  d=-0.09 | phi=+8.09  ank=-3.27  alpha=+4.81
+dcmd=+0  d=-0.09 | phi=+2.15  ank=-1.78  alpha=+0.37
+dcmd=+0  d=-0.18 | phi=-4.90  ank=-0.90  alpha=-5.80
+dcmd=+0  d=-0.18 | phi=-8.64  ank=-0.40  alpha=-9.03
+dcmd=+0  d=-0.18 | phi=-6.77  ank=-0.62  alpha=-7.38
+dcmd=+0  d=-0.18 | phi=-0.53  ank=-2.07  alpha=-2.59
+dcmd=+0  d=-0.18 | phi=+6.02  ank=-3.05  alpha=+2.97
+dcmd=+0  d=-0.09 | phi=+9.03  ank=-3.03  alpha=+6.00
+dcmd=+0  d=-0.09 | phi=+6.53  ank=-3.14  alpha=+3.38
+dcmd=+0  d=-0.18 | phi=+0.31  ank=-1.47  alpha=-1.16
+dcmd=+0  d=-0.18 | phi=-6.06  ank=-0.99  alpha=-7.05
+dcmd=+0  d=-0.18 | phi=-8.13  ank=-0.09  alpha=-8.22
+dcmd=+0  d=-0.18 | phi=-5.10  ank=-0.79  alpha=-5.89
+dcmd=+0  d=-0.18 | phi=+1.01  ank=-2.07  alpha=-1.05
+dcmd=+0  d=-0.18 | phi=+7.27  ank=-2.29  alpha=+4.99
+dcmd=+0  d=-0.18 | phi=+8.44  ank=-3.65  alpha=+4.79
+dcmd=+0  d=-0.18 | phi=+5.12  ank=-2.15  alpha=+2.97
+dcmd=+0  d=-0.09 | phi=-1.52  ank=-1.80  alpha=-3.32
+dcmd=+0  d=-0.18 | phi=-6.64  ank=-0.53  alpha=-7.16
+dcmd=+0  d=-0.18 | phi=-7.65  ank=-0.26  alpha=-7.91
+dcmd=+0  d=-0.18 | phi=-3.52  ank=-1.47  alpha=-4.99
+dcmd=+0  d=-0.09 | phi=+2.81  ank=-2.20  alpha=+0.62
+dcmd=+0  d=-0.09 | phi=+7.47  ank=-2.83  alpha=+4.64
+dcmd=+0  d=-0.09 | phi=+7.73  ank=-2.53  alpha=+5.21
+dcmd=+0  d=-0.18 | phi=+3.30  ank=-2.42  alpha=+0.88
+dcmd=+0  d=-0.18 | phi=-2.99  ank=-1.80  alpha=-4.79
+dcmd=+0  d=-0.18 | phi=-7.08  ank=-0.94  alpha=-8.02
+dcmd=+0  d=-0.18 | phi=-6.66  ank=-0.81  alpha=-7.47
+dcmd=+0  d=-0.09 | phi=-1.82  ank=-1.69  alpha=-3.52
+dcmd=+0  d=-0.18 | phi=+4.17  ank=-2.37  alpha=+1.80
+dcmd=+0  d=-0.18 | phi=+7.78  ank=-2.88  alpha=+4.90
+dcmd=+0  d=-0.18 | phi=+6.59  ank=-2.83  alpha=+3.76
+dcmd=+0  d=-0.18 | phi=+1.67  ank=-1.58  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=-4.20  ank=-1.19  alpha=-5.38
+dcmd=+0  d=-0.18 | phi=-7.10  ank=-0.44  alpha=-7.54
+dcmd=+0  d=-0.18 | phi=-5.45  ank=-0.92  alpha=-6.37
+dcmd=+0  d=-0.18 | phi=-0.24  ank=-1.41  alpha=-1.65
+dcmd=+0  d=-0.18 | phi=+5.19  ank=-2.79  alpha=+2.40
+dcmd=+0  d=-0.09 | phi=+7.65  ank=-2.61  alpha=+5.03
+dcmd=+0  d=-0.09 | phi=+5.41  ank=-2.81  alpha=+2.59
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-1.25  alpha=-1.10
+dcmd=+0  d=-0.18 | phi=-5.12  ank=-0.88  alpha=-6.00
+dcmd=+0  d=-0.18 | phi=-6.81  ank=-0.37  alpha=-7.19
+dcmd=+0  d=-0.18 | phi=-4.13  ank=-1.65  alpha=-5.78
+dcmd=+0  d=-0.18 | phi=+1.36  ank=-1.91  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=+5.95  ank=-2.61  alpha=+3.34
+dcmd=+0  d=-0.18 | phi=+7.12  ank=-2.81  alpha=+4.31
+dcmd=+0  d=-0.09 | phi=+4.00  ank=-2.61  alpha=+1.38
+dcmd=+0  d=-0.18 | phi=-1.32  ank=-1.89  alpha=-3.21
+dcmd=+0  d=-0.18 | phi=-5.58  ank=-0.59  alpha=-6.17
+dcmd=+0  d=-0.18 | phi=-6.17  ank=-1.01  alpha=-7.19
+dcmd=+0  d=-0.18 | phi=-2.72  ank=-1.14  alpha=-3.87
+dcmd=+0  d=-0.18 | phi=+2.57  ank=-2.18  alpha=+0.40
+dcmd=+0  d=-0.18 | phi=+6.39  ank=-2.70  alpha=+3.69
+dcmd=+0  d=-0.18 | phi=+6.42  ank=-2.29  alpha=+4.13
+dcmd=+0  d=-0.18 | phi=+2.59  ank=-2.00  alpha=+0.59
+dcmd=+0  d=-0.18 | phi=-2.64  ank=-1.43  alpha=-4.06
+dcmd=+0  d=-0.18 | phi=-5.98  ank=-0.88  alpha=-6.86
+dcmd=+0  d=-0.18 | phi=-5.47  ank=-1.27  alpha=-6.75
+dcmd=+0  d=-0.18 | phi=-1.34  ank=-1.85  alpha=-3.19
+dcmd=+0  d=-0.18 | phi=+3.69  ank=-2.53  alpha=+1.16
+dcmd=+0  d=-0.09 | phi=+6.66  ank=-2.90  alpha=+3.76
+dcmd=+0  d=-0.18 | phi=+5.47  ank=-2.75  alpha=+2.72
+dcmd=+0  d=-0.09 | phi=+1.19  ank=-1.67  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=-3.67  ank=-1.23  alpha=-4.90
+dcmd=+0  d=-0.18 | phi=-6.00  ank=-0.44  alpha=-6.44
+dcmd=+0  d=-0.18 | phi=-4.39  ank=-1.41  alpha=-5.80
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-2.00  alpha=-1.91
+dcmd=+0  d=-0.18 | phi=+4.55  ank=-2.86  alpha=+1.69
+dcmd=+0  d=-0.09 | phi=+6.39  ank=-2.64  alpha=+3.76
+dcmd=+0  d=-0.18 | phi=+4.42  ank=-2.72  alpha=+1.69
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-1.89  alpha=-1.91
+dcmd=+0  d=-0.18 | phi=-4.37  ank=-0.97  alpha=-5.34
+dcmd=+0  d=-0.18 | phi=-5.73  ank=-0.86  alpha=-6.59
+dcmd=+0  d=-0.09 | phi=-3.21  ank=-1.12  alpha=-4.33
+dcmd=+0  d=-0.18 | phi=+1.38  ank=-1.74  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+5.19  ank=-2.88  alpha=+2.31
+dcmd=+0  d=-0.18 | phi=+5.27  ank=-3.80  alpha=+1.47
+dcmd=+0  d=-0.09 | phi=+4.57  ank=-1.32  alpha=+3.25
+dcmd=+0  d=-0.26 | phi=+4.66  ank=+1.23  alpha=+5.89
+dcmd=+0  d=-0.44 | phi=+2.94  ank=-0.81  alpha=+2.13
+dcmd=+0  d=-0.70 | phi=+3.85  ank=+2.81  alpha=+6.66 | alpha/d=-9.469
+dcmd=+0  d=+0.97 | phi=+5.36  ank=+7.65  alpha=+13.01 | alpha/d=13.455
+dcmd=+0  d=+0.35 | phi=+4.42  ank=+5.60  alpha=+10.02
+dcmd=+0  d=-0.79 | phi=+3.03  ank=+2.57  alpha=+5.60 | alpha/d=-7.083
+dcmd=+0  d=+0.09 | phi=+3.58  ank=+4.88  alpha=+8.46
+dcmd=+0  d=+0.18 | phi=+3.01  ank=+3.05  alpha=+6.06
+dcmd=+0  d=-0.44 | phi=+1.74  ank=-2.46  alpha=-0.73
+dcmd=+0  d=-0.18 | phi=+1.87  ank=-2.77  alpha=-0.90
+dcmd=+0  d=-0.18 | phi=+1.52  ank=-4.94  alpha=-3.43
+dcmd=+0  d=+0.18 | phi=+3.91  ank=+2.86  alpha=+6.77
+dcmd=+0  d=+0.35 | phi=+4.70  ank=+5.65  alpha=+10.35
+dcmd=+0  d=-0.62 | phi=+2.37  ank=-2.00  alpha=+0.37 | alpha/d=-0.607
+dcmd=+0  d=-0.53 | phi=+1.82  ank=-5.10  alpha=-3.27 | alpha/d=6.208
+dcmd=+0  d=-0.35 | phi=+1.93  ank=-5.38  alpha=-3.45
+dcmd=+0  d=-0.26 | phi=+2.53  ank=-1.38  alpha=+1.14
+dcmd=+0  d=+0.44 | phi=+3.93  ank=+5.21  alpha=+9.14
+dcmd=+0  d=+0.00 | phi=+3.71  ank=+3.69  alpha=+7.40
+dcmd=+0  d=-0.18 | phi=+0.92  ank=-4.99  alpha=-4.06
+dcmd=+0  d=+0.26 | phi=+3.01  ank=+3.30  alpha=+6.31
+dcmd=+0  d=-0.26 | phi=+3.19  ank=+3.10  alpha=+6.28
+dcmd=+0  d=+0.00 | phi=+2.29  ank=-0.90  alpha=+1.38
+dcmd=+0  d=+0.18 | phi=+3.21  ank=+3.05  alpha=+6.26
+dcmd=+0  d=+0.00 | phi=+4.24  ank=+5.91  alpha=+10.15
+dcmd=+0  d=+0.09 | phi=+3.65  ank=+1.56  alpha=+5.21
+dcmd=+0  d=-0.18 | phi=+2.77  ank=-2.70  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+4.15  ank=-0.53  alpha=+3.63
+dcmd=+0  d=-0.26 | phi=+4.86  ank=-1.12  alpha=+3.74
+dcmd=+0  d=-0.18 | phi=+5.14  ank=-1.47  alpha=+3.67
+dcmd=+0  d=+0.09 | phi=+5.01  ank=-1.45  alpha=+3.56
+dcmd=+0  d=+0.53 | phi=+5.65  ank=-0.07  alpha=+5.58 | alpha/d=10.583
+dcmd=+0  d=+0.53 | phi=+5.10  ank=-0.70  alpha=+4.39 | alpha/d=8.333
+dcmd=+0  d=-0.09 | phi=+3.30  ank=-4.88  alpha=-1.58
+dcmd=+0  d=+0.26 | phi=+6.64  ank=+4.66  alpha=+11.29
+dcmd=+0  d=+0.18 | phi=+6.06  ank=+2.88  alpha=+8.94
+dcmd=+0  d=-0.09 | phi=+3.56  ank=-4.68  alpha=-1.12
+dcmd=+0  d=+0.53 | phi=+4.66  ank=-1.32  alpha=+3.34 | alpha/d=6.333
+dcmd=+0  d=+0.18 | phi=+2.11  ank=-8.92  alpha=-6.81
+dcmd=+0  d=-0.44 | phi=+2.13  ank=-7.19  alpha=-5.05
+dcmd=+0  d=+0.62 | phi=+3.71  ank=-3.65  alpha=+0.07 | alpha/d=0.107
+dcmd=+0  d=-0.44 | phi=+1.43  ank=-9.91  alpha=-8.48
+dcmd=+0  d=-0.09 | phi=+2.48  ank=-6.48  alpha=-4.00
+dcmd=+0  d=+0.35 | phi=+3.52  ank=-3.78  alpha=-0.26
+dcmd=+0  d=+0.09 | phi=+2.57  ank=-6.75  alpha=-4.17
+dcmd=+0  d=-0.18 | phi=+2.44  ank=-6.97  alpha=-4.53
+dcmd=+0  d=-0.09 | phi=+3.93  ank=-1.30  alpha=+2.64
+dcmd=+0  d=-0.18 | phi=+4.06  ank=+0.44  alpha=+4.50
+dcmd=+0  d=-0.18 | phi=+3.27  ank=-0.99  alpha=+2.29
+dcmd=+0  d=-0.18 | phi=+2.44  ank=-1.05  alpha=+1.38
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.46  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=-2.09  ank=-0.18  alpha=-2.26
+dcmd=+0  d=-0.09 | phi=-2.09!  ank=+0.07  alpha=-2.02   << phi raw=16383 >>
+dcmd=+0  d=-0.18 | phi=-1.98  ank=-0.02  alpha=-2.00
+dcmd=+0  d=-0.09 | phi=+0.66  ank=-0.53  alpha=+0.13
+dcmd=+0  d=-0.18 | phi=+2.42  ank=-0.90  alpha=+1.52
+dcmd=+0  d=-0.09 | phi=+3.27  ank=-0.55  alpha=+2.72
+dcmd=+0  d=-0.18 | phi=+1.85  ank=-0.99  alpha=+0.86
+dcmd=+0  d=-0.18 | phi=-0.46  ank=-0.24  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=-2.40  ank=-0.09  alpha=-2.48
+dcmd=+0  d=-0.18 | phi=-2.72  ank=+0.15  alpha=-2.57
+dcmd=+0  d=-0.18 | phi=-1.19  ank=-0.26  alpha=-1.45
+dcmd=+0  d=-0.09 | phi=+1.10  ank=-0.44  alpha=+0.66
+dcmd=+0  d=-0.18 | phi=+2.90  ank=-0.55  alpha=+2.35
+dcmd=+0  d=-0.18 | phi=+2.88  ank=-0.59  alpha=+2.29
+dcmd=+0  d=-0.18 | phi=+1.10  ank=-0.46  alpha=+0.64
+dcmd=+0  d=-0.18 | phi=-1.08  ank=-0.42  alpha=-1.49
+dcmd=+0  d=-0.18 | phi=-2.46  ank=+0.11  alpha=-2.35
+dcmd=+0  d=-0.18 | phi=-2.37  ank=+0.22  alpha=-2.15
+dcmd=+0  d=-0.18 | phi=-0.46  ank=-0.22  alpha=-0.68
+dcmd=+0  d=-0.09 | phi=+1.69  ank=-0.66  alpha=+1.03
+dcmd=+0  d=-0.18 | phi=+2.94  ank=-0.48  alpha=+2.46
+dcmd=+0  d=-0.18 | phi=+2.44  ank=-0.55  alpha=+1.89
+dcmd=+0  d=-0.18 | phi=+0.51  ank=-0.35  alpha=+0.15
+dcmd=+0  d=-0.09 | phi=-1.65  ank=+0.02  alpha=-1.63
+dcmd=+0  d=-0.09 | phi=-1.65!  ank=+0.26  alpha=-1.38   << phi raw=16383 >>
+dcmd=+0  d=-0.18 | phi=-1.96  ank=+0.04  alpha=-1.91
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.55  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+2.04  ank=-0.66  alpha=+1.38
+dcmd=+0  d=-0.09 | phi=+2.81  ank=-0.88  alpha=+1.93
+dcmd=+0  d=-0.09 | phi=+1.87  ank=-0.57  alpha=+1.30
+dcmd=+0  d=-0.09 | phi=-0.13  ank=-0.57  alpha=-0.70
+dcmd=+0  d=-0.09 | phi=-2.00  ank=-0.44  alpha=-2.44
+dcmd=+0  d=-0.09 | phi=-2.00!  ank=-0.59  alpha=-2.59   << phi raw=16383 >>
+dcmd=+0  d=-0.18 | phi=-1.36  ank=-0.26  alpha=-1.63
+dcmd=+0  d=-0.18 | phi=+0.64  ank=-0.31  alpha=+0.33
+dcmd=+0  d=-0.18 | phi=+2.35  ank=-0.73  alpha=+1.63
+dcmd=+0  d=-0.18 | phi=+2.68  ank=-0.70  alpha=+1.98
+dcmd=+0  d=-0.18 | phi=+1.23  ank=-0.92  alpha=+0.31
+dcmd=+0  d=-0.18 | phi=-0.70  ank=-0.11  alpha=-0.81
+dcmd=+0  d=-0.09 | phi=-2.26  ank=-0.15  alpha=-2.42
+dcmd=+0  d=-0.18 | phi=-2.26  ank=-0.04  alpha=-2.31
+dcmd=+0  d=-0.18 | phi=-0.79  ank=+0.24  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=+1.12  ank=-0.73  alpha=+0.40
+dcmd=+0  d=-0.18 | phi=+2.57  ank=-0.53  alpha=+2.04
+dcmd=+0  d=-0.18 | phi=+2.33  ank=-0.88  alpha=+1.45
+dcmd=+0  d=-0.18 | phi=+0.73  ank=-0.73  alpha=+0.00
+dcmd=+0  d=-0.18 | phi=-1.16  ank=-0.24  alpha=-1.41
+dcmd=+0  d=-0.18 | phi=-1.16!  ank=-0.07  alpha=-1.23   << phi raw=16383 >>
+dcmd=+0  d=-0.18 | phi=-1.91  ank=+0.00  alpha=-1.91
+dcmd=+0  d=-0.18 | phi=-0.31  ank=-0.18  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+1.58  ank=-0.81  alpha=+0.77
+dcmd=+0  d=-0.18 | phi=+2.55  ank=-0.44  alpha=+2.11
+dcmd=+0  d=-0.18 | phi=+1.87  ank=-0.48  alpha=+1.38
+dcmd=+0  d=-0.18 | phi=+0.22  ank=-0.20  alpha=+0.02
+dcmd=+0  d=-0.09 | phi=-1.56  ank=-0.31  alpha=-1.87
+dcmd=+0  d=-0.09 | phi=-2.24  ank=+0.22  alpha=-2.02
+dcmd=+0  d=-0.18 | phi=-1.41  ank=+0.09  alpha=-1.32
+dcmd=+0  d=-0.18 | phi=+0.29  ank=-0.44  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+1.89  ank=-0.81  alpha=+1.08
+dcmd=+0  d=-0.18 | phi=+2.40  ank=-0.70  alpha=+1.69
+dcmd=+0  d=-0.18 | phi=+1.45  ank=-0.88  alpha=+0.57
+dcmd=+0  d=-0.18 | phi=-0.40  ank=-0.40  alpha=-0.79
+dcmd=+0  d=-0.18 | phi=-1.89  ank=-0.22  alpha=-2.11
+dcmd=+0  d=-0.18 | phi=-2.15  ank=-0.04  alpha=-2.20
+dcmd=+0  d=-0.18 | phi=-0.97  ank=-0.07  alpha=-1.03
+dcmd=+0  d=-0.18 | phi=+0.83  ank=-0.73  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+2.11  ank=-0.75  alpha=+1.36
+dcmd=+0  d=-0.18 | phi=+2.18  ank=-0.68  alpha=+1.49
+dcmd=+0  d=-0.18 | phi=+0.94  ank=-0.55  alpha=+0.40
+dcmd=+0  d=-0.09 | phi=-0.81  ank=+0.22  alpha=-0.59
+dcmd=+0  d=-0.18 | phi=-1.89  ank=-0.09  alpha=-1.98
+dcmd=+0  d=-0.09 | phi=-1.78  ank=-0.11  alpha=-1.89
+dcmd=+0  d=-0.18 | phi=-0.44  ank=-0.44  alpha=-0.88
+dcmd=+0  d=-0.18 | phi=+1.21  ank=-0.40  alpha=+0.81
+dcmd=+0  d=-0.09 | phi=+2.26  ank=-0.62  alpha=+1.65
+dcmd=+0  d=-0.18 | phi=+1.80  ank=-0.53  alpha=+1.27
+dcmd=+0  d=-0.18 | phi=+0.48  ank=-0.22  alpha=+0.26
+dcmd=+0  d=-0.18 | phi=-1.16  ank=-0.35  alpha=-1.52
+dcmd=+0  d=-0.18 | phi=-1.91  ank=-0.13  alpha=-2.04
+dcmd=+0  d=-0.18 | phi=-1.43  ank=+0.44  alpha=-0.99
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.29  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=+1.54  ank=-0.48  alpha=+1.05
+dcmd=+0  d=-0.09 | phi=+2.15  ank=-0.79  alpha=+1.36
+dcmd=+0  d=-0.09 | phi=+1.49  ank=-0.44  alpha=+1.05
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-0.33  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=-1.38  ank=-0.44  alpha=-1.82
+dcmd=+0  d=-0.18 | phi=-1.85  ank=+0.22  alpha=-1.63
+dcmd=+0  d=-0.18 | phi=-1.03  ank=-0.07  alpha=-1.10
+dcmd=+0  d=-0.18 | phi=+0.51  ank=-0.59  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+1.69  ank=-0.79  alpha=+0.90
+dcmd=+0  d=-0.09 | phi=+2.02  ank=-0.55  alpha=+1.47
+dcmd=+0  d=-0.09 | phi=+1.05  ank=-0.48  alpha=+0.57
+dcmd=+0  d=-0.18 | phi=-0.46  ank=-0.24  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=-1.65  ank=-0.04  alpha=-1.69
+dcmd=+0  d=-0.18 | phi=-1.65  ank=-0.15  alpha=-1.80
+dcmd=+0  d=-0.18 | phi=-0.57  ank=-0.44  alpha=-1.01
+dcmd=+0  d=-0.18 | phi=+0.81  ank=-0.77  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+1.93  ank=-0.73  alpha=+1.21
+dcmd=+0  d=-0.09 | phi=+1.76  ank=-0.79  alpha=+0.97
+dcmd=+0  d=-0.09 | phi=+0.51  ank=-0.51  alpha=+0.00
+dcmd=+0  d=-0.18 | phi=-0.81  ank=-0.37  alpha=-1.19
+dcmd=+0  d=-0.18 | phi=-1.71  ank=-0.13  alpha=-1.85
+dcmd=+0  d=-0.18 | phi=-1.38  ank=-0.02  alpha=-1.41
+dcmd=+0  d=-0.18 | phi=-0.15  ank=-0.22  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=+1.21  ank=-0.42  alpha=+0.79
+dcmd=+0  d=-0.18 | phi=+1.89  ank=-0.51  alpha=+1.38
+dcmd=+0  d=-0.18 | phi=+1.41  ank=-0.44  alpha=+0.97
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.42  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=-1.14  ank=-0.40  alpha=-1.54
+dcmd=+0  d=-0.18 | phi=-1.65  ank=-0.07  alpha=-1.71
+dcmd=+0  d=-0.18 | phi=-1.03  ank=-0.02  alpha=-1.05
+dcmd=+0  d=-0.18 | phi=+0.24  ank=-0.15  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+1.43  ank=-0.55  alpha=+0.88
+dcmd=+0  d=-0.09 | phi=+1.85  ank=-0.46  alpha=+1.38
+dcmd=+0  d=-0.18 | phi=+1.08  ank=-0.48  alpha=+0.59
+dcmd=+0  d=-0.18 | phi=-0.24  ank=-0.40  alpha=-0.64
+dcmd=+0  d=-0.09 | phi=-1.30  ank=+0.07  alpha=-1.23
+dcmd=+0  d=-0.18 | phi=-1.52  ank=+0.09  alpha=-1.43
+dcmd=+0  d=-0.18 | phi=-0.59  ank=-0.26  alpha=-0.86
+dcmd=+0  d=-0.18 | phi=+0.62  ank=-0.02  alpha=+0.59
+dcmd=+0  d=-0.09 | phi=+1.60  ank=-0.24  alpha=+1.36
+dcmd=+0  d=-0.18 | phi=+1.58  ank=-0.64  alpha=+0.94
+dcmd=+0  d=-0.18 | phi=+0.73  ank=-0.22  alpha=+0.51
+dcmd=+0  d=-0.18 | phi=-0.55  ank=-0.35  alpha=-0.90
+dcmd=+0  d=-0.18 | phi=-1.38  ank=-0.02  alpha=-1.41
+dcmd=+0  d=-0.18 | phi=-1.27  ank=-0.42  alpha=-1.69
+dcmd=+0  d=-0.09 | phi=-0.26  ank=-0.44  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=+0.92  ank=-0.64  alpha=+0.29
+dcmd=+0  d=-0.09 | phi=+1.56  ank=-0.77  alpha=+0.79
+dcmd=+0  d=-0.18 | phi=+1.36  ank=-0.57  alpha=+0.79
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.73  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=-0.90  ank=-0.29  alpha=-1.19
+dcmd=+0  d=-0.18 | phi=-1.41  ank=-0.20  alpha=-1.60
+dcmd=+0  d=-0.18 | phi=-1.01  ank=-0.33  alpha=-1.34
+dcmd=+0  d=-0.18 | phi=+0.13  ank=+0.00  alpha=+0.13
+dcmd=+0  d=-0.18 | phi=+1.16  ank=-0.53  alpha=+0.64
+dcmd=+0  d=-0.18 | phi=+1.56  ank=-0.53  alpha=+1.03
+dcmd=+0  d=-0.18 | phi=+1.08  ank=-0.73  alpha=+0.35
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.42  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=-1.08  ank=-0.20  alpha=-1.27
+dcmd=+0  d=-0.18 | phi=-1.30  ank=-0.42  alpha=-1.71
+dcmd=+0  d=-0.18 | phi=-0.75  ank=-0.18  alpha=-0.92
+dcmd=+0  d=-0.18 | phi=+0.48  ank=-0.51  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+1.32  ank=-0.64  alpha=+0.68
+dcmd=+0  d=-0.18 | phi=+1.45  ank=-0.99  alpha=+0.46
+dcmd=+0  d=-0.09 | phi=+0.70  ank=-0.68  alpha=+0.02
+dcmd=+0  d=-0.09 | phi=-0.37  ank=-0.31  alpha=-0.68
+dcmd=+0  d=-0.18 | phi=-1.10  ank=-0.11  alpha=-1.21
+dcmd=+0  d=-0.18 | phi=-1.14  ank=-0.40  alpha=-1.54
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.20  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.70  ank=-0.42  alpha=+0.29
+dcmd=+0  d=-0.18 | phi=+1.30  ank=-0.81  alpha=+0.48
+dcmd=+0  d=-0.09 | phi=+1.23  ank=-0.20  alpha=+1.03
+dcmd=+0  d=-0.18 | phi=+0.31  ank=+0.02  alpha=+0.33
+dcmd=+0  d=-0.18 | phi=-0.59  ank=-0.15  alpha=-0.75
+dcmd=+0  d=-0.09 | phi=-1.16  ank=-0.20  alpha=-1.36
+dcmd=+0  d=-0.18 | phi=-0.94  ank=-0.55  alpha=-1.49
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.44  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.92  ank=-0.46  alpha=+0.46
+dcmd=+0  d=-0.18 | phi=+1.36  ank=-0.51  alpha=+0.86
+dcmd=+0  d=-0.18 | phi=+0.97  ank=-0.35  alpha=+0.62
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-0.07  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=-0.81  ank=-0.33  alpha=-1.14
+dcmd=+0  d=-0.18 | phi=-1.12  ank=-0.33  alpha=-1.45
+dcmd=+0  d=-0.18 | phi=-0.62  ank=-0.35  alpha=-0.97
+dcmd=+0  d=-0.18 | phi=+0.35  ank=-0.13  alpha=+0.22
+dcmd=+0  d=-0.18 | phi=+1.05  ank=-0.81  alpha=+0.24
+dcmd=+0  d=-0.18 | phi=+1.23  ank=-0.26  alpha=+0.97
+dcmd=+0  d=-0.09 | phi=+0.59  ank=-0.86  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=-0.15  ank=+0.04  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=-0.86  ank=-0.18  alpha=-1.03
+dcmd=+0  d=-0.18 | phi=-0.94  ank=-0.29  alpha=-1.23
+dcmd=+0  d=-0.18 | phi=-0.33  ank=-0.24  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=+0.51  ank=-0.40  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+1.19  ank=-0.79  alpha=+0.40
+dcmd=+0  d=-0.18 | phi=+1.05  ank=-0.51  alpha=+0.55
+dcmd=+0  d=-0.18 | phi=+0.37  ank=+0.02  alpha=+0.40
+dcmd=+0  d=-0.18 | phi=-0.42  ank=-0.35  alpha=-0.77
+dcmd=+0  d=-0.18 | phi=-0.99  ank=-0.26  alpha=-1.25
+dcmd=+0  d=-0.18 | phi=-0.73  ank=-0.02  alpha=-0.75
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.37  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.77  ank=-0.64  alpha=+0.13
+dcmd=+0  d=-0.18 | phi=+1.19  ank=-0.46  alpha=+0.73
+dcmd=+0  d=-0.09 | phi=+0.83  ank=-0.18  alpha=+0.66
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.57  alpha=-0.51
+dcmd=+0  d=-0.09 | phi=-0.59  ank=-0.24  alpha=-0.83
+dcmd=+0  d=-0.18 | phi=-0.90  ank=-0.22  alpha=-1.12
+dcmd=+0  d=-0.18 | phi=-0.51  ank=-0.22  alpha=-0.73
+dcmd=+0  d=-0.18 | phi=+0.24  ank=-0.51  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=+0.86  ank=-0.48  alpha=+0.37
+dcmd=+0  d=-0.09 | phi=+1.03  ank=-0.66  alpha=+0.37
+dcmd=+0  d=-0.18 | phi=+0.55  ank=-0.51  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.53  alpha=-0.75
+dcmd=+0  d=-0.18 | phi=-0.70  ank=-0.51  alpha=-1.21
+dcmd=+0  d=-0.18 | phi=-0.77  ank=-0.24  alpha=-1.01
+dcmd=+0  d=-0.09 | phi=-0.29  ank=-0.33  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.46  ank=-0.29  alpha=+0.18
+dcmd=+0  d=-0.18 | phi=+0.97  ank=-0.46  alpha=+0.51
+dcmd=+0  d=-0.18 | phi=+0.94  ank=-0.37  alpha=+0.57
+dcmd=+0  d=-0.18 | phi=+0.37  ank=-0.31  alpha=+0.07
+dcmd=+0  d=-0.09 | phi=-0.31  ank=+0.02  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=-0.75  ank=-0.07  alpha=-0.81
+dcmd=+0  d=-0.18 | phi=-0.70  ank=-0.46  alpha=-1.16
+dcmd=+0  d=-0.18 | phi=-0.04  ank=-0.44  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.59  ank=-0.46  alpha=+0.13
+dcmd=+0  d=-0.18 | phi=+0.99  ank=-0.64  alpha=+0.35
+dcmd=+0  d=-0.18 | phi=+0.73  ank=-0.26  alpha=+0.46
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.68  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=-0.42  ank=-0.31  alpha=-0.73
+dcmd=+0  d=-0.18 | phi=-0.73  ank=-0.31  alpha=-1.03
+dcmd=+0  d=-0.18 | phi=-0.44  ank=-0.26  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=+0.22  ank=-0.44  alpha=-0.22
+dcmd=+0  d=-0.09 | phi=+0.81  ank=-0.26  alpha=+0.55
+dcmd=+0  d=-0.18 | phi=+0.86  ank=-0.64  alpha=+0.22
+dcmd=+0  d=-0.18 | phi=+0.51  ank=-0.48  alpha=+0.02
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.73  alpha=-0.81
+dcmd=+0  d=-0.18 | phi=-0.55  ank=+0.11  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=-0.64  ank=-0.35  alpha=-0.99
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.29  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.35  ank=-0.44  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.83  ank=-0.53  alpha=+0.31
+dcmd=+0  d=-0.18 | phi=+0.81  ank=-0.73  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+0.33  ank=-0.29  alpha=+0.04
+dcmd=+0  d=-0.09 | phi=-0.24  ank=-0.29  alpha=-0.53
+dcmd=+0  d=-0.09 | phi=-0.57  ank=-0.22  alpha=-0.79
+dcmd=+0  d=-0.18 | phi=-0.46  ank=-0.62  alpha=-1.08
+dcmd=+0  d=-0.09 | phi=+0.02  ank=-0.29  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=+0.59  ank=-0.42  alpha=+0.18
+dcmd=+0  d=-0.18 | phi=+0.77  ank=-0.51  alpha=+0.26
+dcmd=+0  d=-0.18 | phi=+0.62  ank=-0.40  alpha=+0.22
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.35  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=-0.37  ank=-0.22  alpha=-0.59
+dcmd=+0  d=-0.18 | phi=-0.57  ank=-0.24  alpha=-0.81
+dcmd=+0  d=-0.09 | phi=-0.35  ank=-0.31  alpha=-0.66
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.37  alpha=-0.24
+dcmd=+0  d=-0.18 | phi=+0.57  ank=-0.48  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+0.79  ank=-0.40  alpha=+0.40
+dcmd=+0  d=-0.18 | phi=+0.44  ank=-0.73  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=-0.04  ank=-0.42  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=-0.40  ank=-0.18  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=-0.55  ank=-0.24  alpha=-0.79
+dcmd=+0  d=-0.18 | phi=-0.15  ank=-0.33  alpha=-0.48
+dcmd=+0  d=-0.09 | phi=+0.33  ank=-0.07  alpha=+0.26
+dcmd=+0  d=-0.18 | phi=+0.68  ank=-0.18  alpha=+0.51
+dcmd=+0  d=-0.18 | phi=+0.59  ank=-0.07  alpha=+0.53
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.59  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=-0.24  ank=-0.66  alpha=-0.90
+dcmd=+0  d=-0.18 | phi=-0.51  ank=-0.18  alpha=-0.68
+dcmd=+0  d=-0.18 | phi=-0.35  ank=-0.15  alpha=-0.51
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.53  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.48  ank=-0.22  alpha=+0.26
+dcmd=+0  d=-0.18 | phi=+0.70  ank=-0.77  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.44  ank=-0.64  alpha=-0.20
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.35  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=-0.31  ank=-0.73  alpha=-1.03
+dcmd=+0  d=-0.18 | phi=-0.40  ank=-0.44  alpha=-0.83
+dcmd=+0  d=-0.09 | phi=-0.24  ank=-0.62  alpha=-0.86
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.31  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.55  ank=-0.51  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+0.59  ank=-0.51  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+0.29  ank=+0.11  alpha=+0.40
+dcmd=+0  d=-0.09 | phi=-0.09  ank=-0.55  alpha=-0.64
+dcmd=+0  d=-0.18 | phi=-0.35  ank=-0.66  alpha=-1.01
+dcmd=+0  d=-0.18 | phi=-0.33  ank=-0.15  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-0.81  alpha=-0.83
+dcmd=+0  d=-0.09 | phi=+0.29  ank=-0.18  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+0.57  ank=-0.51  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+0.53  ank=-0.35  alpha=+0.18
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.13  alpha=+0.13
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.29  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=-0.35  ank=-0.02  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.53  alpha=-0.75
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.13  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.48  ank=-0.18  alpha=+0.31
+dcmd=+0  d=-0.18 | phi=+0.55  ank=-0.79  alpha=-0.24
+dcmd=+0  d=-0.18 | phi=+0.37  ank=-0.44  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.64  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=-0.31  ank=-0.35  alpha=-0.66
+dcmd=+0  d=-0.18 | phi=-0.33  ank=-0.35  alpha=-0.68
+dcmd=+0  d=-0.09 | phi=-0.09  ank=-0.70  alpha=-0.79
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.40  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.46  ank=-0.37  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+0.53  ank=-0.57  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.29  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.59  alpha=-0.66
+dcmd=+0  d=-0.18 | phi=-0.26  ank=-0.20  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.55  alpha=-0.77
+dcmd=+0  d=-0.18 | phi=+0.00  ank=-0.15  alpha=-0.15
+dcmd=+0  d=-0.09 | phi=+0.31  ank=-0.46  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.53  ank=-0.29  alpha=+0.24
+dcmd=+0  d=-0.18 | phi=+0.44  ank=-0.09  alpha=+0.35
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.29  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=-0.15  ank=-0.37  alpha=-0.53
+dcmd=+0  d=-0.18 | phi=-0.26  ank=-0.31  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=-0.15  ank=-0.62  alpha=-0.77
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.11  alpha=+0.09
+dcmd=+0  d=-0.18 | phi=+0.35  ank=-0.57  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.53  ank=-0.55  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.29  ank=-0.18  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.55  alpha=-0.48
+dcmd=+0  d=-0.09 | phi=-0.15  ank=-0.31  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=-0.22  ank=-0.35  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.73  alpha=-0.66
+dcmd=+0  d=-0.18 | phi=+0.24  ank=-0.24  alpha=+0.00
+dcmd=+0  d=-0.18 | phi=+0.44  ank=-0.22  alpha=+0.22
+dcmd=+0  d=-0.18 | phi=+0.46  ank=+0.18  alpha=+0.64
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.51  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=-0.04  ank=-0.75  alpha=-0.79
+dcmd=+0  d=-0.09 | phi=-0.20  ank=-0.22  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=-0.15  ank=-0.35  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.40  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.68  alpha=-0.48
+dcmd=+0  d=-0.09 | phi=+0.44  ank=-0.53  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.31  ank=-0.75  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.53  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.26  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=-0.11  ank=-0.31  alpha=-0.42
+dcmd=+0  d=-0.09 | phi=-0.09  ank=-0.53  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.62  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.33  ank=+0.18  alpha=+0.51
+dcmd=+0  d=-0.18 | phi=+0.33  ank=-0.55  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.22  ank=-0.26  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.42  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=-0.09  ank=-0.31  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=-0.13  ank=-0.29  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.51  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.22  ank=-0.73  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.35  ank=-0.53  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.29  ank=-0.18  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.33  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.00  ank=-0.37  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=-0.13  ank=-0.42  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.24  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.18  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.33  ank=-0.18  alpha=+0.15
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.55  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.42  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.18  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=-0.13  ank=-0.20  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=-0.07  ank=-0.48  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.26  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.77  alpha=-0.59
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.35  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.31  ank=-0.59  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.59  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.00  ank=-0.35  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.33  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-0.33  alpha=-0.35
+dcmd=+0  d=-0.09 | phi=+0.07  ank=+0.00  alpha=+0.07
+dcmd=+0  d=-0.09 | phi=+0.18  ank=-0.26  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.24  ank=-0.20  alpha=+0.04
+dcmd=+0  d=-0.09 | phi=+0.22  ank=-0.04  alpha=+0.18
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.35  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=-0.11  ank=-0.29  alpha=-0.40
+dcmd=+0  d=-0.09 | phi=-0.09  ank=-0.26  alpha=-0.35
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.33  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.24  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.73  alpha=-0.53
+dcmd=+0  d=-0.18 | phi=+0.26  ank=-0.68  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.35  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.37  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=-0.09  ank=-0.35  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.24  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.33  alpha=-0.24
+dcmd=+0  d=-0.18 | phi=+0.24  ank=-0.31  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.04  alpha=+0.15
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.59  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.09  ank=+0.13  alpha=+0.22
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.15  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.51  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.44  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.29  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.33  alpha=-0.15
+dcmd=+0  d=-0.09 | phi=+0.22  ank=-0.44  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.53  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.64  alpha=-0.55
+dcmd=+0  d=-0.18 | phi=-0.04  ank=-0.59  alpha=-0.64
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.44  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.51  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.51  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.22  ank=-0.33  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.59  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.11  ank=+0.07  alpha=+0.18
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.09  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=-0.02  ank=-0.33  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.18  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.20  ank=-0.57  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=+0.20  ank=-0.35  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.48  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.37  alpha=-0.24
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.22  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=+0.02  ank=-0.46  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.02  ank=-0.37  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.02  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.44  alpha=-0.29
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.48  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.46  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.44  alpha=-0.35
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.37  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.35  alpha=-0.29
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.64  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.51  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.73  alpha=-0.57
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.29  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.83  alpha=-0.68
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.11  alpha=+0.00
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.35  alpha=-0.20
+dcmd=+0  d=-0.18 | phi=+0.07  ank=+0.00  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.57  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.59  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.22  alpha=-0.07
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.22  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.24  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.53  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.48  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.24  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.26  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.48  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.44  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.59  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.68  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.15  alpha=-0.02
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.42  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.18  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.97  alpha=-0.83
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.59  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.18  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.37  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.66  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.37  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.73  alpha=-0.64
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.24  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.13  alpha=-0.02
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.11  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.77  alpha=-0.62
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.48  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.20  alpha=-0.11
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.42  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.29  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.22  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.35  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.35  alpha=-0.26
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.26  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.57  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.22  alpha=-0.09
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.46  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.35  alpha=-0.24
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.48  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.26  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.33  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.09  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.37  alpha=-0.20
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.75  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.15  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.18  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.64  alpha=-0.53
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.09  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.48  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.66  alpha=-0.59
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.46  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.29  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.33  alpha=-0.22
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.62  alpha=-0.53
+dcmd=+0  d=-0.09 | phi=+0.18  ank=-0.51  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.48  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.46  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=+0.02  ank=-0.48  alpha=-0.46
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.48  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.13  alpha=-0.07
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.26  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=+0.20  ank=-0.42  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.73  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.11  alpha=-0.02
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.51  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.57  alpha=-0.42
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.24  alpha=-0.09
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.26  alpha=-0.15
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.20  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.18  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.11  alpha=+0.00
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.09  alpha=+0.04
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.46  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.64  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.42  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.48  alpha=-0.40
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.18  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.09  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.57  alpha=-0.53
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.11  alpha=+0.02
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.35  alpha=-0.26
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.13  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.42  alpha=-0.33
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.40  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.62  alpha=-0.55
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.62  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.35  alpha=-0.26
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.46  alpha=-0.31
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.51  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.75  alpha=-0.66
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.31  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.92  alpha=-0.83
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.57  alpha=-0.51
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.09  alpha=+0.02
+dcmd=+0  d=-0.09 | phi=+0.11  ank=+0.22  alpha=+0.33
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.44  alpha=-0.29
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.70  alpha=-0.59
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.73  alpha=-0.64
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.73  alpha=-0.66
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.02  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.48  alpha=-0.44
+dcmd=+0  d=-0.09 | phi=+0.02  ank=-0.33  alpha=-0.31
+dcmd=+0  d=-0.18 | phi=+0.09  ank=+0.02  alpha=+0.11
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.42  alpha=-0.29
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.73  alpha=-0.62
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.44  alpha=-0.33
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.42  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.18  alpha=-0.07
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.53  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.20  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.40  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=+0.13  ank=-0.37  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.53  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.20  alpha=-0.07
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.51  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.40  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.51  alpha=-0.42
+dcmd=+0  d=-0.09 | phi=+0.09  ank=+0.13  alpha=+0.22
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.57  alpha=-0.40
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.55  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.26  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.04  ank=-0.40  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.40  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.62  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.26  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.57  alpha=-0.46
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.31  alpha=-0.18
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.26  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.81  alpha=-0.70
+dcmd=+0  d=-0.09 | phi=+0.07  ank=-0.22  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.29  alpha=-0.18
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.22  alpha=-0.13
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.40  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.48  alpha=-0.35
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.73  alpha=-0.62
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.37  alpha=-0.24
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.59  alpha=-0.48
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.44  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.24  alpha=-0.13
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.37  alpha=-0.29
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.13  alpha=-0.07
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.86  alpha=-0.77
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.35  alpha=-0.20
+dcmd=+0  d=-0.09 | phi=+0.15  ank=-0.20  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.13  alpha=-0.02
+dcmd=+0  d=-0.18 | phi=+0.15  ank=-0.37  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.40  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.15  ank=+0.11  alpha=+0.26
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.22  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.09  ank=-0.24  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.40  alpha=-0.33
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.48  alpha=-0.42
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.48  alpha=-0.37
+dcmd=+0  d=-0.18 | phi=+0.11  ank=-0.26  alpha=-0.15
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.79  alpha=-0.70
+dcmd=+0  d=-0.18 | phi=+0.09  ank=-0.53  alpha=-0.44
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.29  alpha=-0.22
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.53  alpha=-0.42
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.07  alpha=+0.07
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.44  alpha=-0.37
+dcmd=+0  d=-0.09 | phi=+0.04  ank=-0.26  alpha=-0.22
+dcmd=+0  d=-0.18 | phi=+0.18  ank=-0.22  alpha=-0.04
+dcmd=+0  d=-0.18 | phi=+0.13  ank=-0.64  alpha=-0.51
+dcmd=+0  d=-0.09 | phi=+0.11  ank=-0.07  alpha=+0.04
+dcmd=+0  d=-0.18 | phi=+0.07  ank=-0.18  alpha=-0.11
+dcmd=+0  d=-0.09 | phi=+0.18  ank=-0.42  alpha=-0.24

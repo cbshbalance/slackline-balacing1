@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>실사 오버랩 매칭 도구 — 줄타기 (v19 룩)</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;background:#0b1020;color:#e8ecf5;
+    font-family:"Malgun Gothic","Noto Sans KR",system-ui,sans-serif;user-select:none}
+  #wrap{position:absolute;inset:0 348px 52px 0;display:flex;align-items:center;justify-content:center;background:#05070f}
+  #box{position:relative}
+  video{display:block;width:100%;height:100%}
+  #gl{position:absolute;left:0;top:0;pointer-events:none}
+  #svg{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+  #panel{position:absolute;right:0;top:0;bottom:0;width:348px;background:#0e1426;border-left:1px solid #2a3350;
+    overflow-y:auto;padding:10px 12px 40px}
+  h3{font-size:12px;color:#5eead4;letter-spacing:.5px;margin:14px 0 6px;border-bottom:1px solid #2a3350;padding-bottom:4px}
+  h3:first-child{margin-top:0}
+  .sl{margin-bottom:5px}
+  .sl label{display:flex;justify-content:space-between;font-size:11.5px;color:#aab3c8;margin-bottom:1px}
+  .sl label b{color:#5eead4;font-family:Consolas,monospace;font-weight:400}
+  input[type=range]{width:100%;height:16px;accent-color:#3a86ff}
+  .row{display:flex;gap:5px;margin:6px 0}
+  .btn{flex:1;background:#1b2440;color:#e8ecf5;border:1px solid #2a3350;border-radius:6px;
+    padding:5px 6px;font-size:11.5px;cursor:pointer}
+  .btn:hover{background:#25314f}
+  label.chk{display:flex;align-items:center;gap:5px;font-size:11.5px;color:#aab3c8;margin:3px 0;cursor:pointer}
+  #out{width:100%;height:140px;background:#070b16;color:#7fd4b0;border:1px solid #2a3350;border-radius:6px;
+    font:10.5px/1.45 Consolas,monospace;padding:6px;margin-top:6px;resize:vertical}
+  #bar{position:absolute;left:0;right:348px;bottom:0;height:52px;background:rgba(10,14,28,.92);
+    border-top:1px solid #2a3350;display:flex;align-items:center;gap:8px;padding:0 12px}
+  #scrub{flex:1;accent-color:#3a86ff}
+  #tt{font:12px Consolas,monospace;color:#8a93a8;min-width:118px;text-align:right}
+  .hint{font-size:10.5px;color:#6b7590;line-height:1.5;margin:4px 0 8px}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="box">
+  <video id="vid" playsinline muted>
+    <source src="media/jultagi_6s_stab.webm" type="video/webm">
+    <source src="media/jultagi_6s_stab.mp4" type="video/mp4">
+  </video>
+  <canvas id="gl"></canvas>
+  <svg id="svg"></svg>
+</div></div>
+
+<div id="bar">
+  <button class="btn" style="flex:0 0 42px" id="bPlay">▶</button>
+  <button class="btn" style="flex:0 0 42px" id="bB">◀|</button>
+  <button class="btn" style="flex:0 0 42px" id="bF">|▶</button>
+  <button class="btn" style="flex:0 0 62px" id="b44">4.4 s</button>
+  <input type="range" id="scrub" min="0" max="1000" value="0">
+  <div id="tt">0.00 s</div>
+</div>
+
+<div id="panel">
+  <h3>표시</h3>
+  <label class="chk"><input type="checkbox" id="cRope" checked> 줄 (두 토막)</label>
+  <label class="chk"><input type="checkbox" id="cSup" checked> 기둥 (1자, v19)</label>
+  <label class="chk"><input type="checkbox" id="cAxis" checked> 회전축 (지지점 A–B)</label>
+  <label class="chk"><input type="checkbox" id="cR" checked> R (축 → 발 수직거리)</label>
+  <label class="chk"><input type="checkbox" id="cArc" checked> 발의 원호</label>
+  <label class="chk"><input type="checkbox" id="cBody" checked> 2링크 몸 (v19 형상)</label>
+  <label class="chk"><input type="checkbox" id="cPlane"> x-z 평면</label>
+  <label class="chk"><input type="checkbox" id="cGray"> 실사를 흑백으로</label>
+  <div class="sl"><label>모델 불투명도 <b id="vOpa">0.90</b></label>
+    <input type="range" id="sOpa" min="0.15" max="1" step="0.05" value="0.9"></div>
+
+  <h3>굵기 (v19 규약 · 눈에 보이게)</h3>
+  <div class="sl"><label>줄 굵기 [mm] <b id="vRT">26</b></label><input type="range" id="sRT" min="4" max="120" step="1" value="26"></div>
+  <div class="sl"><label>지지대 굵기 [mm] <b id="vST">55</b></label><input type="range" id="sST" min="10" max="200" step="1" value="55"></div>
+  <div class="sl"><label>몸 굵기 배율 <b id="vBW">1.00</b></label><input type="range" id="sBW" min="0.3" max="2.2" step="0.02" value="1"></div>
+  <div class="sl"><label>보조선 굵기 [mm] <b id="vGT">18</b></label><input type="range" id="sGT" min="3" max="70" step="1" value="18"></div>
+
+  <h3>기하 — 줄</h3>
+  <div class="hint">D = 두 지지점 사이 거리 · R = 축에서 발까지 수직거리 · 발 위치 = 스팬 방향(0이면 한가운데)</div>
+  <div class="sl"><label>D  지지점 간격 [m] <b id="vD">4.70</b></label><input type="range" id="sD" min="2" max="20" step="0.05" value="4.70"></div>
+  <div class="sl"><label>R  처짐 [m] <b id="vR">0.62</b></label><input type="range" id="sR" min="0.1" max="2.5" step="0.01" value="0.62"></div>
+  <div class="sl"><label>발 위치 (스팬 방향) [m] <b id="vYF">0.60</b></label><input type="range" id="sYF" min="-9" max="9" step="0.05" value="0.60"></div>
+  <div class="sl"><label>지지점 높이 [m] <b id="vZT">2.55</b></label><input type="range" id="sZT" min="0.5" max="8" step="0.05" value="2.55"></div>
+
+  <h3>기하 — 사람</h3>
+  <div class="sl"><label>L1 하체 [m] <b id="vL1">0.85</b></label><input type="range" id="sL1" min="0.4" max="1.4" step="0.01" value="0.85"></div>
+  <div class="sl"><label>L2 상체 [m] <b id="vL2">0.85</b></label><input type="range" id="sL2" min="0.4" max="1.4" step="0.01" value="0.85"></div>
+
+  <h3>자세</h3>
+  <div class="sl"><label>φ  줄 흔들림 [°] <b id="vPhi">0.0</b></label><input type="range" id="sPhi" min="-25" max="25" step="0.2" value="0"></div>
+  <div class="sl"><label>α  하체 [°] <b id="vAl">0.0</b></label><input type="range" id="sAl" min="-30" max="30" step="0.2" value="0"></div>
+  <div class="sl"><label>θ  상체 [°] <b id="vTh">0.0</b></label><input type="range" id="sTh" min="-30" max="30" step="0.2" value="0"></div>
+
+  <h3>여섯 점으로 카메라 풀기</h3>
+  <div class="hint">순서대로 찍으세요 —
+  <b>① 왼쪽 줄 끝 ② 왼쪽 기둥 바닥 ③ 오른쪽 줄 끝 ④ 오른쪽 기둥 바닥
+  ⑤ 광대의 발 ⑥ 광대의 머리 끝</b>.<br>
+  ⑤⑥ 이 있어야 원근이 결정됩니다 — 광대의 키가 알려진 길이 노릇을 해서
+  지지점 간격 D 와 줄 처짐 R 을 <b>영상에서 재게</b> 해 줍니다.</div>
+  <div class="sl"><label>광대 키 (발~머리끝) [m] <b id="vPH">1.72</b></label>
+    <input type="range" id="sPH" min="1.3" max="2.0" step="0.01" value="1.72"></div>
+  <label class="chk"><input type="checkbox" id="lockFov" checked> 화각 고정 (권장 — 안 고정하면 흔들립니다)</label>
+  <div class="row"><button class="btn" id="bPick">① 점 찍기 시작</button><button class="btn" id="bClr">지우기</button></div>
+  <label class="chk"><input type="checkbox" id="autoZ" checked> 지지점 높이도 자동으로 찾기 (2.0~4.5 m 훑기)</label>
+  <div class="row"><button class="btn" id="bFit" style="background:#1e5f3f;border-color:#2e8f5f">카메라 자동 맞추기</button></div>
+  <div class="row"><button class="btn" id="bMirror">카메라 반대편으로</button></div>
+  <div class="hint">평면 위의 점만으로는 카메라가 <b>줄의 앞쪽인지 뒤쪽인지</b> 구분되지 않습니다(거울 해).
+  둘 다 같은 그림을 만들거든요. φ 슬라이더를 움직여 발이 실사와 <b>같은 방향</b>으로 가는 쪽을 고르세요.</div>
+  <div class="hint" id="fitInfo">아직 안 풀었습니다.</div>
+
+  <h3>카메라</h3>
+  <div class="sl"><label>방위각 az [°] <b id="vAz">78.0</b></label><input type="range" id="sAz" min="-90" max="90" step="0.5" value="78"></div>
+  <div class="sl"><label>고도각 el [°] <b id="vEl">-4.5</b></label><input type="range" id="sEl" min="-40" max="50" step="0.5" value="-4.5"></div>
+  <div class="sl"><label>거리 [m] <b id="vDist">12.0</b></label><input type="range" id="sDist" min="3" max="60" step="0.1" value="12.0"></div>
+  <div class="sl"><label>화각 fov [°] <b id="vFov">58.0</b></label><input type="range" id="sFov" min="12" max="100" step="0.5" value="58"></div>
+  <div class="sl"><label>롤 (기울임) [°] <b id="vRoll">0.0</b></label><input type="range" id="sRoll" min="-15" max="15" step="0.1" value="0"></div>
+  <div class="sl"><label>시선 y [m] <b id="vTy">0.00</b></label><input type="range" id="sTy" min="-9" max="9" step="0.05" value="0"></div>
+  <div class="sl"><label>시선 z [m] <b id="vTz">2.45</b></label><input type="range" id="sTz" min="0" max="8" step="0.05" value="2.45"></div>
+
+  <h3>저장</h3>
+  <div class="row"><button class="btn" id="bSave">현재 값 복사</button><button class="btn" id="bReset">되돌리기</button></div>
+  <textarea id="out" readonly></textarea>
+  <div class="hint">색·형상은 v19_state 규약 그대로입니다 — 하체 0x06b98c · 상체 0x7a35d6 · 힙 0xffbe0b · 머리 0xf2c14e · 줄 0x23262b · 프레임 0x555a63. 그래서 여기서 v19 화면으로 넘어가도 같은 물건으로 보입니다.</div>
+</div>
+
+<script src="three.min.js"></script>
+<script>
+var RAD=Math.PI/180;
+var vid=document.getElementById('vid'), box=document.getElementById('box'),
+    glc=document.getElementById('gl'), svg=document.getElementById('svg'), wrap=document.getElementById('wrap');
+
+var renderer=new THREE.WebGLRenderer({canvas:glc,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+var scene=new THREE.Scene();
+var camera=new THREE.PerspectiveCamera(58,1,0.05,500); camera.up.set(0,0,1);
+scene.add(new THREE.AmbientLight(0xffffff,0.75));
+var dl=new THREE.DirectionalLight(0xffffff,0.85); dl.position.set(2,-4,6); scene.add(dl);
+
+/* v19_state 와 같은 재료·형상 */
+var OP=0.9;
+function mat(c){ return new THREE.MeshLambertMaterial({color:c,transparent:true,opacity:OP}); }
+function box3(w,d,h,c){ return new THREE.Mesh(new THREE.BoxGeometry(w,d,h), mat(c)); }
+function rod(p1,p2,r,c){
+  var a=new THREE.Vector3(p1[0],p1[1],p1[2]), b=new THREE.Vector3(p2[0],p2[1],p2[2]);
+  var d=b.clone().sub(a), len=d.length(); if(len<1e-6) len=1e-6;
+  var m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,12), mat(c));
+  m.position.copy(a.clone().add(b).multiplyScalar(0.5));
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.clone().normalize());
+  return m;
+}
+var G=new THREE.Group(); scene.add(G);
+function clearG(){ for(var i=G.children.length-1;i>=0;i--){var o=G.children[i];
+  if(o.geometry)o.geometry.dispose(); if(o.material)o.material.dispose(); G.remove(o);} }
+
+var P0={D:4.70,R:0.62,yf:0.60,zT:2.55,L1:0.85,L2:0.85,phi:0,al:0,th:0,
+        rt:26,st:55,bw:1,gt:18,ph:1.72,
+        az:78,el:-4.5,dist:12.0,fov:58,roll:0,ty:0,tz:2.45,opa:0.9};
+var P=JSON.parse(JSON.stringify(P0));
+var MAP={sD:'D',sR:'R',sYF:'yf',sZT:'zT',sL1:'L1',sL2:'L2',sPhi:'phi',sAl:'al',sTh:'th',
+         sRT:'rt',sST:'st',sBW:'bw',sGT:'gt',sPH:'ph',
+         sAz:'az',sEl:'el',sDist:'dist',sFov:'fov',sRoll:'roll',sTy:'ty',sTz:'tz',sOpa:'opa'};
+var LBL={D:'vD',R:'vR',yf:'vYF',zT:'vZT',L1:'vL1',L2:'vL2',phi:'vPhi',al:'vAl',th:'vTh',
+         rt:'vRT',st:'vST',bw:'vBW',gt:'vGT',ph:'vPH',
+         az:'vAz',el:'vEl',dist:'vDist',fov:'vFov',roll:'vRoll',ty:'vTy',tz:'vTz',opa:'vOpa'};
+var DEC={R:2,L1:2,L2:2,opa:2,yf:2,zT:2,phi:1,al:1,th:1,az:1,el:1,dist:1,fov:1,roll:1,
+         ty:2,tz:2,D:2,rt:0,st:0,bw:2,gt:0,ph:2};
+Object.keys(MAP).forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){P[MAP[id]]=parseFloat(this.value);draw();});});
+['cRope','cSup','cAxis','cR','cArc','cBody','cPlane','cGray'].forEach(function(id){
+  document.getElementById(id).addEventListener('change',draw);});
+function syncUI(){Object.keys(MAP).forEach(function(id){
+  document.getElementById(id).value=P[MAP[id]];
+  document.getElementById(LBL[MAP[id]]).textContent=P[MAP[id]].toFixed(DEC[MAP[id]]);});}
+
+function layout(){
+  var W=wrap.clientWidth,H=wrap.clientHeight;
+  var vw=vid.videoWidth||1080, vh=vid.videoHeight||1920, ar=vw/vh;
+  var w=W,h=W/ar; if(h>H){h=H;w=H*ar;}
+  box.style.width=w+'px'; box.style.height=h+'px';
+  glc.style.width=w+'px'; glc.style.height=h+'px';
+  svg.setAttribute('width',w); svg.setAttribute('height',h);
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  return {w:w,h:h};
+}
+
+function draw(){
+  var r=layout(); OP=P.opa; clearG();
+  var zT=P.zT, R=P.R, hD=P.D/2, yf=Math.max(-hD+0.05,Math.min(hD-0.05,P.yf));
+  var A=[0,-hD,zT], B=[0,hD,zT];
+  var ph=P.phi*RAD, al=P.al*RAD, th=P.th*RAD;
+  var foot=[R*Math.sin(ph), yf, zT-R*Math.cos(ph)];
+  var pivot=[0,yf,zT];
+  var hip =[foot[0]+P.L1*Math.sin(al), yf, foot[2]+P.L1*Math.cos(al)];
+  var head=[hip[0]+P.L2*Math.sin(th),  yf, hip[2]+P.L2*Math.cos(th)];
+  var rt=P.rt/2000, st=P.st/2000, gt=P.gt/2000;
+
+  if(cSup.checked){                       // v19 처럼 1자 기둥 — 바닥에서 지지점까지
+    G.add(rod([0,-hD,0],[0,-hD,zT],st,0x555a63));
+    G.add(rod([0, hD,0],[0, hD,zT],st,0x555a63));
+  }
+  if(cRope.checked){ G.add(rod(A,foot,rt,0x23262b)); G.add(rod(foot,B,rt,0x23262b)); }
+  if(cAxis.checked){ G.add(rod(A,B,gt*0.55,0xff2d78));
+    [A,B].forEach(function(p){var s=new THREE.Mesh(new THREE.SphereGeometry(gt*1.5,12,8),mat(0x4c9fe8));
+      s.position.set(p[0],p[1],p[2]); G.add(s);}); }
+  if(cR.checked) G.add(rod(pivot,foot,gt*0.75,0x3a86ff));
+  if(cArc.checked){
+    var pts=[]; for(var k=0;k<=48;k++){var a=(-32+64*k/48)*RAD;
+      pts.push(new THREE.Vector3(R*Math.sin(a),yf,zT-R*Math.cos(a)));}
+    G.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),48,gt*0.35,8,false),mat(0x3a86ff)));
+  }
+  if(cBody.checked){
+    var b=P.bw;
+    var thk=0.147*P.L1*b, wLo=0.309*P.L1*b, thU=0.101*P.L2*b, wUp=0.240*P.L2*b;
+    var lb=box3(thk,wLo,P.L1,0x06b98c);
+    lb.position.set((foot[0]+hip[0])/2, yf, (foot[2]+hip[2])/2); lb.rotation.y=al; G.add(lb);
+    var hr=0.062*P.L1*b;
+    var hp=new THREE.Mesh(new THREE.CylinderGeometry(hr,hr,0.50*P.L1*b,16),mat(0xffbe0b));
+    hp.position.set(hip[0],yf,hip[2]); G.add(hp);
+    var ub=box3(thU,wUp,P.L2,0x7a35d6);
+    ub.position.set((hip[0]+head[0])/2, yf, (hip[2]+head[2])/2); ub.rotation.y=th; G.add(ub);
+    var hd=box3(0.101*P.L2*b,0.261*P.L2*b,0.123*P.L2*b,0xf2c14e);
+    hd.position.set(head[0]+0.06*P.L2*Math.sin(th), yf, head[2]+0.06*P.L2*Math.cos(th));
+    hd.rotation.y=th; G.add(hd);
+    var ft=new THREE.Mesh(new THREE.SphereGeometry(0.05*P.L1*b,14,10),mat(0xe6a817));
+    ft.position.set(foot[0],yf,foot[2]); G.add(ft);
+  }
+  if(cPlane.checked){
+    var pl2=new THREE.Mesh(new THREE.PlaneGeometry(R*3.4,(P.L1+P.L2)*1.8),
+      new THREE.MeshBasicMaterial({color:0xffcc33,transparent:true,opacity:0.15,side:THREE.DoubleSide}));
+    pl2.rotation.x=Math.PI/2; pl2.position.set(0,yf,zT-R+(P.L1+P.L2)*0.35); G.add(pl2);
+  }
+
+  var az=P.az*RAD, el=P.el*RAD, d=P.dist;
+  camera.fov=P.fov; camera.updateProjectionMatrix();
+  camera.position.set(d*Math.cos(el)*Math.sin(az), P.ty-d*Math.cos(el)*Math.cos(az), P.tz+d*Math.sin(el));
+  camera.up.set(Math.sin(P.roll*RAD),0,Math.cos(P.roll*RAD));
+  camera.lookAt(0,P.ty,P.tz); camera.updateMatrixWorld(true);
+  vid.style.filter=cGray.checked?'grayscale(1) contrast(1.05)':'none';
+  renderer.render(scene,camera);
+
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+  function pj(p){var v=new THREE.Vector3(p[0],p[1],p[2]).project(camera);
+    return [(v.x*0.5+0.5)*r.w,(-v.y*0.5+0.5)*r.h];}
+  function tx(p,s,c,dx,dy){var q=pj(p);
+    var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',q[0]+(dx||0));t.setAttribute('y',q[1]+(dy||0));t.setAttribute('fill',c);
+    t.setAttribute('font-size',16);t.setAttribute('font-weight',700);
+    t.setAttribute('stroke','rgba(0,0,0,.7)');t.setAttribute('stroke-width',3.5);
+    t.setAttribute('paint-order','stroke');t.textContent=s;svg.appendChild(t);}
+  if(cR.checked) tx([(pivot[0]+foot[0])/2,yf,(pivot[2]+foot[2])/2],'R = '+R.toFixed(2)+' m','#8ab6ff',12,4);
+  if(cAxis.checked){tx(A,'A','#ff8fb0',-16,-8);tx(B,'B','#ff8fb0',10,-8);}
+  PICK.forEach(function(q,i){
+    ['circle','text'].forEach(function(tag){
+      var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+      if(tag==='circle'){e.setAttribute('cx',q[0]);e.setAttribute('cy',q[1]);e.setAttribute('r',7);
+        e.setAttribute('fill','none');e.setAttribute('stroke','#00e5a0');e.setAttribute('stroke-width',3);}
+      else{e.setAttribute('x',q[0]+11);e.setAttribute('y',q[1]-8);e.setAttribute('fill','#00e5a0');
+        e.setAttribute('font-size',15);e.setAttribute('font-weight',700);
+        e.setAttribute('stroke','rgba(0,0,0,.7)');e.setAttribute('stroke-width',3);
+        e.setAttribute('paint-order','stroke');e.textContent=String(i+1);}
+      svg.appendChild(e);});
+  });
+  if(picking){var h=document.createElementNS('http://www.w3.org/2000/svg','text');
+    h.setAttribute('x',12);h.setAttribute('y',26);h.setAttribute('fill','#00e5a0');
+    h.setAttribute('font-size',18);h.setAttribute('font-weight',700);
+    h.setAttribute('stroke','rgba(0,0,0,.75)');h.setAttribute('stroke-width',4);
+    h.setAttribute('paint-order','stroke');h.textContent='클릭: '+PICKNAME[PICK.length]+'   ('+(PICK.length+1)+'/'+NPICK+')';svg.appendChild(h);}
+  syncUI(); updOut(A,B,foot);
+}
+
+function updOut(A,B,foot){
+  function len(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);}
+  var la=len(A,foot), lb=len(foot,B);
+  document.getElementById('out').value=JSON.stringify({
+    geom:{D:+P.D.toFixed(3),R:+P.R.toFixed(3),foot_y:+P.yf.toFixed(3),z_top:+P.zT.toFixed(3),
+          L1:+P.L1.toFixed(3),L2:+P.L2.toFixed(3),
+          rope_seg_A:+la.toFixed(3),rope_seg_B:+lb.toFixed(3),rope_total:+(la+lb).toFixed(3)},
+    look:{rope_mm:P.rt,support_mm:P.st,body_scale:P.bw,guide_mm:P.gt},
+    pose:{phi_deg:+P.phi.toFixed(2),alpha_deg:+P.al.toFixed(2),theta_deg:+P.th.toFixed(2)},
+    camera:{az:+P.az.toFixed(2),el:+P.el.toFixed(2),dist:+P.dist.toFixed(2),fov:+P.fov.toFixed(2),
+            roll:+P.roll.toFixed(2),target_y:+P.ty.toFixed(2),target_z:+P.tz.toFixed(2)},
+    video:{t:+vid.currentTime.toFixed(3)}
+  },null,1);
+}
+
+
+/* ================= 여섯 점으로 카메라 풀기 =================
+   미지수 10 : az el dist fov roll ty tz D y_p z_foot   (화각 고정이면 9)
+   식     12 : 여섯 점 × (x,y)
+   ⑤⑥(광대 발·머리)가 알려진 길이를 주므로 D 와 R 이 결정된다.
+   ---------------------------------------------------------- */
+var PICK=[], picking=false;
+var PICKNAME=['① 왼쪽 줄 끝','② 왼쪽 기둥 바닥','③ 오른쪽 줄 끝','④ 오른쪽 기둥 바닥',
+              '⑤ 광대의 발','⑥ 광대의 머리 끝'];
+var NPICK=6, FITR=null;
+var bPick=document.getElementById('bPick');
+box.addEventListener('click',function(e){
+  if(!picking) return;
+  var r=box.getBoundingClientRect();
+  PICK.push([e.clientX-r.left, e.clientY-r.top]);
+  if(PICK.length>=NPICK){picking=false;box.style.cursor='default';bPick.textContent='① 점 찍기 시작';}
+  else bPick.textContent='다음: '+PICKNAME[PICK.length];
+  draw();
+});
+bPick.onclick=function(){PICK=[];picking=true;box.style.cursor='crosshair';
+  this.textContent='다음: '+PICKNAME[0];draw();};
+document.getElementById('bClr').onclick=function(){PICK=[];picking=false;FITR=null;
+  box.style.cursor='default';bPick.textContent='① 점 찍기 시작';
+  document.getElementById('fitInfo').textContent='아직 안 풀었습니다.';draw();};
+
+var scam=new THREE.PerspectiveCamera(58,1,0.05,500); scam.up.set(0,0,1);
+function camSet(c,v,W,H){
+  var az=v[0]*RAD, el=v[1]*RAD, d=v[2];
+  c.fov=Math.max(8,Math.min(115,v[3])); c.aspect=W/H; c.updateProjectionMatrix();
+  c.position.set(d*Math.cos(el)*Math.sin(az), v[5]-d*Math.cos(el)*Math.cos(az), v[6]+d*Math.sin(el));
+  c.up.set(Math.sin(v[4]*RAD),0,Math.cos(v[4]*RAD));
+  c.lookAt(0,v[5],v[6]); c.updateMatrixWorld(true);
+}
+/* v = [az,el,dist,fov,roll,ty,tz, D, y_p, z_foot] */
+function worldPts(v,swap){
+  var hD=v[7]/2, zT=P.zT, sL=swap?1:-1, yp=v[8], zf=v[9], hh=P.ph;
+  return [[0,sL*hD,zT],[0,sL*hD,0],[0,-sL*hD,zT],[0,-sL*hD,0],
+          [0,yp,zf],[0,yp,zf+hh]];
+}
+function resid(v,swap,W,H){
+  camSet(scam,v,W,H); var wp=worldPts(v,swap), out=[];
+  for(var i=0;i<NPICK;i++){
+    var q=new THREE.Vector3(wp[i][0],wp[i][1],wp[i][2]).project(scam);
+    out.push((q.x*0.5+0.5)*W-PICK[i][0]);
+    out.push((-q.y*0.5+0.5)*H-PICK[i][1]);
+  } return out;
+}
+function cost(v,swap,W,H){var r=resid(v,swap,W,H),s=0;for(var i=0;i<r.length;i++)s+=r[i]*r[i];return s;}
+function clampV(v){
+  v[1]=Math.max(-50,Math.min(55,v[1])); v[2]=Math.max(1.5,Math.min(150,v[2]));
+  v[3]=Math.max(12,Math.min(105,v[3])); v[4]=Math.max(-25,Math.min(25,v[4]));
+  v[6]=Math.max(0,Math.min(14,v[6]));   v[7]=Math.max(1.5,Math.min(30,v[7]));
+  v[8]=Math.max(-v[7]/2+0.05,Math.min(v[7]/2-0.05,v[8]));
+  v[9]=Math.max(0.2,Math.min(14,v[9])); return v;
+}
+function gauss(A,b,n){
+  for(var i=0;i<n;i++){
+    var mx=i; for(var k=i+1;k<n;k++) if(Math.abs(A[k][i])>Math.abs(A[mx][i])) mx=k;
+    var t=A[i];A[i]=A[mx];A[mx]=t; var tb=b[i];b[i]=b[mx];b[mx]=tb;
+    if(Math.abs(A[i][i])<1e-13) return null;
+    for(var k2=i+1;k2<n;k2++){var f=A[k2][i]/A[i][i];
+      for(var j=i;j<n;j++)A[k2][j]-=f*A[i][j]; b[k2]-=f*b[i];}
+  }
+  var x=new Array(n);
+  for(var i2=n-1;i2>=0;i2--){var s=b[i2];
+    for(var j2=i2+1;j2<n;j2++)s-=A[i2][j2]*x[j2]; x[i2]=s/A[i2][i2];}
+  return x;
+}
+function lm(v0,swap,W,H,free){
+  var v=v0.slice(), lam=1e-2, n=free.length, m=NPICK*2;
+  var f=cost(v,swap,W,H);
+  for(var it=0;it<300;it++){
+    var r=resid(v,swap,W,H), J=[];
+    for(var q=0;q<m;q++) J.push(new Array(n));
+    for(var j=0;j<n;j++){
+      var idx=free[j], h=Math.max(1e-4,Math.abs(v[idx])*1e-4), vp=v.slice(); vp[idx]+=h;
+      var rp=resid(vp,swap,W,H);
+      for(var q2=0;q2<m;q2++) J[q2][j]=(rp[q2]-r[q2])/h;
+    }
+    var A=[],g=new Array(n);
+    for(var i=0;i<n;i++){A.push(new Array(n).fill(0)); g[i]=0;}
+    for(var q3=0;q3<m;q3++) for(var i3=0;i3<n;i3++){ g[i3]+=J[q3][i3]*r[q3];
+      for(var j3=0;j3<n;j3++) A[i3][j3]+=J[q3][i3]*J[q3][j3]; }
+    for(var i4=0;i4<n;i4++){A[i4][i4]*=(1+lam); A[i4][i4]+=lam*1e-6;}
+    var dv=gauss(A.map(function(x){return x.slice();}), g.map(function(x){return -x;}), n);
+    if(!dv) break;
+    var v2=v.slice(); for(var j4=0;j4<n;j4++) v2[free[j4]]+=dv[j4];
+    v2=clampV(v2);
+    var f2=cost(v2,swap,W,H);
+    if(f2<f){v=v2;f=f2;lam=Math.max(1e-7,lam*0.4);} else lam*=4;
+    if(lam>1e8) break;
+  }
+  return {v:v,f:f};
+}
+function fitOnce(W,H,free,quick){
+  var best=null, starts=quick?
+    [[70,-5,14,P.fov,0,0,P.zT,8,0,P.zT-0.4],[-70,-5,14,P.fov,0,0,P.zT,8,0,P.zT-0.4]]:
+    [[P.az,P.el,P.dist,P.fov,P.roll,P.ty,P.tz,P.D,P.yf,P.zT-P.R],
+     [ 70,-5,14,P.fov,0,0,P.zT, 8,0,P.zT-0.5],[-70,-5,14,P.fov,0,0,P.zT, 8,0,P.zT-0.5],
+     [ 45,-8,20,P.fov,0,0,P.zT,12,0,P.zT-0.3],[-45,-8,20,P.fov,0,0,P.zT,12,0,P.zT-0.3],
+     [100, 0,10,P.fov,0,0,P.zT, 6,0,P.zT-0.4]];
+  [false,true].forEach(function(sw){ starts.forEach(function(st){
+    var o=lm(st,sw,W,H,free); if(!best||o.f<best.f) best={f:o.f,v:o.v,sw:sw}; }); });
+  return best;
+}
+document.getElementById('bMirror').onclick=function(){
+  P.az=(P.az>0?P.az-180:P.az+180); P.roll=-P.roll; P.yf=-P.yf; syncUI(); draw();
+  document.getElementById('fitInfo').textContent+='   |  반대편으로 뒤집음';
+};
+document.getElementById('bFit').onclick=function(){
+  var info=document.getElementById('fitInfo');
+  if(PICK.length<NPICK){info.textContent='점 '+NPICK+'개를 먼저 찍어주세요. ('+PICK.length+'/'+NPICK+')';return;}
+  var r=layout(),W=r.w,H=r.h;
+  var lockF=document.getElementById('lockFov').checked;
+  var free = lockF?[0,1,2,4,5,6,7,8,9]:[0,1,2,3,4,5,6,7,8,9];
+  var scanTxt='';
+  if(document.getElementById('autoZ').checked){        // 지지점 높이 훑기 — 최소를 찾는다
+    var bz=null, zsave=P.zT;
+    for(var z=2.0; z<=4.51; z+=0.1){ P.zT=z;
+      var o=fitOnce(W,H,free,true);
+      if(!bz||o.f<bz.f) bz={f:o.f,z:z};
+    }
+    P.zT=bz?bz.z:zsave;
+    scanTxt=' (높이 훑기 → '+P.zT.toFixed(1)+' m)';
+  }
+  var best=null;
+  best=fitOnce(W,H,free,false);
+  var v=best.v;
+  P.az=v[0];P.el=v[1];P.dist=v[2];P.fov=v[3];P.roll=v[4];P.ty=v[5];P.tz=v[6];
+  P.D=v[7]; P.yf=v[8];
+  P.R=Math.max(0.05, P.zT-v[9]);           // 줄 처짐 = 지지점 높이 − 발 높이
+  var rms=Math.sqrt(best.f/(NPICK*2));
+  FITR={rms:rms};
+  info.textContent='평균 오차 '+rms.toFixed(1)+' px   |   D '+P.D.toFixed(2)+' m · R '+P.R.toFixed(3)+
+    ' m · 발위치 '+P.yf.toFixed(2)+' m   |   az '+P.az.toFixed(1)+'° el '+P.el.toFixed(1)+
+    '° 거리 '+P.dist.toFixed(1)+' m 화각 '+P.fov.toFixed(1)+'° 롤 '+P.roll.toFixed(1)+'°'+
+    scanTxt + (rms>10?'   ← 오차가 큽니다. 점을 다시 찍어 보세요.':'');
+  syncUI(); draw();
+};
+var scrub=document.getElementById('scrub'),tt=document.getElementById('tt'),bPlay=document.getElementById('bPlay');
+function upT(){tt.textContent=vid.currentTime.toFixed(2)+' / '+(vid.duration||0).toFixed(2)+' s';
+  if(vid.duration)scrub.value=Math.round(vid.currentTime/vid.duration*1000);}
+vid.addEventListener('loadedmetadata',function(){layout();draw();upT();});
+vid.addEventListener('timeupdate',upT); vid.addEventListener('seeked',upT);
+bPlay.onclick=function(){if(vid.paused){vid.play();bPlay.textContent='⏸';}else{vid.pause();bPlay.textContent='▶';}};
+document.getElementById('bB').onclick=function(){vid.pause();bPlay.textContent='▶';vid.currentTime=Math.max(0,vid.currentTime-1/30);};
+document.getElementById('bF').onclick=function(){vid.pause();bPlay.textContent='▶';vid.currentTime=Math.min(vid.duration||6,vid.currentTime+1/30);};
+document.getElementById('b44').onclick=function(){vid.pause();bPlay.textContent='▶';vid.currentTime=4.4;};
+scrub.oninput=function(){vid.pause();bPlay.textContent='▶';vid.currentTime=this.value/1000*(vid.duration||6);};
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key===' '){e.preventDefault();bPlay.click();}
+  else if(e.key==='ArrowRight')document.getElementById('bF').click();
+  else if(e.key==='ArrowLeft')document.getElementById('bB').click();});
+document.getElementById('bReset').onclick=function(){P=JSON.parse(JSON.stringify(P0));syncUI();draw();};
+document.getElementById('bSave').onclick=function(){var o=document.getElementById('out');
+  o.select();document.execCommand('copy');var b=this;b.textContent='복사됨';
+  setTimeout(function(){b.textContent='현재 값 복사';},1200);};
+window.addEventListener('resize',draw);
+syncUI(); draw();
+</script>
+</body>
+</html>

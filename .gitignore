@@ -25,7 +25,13 @@ venv/
 
 # OneDrive 충돌 파일
 *-충북과학고등학교*
+*-DOILRNE*
 *.tmp
+
+# 임시 및 작업 디렉토리
+tmp/
+*.mp4
+*.webp
 
 # 대용량 / 바이너리
 *.zip

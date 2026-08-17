@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>줄타기 발표 — 통합 시연 앱 v0.1</title>
+<style>
+  :root{ --bg:#0b1020; --fg:#e8ecf5; --dim:#8a93a8; --line:#2a3350;
+         --cPhi:#3a86ff; --cAlpha:#06d6a0; --cTheta:#8338ec;
+         --cBeta:#ff2d78; --cDelta:#ff9f1c; --cCom:#ff2d78; }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%; overflow:hidden; background:var(--bg); color:var(--fg);
+    font-family:"Malgun Gothic","Noto Sans KR",system-ui,sans-serif; user-select:none}
+  #stage{position:absolute; inset:0 0 74px 0; overflow:hidden; transition:background .6s}
+  #stage.light{background:#f7f8fb}
+  .pane{position:absolute; transition:opacity .35s; border-radius:10px; overflow:hidden}
+  #c3d{background:transparent}
+  #cpos,#cpred{background:#fff; box-shadow:0 4px 26px rgba(0,0,0,.35)}
+  #ovl{position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; overflow:visible}
+  #cap{position:absolute; left:0; right:0; bottom:34px; text-align:center;
+       font-size:clamp(18px,2.4vw,34px); font-weight:700; letter-spacing:-.5px;
+       text-shadow:0 2px 18px rgba(0,0,0,.75); pointer-events:none; padding:0 6%}
+  #cap.dark{color:#0b1020; text-shadow:0 2px 14px rgba(255,255,255,.8)}
+  #sub{position:absolute; left:0; right:0; bottom:8px; text-align:center;
+       font-size:clamp(12px,1.3vw,18px); color:var(--dim); pointer-events:none}
+  #hud{position:absolute; top:14px; left:16px; font:12.5px/1.75 Consolas,monospace;
+       background:rgba(10,14,28,.62); border:1px solid var(--line); border-radius:9px;
+       padding:9px 13px; white-space:pre; backdrop-filter:blur(6px)}
+  #scenetag{position:absolute; top:14px; right:16px; font-size:13px; color:var(--dim);
+       background:rgba(10,14,28,.62); border:1px solid var(--line); border-radius:9px; padding:7px 12px}
+  #note{position:absolute; bottom:70px; right:16px; font-size:12px; color:#ffb703;
+       background:rgba(10,14,28,.7); border:1px solid #6b5300; border-radius:8px; padding:6px 10px; display:none}
+
+  #bar{position:absolute; left:0; right:0; bottom:0; height:74px; background:#0e1426;
+       border-top:1px solid var(--line); display:flex; align-items:center; gap:10px; padding:0 14px}
+  .btn{background:#1b2440; color:var(--fg); border:1px solid var(--line); border-radius:7px;
+       padding:6px 10px; font-size:13px; cursor:pointer; white-space:nowrap}
+  .btn:hover{background:#25314f} .btn.on{background:#3a86ff; border-color:#3a86ff}
+  .grp{display:flex; gap:4px; align-items:center}
+  #scrub{flex:1; height:26px; accent-color:#3a86ff; cursor:pointer}
+  #tread{font:13px Consolas,monospace; color:var(--dim); min-width:150px; text-align:right}
+  select,input[type=range]{background:#1b2440; color:var(--fg); border:1px solid var(--line);
+       border-radius:6px; padding:3px 6px; font-size:12.5px}
+  #scenes{position:absolute; bottom:80px; left:14px; display:flex; gap:4px; flex-wrap:wrap; max-width:62%}
+  .sc{font-size:11.5px; padding:4px 8px; border-radius:6px; background:rgba(27,36,64,.85);
+      border:1px solid var(--line); cursor:pointer; color:var(--dim)}
+  .sc.on{background:#3a86ff; color:#fff; border-color:#3a86ff}
+  body.hideui #bar,body.hideui #scenes,body.hideui #hud,body.hideui #scenetag{display:none}
+  body.hideui #stage{inset:0}
+  #help{position:absolute; inset:0; background:rgba(6,9,18,.94); z-index:50; display:none;
+        padding:6vh 8vw; font-size:15px; line-height:2.1; overflow:auto}
+  #help h2{font-size:22px; margin-bottom:14px} #help kbd{background:#1b2440; border:1px solid var(--line);
+        border-radius:5px; padding:1px 7px; font:13px Consolas,monospace}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c3d" class="pane"></canvas>
+  <canvas id="cpos" class="pane"></canvas>
+  <canvas id="cpred" class="pane"></canvas>
+  <svg id="ovl"></svg>
+  <div id="cap"></div>
+  <div id="sub"></div>
+  <div id="hud"></div>
+  <div id="scenetag"></div>
+  <div id="note"></div>
+</div>
+
+<div id="scenes"></div>
+
+<div id="bar">
+  <div class="grp">
+    <button class="btn" id="bPrev" title="이전 씬 [">⏮</button>
+    <button class="btn" id="bBack" title="한 프레임 뒤 ←">◀|</button>
+    <button class="btn" id="bPlay" title="재생/정지 Space" style="min-width:52px">▶</button>
+    <button class="btn" id="bFwd" title="한 프레임 앞 →">|▶</button>
+    <button class="btn" id="bNext" title="다음 씬 ]">⏭</button>
+  </div>
+  <div class="grp">
+    <span style="font-size:12px;color:var(--dim)">속도</span>
+    <select id="spd">
+      <option value="0.05">0.05×</option><option value="0.1">0.1×</option>
+      <option value="0.25">0.25×</option><option value="0.5">0.5×</option>
+      <option value="1" selected>1×</option><option value="2">2×</option>
+    </select>
+  </div>
+  <input type="range" id="scrub" min="0" max="1000" value="0">
+  <div id="tread">0.00 / 0.00 s</div>
+  <div class="grp">
+    <button class="btn" id="bView" title="자유 시점 (질의응답)">🎥 자유</button>
+    <button class="btn" id="bHelp" title="도움말 ?">?</button>
+    <button class="btn" id="bHide" title="UI 숨기기 H">⤢</button>
+  </div>
+</div>
+
+<div id="help">
+  <h2>조작</h2>
+  <div>
+    <kbd>Space</kbd> 재생/정지 &nbsp;·&nbsp; <kbd>←</kbd><kbd>→</kbd> 한 프레임 &nbsp;·&nbsp;
+    <kbd>Shift</kbd>+<kbd>←</kbd><kbd>→</kbd> 0.5초 &nbsp;·&nbsp; <kbd>[</kbd><kbd>]</kbd> 씬 이동<br>
+    <kbd>1</kbd>–<kbd>8</kbd> 씬 점프 &nbsp;·&nbsp; <kbd>-</kbd><kbd>+</kbd> 재생속도 &nbsp;·&nbsp;
+    <kbd>0</kbd> 씬 처음으로 &nbsp;·&nbsp; <kbd>V</kbd> 자유 시점(마우스 드래그·휠) &nbsp;·&nbsp;
+    <kbd>H</kbd> UI 숨김 &nbsp;·&nbsp; <kbd>?</kbd> 이 창
+  </div>
+  <h2 style="margin-top:26px">구조</h2>
+  <div style="color:#aab3c8">
+    물리는 앱을 열 때 <b>한 번만</b> 계산(bake)되고, 화면은 그 결과를 시간축으로 훑습니다(scrub).<br>
+    그래서 어느 속도로 재생하든, 뒤로 감든, 한 프레임씩 넘기든 항상 같은 그림이 나옵니다.<br>
+    <code>seek(t)</code> 하나가 전부를 결정 — 나중에 헤드리스로 프레임을 뽑아 mp4로 굽는 것도 같은 함수로 됩니다.
+  </div>
+  <div style="margin-top:26px"><button class="btn" onclick="document.getElementById('help').style.display='none'">닫기</button></div>
+</div>
+
+<script src="three.min.js"></script>
+<script src="model.js"></script>
+<script>
+/* ==================================================================
+ * 0. 모델 · 궤적 베이크 (앱 시작 시 한 번)
+ * ================================================================== */
+var DEG = 180 / Math.PI, RAD = Math.PI / 180;
+var MOD = { human: SL.build(SL.PARAMS.human), robot: SL.build(SL.PARAMS.robot_meas) };
+var M = MOD.robot;
+var TRAJ = {
+  free  : SL.bake(M, { mode:'free',  T:1.10, A_at:0.6*RAD, startAt:0.35, osc:0.0 }),
+  fold  : SL.bake(M, { mode:'fold',  T:5.0,  A_at:0.6*RAD, startAt:0.35, osc:0.35*RAD, deadbeat:'exact' }),
+  cycle : SL.bake(M, { mode:'cycle', T:5.0,  A_at:0.6*RAD, startAt:0.35, osc:0.35*RAD, deadbeat:'exact' }),
+  incr  : SL.bake(M, { mode:'incr',  T:24.0, A_at:0.6*RAD, startAt:0.35, osc:0.35*RAD, tauRet:1.5, rho:0.9 })
+};
+
+/* ==================================================================
+ * 1. 시나리오 — 여기 숫자만 고치면 발표가 고쳐진다
+ *    physT = trajT0 + t_local * rate      (rate < 1 이면 슬로우모션)
+ * ================================================================== */
+var VIEW = {                       // 카메라 프리셋 (az, el = deg, dist = m)
+  wide   : { az: 38, el: 14, dist: 4.2, tz: 0.95, fov: 42 },
+  hero   : { az: 26, el: 10, dist: 1.9, tz: 0.62, fov: 42 },
+  swing  : { az:  0, el:  0, dist: 1.8, tz: 0.62, fov: 34 },   // 스윙 평면 정면 (xz)
+  axis   : { az: 90, el:  6, dist: 2.0, tz: 0.62, fov: 40 },   // 축 방향 — V자가 보인다
+  close  : { az: -8, el:  5, dist: 1.45, tz: 0.63, fov: 34 }
+};
+function V(p, o) { var r = {}; for (var k in p) r[k] = p[k]; for (var k2 in (o||{})) r[k2] = o[k2]; return r; }
+
+var SCENES = [
+{ id:'S1', name:'① 역설', dur:16, set:'human', layout:'3d', light:false,
+  note:'실사 줄타기 영상이 들어갈 자리 — 여기서 정지 → 모델이 페이드인',
+  cam:[[0, V(VIEW.wide,{az:34,dist:2.6})],[16, V(VIEW.wide,{az:22,dist:2.4})]],
+  show:{poles:1, rope:1, arc:0, body:1, com:0, angles:'none', bar:0, dim:[0,1]},
+  cap:[[0,5,''],[5,11,'한국 줄타기는 장대 없이 균형을 잡는다'],[11,16,'물리적으로는 불가능해 보인다']] },
+
+{ id:'S2', name:'② 그네', dur:30, set:'human', layout:'3d', light:false,
+  cam:[[0, V(VIEW.wide,{az:22,dist:2.4})],[5, V(VIEW.axis,{dist:2.3,el:4})],
+       [14, V(VIEW.axis,{dist:2.0,el:2})],[22, V(VIEW.axis,{dist:2.0,el:4})],
+       [30, V(VIEW.axis,{dist:1.9,el:6})]],
+  // D 는 시간의 함수, R 은 불변. 마지막에만 전체 스케일이 로봇으로.
+  dSeq:[[0,4.00],[5,4.00],[13,0.00],[17,0.00],[22,0.60],[30,0.60]],
+  scaleSeq:[[0,0],[24,0],[29,1],[30,1]],
+  show:{poles:1, rope:1, arc:1, body:1, com:0, angles:'none', bar:1},
+  poleFade:[5,12],
+  cap:[[0.5,4.6,'필요한 것은 처짐 길이 R 하나다'],
+       [5.5,12.5,'기둥 간격을 줄인다 — 줄 길이가 따라 줄면 R 은 그대로'],
+       [13.5,16.5,'줄타기는 손 놓고 타는 그네와 같다'],
+       [18,23,'간격을 600 mm 로 벌리면 — 우리 로봇의 V자'],
+       [24.5,30,'여기서부터는 그냥 모형이라 줄인 것. 줄일수록 오히려 어렵다']] },
+
+{ id:'S3', name:'③ 평면', dur:10, set:'robot', layout:'3d', light:false, lightAt:6,
+  cam:[[0, V(VIEW.axis,{dist:1.7})],[6, V(VIEW.swing,{dist:2.0})],[10, V(VIEW.swing,{dist:1.5})]],
+  show:{poles:1, rope:1, arc:1, body:1, com:1, angles:'none', bar:1, plane:[1,6]},
+  cap:[[0,10,'이 운동은 한 평면 안에서 끝난다']] },
+
+{ id:'S4', name:'④ 좌표', dur:38, set:'robot', layout:'3d', light:true,
+  cam:[[0, V(VIEW.swing,{dist:1.5})],[38, V(VIEW.swing,{dist:1.45})]],
+  pose:'demo',                                   // 각도 설명용 정적 포즈 (물리 정지)
+  show:{poles:0, rope:1, arc:1, body:1, com:1, bar:1},
+  angleSeq:[[2,11.5,'phi'],[12,18.5,'alpha'],[17,24,'theta'],[25,38,'beta_delta']],
+  cap:[[1.5,11,'φ — 줄과 발이 함께 흔들리는 각. 발은 줄 위를 미끄러지지 않는다'],
+       [12,17,'α — 하체 기울기 (연직 기준)'],
+       [17.5,23,'θ — 상체 기울기'],
+       [23.5,26,'x_CoM = R·φ + h·β'],
+       [26,32,'좌표를 갈아탄다 — 넘어짐 β 와 접힘 δ'],
+       [32,38,'δ > 0 : 머리와 발은 한쪽, 엉덩이는 반대쪽 — 허리가 접힌다']] },
+
+{ id:'S5', name:'⑤ 접기', dur:30, set:'robot', layout:'3d', light:false,
+  cam:[[0, V(VIEW.swing,{dist:1.5})],[10, V(VIEW.close,{az:-6})],[22, V(VIEW.close,{az:8,dist:1.15})],[30, V(VIEW.swing,{dist:1.5})]],
+  traj:'cycle', trajT0:0.30, rate:0.0085,
+  show:{poles:0, rope:1, arc:1, body:1, com:1, trail:1, bar:1, angles:'delta'},
+  cap:[[0,5.5,'가만히 두면 넘어진다 — 배가시간 117 ms'],
+       [6,12.8,'접기 — 발을 무게중심 너머로 던진다'],
+       [13.2,15.4,'기다리기 — 중력 토크가 반대로 일한다'],
+       [15.8,25.8,'펴기'],
+       [26.2,30,'A = 0 — 넘어지는 성분이 사라졌다']] },
+
+{ id:'S6', name:'⑥ 평면 2장', dur:30, set:'robot', layout:'3d+both', light:false,
+  cam:[[0, V(VIEW.swing,{dist:1.5})],[30, V(VIEW.swing,{dist:1.6})]],
+  traj:'cycle', trajT0:0.30, rate:0.0085,
+  show:{poles:0, rope:1, arc:1, body:1, com:1, trail:1, bar:1},
+  planes:{ pos:[2,30], pred:[10,30] },
+  cap:[[2,9,'원위치 평면 — 그림자. 선 위에 있어도 안전하지 않다'],
+       [11,20,'예측점 q + P q̇ 를 찍으면 그림이 정확해진다'],
+       [21,30,'예측점이 안정선 위에 있다 ⟺ A = 0']] },
+
+{ id:'S7', name:'⑦ ε* · 증분', dur:46, set:'robot', layout:'pred+3d', light:false,
+  cam:[[0, V(VIEW.close,{az:-4,dist:1.3})],[46, V(VIEW.close,{az:6,dist:1.35})]],
+  traj:'fold', trajT0:0.28, rate:0.016, traj2:'incr', traj2At:18, rate2:0.42,
+  show:{poles:0, rope:1, arc:1, body:1, com:1, trail:1, bar:1},
+  planes:{ pred:[0,46], pos:[0,0] },
+  cap:[[0,4.5,'얼마나 접어야 하는가 — 분홍 화살표가 그 답이다'],
+       [5,10.5,'δ_f* = −A / (k(w_φ s − w_β))  ·  ε* = −h /(rR + h)'],
+       [11,17.5,'ε* 로 접으면 펴지 않아도 유계다'],
+       [19,30,'증분 접기 — 문턱을 넘을 때만, 조금씩'],
+       [31,46,'그리고 천천히 일어선다']] },
+
+{ id:'S8', name:'⑧ 실증', dur:16, set:'robot', layout:'3d', light:false,
+  note:'실기 어름이 주행 영상이 들어갈 자리',
+  cam:[[0, V(VIEW.close,{az:6,dist:1.35})],[16, V(VIEW.hero,{az:30,dist:2.2})]],
+  traj:'incr', trajT0:12.0, rate:0.42,
+  show:{poles:1, rope:1, arc:1, body:1, com:1, trail:1, bar:1},
+  cap:[[2,9,'한국 줄타기는 어떻게 장대 없이 균형을 잡는가?'],
+       [10,16,'처진 줄 진자 위 이중 역진자 · 허리 접기 하나']] }
+];
+var TOTAL = 0, T0 = [];
+SCENES.forEach(function (s) { T0.push(TOTAL); TOTAL += s.dur; });
+
+/* ==================================================================
+ * 2. 3D 씬
+ * ================================================================== */
+var stage = document.getElementById('stage');
+var cv3d = document.getElementById('c3d');
+var renderer = new THREE.WebGLRenderer({ canvas: cv3d, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(42, 1, 0.02, 200);
+camera.up.set(0, 0, 1);
+scene.add(new THREE.AmbientLight(0x9aa8c8, 1.15));
+var dl = new THREE.DirectionalLight(0xffffff, 1.5); dl.position.set(3, -5, 7); scene.add(dl);
+var dl2 = new THREE.DirectionalLight(0x88aaff, 0.5); dl2.position.set(-4, 3, 2); scene.add(dl2);
+
+var C = { lower:0x06d6a0, upper:0x8338ec, hip:0xffbe0b, com:0xff2d78,
+          rope:0xffd400, pole:0x8892a8, arc:0x3a86ff, plane:0x3a86ff, trail:0xffffff };
+function mat(c, o) { return new THREE.MeshStandardMaterial({ color:c, roughness:.45, metalness:.15,
+          transparent:true, opacity:o===undefined?1:o }); }
+function lmat(c, o, w) { return new THREE.LineBasicMaterial({ color:c, transparent:true,
+          opacity:o===undefined?1:o, linewidth:w||1 }); }
+
+var G = {};   // 3D 요소 모음
+G.root = new THREE.Group(); scene.add(G.root);
+
+G.poleA = new THREE.Mesh(new THREE.CylinderGeometry(.02,.028,1,12), mat(C.pole));
+G.poleB = G.poleA.clone(); G.poleA.material = mat(C.pole); G.poleB.material = mat(C.pole);
+G.root.add(G.poleA, G.poleB);
+
+function mkLine(n, m) {
+  var g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
+  return new THREE.Line(g, m);
+}
+G.ropeA = mkLine(2, lmat(C.rope, 1));
+G.ropeB = mkLine(2, lmat(C.rope, 1));
+G.arc   = mkLine(97, new THREE.LineDashedMaterial({ color:C.arc, dashSize:.035, gapSize:.025, transparent:true, opacity:.55 }));
+G.vert  = mkLine(2, new THREE.LineDashedMaterial({ color:0x9fb0d0, dashSize:.03, gapSize:.025, transparent:true, opacity:.5 }));
+G.bar   = mkLine(2, lmat(0xffffff, .35));
+G.trail = mkLine(600, lmat(C.trail, .85));
+G.root.add(G.ropeA, G.ropeB, G.arc, G.vert, G.bar, G.trail);
+
+G.link1 = new THREE.Mesh(new THREE.CylinderGeometry(.017,.017,1,14), mat(C.lower));
+G.link2 = new THREE.Mesh(new THREE.CylinderGeometry(.015,.015,1,14), mat(C.upper));
+G.hip   = new THREE.Mesh(new THREE.SphereGeometry(.026,20,14), mat(C.hip));
+G.com   = new THREE.Mesh(new THREE.SphereGeometry(.022,20,14), mat(C.com));
+G.foot  = new THREE.Mesh(new THREE.SphereGeometry(.017,16,12), mat(0xffffff));
+G.head  = new THREE.Mesh(new THREE.SphereGeometry(.020,16,12), mat(C.upper));
+G.root.add(G.link1, G.link2, G.hip, G.com, G.foot, G.head);
+
+G.xz = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.8),
+        new THREE.MeshBasicMaterial({ color:C.plane, transparent:true, opacity:0, side:THREE.DoubleSide }));
+G.xz.rotation.x = Math.PI / 2; G.root.add(G.xz);
+
+function setLine(line, pts) {
+  var a = line.geometry.attributes.position, n = a.count, i;
+  for (i = 0; i < n; i++) { var p = pts[Math.min(i, pts.length - 1)];
+    a.setXYZ(i, p[0], p[1], p[2]); }
+  a.needsUpdate = true; line.geometry.computeBoundingSphere();
+  if (line.material.isLineDashedMaterial) line.computeLineDistances();
+}
+function placeCyl(mesh, a, b, r) {
+  var A = new THREE.Vector3(a[0],a[1],a[2]), B = new THREE.Vector3(b[0],b[1],b[2]);
+  var d = new THREE.Vector3().subVectors(B, A), len = d.length();
+  mesh.position.copy(A).addScaledVector(d, .5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.clone().normalize());
+  mesh.scale.set(r||1, len, r||1);
+}
+
+/* ==================================================================
+ * 3. 기하 계산 — (φ, α, θ) + 기하 파라미터 → 3D 점들
+ * ================================================================== */
+var FOOT_Z = 0.30;
+function geom(gp, st) {
+  var R = gp.R, zTop = FOOT_Z + R;
+  var fx = R * Math.sin(st.phi), fz = zTop - R * Math.cos(st.phi);
+  var foot = [fx, 0, fz];
+  var hip  = [fx + gp.L1 * Math.sin(st.alpha), 0, fz + gp.L1 * Math.cos(st.alpha)];
+  var head = [hip[0] + gp.L2 * Math.sin(st.theta), 0, hip[2] + gp.L2 * Math.cos(st.theta)];
+  var m1 = gp.m1, m2 = gp.m2, Mt = m1 + m2;
+  var c1 = [fx + gp.ell1*Math.sin(st.alpha), 0, fz + gp.ell1*Math.cos(st.alpha)];
+  var c2 = [hip[0] + gp.ell2*Math.sin(st.theta), 0, hip[2] + gp.ell2*Math.cos(st.theta)];
+  var com = [(m1*c1[0]+m2*c2[0])/Mt, 0, (m1*c1[2]+m2*c2[2])/Mt];
+  return { foot:foot, hip:hip, head:head, com:com, zTop:zTop, R:R,
+           pA:[0,  gp.D/2, zTop], pB:[0, -gp.D/2, zTop], pivot:[0,0,zTop] };
+}
+
+/* ==================================================================
+ * 4. 평면(2D) 그리기 — v19_state 규약
+ * ================================================================== */
+function planeDraw(cv, kind, st, trail, opt) {
+  var ctx = cv.getContext('2d'), W = cv.width, H = cv.height, DPR = opt.dpr;
+  if (!opt.range) {                                   // 자동 범위 (계단식 — 화면 떨림 방지)
+    var mx = Math.max(Math.abs(st[0]), Math.abs(st[1]));
+    if (trail) for (var q0=0;q0<trail.length;q0++) mx = Math.max(mx, Math.abs(trail[q0][0]), Math.abs(trail[q0][1]));
+    var steps=[3,4,5,6,8,10,13,16,20,26,34,45], want=mx*2.35, i0=0;
+    while (i0<steps.length-1 && steps[i0]<want) i0++;
+    opt.range = steps[i0];
+  }
+  ctx.save(); ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,W,H);
+  var pad = 46*DPR, ax = { x0:pad, y0:pad*0.6, w:W-pad*1.5, h:H-pad*1.7 };
+  var rng = opt.range || 6;                       // ±deg
+  function X(b){ return ax.x0 + (b/rng*0.5+0.5)*ax.w; }
+  function Y(p){ return ax.y0 + (0.5 - p/rng*0.5)*ax.h; }
+  // 축
+  ctx.strokeStyle='#dfe3ec'; ctx.lineWidth=1*DPR;
+  ctx.strokeRect(ax.x0, ax.y0, ax.w, ax.h);
+  ctx.beginPath(); ctx.moveTo(X(-rng),Y(0)); ctx.lineTo(X(rng),Y(0));
+  ctx.moveTo(X(0),Y(-rng)); ctx.lineTo(X(0),Y(rng)); ctx.strokeStyle='#c9cfdc'; ctx.stroke();
+  var slope = (kind==='pred') ? M.slopeA0 : M.r;
+  // CoM 등고선 (원위치 평면만)
+  if (kind==='pos') {
+    ctx.strokeStyle='#c9cfdc'; ctx.lineWidth=1*DPR; ctx.setLineDash([]);
+    for (var q=-3; q<=3; q++) { var off = q*rng*0.33;
+      ctx.beginPath(); ctx.moveTo(X(-rng), Y(M.slopeCoM*(-rng)+off)); ctx.lineTo(X(rng), Y(M.slopeCoM*rng+off)); ctx.stroke(); }
+  }
+  // 트리거 띠 (예측점 평면만)
+  if (kind==='pred') {
+    var At = M.p.A_TRIG_DEG / M.wq[0];
+    ctx.fillStyle='rgba(255,214,0,.16)'; ctx.beginPath();
+    ctx.moveTo(X(-rng),Y(slope*(-rng)+At)); ctx.lineTo(X(rng),Y(slope*rng+At));
+    ctx.lineTo(X(rng),Y(slope*rng-At)); ctx.lineTo(X(-rng),Y(slope*(-rng)-At)); ctx.closePath(); ctx.fill();
+    ctx.setLineDash([6*DPR,5*DPR]); ctx.strokeStyle='#d9a400'; ctx.lineWidth=1.6*DPR;
+    [At,-At].forEach(function(o){ ctx.beginPath(); ctx.moveTo(X(-rng),Y(slope*(-rng)+o)); ctx.lineTo(X(rng),Y(slope*rng+o)); ctx.stroke(); });
+    ctx.setLineDash([]);
+  }
+  // 안정선 / 판정선
+  ctx.strokeStyle='#12a05a'; ctx.lineWidth=3*DPR;
+  if (kind==='pos') ctx.setLineDash([9*DPR,6*DPR]);
+  ctx.beginPath(); ctx.moveTo(X(-rng),Y(slope*(-rng))); ctx.lineTo(X(rng),Y(slope*rng)); ctx.stroke();
+  ctx.setLineDash([]);
+  // 궤적
+  var PH = ['#7b3fd6','#e63946','#2c6fd6','#e8a800','#7b3fd6','#999'];
+  if (trail && trail.length>1) {
+    for (var i=1;i<trail.length;i++) {
+      var a=trail[i-1], b=trail[i];
+      ctx.strokeStyle = PH[b[2]] || '#7b3fd6'; ctx.lineWidth = 2.6*DPR;
+      ctx.beginPath(); ctx.moveTo(X(a[0]),Y(a[1])); ctx.lineTo(X(b[0]),Y(b[1])); ctx.stroke();
+    }
+  }
+  // δ_f* 화살표 (예측점 평면)
+  if (kind==='pred' && opt.dstar) {
+    var dq = opt.dstar;   // [dbeta, dphi] in deg
+    ctx.strokeStyle='#ff2d78'; ctx.fillStyle='#ff2d78'; ctx.lineWidth=3*DPR;
+    var x1=X(st[0]), y1=Y(st[1]), x2=X(st[0]+dq[0]), y2=Y(st[1]+dq[1]);
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    var an=Math.atan2(y2-y1,x2-x1), hl=9*DPR;
+    ctx.beginPath(); ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-hl*Math.cos(an-0.45), y2-hl*Math.sin(an-0.45));
+    ctx.lineTo(x2-hl*Math.cos(an+0.45), y2-hl*Math.sin(an+0.45)); ctx.closePath(); ctx.fill();
+  }
+  // 현재 점
+  ctx.fillStyle = (opt.phase===1)?'#ff2d78':'#111'; ctx.strokeStyle='#fff'; ctx.lineWidth=2.5*DPR;
+  ctx.beginPath(); ctx.arc(X(st[0]),Y(st[1]), 7.5*DPR, 0, 6.2832); ctx.fill(); ctx.stroke();
+  // 라벨
+  ctx.fillStyle='#333'; ctx.font=(15*DPR)+'px "Malgun Gothic",sans-serif';
+  ctx.fillText(kind==='pred'?'예측점 평면  (β_pred, φ_pred)':'원위치 평면  (β, φ)  — 그림자', ax.x0, ax.y0-10*DPR);
+  ctx.font=(13*DPR)+'px Consolas,monospace'; ctx.fillStyle='#666';
+  ctx.fillText('β [°]', ax.x0+ax.w-42*DPR, ax.y0+ax.h+24*DPR);
+  ctx.fillText('φ [°]', ax.x0+6*DPR, ax.y0+14*DPR);
+  if (kind==='pred') { ctx.fillStyle='#12a05a';
+    ctx.fillText('A = 0', X(rng*0.62), Y(slope*rng*0.62)-9*DPR); }
+  ctx.restore();
+}
+
+/* ==================================================================
+ * 5. SVG 오버레이 — 각호 · 라벨 · 치수선
+ * ================================================================== */
+var ovl = document.getElementById('ovl'), SVGNS='http://www.w3.org/2000/svg';
+function clearOvl(){ while(ovl.firstChild) ovl.removeChild(ovl.firstChild); }
+function proj(p, rect) {
+  var v = new THREE.Vector3(p[0],p[1],p[2]).project(camera);
+  return [rect.x + (v.x*0.5+0.5)*rect.w, rect.y + (-v.y*0.5+0.5)*rect.h];
+}
+function svg(tag, attrs) { var e=document.createElementNS(SVGNS,tag);
+  for (var k in attrs) e.setAttribute(k, attrs[k]); ovl.appendChild(e); return e; }
+function label(p, text, color, rect, dx, dy) {
+  var s = proj(p, rect);
+  var t = svg('text', { x:s[0]+(dx||0), y:s[1]+(dy||0), fill:color,
+    'font-size':22, 'font-weight':700, 'font-family':'"Malgun Gothic",sans-serif',
+    stroke:'rgba(255,255,255,.85)', 'stroke-width':4, 'paint-order':'stroke' });
+  t.textContent = text; return t;
+}
+/* 3D 각호: 정점 v, 각도 a0→a1 (연직 기준, xz평면, 오른쪽 +) */
+function arc3(v, a0, a1, rad, color, rect, txt, opa) {
+  var pts = [], n = 26, i, up = 1;
+  for (i=0;i<=n;i++) { var a = a0 + (a1-a0)*i/n;
+    pts.push([v[0] + rad*Math.sin(a), 0, v[2] + rad*Math.cos(a)*up]); }
+  var d = pts.map(function(p,i2){ var s=proj(p,rect); return (i2?'L':'M')+s[0].toFixed(1)+','+s[1].toFixed(1); }).join(' ');
+  svg('path', { d:d, fill:'none', stroke:color, 'stroke-width':3.4, opacity:opa===undefined?1:opa });
+  if (txt) { var mid = pts[Math.floor(n/2)];
+    var lp = [v[0] + rad*1.34*Math.sin((a0+a1)/2), 0, v[2] + rad*1.34*Math.cos((a0+a1)/2)];
+    label(lp, txt, color, rect, -9, 8).setAttribute('opacity', opa===undefined?1:opa); }
+}
+function ray(v, ang, len, color, rect, dash, opa) {
+  var p2 = [v[0]+len*Math.sin(ang), 0, v[2]+len*Math.cos(ang)];
+  var a=proj(v,rect), b=proj(p2,rect);
+  svg('line',{ x1:a[0],y1:a[1],x2:b[0],y2:b[1], stroke:color, 'stroke-width':2,
+    'stroke-dasharray':dash||'6 5', opacity:opa===undefined?.85:opa });
+}
+
+/* ==================================================================
+ * 6. 감독 — seek(t) 하나가 화면 전체를 결정한다 (누적 상태 없음)
+ * ================================================================== */
+function ease(u){ return u<=0?0:u>=1?1:(u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2); }
+function kf(t, keys) {                      // keys = [[t, value|obj], ...]
+  if (t<=keys[0][0]) return keys[0][1];
+  for (var i=1;i<keys.length;i++) if (t<=keys[i][0]) {
+    var a=keys[i-1], b=keys[i], u=ease((t-a[0])/(b[0]-a[0]));
+    if (typeof a[1]==='number') return a[1]+(b[1]-a[1])*u;
+    var o={}; for (var k in a[1]) o[k]=a[1][k]+((b[1][k]===undefined?a[1][k]:b[1][k])-a[1][k])*u;
+    return o;
+  }
+  return keys[keys.length-1][1];
+}
+function ramp(t, a, b){ return a===b ? (t>=a?1:0) : Math.max(0,Math.min(1,(t-a)/(b-a))); }
+function win(t, seg){ if(!seg) return 0; var f=ramp(t,seg[0],seg[0]+1.0), g=1-ramp(t,seg[1]-0.8,seg[1]); return Math.min(f,g); }
+
+var free = { on:false, az:10, el:8, dist:1.6 };
+var STATE = { t:0, playing:false, speed:1, scene:0 };
+
+function sceneAt(t) {
+  var i = SCENES.length-1;
+  for (var j=0;j<SCENES.length;j++) if (t < T0[j]+SCENES[j].dur) { i=j; break; }
+  return { i:i, s:SCENES[i], tl: t - T0[i] };
+}
+
+function seek(t) {
+  t = Math.max(0, Math.min(TOTAL-1e-4, t));
+  STATE.t = t;
+  var sc = sceneAt(t), s = sc.s, tl = sc.tl;
+  STATE.scene = sc.i;
+  var mdl = MOD[s.set === 'human' ? 'human' : 'robot'];
+
+  /* --- 기하 파라미터 (사람 → 로봇 모프) --- */
+  var hp = SL.PARAMS.human, rp = SL.PARAMS.robot_meas, w = (s.set==='human')?0:1;
+  if (s.morph) w = ease(ramp(tl, s.morph.t0, s.morph.t1));
+  if (s.scaleSeq) w = kf(tl, s.scaleSeq);
+  function lerp(a,b){ return a+(b-a)*w; }
+  var gp = { R:lerp(hp.R,rp.R), D:lerp(hp.D_span,rp.D_span), L1:lerp(hp.L1,rp.L1),
+             L2:lerp(hp.L2,rp.L2), ell1:lerp(hp.ell1,rp.ell1), ell2:lerp(hp.ell2,rp.ell2),
+             m1:lerp(hp.m1,rp.m1), m2:lerp(hp.m2,rp.m2) };
+  if (s.dSeq) gp.D = kf(tl, s.dSeq) * (gp.R / hp.R);   // R 이 줄면 D 도 같은 비율 (닮음)
+  var span = gp.L1 + gp.L2 + gp.R, spanR = rp.L1 + rp.L2 + rp.R;
+  var rad = span / spanR;                    // 기하 스케일 (로봇=1)
+
+  if (s.morph && w > 0.5) mdl = MOD.robot;
+
+  /* --- 상태 (물리는 멈춰 있고, 궤적을 훑는다) --- */
+  var stt = { phi:0, beta:0, delta:0, A:0, phase:0, dphi:0, dbeta:0 }, trj=null, physT=0;
+  if (s.traj) {
+    trj = TRAJ[s.traj]; physT = (s.trajT0||0) + tl*(s.rate||1);
+    if (s.traj2 && tl >= s.traj2At) { trj = TRAJ[s.traj2];
+      physT = (s.traj2T0||0) + (tl-s.traj2At)*(s.rate2||s.rate||1); }
+    var sm = SL.sample(trj, physT);
+    stt = { phi:sm.phi, beta:sm.beta, delta:sm.delta, A:sm.A, phase:sm.phase,
+            dphi:sm.dphi, dbeta:sm.dbeta };
+  } else if (s.pose === 'demo') {             // ④ 각도 설명용 포즈 — 구간마다 하나씩만 크게
+    function env(a, b) {                     // a→b 구간에서 부드럽게 0→1→0
+      if (tl <= a || tl >= b) return 0;
+      var e = 1.1, u = tl - a, v = b - tl;
+      return Math.min(1, u < e ? 0.5 - 0.5*Math.cos(Math.PI*u/e) : 1,
+                         v < e ? 0.5 - 0.5*Math.cos(Math.PI*v/e) : 1);
+    }
+    stt.phi   =  9*RAD * Math.sin(2*Math.PI*(tl-2)/8.0)  * env(2, 11.5);
+    stt.beta  =  7*RAD * Math.sin(2*Math.PI*(tl-12)/9.0) * env(12, 24);
+    stt.delta = 17*RAD * Math.sin(2*Math.PI*(tl-25)/13.0) * env(25, 38);
+    stt.beta += 2.5*RAD * Math.sin(2*Math.PI*(tl-25)/17.0) * env(25, 38);
+  } else if (s.set==='human') {
+    stt.phi = 4*RAD*Math.sin(tl*0.55); stt.beta = 2.4*RAD*Math.sin(tl*0.55+1.3);
+  }
+  var pat = SL.toPAT(mdl, stt.phi, stt.beta, stt.delta);
+  var gm = geom(gp, pat);
+
+  /* --- 3D 요소 --- */
+  var sh = s.show || {};
+  var opPole = (sh.poles?1:0) * (s.morph ? 1-ease(ramp(tl, s.show.dim?s.show.dim[0]:0, s.show.dim?s.show.dim[1]:1))*0.85 : 1);
+  if (s.poleFade) opPole = (sh.poles?1:0) * (1 - ease(ramp(tl, s.poleFade[0], s.poleFade[1])));
+  if (s.id==='S1') opPole = 1;
+  G.poleA.visible = G.poleB.visible = opPole>0.02;
+  if (G.poleA.visible) {
+    [[G.poleA, gm.pA],[G.poleB, gm.pB]].forEach(function(pr){
+      placeCyl(pr[0], [0, pr[1][1], 0], [0, pr[1][1], gm.zTop], rad*0.9);
+      pr[0].material.opacity = opPole; });
+  }
+  setLine(G.ropeA, [gm.pA, gm.foot]); setLine(G.ropeB, [gm.pB, gm.foot]);
+  G.ropeA.visible = G.ropeB.visible = !!sh.rope;
+  var arcPts=[], k;
+  for (k=0;k<=96;k++){ var a=(-38+76*k/96)*RAD;
+    arcPts.push([gm.R*Math.sin(a),0,gm.zTop-gm.R*Math.cos(a)]); }
+  setLine(G.arc, arcPts); G.arc.visible = !!sh.arc;
+  setLine(G.vert, [gm.foot, [gm.foot[0],0,gm.foot[2]+gp.L1+gp.L2+0.08]]); G.vert.visible = !!sh.body;
+  setLine(G.bar, [gm.pivot, gm.foot]); G.bar.visible = !!sh.bar;
+
+  placeCyl(G.link1, gm.foot, gm.hip, rad); placeCyl(G.link2, gm.hip, gm.head, rad);
+  [G.hip,G.head,G.foot,G.com].forEach(function(o){ o.scale.setScalar(rad); });
+  G.hip.position.set(gm.hip[0],0,gm.hip[2]); G.head.position.set(gm.head[0],0,gm.head[2]);
+  G.foot.position.set(gm.foot[0],0,gm.foot[2]); G.com.position.set(gm.com[0],0,gm.com[2]);
+  [G.link1,G.link2,G.hip,G.head,G.foot].forEach(function(o){ o.visible=!!sh.body; });
+  G.com.visible = !!sh.com;
+  G.xz.position.set(0,0,gm.zTop-gm.R*0.5);
+  G.xz.material.opacity = 0.10*win(tl, sh.plane);
+  G.xz.visible = G.xz.material.opacity>0.005;
+
+  /* 발 자취 트레일 */
+  if (sh.trail && trj) {
+    var pts=[], nT=180, i2;
+    for (i2=0;i2<nT;i2++){
+      var tp = Math.max(0, physT - (nT-1-i2)*(0.28/nT));
+      var s2 = SL.sample(trj, tp);
+      var p2 = SL.toPAT(mdl, s2.phi, s2.beta, s2.delta);
+      var g2 = geom(gp, p2); pts.push(g2.foot);
+    }
+    setLine(G.trail, pts); G.trail.visible = true;
+    G.trail.material.opacity = 0.9;
+  } else G.trail.visible = false;
+
+  /* --- 레이아웃 먼저 (카메라 aspect 확정) --- */
+  layout(s, tl);
+
+  /* --- 카메라 --- */
+  var cam = kf(tl, s.cam);
+  if (free.on) { cam = { az:free.az, el:free.el, dist:free.dist, tz:cam.tz, fov:cam.fov }; }
+  var dist = cam.dist * rad;
+  var az = cam.az*RAD, el = cam.el*RAD;
+  camera.fov = cam.fov; camera.updateProjectionMatrix();
+  camera.position.set(dist*Math.cos(el)*Math.sin(az), -dist*Math.cos(el)*Math.cos(az), cam.tz + dist*Math.sin(el));
+  camera.lookAt(0, 0, cam.tz);
+  camera.updateMatrixWorld(true);      // ★ project() 가 이번 프레임 카메라를 쓰도록
+
+  /* --- 평면 --- */
+  var pl = s.planes || {};
+  var opPos = win(tl, pl.pos), opPred = win(tl, pl.pred);
+  cpos.style.opacity = opPos; cpred.style.opacity = opPred;
+  cpos.style.display = opPos>0.01?'block':'none'; cpred.style.display = opPred>0.01?'block':'none';
+  if (opPos>0.01 || opPred>0.01) {
+    var x4 = [stt.phi, stt.beta, stt.dphi, stt.dbeta];
+    var pr = mdl.pred(x4);
+    var trailPos=[], trailPred=[];
+    if (trj) { var nn=140, i3;
+      for (i3=0;i3<nn;i3++){ var tp2=Math.max(0, physT-(nn-1-i3)*0.012);
+        var s3=SL.sample(trj,tp2); var x3=[s3.phi,s3.beta,s3.dphi,s3.dbeta];
+        var p3=mdl.pred(x3);
+        trailPos.push([s3.beta*DEG, s3.phi*DEG, s3.phase]);
+        trailPred.push([p3[1]*DEG, p3[0]*DEG, s3.phase]); } }
+    var ds = mdl.deltaStar(x4);                    // [rad]
+    var dq = [-mdl.k*ds*DEG, mdl.k*mdl.s*ds*DEG];  // (Δβ, Δφ) [deg]
+    var dpr = Math.min(2, window.devicePixelRatio||1);
+    if (opPos>0.01) planeDraw(cpos,'pos',[stt.beta*DEG, stt.phi*DEG], trailPos,
+        { dpr:dpr, range:s.planeRange, phase:stt.phase });
+    if (opPred>0.01) planeDraw(cpred,'pred',[pr[1]*DEG, pr[0]*DEG], trailPred,
+        { dpr:dpr, range:s.planeRange, phase:stt.phase, dstar:dq });
+  }
+
+  /* --- 오버레이 (각호·라벨) --- */
+  clearOvl();
+  var rect = { x:0, y:0, w:stage.clientWidth, h:stage.clientHeight };
+  var r3 = paneRect.c3d;
+  var rc = { x:r3.x, y:r3.y, w:r3.w, h:r3.h };
+  drawOverlay(s, tl, gm, pat, stt, mdl, gp, rc);
+
+  /* --- 자막 · HUD --- */
+  var capEl = document.getElementById('cap'), txt='';
+  (s.cap||[]).forEach(function(c){ if (tl>=c[0] && tl<c[1]) txt=c[2]; });
+  capEl.textContent = txt;
+  var lightNow = s.light || (s.lightAt!==undefined && tl>=s.lightAt);
+  stage.classList.toggle('light', !!lightNow);
+  capEl.classList.toggle('dark', !!lightNow);
+  document.getElementById('sub').textContent =
+    trj ? ('물리 시간 ' + physT.toFixed(3) + ' s  ·  재생 ' + (1/(s.rate||1)).toFixed(0) + '× 느리게') : '';
+  var nt = document.getElementById('note');
+  if (s.note) { nt.style.display='block'; nt.textContent = '▤ ' + s.note; } else nt.style.display='none';
+  document.getElementById('hud').textContent =
+    'φ  ' + (stt.phi*DEG).toFixed(2).padStart(7) + '°\n' +
+    'β  ' + (stt.beta*DEG).toFixed(2).padStart(7) + '°\n' +
+    'δ  ' + (stt.delta*DEG).toFixed(2).padStart(7) + '°\n' +
+    'A  ' + (stt.A*DEG).toFixed(3).padStart(7) + '°   ' + ['자유','접기','대기','펴기','복귀','낙하'][stt.phase] + '\n' +
+    'R  ' + gp.R.toFixed(3) + ' m   λu ' + mdl.lam_u.toFixed(2) + ' /s';
+  document.getElementById('scenetag').textContent = s.name + '   ' + tl.toFixed(1) + ' / ' + s.dur + ' s';
+  document.getElementById('tread').textContent = t.toFixed(2) + ' / ' + TOTAL.toFixed(0) + ' s';
+  document.getElementById('scrub').value = Math.round(t/TOTAL*1000);
+  Array.prototype.forEach.call(document.querySelectorAll('.sc'), function(e,i){ e.classList.toggle('on', i===sc.i); });
+
+  renderer.render(scene, camera);
+}
+
+/* ---- 오버레이 내용 ---- */
+function drawOverlay(s, tl, gm, pat, stt, mdl, gp, rect) {
+  if (rect.w<10) return;
+  var i;
+  // ② R 은 불변 · D 와 L 만 줄어든다
+  if (s.id==='S2') {
+    var zTop = gm.zTop, R = gm.R, halfD = gp.D/2;
+    var Lhalf = Math.sqrt(R*R + halfD*halfD);
+    var oA = proj([0, halfD, zTop], rect), oB = proj([0, -halfD, zTop], rect);
+    svg('line',{x1:oA[0],y1:oA[1],x2:oB[0],y2:oB[1],stroke:'#ff2d78','stroke-width':2.4,
+                'stroke-dasharray':'9 6',opacity:.9});
+    var a2=proj(gm.pivot,rect), b2=proj(gm.foot,rect);
+    svg('line',{x1:a2[0],y1:a2[1],x2:b2[0],y2:b2[1],stroke:'#3a86ff','stroke-width':5});
+    svg('circle',{cx:a2[0],cy:a2[1],r:6,fill:'#ff2d78'});
+    label([0,0,(gm.pivot[2]+gm.foot[2])/2], 'R = '+R.toFixed(3)+' m   불변', '#1a5fd0', rect, 16, 34);
+    if (gp.D > 0.02) {
+      label([0,0,zTop+R*0.10], 'D = '+(gp.D*1000).toFixed(0)+' mm', '#d01050', rect, -50, -30);
+      var mid = proj([0, -halfD*0.62, (zTop*0.62+gm.foot[2]*0.38)], rect);
+      var tL = svg('text',{x:mid[0]-96,y:mid[1]-6,fill:'#a37200','font-size':19,'font-weight':700,
+        stroke:'rgba(255,255,255,.85)','stroke-width':4,'paint-order':'stroke'});
+      tL.textContent = 'L/2 = '+Lhalf.toFixed(3)+' m';
+    } else {
+      label([0,0,zTop+R*0.10], 'D = 0 — 줄 하나짜리 그네', '#d01050', rect, -96, -34);
+    }
+    var fx = rect.x + rect.w*0.5;
+    var tf = svg('text',{x:fx,y:rect.y+rect.h*0.13,fill:'#1a5fd0','font-size':25,'font-weight':700,
+      'text-anchor':'middle',stroke:'rgba(255,255,255,.9)','stroke-width':5,'paint-order':'stroke'});
+    tf.textContent = 'R = ½√(L² − D²)   →   D 가 줄어도 L 이 따라 줄면 R 은 그대로';
+    if (tl > 24.5) {
+      var t3 = svg('text',{x:fx,y:rect.y+rect.h*0.20,fill:'#c81e5a','font-size':21,'font-weight':700,
+        'text-anchor':'middle',opacity:ramp(tl,24.5,26.5),
+        stroke:'rgba(255,255,255,.9)','stroke-width':5,'paint-order':'stroke'});
+      t3.textContent = '배가시간  195 ms (사람 스케일)  →  117 ms (로봇) — 줄이면 더 어렵다';
+    }
+  }
+  // ④ 각도
+  if (s.id==='S4' && s.angleSeq) {
+    var L1=gp.L1, L2=gp.L2;
+    s.angleSeq.forEach(function(seq){
+      var o = win(tl, [seq[0], seq[1]]); if (o<0.02) return;
+      if (seq[2]==='phi') {
+        ray(gm.pivot, Math.PI, gm.R*1.06, '#7f8aa3', rect, '5 5', o*0.75);
+        var pa0=proj(gm.pivot,rect), pb0=proj(gm.foot,rect);
+        svg('line',{x1:pa0[0],y1:pa0[1],x2:pb0[0],y2:pb0[1],stroke:'#3a86ff','stroke-width':2.6,opacity:o*0.9});
+        svg('circle',{cx:pa0[0],cy:pa0[1],r:5,fill:'#3a86ff',opacity:o});
+        arc3(gm.pivot, Math.PI, Math.PI - pat.phi, gm.R*0.96, '#3a86ff', rect, 'φ', o);
+      } else if (seq[2]==='alpha') {
+        ray(gm.foot, 0, L1*1.25, '#7f8aa3', rect, '5 5', o*0.7);
+        arc3(gm.foot, 0, pat.alpha, L1*0.85, '#06d6a0', rect, 'α', o);
+      } else if (seq[2]==='theta') {
+        ray(gm.hip, 0, L2*1.2, '#7f8aa3', rect, '5 5', o*0.7);
+        arc3(gm.hip, 0, pat.theta, L2*0.72, '#8338ec', rect, 'θ', o);
+      } else if (seq[2]==='beta_delta') {
+        ray(gm.foot, 0, L1*1.3, '#7f8aa3', rect, '5 5', o*0.6);
+        arc3(gm.foot, 0, stt.beta, L1*1.05, '#ff2d78', rect, 'β', o);
+        var a1=proj(gm.foot,rect), a2=proj(gm.com,rect);
+        svg('line',{x1:a1[0],y1:a1[1],x2:a2[0],y2:a2[1],stroke:'#ff2d78','stroke-width':2.5,'stroke-dasharray':'7 4',opacity:o});
+        arc3(gm.hip, pat.alpha, pat.theta, L2*0.60, '#ff9f1c', rect, 'δ', o);
+        label(gm.com, 'CoM', '#ff2d78', rect, 12, 4).setAttribute('opacity',o);
+      }
+    });
+  }
+  // ⑤ 접기 표시
+  if (s.id==='S5' && stt.phase>0 && stt.phase<4) {
+    arc3(gm.hip, pat.alpha, pat.theta, gp.L2*0.55, '#ff9f1c', rect,
+         'δ = '+(stt.delta*DEG).toFixed(1)+'°', 1);
+    var f=proj(gm.foot,rect), c=proj([gm.com[0],0,gm.foot[2]],rect);
+    svg('line',{x1:f[0],y1:f[1],x2:c[0],y2:c[1],stroke:'#ff2d78','stroke-width':3.4});
+    svg('line',{x1:c[0],y1:c[1]-9,x2:c[0],y2:c[1]+9,stroke:'#ff2d78','stroke-width':2.4});
+    if (stt.phase===1)
+      label([(gm.foot[0]+gm.com[0])/2, 0, gm.foot[2]+0.055], '발이 무게중심을 지나쳐 간다', '#ff2d78', rect, -92, 0);
+  }
+}
+
+/* ==================================================================
+ * 7. 레이아웃
+ * ================================================================== */
+var cpos = document.getElementById('cpos'), cpred = document.getElementById('cpred');
+var paneRect = { c3d:{x:0,y:0,w:10,h:10} };
+function setPane(el, r) {
+  el.style.left=r.x+'px'; el.style.top=r.y+'px'; el.style.width=r.w+'px'; el.style.height=r.h+'px';
+  if (el.tagName==='CANVAS' && el.id!=='c3d') {
+    var d=Math.min(2,window.devicePixelRatio||1);
+    if (el.width!==Math.round(r.w*d)) { el.width=Math.round(r.w*d); el.height=Math.round(r.h*d); }
+  }
+}
+function layout(s, tl) {
+  var W=stage.clientWidth, H=stage.clientHeight, pad=14, L=s.layout||'3d';
+  var r3, rp1=null, rp2=null;
+  if (L==='3d') r3={x:0,y:0,w:W,h:H};
+  else if (L==='3d+both') { var wl=Math.round(W*0.50);
+    r3={x:0,y:0,w:wl,h:H};
+    var hh=Math.round((H-pad*3-60)/2);
+    rp1={x:wl+pad,y:pad,w:W-wl-pad*2,h:hh};
+    rp2={x:wl+pad,y:pad*2+hh,w:W-wl-pad*2,h:hh}; }
+  else if (L==='pred+3d') { var wr=Math.round(W*0.58);
+    rp2={x:pad,y:pad+34,w:wr-pad*1.5,h:H-pad*2-108};
+    r3={x:wr,y:0,w:W-wr,h:H}; rp1={x:-9999,y:0,w:10,h:10}; }
+  else r3={x:0,y:0,w:W,h:H};
+  paneRect.c3d=r3;
+  var hudEl=document.getElementById('hud');
+  hudEl.style.left = (L==='pred+3d' ? (r3.x+14) : 16)+'px';
+  setPane(cv3d,r3);
+  var d=Math.min(2,window.devicePixelRatio||1);
+  if (cv3d.width!==Math.round(r3.w*d)) { renderer.setSize(r3.w,r3.h,false); }
+  camera.aspect = r3.w/Math.max(1,r3.h);
+  if (rp1) setPane(cpos,rp1); if (rp2) setPane(cpred,rp2);
+}
+
+/* ==================================================================
+ * 8. 컨트롤
+ * ================================================================== */
+var scrub=document.getElementById('scrub'), bPlay=document.getElementById('bPlay');
+function play(v){ STATE.playing=(v===undefined)?!STATE.playing:v; bPlay.textContent=STATE.playing?'⏸':'▶';
+  bPlay.classList.toggle('on',STATE.playing); if(STATE.playing) last=performance.now(); }
+var last=performance.now();
+function loop(now){
+  if (STATE.playing){ var dt=Math.min(.12,(now-last)/1000); last=now;
+    var nt=STATE.t+dt*STATE.speed; if(nt>=TOTAL){ nt=TOTAL-1e-3; play(false);} seek(nt); }
+  else last=now;
+  requestAnimationFrame(loop);
+}
+document.getElementById('bPlay').onclick=function(){play();};
+document.getElementById('bFwd').onclick=function(){play(false); seek(STATE.t+1/60);};
+document.getElementById('bBack').onclick=function(){play(false); seek(STATE.t-1/60);};
+document.getElementById('bPrev').onclick=function(){play(false); gotoScene(STATE.scene-1);};
+document.getElementById('bNext').onclick=function(){play(false); gotoScene(STATE.scene+1);};
+document.getElementById('spd').onchange=function(e){ STATE.speed=parseFloat(e.target.value); };
+scrub.oninput=function(){ play(false); seek(parseFloat(scrub.value)/1000*TOTAL); };
+document.getElementById('bHide').onclick=function(){ document.body.classList.toggle('hideui'); onResize(); };
+document.getElementById('bHelp').onclick=function(){ var h=document.getElementById('help');
+  h.style.display = h.style.display==='block'?'none':'block'; };
+document.getElementById('bView').onclick=function(){ free.on=!free.on;
+  this.classList.toggle('on',free.on); seek(STATE.t); };
+function gotoScene(i){ i=Math.max(0,Math.min(SCENES.length-1,i)); seek(T0[i]+0.001); }
+
+var sceneBar=document.getElementById('scenes');
+SCENES.forEach(function(s,i){ var b=document.createElement('div'); b.className='sc'; b.textContent=s.name;
+  b.onclick=function(){ play(false); gotoScene(i); }; sceneBar.appendChild(b); });
+
+document.addEventListener('keydown', function(e){
+  if (e.target.tagName==='INPUT'||e.target.tagName==='SELECT') return;
+  var k=e.key;
+  if (k===' '){ e.preventDefault(); play(); }
+  else if (k==='ArrowRight'){ play(false); seek(STATE.t + (e.shiftKey?0.5:1/60)); }
+  else if (k==='ArrowLeft'){ play(false); seek(STATE.t - (e.shiftKey?0.5:1/60)); }
+  else if (k===']'){ play(false); gotoScene(STATE.scene+1); }
+  else if (k==='['){ play(false); gotoScene(STATE.scene-1); }
+  else if (k==='0'){ play(false); gotoScene(STATE.scene); }
+  else if (k>='1'&&k<='8'){ play(false); gotoScene(parseInt(k,10)-1); }
+  else if (k==='-'||k==='_'){ stepSpeed(-1); }
+  else if (k==='='||k==='+'){ stepSpeed(1); }
+  else if (k==='h'||k==='H'){ document.body.classList.toggle('hideui'); onResize(); }
+  else if (k==='v'||k==='V'){ document.getElementById('bView').click(); }
+  else if (k==='?'||k==='/'){ document.getElementById('bHelp').click(); }
+});
+function stepSpeed(d){ var sel=document.getElementById('spd'); var i=sel.selectedIndex+d;
+  sel.selectedIndex=Math.max(0,Math.min(sel.options.length-1,i)); STATE.speed=parseFloat(sel.value); }
+
+/* 자유 시점 드래그 */
+var drag=null;
+cv3d.addEventListener('mousedown',function(e){ if(!free.on) return; drag={x:e.clientX,y:e.clientY}; });
+window.addEventListener('mousemove',function(e){ if(!drag) return;
+  free.az += (e.clientX-drag.x)*0.35; free.el = Math.max(-60,Math.min(80,free.el+(e.clientY-drag.y)*0.25));
+  drag={x:e.clientX,y:e.clientY}; seek(STATE.t); });
+window.addEventListener('mouseup',function(){ drag=null; });
+cv3d.addEventListener('wheel',function(e){ if(!free.on) return; e.preventDefault();
+  free.dist=Math.max(0.4,Math.min(12,free.dist*(1+e.deltaY*0.0012))); seek(STATE.t); },{passive:false});
+
+function onResize(){ seek(STATE.t); }
+window.addEventListener('resize', onResize);
+
+/* ==================================================================
+ * 9. 시작 — 콘솔에 모델 검산 출력
+ * ================================================================== */
+console.log('[모델 · 로봇 실측정본]',
+  'λ_u='+M.lam_u.toFixed(4), 'A=0 기울기='+M.slopeA0.toFixed(4),
+  'CoM 등고선='+M.slopeCoM.toFixed(4), 'γ_fold='+M.GAMMA_FOLD.toFixed(2),
+  'γ_cycle='+M.GAMMA_CYCLE.toFixed(2), 'ε*='+M.eps_star.toFixed(3),
+  'T_osc='+M.T_osc.toFixed(3)+'s');
+console.log('[구조검산] M[φ,δ]/M00=', M.check.Mphidelta, ' G[φ,δ]=', M.check.Gphidelta, ' G[β,δ]=', M.check.Gbetadelta);
+window.__seek = seek;                    // ★ 오프라인 렌더러가 부르는 계약
+window.__total = TOTAL;
+window.__scenes = SCENES.map(function(s,i){ return {id:s.id,name:s.name,t0:T0[i],dur:s.dur}; });
+seek(0); requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -101,9 +101,9 @@ class Plant:
         g = np.asarray(_FG(*a), float).ravel()
         p = self.p
         dd = x[5] - x[4]
-        tau_hip_fric = p["B_THETA"] * dd + p["TAU_C_HIP"] * np.tanh(dd / EPS_V)
+        tau_hip_fric = p["B_THETA"] * dd + p.get("TAU_C_HIP", 0.045) * np.tanh(dd / EPS_V)
         Q = np.array([
-            -p["c_phi"] * x[3] - p["tau_coulomb"] * np.tanh(x[3] / EPS_V),
+            -p["c_phi"] * x[3] - p.get("tau_coulomb", 3.105e-4) * np.tanh(x[3] / EPS_V),
             -tau + tau_hip_fric,
             +tau - tau_hip_fric,
         ])
@@ -130,7 +130,7 @@ def servo_tau(tau_cmd, deltad, tau_lim, w_nl):
 # [2] 선형화 검산 — 비선형 EOM ↔ model_v19
 # ============================================================
 def check_linearization(p, mdl):
-    pl = Plant(p, p["I_ARM"])
+    pl = Plant(p, 0.0)
     a0 = tuple([0.0] * 6) + pl.pars
     Mn = np.asarray(_FM(*a0), float)
     eps = 1e-6
@@ -206,7 +206,7 @@ def feasible_Tf(p, mdl, i_arm, cur_unit, A_design_deg=1.0, margin=0.8):
     """γ_cycle(Tf) 는 Tf 가 길수록 커지고, 요구 가속도는 δf/Tf² — 고정점을 찾는다."""
     I_d = p["I2_cm"] + p["m2"] * p["ell2"]**2 + i_arm
     tau_lim = cur_unit * p["CUR_UNIT"] / 1000.0 * p["KT"]
-    a_av = margin * (tau_lim - p["TAU_C_HIP"]) / I_d          # [rad/s²]
+    a_av = margin * (tau_lim - p.get("TAU_C_HIP", 0.045)) / I_d          # [rad/s²]
     v_av = 0.83 * np.deg2rad(p["W_NOLOAD_DPS"])
     A = np.deg2rad(A_design_deg)
     Tf = p["T_FOLD"]; Tw, Trest = p["T_WAIT"], p["T_REST"]
@@ -263,7 +263,7 @@ def _A_of(x, p1r, p2r, w4):
 def _one_cycle(pl, p, fz, x, df, tau_lim, dt=2e-4):
     """x 에서 δf 로 한 사이클(F-W-E-R) 실행 → 종료 상태"""
     Tf, Te = fz["Tf"], fz["Te"]; Tw, Trest = p["T_WAIT"], p["T_REST"]
-    I_dN = p["I2_cm"] + p["m2"] * p["ell2"]**2 + p["I_ARM"]
+    I_dN = p["I2_cm"] + p["m2"] * p["ell2"]**2 + p.get("I_ARM", 0.003)
     Kp, Kd = I_dN * SERVO_WN**2, 2 * SERVO_WN * I_dN
     w_nl = np.deg2rad(p["W_NOLOAD_DPS"])
     for ph, dur in (("F", Tf), ("W", Tw), ("E", Te), ("R", Trest)):
@@ -337,9 +337,9 @@ def main():
     gains = gains_nominal(p, mdl)   # 게인은 공칭 모델로 고정 (실물과 같은 조건)
 
     lines = ["# v20 결과 — 실측 모델 비선형 시뮬 (2026-07-31)", ""]
-    lines.append(f"공칭: I_δ={p['I2_cm']+p['m2']*p['ell2']**2+p['I_ARM']:.4f} kg·m² "
-                 f"(링크 {p['I2_cm']+p['m2']*p['ell2']**2:.4f} + armature {p['I_ARM']}) / "
-                 f"힙 쿨롱 {p['TAU_C_HIP']} N·m / λ_u={mdl['lam_u']:.2f} /s")
+    lines.append(f"공칭: I_δ={p['I2_cm']+p['m2']*p['ell2']**2+p.get('I_ARM', 0.003):.4f} kg·m² "
+                 f"(링크 {p['I2_cm']+p['m2']*p['ell2']**2:.4f} + armature {p.get('I_ARM', 0.003)}) / "
+                 f"힙 쿨롱 {p.get('TAU_C_HIP', 0.045)} N·m / λ_u={mdl['lam_u']:.2f} /s")
     lines.append("")
 
     # FWE 설계점: 트리거 0.3° (0.6°는 접기각이 커져 Tf 고정점이 수축한계에 걸림)

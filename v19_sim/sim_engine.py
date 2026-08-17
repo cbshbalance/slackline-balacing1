@@ -102,6 +102,8 @@ REAL_DEFAULT = dict(
     fwe_async_vret_dps = 3.0, # [°/s] 저속 복귀 속도. 상한 v < λ·A_여유/킥계수 ≈ 6°/s —
                           #   45°/s 로 되돌리면 복귀가 만든 위험도만으로 초당 수 회 재트리거(자기교란).
     fwe_async_hold_min_deg = 1.0,  # 이 각도 이하로 복귀하면 멈춤(데드밴드)
+    fwe_async_fixed_deg = 0.0,  # ★[2026-08-14 추가] >0 이면 증분을 Δδ = 이 각도 × sign(A) 로 고정
+                          #   (0 = 기존 비례 Δδ = ρ·γ·A). '고정 vs 비례' 판정 실험용.
     armature_plant_scale = 1.0,  # 플랜트측 armature 배율 (제어기 비공개 — 미지 모델오차 실험용)
     gear_eta = 1.0,       # ★기어 전달효율 η (부하 비례 마찰의 방향 비대칭).
                           #   모터가 일할 때(τ·δ̇>0) τ→η·τ, 역구동/제동 시 τ→τ/η (η_back=2−1/η 물리).
@@ -152,6 +154,11 @@ class SimEngine:
         rope = {k: dict(v=p[k]) for k in
                 ("crank_m_each", "crank_L", "bottom_m", "top_socket_m", "top_socket_ell", "R")}
         p["I_r"], p["S_r"], p["m_rope"] = P.calc_rope_inertia(rope)
+        # ★[2026-08-14] nominal 에 I_r/S_r 이 직접 있으면 부품표 계산을 덮는다
+        #   (실측 정본 세트 적용용 — I_r 은 저울, S_r 은 자유흔들기 omega_n 에서 나온 값)
+        for _k in ("I_r", "S_r"):
+            if _k in self.nominal:
+                p[_k] = float(self.nominal[_k])
         if self.nominal.get("I1_cm") is None or "I1_cm" not in self.nominal:
             p["I1_cm"] = p["m1"]*p["L1"]**2/12
             p["I2_cm"] = p["m2"]*p["L2"]**2/12
@@ -562,7 +569,8 @@ class SimEngine:
 
         if fwe["phase"] == PH_IDLE:
             if fwe["armed"] and abs(A) > trig:
-                inc = p["RHO"] * r["fwe_async_gamma"] * A
+                fx = r.get("fwe_async_fixed_deg", 0.0)      # ★고정증분 옵션
+                inc = (np.deg2rad(fx)*np.sign(A)) if fx > 0 else p["RHO"]*r["fwe_async_gamma"]*A
                 new = float(np.clip(fwe["hold"] + inc, -dmax, dmax))
                 if abs(new - (fwe["hold"] + inc)) > 1e-9:
                     fwe["n_sat"] += 1                      # 관절 한계 포화

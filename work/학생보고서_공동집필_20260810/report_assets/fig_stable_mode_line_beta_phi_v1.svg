@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1200" viewBox="0 0 1400 1200">
+  <defs>
+    <marker id="axis-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#172033"/>
+    </marker>
+    <marker id="green-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#168a50"/>
+    </marker>
+    <style>
+      .kr { font-family: "Malgun Gothic", "Noto Sans CJK KR", sans-serif; }
+      .math { font-family: "Cambria Math", "STIX Two Math", serif; }
+      .tick { font-size: 26px; fill: #475569; }
+      .axis-label { font-size: 34px; font-weight: 600; fill: #172033; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="1200" fill="#ffffff"/>
+
+  <text x="700" y="62" text-anchor="middle" class="kr" font-size="38" font-weight="600" fill="#172033">정지 출발에서의 안정모드선</text>
+  <text x="700" y="105" text-anchor="middle" class="kr" font-size="25" fill="#64748b">(β, φ) 위치 평면 · R = 0.7 m</text>
+
+  <!-- plot frame: beta, phi are both -12 to +12 degrees -->
+  <rect x="220" y="150" width="900" height="900" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- neutral grid -->
+  <g stroke="#dbe3ec" stroke-width="2">
+    <line x1="295" y1="150" x2="295" y2="1050"/>
+    <line x1="482.5" y1="150" x2="482.5" y2="1050"/>
+    <line x1="857.5" y1="150" x2="857.5" y2="1050"/>
+    <line x1="1045" y1="150" x2="1045" y2="1050"/>
+    <line x1="220" y1="225" x2="1120" y2="225"/>
+    <line x1="220" y1="412.5" x2="1120" y2="412.5"/>
+    <line x1="220" y1="787.5" x2="1120" y2="787.5"/>
+    <line x1="220" y1="975" x2="1120" y2="975"/>
+  </g>
+
+  <!-- coordinate axes through the origin -->
+  <line x1="220" y1="600" x2="1150" y2="600" stroke="#172033" stroke-width="4" marker-end="url(#axis-arrow)"/>
+  <line x1="670" y1="1050" x2="670" y2="120" stroke="#172033" stroke-width="4" marker-end="url(#axis-arrow)"/>
+
+  <!-- ticks -->
+  <g stroke="#172033" stroke-width="3">
+    <line x1="295" y1="591" x2="295" y2="609"/>
+    <line x1="482.5" y1="591" x2="482.5" y2="609"/>
+    <line x1="857.5" y1="591" x2="857.5" y2="609"/>
+    <line x1="1045" y1="591" x2="1045" y2="609"/>
+    <line x1="661" y1="225" x2="679" y2="225"/>
+    <line x1="661" y1="412.5" x2="679" y2="412.5"/>
+    <line x1="661" y1="787.5" x2="679" y2="787.5"/>
+    <line x1="661" y1="975" x2="679" y2="975"/>
+  </g>
+
+  <!-- numeric tick labels -->
+  <g class="math tick">
+    <text x="295" y="638" text-anchor="middle">−10</text>
+    <text x="482.5" y="638" text-anchor="middle">−5</text>
+    <text x="686" y="638">0</text>
+    <text x="857.5" y="638" text-anchor="middle">5</text>
+    <text x="1045" y="638" text-anchor="middle">10</text>
+
+    <text x="647" y="234" text-anchor="end">10</text>
+    <text x="647" y="421.5" text-anchor="end">5</text>
+    <text x="647" y="796.5" text-anchor="end">−5</text>
+    <text x="647" y="984" text-anchor="end">−10</text>
+  </g>
+
+  <!-- stable-mode line phi = -2.12 beta; clipped by phi = +/-12 -->
+  <line x1="457.74" y1="150" x2="882.26" y2="1050" stroke="#168a50" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="557.5" cy="361.5" r="8" fill="#168a50"/>
+  <circle cx="782.5" cy="838.5" r="8" fill="#168a50"/>
+
+  <!-- direct line annotation -->
+  <path d="M 888 285 C 770 292, 665 315, 574 354" fill="none" stroke="#168a50" stroke-width="3" marker-end="url(#green-arrow)"/>
+  <rect x="850" y="205" width="380" height="126" rx="12" fill="#ffffff" stroke="#168a50" stroke-width="2"/>
+  <text x="1040" y="245" text-anchor="middle" class="kr" font-size="29" font-weight="600" fill="#168a50">안정모드선</text>
+  <text x="1040" y="286" text-anchor="middle" class="math" font-size="31" fill="#168a50">φ = rβ</text>
+  <text x="1040" y="318" text-anchor="middle" class="math" font-size="24" fill="#475569">r = −2.12</text>
+
+  <!-- unmistakable axis quantities -->
+  <text x="1172" y="588" class="math axis-label" font-size="48">β</text>
+  <text x="687" y="124" class="math axis-label" font-size="48">φ</text>
+  <text x="670" y="1132" text-anchor="middle" class="kr axis-label">β : 가중 무게중심 기울기 [°]</text>
+  <text x="78" y="600" text-anchor="middle" class="kr axis-label" transform="rotate(-90 78 600)">φ : 줄·발의 흔들림 각 [°]</text>
+
+  <text x="1000" y="1016" text-anchor="middle" class="kr" font-size="25" fill="#475569">β와 φ의 부호가 반대인 엇갈림 운동</text>
+</svg>
