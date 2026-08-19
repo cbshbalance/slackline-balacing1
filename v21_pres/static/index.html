@@ -59,6 +59,12 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
    <canvas id="c3d"></canvas>
    <img id="ovImg" src="/media/jultagi_photo.png" alt=""
         style="position:absolute;left:0;top:0;width:100%;height:100%;display:none;pointer-events:none">
+   <div id="ovVidWrap" style="position:absolute;overflow:hidden;display:none;pointer-events:none">
+    <video id="ovVid" muted playsinline preload="auto" style="position:absolute;left:0;top:0">
+     <source src="/media/jultagi_49s.webm" type="video/webm">
+     <source src="/media/jultagi_49s.mp4" type="video/mp4">
+    </video>
+   </div>
    <div id="overlay"></div>
    <div id="fallen">낙하!</div>
    <div class="viewbtns">
@@ -81,6 +87,8 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
   </div>
   <label class="chk" style="margin:0;font-size:11.5px;opacity:.9">
    <input type="checkbox" id="cShowEst" checked>추정점 표시 (로봇이 보는 값)</label>
+  <label class="chk" style="margin:2px 0 0;font-size:11.5px;opacity:.9">
+   <input type="checkbox" id="cSpikeClean" checked>접기 스파이크 정리 — 접기·REST 중 <b>참값</b>을 예측점 평면에서 숨김 (접기 β̇ 킥이 예측점을 튕기는 실제 물리 · 표시만 정리, 판정·물리 불변)</label>
   <label class="chk" style="margin:2px 0 0;font-size:11.5px;opacity:.9">
    <input type="checkbox" id="cPick" checked>🖱 평면 집기 — <b>원위치 평면</b>에서 hover=자세·클릭=시작 · Shift=모드선 위 · Alt=수직</label>
   <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
@@ -142,8 +150,14 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
     <input type="range" id="sJFy" min="-7" max="7" step="0.05" value="2.75"></div>
    <div class="sl"><div class="lab"><span>사람 → 로봇 모프</span><span class="v" id="vJM">0.00</span></div>
     <input type="range" id="sJM" min="0" max="1" step="0.01" value="0"></div>
-   <div class="row"><button class="btn" id="bOvFade">크로스페이드</button><button class="btn" id="bOvMorph">축소 모프</button><button class="btn" id="bOvSeq" style="border-color:#3a86ff;font-weight:bold">▶ 시퀀스</button></div>
-   <div class="hint">▶ 시퀀스 = 사진만 → 크로스페이드 → 기둥 간격 60 cm 축소 모프 → v19 로봇 화면.</div>
+   <div class="row"><button class="btn on" id="bOvMedP">미디어: 사진</button><button class="btn" id="bOvMedV">영상 (49s)</button><button class="btn" id="bVidPlay" style="flex:0 0 46px">▶/⏸</button></div>
+   <div class="sl"><div class="lab"><span>영상 정지 시점 t* (s)</span><span class="v" id="vVts">6.30</span></div>
+    <input type="range" id="sVts" min="0" max="49" step="0.05" value="6.30"></div>
+   <div class="sl"><div class="lab"><span>기둥·줄 두께 배율</span><span class="v" id="vOvThk">1.80</span></div>
+    <input type="range" id="sOvThk" min="0.6" max="3.5" step="0.1" value="1.8"></div>
+   <div class="row"><button class="btn" id="bOvFade">크로스페이드</button><button class="btn" id="bOvMorph">축소 모프</button></div>
+   <div class="row"><button class="btn" id="bOvSeqV" style="background:linear-gradient(135deg,#7b2ff7,#3a86ff);color:#fff;font-weight:bold">▶ 영상 시퀀스</button><button class="btn" id="bOvSeq" style="border-color:#3a86ff">▶ 사진 시퀀스</button></div>
+   <div class="hint">▶ 영상 시퀀스 = 영상 재생 → <b>t*(6.3 s) 정지</b> → 모델 오버랩(0.7 s) → <b>3 s 겹친 채 모델 진동</b> → 실사 페이드아웃 → 기둥 60 cm 축소 모프 → v19 로봇 화면. 시작 시 ★★실측 프리셋으로 시뮬 재생.</div>
    <div class="hint" id="ovCamInfo">az — · el — · dist —</div>
    <div class="row"><input id="iScName" type="text" value="my_scene" style="flex:1;background:#0d1117;color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:3px 6px;font-size:11px">
     <button class="btn" id="bScSave" style="flex:0 0 52px">저장</button><button class="btn" id="bScLoad" style="flex:0 0 62px">불러옴</button></div>
@@ -413,17 +427,20 @@ rebuildRobot();
 
 // ============================== [v21 2] 실사 오버랩 ==============================
 const OV = {
-  mode:'none', opa:0.85, gray:false, sceneOn:false, morphT:0,
-  gHum:{D:11.59, Hs:2.49, R:0.70, L1:0.85, L2:0.87, footY:2.75, sag:0.149},
+  mode:'none', opa:0.85, gray:false, sceneOn:false, morphT:0, media:'photo', thk:1.8,
+  gHum:{D:11.59, Hs:2.49, R:0.70, L1:0.703, L2:1.017, footY:2.75, sag:0.149},   // L1:L2 = 로봇 비율(0.259:0.375), 합 1.72
   gRob:{D:0.60,  Hs:1.245, R:0.433, L1:0.259, L2:0.375, footY:0.0, sag:0.433},
   cams:null, anim:null, photo:'/media/jultagi_photo.png', pw:666, ph:494,
 };
+// [v21 영상] 사진 = 세로영상(1080x1920)의 t*=6.3 s 프레임에서 y 607~1407 전폭 밴드 (NCC 매칭 8/18)
+const VM = {vw:1080, vh:1920, cx:0, cy:607, cw:1080, ch:800, tPause:6.30};
 // 8/17 사진 정합 결과 (문서 56 E6-가, 재투영 잔차 ~2 px)
 const SCENE_JULTAGI = {
   camera:{az:140.61, el:-5.42, dist:15.19, fov:30.0, roll:-3.01, ty:2.33, tz:2.86},
-  geom:{D:11.59, Hs:2.49, R:0.70, L1:0.85, L2:0.87, footY:2.75, sag:0.149},
+  geom:{D:11.59, Hs:2.49, R:0.70, L1:0.703, L2:1.017, footY:2.75, sag:0.149},
   photo:'/media/jultagi_photo.png'
 };
+const ovVid = el("ovVid"), ovVidWrap = el("ovVidWrap");
 const CAM_ROBOT = {az:51.6, el:20.1, dist:2.6, fov:42, roll:0, ty:0, tz:0.85};  // v19 기본 뷰
 const ovImg = el("ovImg");
 ovImg.onload = ()=>{ OV.pw=ovImg.naturalWidth||666; OV.ph=ovImg.naturalHeight||494; };
@@ -451,44 +468,59 @@ function jBuild(){
   const foot=[g.R*Math.sin(f), g.footY, axZ-g.R*Math.cos(f)];
   const hip =[foot[0]+g.L1*Math.sin(al), g.footY, foot[2]+g.L1*Math.cos(al)];
   const head=[hip[0]+g.L2*Math.sin(th),  g.footY, hip[2]+g.L2*Math.cos(th)];
-  const pr=0.010+0.008*(g.Hs/2.5);
+  const pr=(0.010+0.008*(g.Hs/2.5))*OV.thk;                       // 두께 배율 (실사 위 가독성)
   jG.add(jrod([0,-g.D/2,0],[0,-g.D/2,g.Hs],pr,0x555a63));       // 기둥 2
   jG.add(jrod([0, g.D/2,0],[0, g.D/2,g.Hs],pr,0x555a63));
-  jG.add(jrod([0,-g.D/2,g.Hs],foot,pr*0.45,0x23262b));           // 줄 (두 토막)
-  jG.add(jrod(foot,[0, g.D/2,g.Hs],pr*0.45,0x23262b));
-  jG.add(jrod(foot,hip, Math.max(g.L1*0.075,0.012), 0x06b98c));  // 하체
-  jG.add(jrod(hip,head, Math.max(g.L2*0.065,0.011), 0x7a35d6));  // 상체
-  const hd=new THREE.Mesh(new THREE.BoxGeometry(g.L2*0.10,g.L2*0.26,g.L2*0.12),jmat(0xf2c14e));
-  hd.position.set(head[0]+0.05*g.L2*Math.sin(th), g.footY, head[2]+0.05*g.L2*Math.cos(th));
+  jG.add(jrod([0,-g.D/2,g.Hs],foot,pr*0.5,0x23262b));            // 줄 (두 토막)
+  jG.add(jrod(foot,[0, g.D/2,g.Hs],pr*0.5,0x23262b));
+  // 몸: v19 로봇과 같은 비율·색 (하체 0.147L1x0.309L1 / 상체 0.101L2x0.240L2 / 머리·힙·발 규약 동일)
+  function jbox(w,d,h,c){ return new THREE.Mesh(new THREE.BoxGeometry(w,d,h), jmat(c)); }
+  const lb=jbox(0.147*g.L1, 0.309*g.L1, g.L1, 0x06b98c);
+  lb.position.set((foot[0]+hip[0])/2, g.footY, (foot[2]+hip[2])/2); lb.rotation.y=al; jG.add(lb);
+  const ub=jbox(0.101*g.L2, 0.240*g.L2, g.L2, 0x7a35d6);
+  ub.position.set((hip[0]+head[0])/2, g.footY, (hip[2]+head[2])/2); ub.rotation.y=th; jG.add(ub);
+  const hd=jbox(0.101*g.L2, 0.261*g.L2, 0.123*g.L2, 0xf2c14e);
+  hd.position.set(head[0]+0.062*g.L2*Math.sin(th), g.footY, head[2]+0.062*g.L2*Math.cos(th));
   hd.rotation.y=th; jG.add(hd);
-  const hpr=Math.max(0.05*g.L1,0.010);
-  const hp=new THREE.Mesh(new THREE.CylinderGeometry(hpr,hpr,Math.max(g.L1*0.42,0.06),12),jmat(0xffbe0b));
+  const hpr=0.062*g.L1;
+  const hp=new THREE.Mesh(new THREE.CylinderGeometry(hpr,hpr,0.50*g.L1,14),jmat(0xffbe0b));
   hp.position.set(hip[0],g.footY,hip[2]); jG.add(hp);
-  const ft=new THREE.Mesh(new THREE.SphereGeometry(Math.max(0.05*g.L1,0.012),12,8),jmat(0xe6a817));
+  const ft=new THREE.Mesh(new THREE.SphereGeometry(0.05*g.L1,12,8),jmat(0xe6a817));
   ft.position.set(foot[0],g.footY,foot[2]); jG.add(ft);
 }
 function ovLayout(){
   const simEl=document.querySelector('.sim');
   const active=OV.mode!=='none';
-  ovImg.style.display=active? 'block':'none';
+  const isVid = OV.media==='video';
+  ovImg.style.display = (active && !isVid)? 'block':'none';
+  ovVidWrap.style.display = (active && isVid)? 'block':'none';
   if(!active){
     canvas.style.position=''; canvas.style.left=''; canvas.style.top='';
     canvas.style.width='100%'; canvas.style.height='100%'; canvas.style.zIndex='';
     return;
   }
-  const W=simEl.clientWidth, H=simEl.clientHeight, ar=OV.pw/OV.ph;
+  const ar = isVid? VM.cw/VM.ch : OV.pw/OV.ph;    // 영상은 크롭 밴드 종횡비 (사진과 동일 시야 → 카메라 그대로)
+  const W=simEl.clientWidth, H=simEl.clientHeight;
   let w=W, h=W/ar; if(h>H){h=H; w=H*ar;}
   const L=(W-w)/2, T=(H-h)/2;
-  [canvas, ovImg].forEach(e2=>{ e2.style.position='absolute';
+  const lay = isVid? ovVidWrap : ovImg;
+  [canvas, lay].forEach(e2=>{ e2.style.position='absolute';
     e2.style.left=L+'px'; e2.style.top=T+'px';
     e2.style.width=w+'px'; e2.style.height=h+'px'; });
-  ovImg.style.zIndex = OV.mode==='front'? 3 : 0;
+  if(isVid){                                       // 크롭: 원영상을 확대·이동해 t* 밴드만 보이게
+    const k = w/VM.cw;
+    ovVid.style.width  = (VM.vw*k)+'px';
+    ovVid.style.height = (VM.vh*k)+'px';
+    ovVid.style.left   = (-VM.cx*k)+'px';
+    ovVid.style.top    = (-VM.cy*k)+'px';
+  }
+  lay.style.zIndex = OV.mode==='front'? 3 : 0;
   canvas.style.zIndex = 1;
-  ovImg.style.opacity = OV.opa;
-  ovImg.style.filter = OV.gray? 'grayscale(1) contrast(1.05)':'none';
+  lay.style.opacity = OV.opa;
+  lay.style.filter = OV.gray? 'grayscale(1) contrast(1.05)':'none';
 }
 function easeIO(t){ return t<0.5? 2*t*t : 1-2*(1-t)*(1-t); }
-function ovStartAnim(kind,dur,next){ OV.anim={kind,dur,next,t0:performance.now()}; }
+function ovStartAnim(kind,dur,next,from,to){ OV.anim={kind,dur,next,from,to,t0:performance.now()}; }
 function ovSetFovRoll(fovDeg, rollDeg){
   camFov=fovDeg; camRoll=rollDeg*Math.PI/180;
   camera.fov=camFov; camera.updateProjectionMatrix();
@@ -525,14 +557,35 @@ function ovExit(){
   target.set(0, CAM_ROBOT.ty, CAM_ROBOT.tz); ovSetFovRoll(42,0); camUpdate();
 }
 function ovSequence(){
-  ovApplyScene(SCENE_JULTAGI); OV.opa=1.0;
-  setTimeout(()=>ovStartAnim('fade',2000,
-    ()=>setTimeout(()=>ovStartAnim('morph',5000,null),400)),800);
+  ovApplyScene(SCENE_JULTAGI); OV.media='photo'; OV.opa=1.0;
+  setTimeout(()=>ovStartAnim('fadeTo',2000,
+    ()=>setTimeout(()=>ovStartAnim('morph',5000,null),400),1,0),800);
+}
+let vseqTimer=null;
+function ovSequenceVideo(){
+  // 영상 재생 → t* 정지 → 오버랩 진입(0.7s, 1→0.55) → 3s 겹침(모델 진동) → 실사 아웃(1.5s) → 축소 모프
+  send({cmd:"fwe_async_preset_measured"});          // 겹칠 때 모델이 증분접기로 진동 중이도록
+  ovApplyScene(SCENE_JULTAGI);
+  OV.media='video'; OV.opa=1.0; OV.anim=null;
+  VM.tPause = +el("sVts").value || VM.tPause;
+  try{ ovVid.currentTime = 0; }catch(err){}
+  ovVid.play();
+  if(vseqTimer) clearInterval(vseqTimer);
+  vseqTimer=setInterval(()=>{
+    if(ovVid.currentTime >= VM.tPause){
+      ovVid.pause(); clearInterval(vseqTimer); vseqTimer=null;
+      ovStartAnim('fadeTo',700,
+        ()=>setTimeout(()=>ovStartAnim('fadeTo',1500,
+          ()=>setTimeout(()=>ovStartAnim('morph',5000,null),300),0.55,0),3000),
+        1,0.55);
+    }
+  },40);
 }
 function ovTick(){
   if(OV.anim){
     const a=OV.anim, t=Math.min(1,(performance.now()-a.t0)/a.dur), sE=easeIO(t);
     if(a.kind==='fade') OV.opa=1-sE;
+    else if(a.kind==='fadeTo') OV.opa = a.from + (a.to-a.from)*sE;
     else if(a.kind==='morph'){
       OV.morphT=sE;
       const c0=OV.cams||SCENE_JULTAGI.camera, c1=CAM_ROBOT;
@@ -626,8 +679,11 @@ function drawPlane(ctx, opts){
   const t1=hist.length? hist[hist.length-1][0] : 0, t0=t1-PLTRAIL;
   // 범위: 접기 순간의 스파이크가 스케일을 다 먹지 않도록 85 백분위 기준.
   //      트리거 띠(±A_trig/w_φ)가 항상 보이도록 하한을 둔다.
+  const sclean = opts.spikeClean && el("cSpikeClean") && el("cSpikeClean").checked;
   const vals=[];
-  for(const p of hist){ if(p[0]<t0) continue; vals.push(Math.abs(p[ib]), Math.abs(p[ip])); }
+  for(const p of hist){ if(p[0]<t0) continue;
+    if(sclean && p.length>19 && p[19]>=1) continue;     // fold/rest 는 범위 산정에서도 제외
+    vals.push(Math.abs(p[ib]), Math.abs(p[ip])); }
   vals.sort((a,b)=>a-b);
   const p85 = vals.length? vals[Math.floor(vals.length*0.85)] : 1.0;
   let m = Math.max(p85*1.6, opts.min||2.0);
@@ -692,10 +748,11 @@ function drawPlane(ctx, opts){
     ctx.stroke(); ctx.setLineDash([]);
   }
 
-  // --- 궤적 (참) ---
+  // --- 궤적 (참) --- (스파이크 정리 시 fold/rest 구간은 선을 끊는다)
   ctx.strokeStyle="rgba(255,255,255,.42)"; ctx.lineWidth=1.5*DPR; ctx.beginPath();
   let first=true;
   for(const p of hist){ if(p[0]<t0) continue;
+    if(sclean && p.length>19 && p[19]>=1){ first=true; continue; }
     const x=X(p[ib]), y=Y(p[ip]); if(first){ctx.moveTo(x,y);first=false;} else ctx.lineTo(x,y); }
   ctx.stroke();
 
@@ -703,8 +760,11 @@ function drawPlane(ctx, opts){
   //   흰색 = 대기(문턱 아래, 무개입) / 분홍 = 증분 접기 실행 중. 판정은 하늘색 링.
   if(lastView && lastView.pl && lastView.pl.length > opts.pli+1){
     const cb=lastView.pl[opts.pli], cf=lastView.pl[opts.pli+1];
+    const inFold = (lastView.fwe==="fold"||lastView.fwe==="rest");
+    ctx.globalAlpha = (sclean && inFold)? 0.22 : 1.0;   // 접기 중 참값점은 흐리게 (물리 그대로, 표시만)
     ctx.fillStyle = (lastView.fwe==="fold")? "#ff006e" : "#ffffff";
     ctx.beginPath(); ctx.arc(X(cb),Y(cf), 3.6*DPR, 0, 7); ctx.fill();
+    ctx.globalAlpha = 1.0;
     if(showEst && lastView.plh && lastView.plh.length > opts.pli+1){
       const eb=lastView.plh[opts.pli], ef=lastView.plh[opts.pli+1];
       ctx.strokeStyle="rgba(76,201,240,.55)"; ctx.lineWidth=1.0*DPR;
@@ -796,7 +856,7 @@ step ${v.step}`;
   if(PL){
     drawPlane(P1,{id:'pl1', pick:true, pli:0, ib:11,ip:12,ibh:15,iph:16, slope:PL.r, lineColor:"#06d6a0", dashed:true,
                   lineLab:"안정모드선 φ=r·β", xlab:"β", ylab:"φ"});
-    drawPlane(P2,{id:'pl2', pli:2, ib:13,ip:14,ibh:17,iph:18, slope:PL.slopeA0, lineColor:"#06d6a0", dashed:false,
+    drawPlane(P2,{id:'pl2', pli:2, spikeClean:true, ib:13,ip:14,ibh:17,iph:18, slope:PL.slopeA0, lineColor:"#06d6a0", dashed:false,
                   lineLab:"초록 A=0 · 노랑 트리거 ±"+el("vTrig").textContent+"°",
                   xlab:"β_pred", ylab:"φ_pred", showTrig:true});
   }
@@ -930,6 +990,17 @@ el("bOvScene").onclick=()=>ovApplyScene(SCENE_JULTAGI);
 el("bOvFade").onclick=()=>{ if(OV.mode==='none') ovMode('front','bOvFront'); OV.opa=1; ovStartAnim('fade',2000,null); };
 el("bOvMorph").onclick=()=>{ if(!OV.sceneOn){ el("cJScene").checked=true; OV.sceneOn=true; } ovStartAnim('morph',5000,null); };
 el("bOvSeq").onclick=()=>ovSequence();
+el("bOvSeqV").onclick=()=>ovSequenceVideo();
+function ovMedia(md,btn){ OV.media=md;
+  ["bOvMedP","bOvMedV"].forEach(id=>el(id).classList.remove("on")); el(btn).classList.add("on"); }
+el("bOvMedP").onclick=()=>ovMedia('photo','bOvMedP');
+el("bOvMedV").onclick=()=>ovMedia('video','bOvMedV');
+el("bVidPlay").onclick=()=>{ if(OV.media!=='video') ovMedia('video','bOvMedV');
+  if(ovVid.paused) ovVid.play(); else ovVid.pause(); };
+slider("sVts","vVts",v=>v.toFixed(2),()=>{}); el("sVts").addEventListener("input",()=>{
+  VM.tPause=+el("sVts").value;
+  if(OV.media==='video' && ovVid.paused){ try{ ovVid.currentTime=VM.tPause; }catch(err){} } });
+slider("sOvThk","vOvThk",v=>v.toFixed(2),()=>{}); el("sOvThk").addEventListener("input",()=>{ OV.thk=+el("sOvThk").value; });
 el("cOvGray").onchange=e=>{ OV.gray=e.target.checked; };
 el("cJScene").onchange=e=>{ OV.sceneOn=e.target.checked; };
 slider("sOvOpa","vOvOpa",v=>v.toFixed(2),()=>{}); el("sOvOpa").addEventListener("input",()=>{ OV.opa=+el("sOvOpa").value; });

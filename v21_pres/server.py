@@ -25,6 +25,7 @@ from sim_engine import SimEngine
 PORT = int(os.environ.get("V21_PORT", "8210"))   # 병행 실행·테스트용 오버라이드
 TICK = 1.0 / 30.0          # 프레임 전송 주기
 GRAPH_DECIM_FAST = 4       # 실속도 재생 시 그래프 데시메이션 (125Hz)
+PHC = {"idle": 0, "fold": 1, "rest": 2}   # [v21] hist 19번 열: FWE 위상 코드
 
 # 리빌드(모델 재컴파일·게인 재계산)가 필요한 현실화 키
 REAL_REBUILD = {"f_phi", "c_phi_extra", "f_ankle", "b_ankle",
@@ -53,10 +54,11 @@ class SimServer:
                 round(f["tau_act"], 4), f["cur"],
                 round(np.rad2deg(xh[1]), 4), round(np.rad2deg(xh[2]), 4)]  \
                + [round(np.rad2deg(v), 4) for v in e.plane_pt(x)] \
-               + [round(np.rad2deg(v), 4) for v in e.plane_pt(xh)]
+               + [round(np.rad2deg(v), 4) for v in e.plane_pt(xh)] \
+               + [PHC.get(e.fwe["phase"], 3)]
         # 인덱스: 0 t / 1 φ / 2 α / 3 θ / 4 δ / 5 A / 6 Ae / 7 τ / 8 cur / 9 α̂ / 10 θ̂
         #        11 β 12 φ 13 β_pred 14 φ_pred      (참)
-        #        15 β̂ 16 φ̂ 17 β̂_pred 18 φ̂_pred     (추정)
+        #        15 β̂ 16 φ̂ 17 β̂_pred 18 φ̂_pred     (추정) / 19 위상코드(0 idle 1 fold 2 rest)
 
     def view_msg(self):
         e = self.eng
