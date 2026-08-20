@@ -22,8 +22,8 @@ body{background:var(--bg);color:var(--fg);font-family:'Segoe UI','Malgun Gothic'
 .viewbtns{position:absolute;bottom:10px;right:10px;display:flex;gap:4px}
 .graphs{flex:2;display:flex;flex-direction:column;min-height:120px}
 .graphs canvas{flex:1;width:100%;min-height:0}
-.planes{width:340px;display:flex;flex-direction:column;gap:8px;padding:8px;border-left:1px solid var(--border);background:#0f131b}
-.plbox{flex:1;display:flex;flex-direction:column;min-height:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#10141d}
+.planes{width:340px;display:flex;flex-direction:column;gap:8px;padding:8px;border-left:1px solid var(--border);background:#0f131b;overflow-y:auto}
+.plbox{flex:1;display:flex;flex-direction:column;min-height:210px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#10141d}
 .plbox .ttl{font-size:11.5px;padding:5px 9px;color:var(--cyan);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline}
 .plbox .ttl small{color:var(--dim);font-size:10px;font-weight:normal}
 .plbox .ttl .plbtns{display:flex;gap:3px;margin-left:6px}
@@ -117,6 +117,17 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
    <div style="font-size:10px;color:var(--dim);margin-top:2px">β̂ 재구성 P2R 실측 0.417 (문서 57) · 절편 = A 오프셋 정본 (문서 50 §Z2)</div>
    <label class="chk" style="margin:5px 0 0;font-size:11.5px"><input type="checkbox" id="cAnkN">실측 발목잡음 주입 σ
     <input id="iAnkN" type="number" step="0.01" value="0.223" style="width:56px">° (문서 54 — 베어링 교체 후 갱신)</label>
+  </div>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
+   <div style="font-size:11px;color:#ffd166;margin-bottom:4px">실기 로그 재생 (E1) — CSV 를 평면 위에 (±180° 자동 언랩)</div>
+   <div class="row" style="gap:4px">
+    <input type="file" id="fLog" accept=".csv,.txt" style="font-size:10px;max-width:168px">
+    <button class="btn" id="bLogPlay">▶ / ⏸</button>
+    <button class="btn" id="bLogClr">지우기</button>
+   </div>
+   <input type="range" id="sLog" min="0" max="0" value="0" style="width:100%;margin-top:3px">
+   <div id="logInfo" style="font-size:10px;color:var(--dim)">로그 없음 — 열: t_ms + alpha_deg + (del_now_deg 또는 theta_deg) [+ phi_deg]</div>
+   <label class="chk" style="margin:2px 0 0;font-size:11px"><input type="checkbox" id="cLogPose" checked>스크럽 시 3D 로봇이 로그 자세를 따라감 (물리 정지 상태)</label>
   </div>
   <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
    <div style="font-size:11px;color:var(--cyan);margin-bottom:4px">정확 상태 입력 — 예측점 평면은 숫자의 평면 (속도 포함 4D)</div>
@@ -347,6 +358,7 @@ const PLPOP = {pl1:null, pl2:null};   // 별도 창 {win, ctx(평면), rctx(로�
 const PLVIEW = {pl1:{on:false, m:2, b:0, f:0}, pl2:{on:false, m:2, b:0, f:0}};  // 수동 뷰 (휠 줌·우클릭 팬)
 PLVIEW.pl1pop = PLVIEW.pl1; PLVIEW.pl2pop = PLVIEW.pl2;  // 별도 창은 본창과 같은 뷰 공유
 let SCENES = null, sceneIdx = -1;   // [v21 B] 씬 체인 (scenes/chain.json — 배열 데이터)
+let RLOG = null, rlogIdx = 0, rlogPlay = false;   // [v21 E1] 실기 로그 재생 (±180° 언랩 포함)
 let PLEPS = null;
 const DM = {kind:null, t0:0, dur:0, dmax:30, base:null, lastSend:0};  // [v21 1C] frame() 첫 호출 전에 선언
 const WIN = 8.0;            // 그래프 창 [s]
@@ -817,6 +829,20 @@ function drawPlane(ctx, opts){
     const x=X(p[ib]), y=Y(p[ip]); if(first){ctx.moveTo(x,y);first=false;} else ctx.lineTo(x,y); }
   ctx.stroke();
 
+  // --- [v21 E1] 실기 로그 궤적 (금색) — 원위치 평면 (b,f) / 예측점 평면 (bp,fp), 스크럽 위치까지 ---
+  const lgKind = opts.id ? (opts.id.startsWith('pl1')?'pl1':'pl2') : null;
+  if(RLOG && RLOG.n>1 && lgKind){
+    const xs = lgKind==='pl1'? RLOG.b : RLOG.bp, ys = lgKind==='pl1'? RLOG.f : RLOG.fp;
+    ctx.strokeStyle="rgba(255,209,102,.9)"; ctx.lineWidth=2.0*DPR; ctx.beginPath();
+    const end=Math.min(rlogIdx, RLOG.n-1);
+    for(let i=0;i<=end;i++){ const x=X(xs[i]), y=Y(ys[i]); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+    ctx.stroke();
+    ctx.fillStyle="#ffd166";                      // 현재 스크럽 위치 = 마름모
+    const px=X(xs[end]), py=Y(ys[end]);
+    ctx.beginPath(); ctx.moveTo(px,py-5*DPR); ctx.lineTo(px+5*DPR,py); ctx.lineTo(px,py+5*DPR); ctx.lineTo(px-5*DPR,py); ctx.closePath(); ctx.fill();
+    ctx.font=`${10*DPR}px Consolas`; ctx.fillText("실기 로그", 6*DPR, H-22*DPR);
+  }
+
   // --- 현재 점 (lastView 기준 — pose 미리보기·리셋 직후에도 따라온다) ---
   //   흰색 = 대기(문턱 아래, 무개입) / 분홍 = 증분 접기 실행 중. 판정은 하늘색 링.
   if(lastView && lastView.pl && lastView.pl.length > opts.pli+1){
@@ -1248,6 +1274,103 @@ function sceneGo(i){
   clearTimeout(sceneGo._t);
   sceneGo._t = setTimeout(()=>{ hud.style.opacity = "0.25"; }, 5000);
 }
+
+// ============================== [v21 E1] 실기 로그 재생 ==============================
+// CSV(p2r_logger 형식 등)를 읽어 두 평면에 금색 궤적으로 얹는다. 실기 엔코더는 ±180° 래핑이
+// 있으므로 각도열을 전부 언랩. 속도는 실기 파이프라인과 같은 25 ms 기저차분 + EMA τ28 ms 로 재구성.
+function unwrapDeg(a){
+  let off=0, prev=a[0]; const out=[a[0]];
+  for(let i=1;i<a.length;i++){
+    let y=a[i]+off, d=y-prev;
+    while(d>180){ off-=360; y-=360; d-=360; }
+    while(d<-180){ off+=360; y+=360; d+=360; }
+    out.push(y); prev=y;
+  }
+  return out;
+}
+function loadLogText(txt, name){
+  if(!PL){ el("logInfo").textContent="서버 연결 후 다시 시도"; return; }
+  const lines=txt.split(/\r?\n/); let hdr=null, rows=[];
+  for(const ln of lines){
+    const c=ln.split(",");
+    if(!hdr){ if(ln.includes("t_ms")) hdr=c.map(x=>x.trim()); continue; }
+    if(c.length<hdr.length) continue;
+    const v=c.map(Number); if(!isFinite(v[0])) continue;
+    rows.push(v);
+  }
+  if(!hdr || rows.length<5){ el("logInfo").textContent="읽기 실패 — t_ms 헤더/데이터 행 확인"; return; }
+  const col=n=>hdr.indexOf(n);
+  const iT=col("t_ms"), iAl=col("alpha_deg"), iTh=col("theta_deg"),
+        iDl=col("del_now_deg"), iPh=col("phi_deg");
+  if(iT<0 || iAl<0 || (iTh<0 && iDl<0)){ el("logInfo").textContent="필수 열 없음 (t_ms, alpha_deg, del_now_deg/theta_deg)"; return; }
+  const t=rows.map(r=>r[iT]/1000);
+  let al=unwrapDeg(rows.map(r=>r[iAl]));
+  let th=iTh>=0? unwrapDeg(rows.map(r=>r[iTh])) : al.map((a,i)=>a+rows[i][iDl]);
+  if(iTh<0) th=unwrapDeg(th);
+  let ph=iPh>=0? unwrapDeg(rows.map(r=>r[iPh])) : new Array(rows.length).fill(0);
+  const n=t.length, b=[], f=[], bp=[], fp=[];
+  // 속도: 25 ms 기저차분 + EMA τ28 ms (실기 파이프라인과 동일 규약)
+  const vOf=x=>{
+    const raw=new Array(n).fill(0), ema=new Array(n).fill(0);
+    let j=0;
+    for(let i=1;i<n;i++){
+      while(t[i]-t[j+1]>=0.025 && j+1<i) j++;
+      const dt=t[i]-t[j];
+      raw[i]= dt>1e-6? (x[i]-x[j])/dt : raw[i-1];
+      const a=(t[i]-t[i-1])/(0.028+(t[i]-t[i-1]));
+      ema[i]=ema[i-1]+a*(raw[i]-ema[i-1]);
+    }
+    return ema;
+  };
+  const ald=vOf(al), thd=vOf(th), phd=vOf(ph);
+  for(let i=0;i<n;i++){
+    const bb=PL.p1r*al[i]+PL.p2r*th[i], bd=PL.p1r*ald[i]+PL.p2r*thd[i];
+    b.push(bb); f.push(ph[i]);
+    fp.push(ph[i] + PL.P[0][0]*phd[i] + PL.P[0][1]*bd);
+    bp.push(bb    + PL.P[1][0]*phd[i] + PL.P[1][1]*bd);
+  }
+  RLOG={t,b,f,bp,fp,al,th,ph,n}; rlogIdx=n-1; rlogPlay=false;
+  el("sLog").max=n-1; el("sLog").value=n-1;
+  // 뷰를 로그 범위에 자동 맞춤 (더블클릭 = 자동 범위 복귀)
+  const fit=(xs,ys,kind)=>{
+    let m=2; for(let i=0;i<n;i++){ m=Math.max(m, Math.abs(xs[i]), Math.abs(ys[i])); }
+    PLVIEW[kind].on=true; PLVIEW[kind].m=m*1.15; PLVIEW[kind].b=0; PLVIEW[kind].f=0;
+  };
+  fit(b,f,'pl1'); fit(bp,fp,'pl2');
+  el("logInfo").textContent=`${name}: ${n}행 · ${(t[n-1]-t[0]).toFixed(1)}s · φ열 ${iPh>=0?"있음":"없음(0으로 표시)"} — 뷰를 로그에 맞춤(더블클릭=복귀)`;
+}
+el("fLog").onchange=ev=>{
+  const file=ev.target.files[0]; if(!file) return;
+  const rd=new FileReader();
+  rd.onload=()=>loadLogText(rd.result, file.name);
+  rd.readAsText(file);
+};
+el("bLogClr").onclick=()=>{ RLOG=null; rlogPlay=false; el("sLog").max=0; el("logInfo").textContent="로그 없음"; };
+function rlogPose(){
+  if(!RLOG || !el("cLogPose").checked) return;
+  const i=rlogIdx;
+  if(running) send({cmd:"pause"});
+  const now=performance.now();
+  if(now-(rlogPose._t||0)<60) return; rlogPose._t=now;
+  send({cmd:"pose", phi0:RLOG.ph[i], alpha0:RLOG.al[i], theta0:RLOG.th[i]});
+}
+el("sLog").oninput=()=>{ if(!RLOG) return; rlogIdx=Math.min(+el("sLog").value, RLOG.n-1); rlogPose(); };
+el("bLogPlay").onclick=()=>{
+  if(!RLOG) return;
+  rlogPlay=!rlogPlay;
+  if(rlogPlay){
+    if(rlogIdx>=RLOG.n-1) rlogIdx=0;
+    const t0=performance.now()/1000 - RLOG.t[rlogIdx] + RLOG.t[0];
+    (function tick(){
+      if(!rlogPlay || !RLOG) return;
+      const tt=performance.now()/1000 - t0 + RLOG.t[0];
+      while(rlogIdx<RLOG.n-1 && RLOG.t[rlogIdx+1]<=tt) rlogIdx++;
+      el("sLog").value=rlogIdx; rlogPose();
+      if(rlogIdx>=RLOG.n-1){ rlogPlay=false; return; }
+      requestAnimationFrame(tick);
+    })();
+  }
+};
 
 // ============================== [v21 D2] 평면 전체화면·별도 창 (조작 동일 + 왼쪽 로봇 미러) ==============================
 function planeFs(which){                     // 전체화면 토글 — 왼쪽 로봇 미러 + 오른쪽 정사각 평면
