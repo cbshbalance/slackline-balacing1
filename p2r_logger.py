@@ -7,7 +7,7 @@ p2r_logger.py — 시리얼 모니터 + CSV 로거 (p2r_test.ino 용)
 (기존엔 로거를 쓰려면 시리얼 모니터를 닫아야 해서 명령을 못 쳤다 — 그게 없어진다.)
  
 사용:
-    python p2r_logger.py 0817_p2r_r1.csv      ← 포트는 알아서 찾는다
+    python p2r_logger.py 0817_p2r_r2    ← 포트는 알아서 찾는다
     python p2r_logger.py                      ← 파일명 생략하면 날짜로 자동 생성
     python p2r_logger.py r1.csv --port COM7   ← 포트를 직접 지정
     python p2r_logger.py --list               ← 포트 목록만 보기
