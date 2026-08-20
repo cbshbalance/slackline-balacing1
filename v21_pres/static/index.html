@@ -30,8 +30,12 @@ body{background:var(--bg);color:var(--fg);font-family:'Segoe UI','Malgun Gothic'
 .plbox .ttl .plbtns button{font-size:11px;line-height:1;padding:2px 6px;background:#1a2030;
  color:var(--cyan);border:1px solid var(--border);border-radius:5px;cursor:pointer}
 .plbox .ttl .plbtns button:hover{background:#243050}
-.plbox:fullscreen{background:#0f131b;padding:10px;border:none;border-radius:0}
-.plbox:fullscreen .ttl{font-size:15px}
+.plbox .fsrobot{display:none}
+.plbox:fullscreen{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);
+ gap:8px;background:#0f131b;padding:10px;border:none;border-radius:0}
+.plbox:fullscreen .ttl{grid-column:1/3;font-size:15px}
+.plbox:fullscreen .fsrobot{display:block;grid-row:2;grid-column:1;width:100%;height:100%}
+.plbox:fullscreen canvas:not(.fsrobot){grid-row:2;grid-column:2;height:100%;width:auto;aspect-ratio:1/1;flex:none}
 .plbox canvas{flex:1;width:100%;min-height:0;display:block}
 .panel{width:320px;overflow-y:auto;border-left:1px solid var(--border);background:var(--panel);padding:10px}
 .sec{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px}
@@ -86,11 +90,13 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
   <div class="plbox" id="box_pl1">
    <div class="ttl"><span>원위치 평면 (β, φ)</span><small>그림자 — 속도가 안 보인다</small>
     <span class="plbtns"><button id="bFs1" title="전체화면 (Esc 복귀)">⛶</button><button id="bPop1" title="별도 창">↗</button></span></div>
+   <canvas class="fsrobot" id="fsr1"></canvas>
    <canvas id="pl1"></canvas>
   </div>
   <div class="plbox" id="box_pl2">
    <div class="ttl"><span>예측점 평면 (β_pred, φ_pred)</span><small>점=참 · <b style="color:#4cc9f0">링=추정</b>(판정)</small>
     <span class="plbtns"><button id="bFs2" title="전체화면 (F 키, Esc 복귀)">⛶</button><button id="bPop2" title="별도 창">↗</button></span></div>
+   <canvas class="fsrobot" id="fsr2"></canvas>
    <canvas id="pl2"></canvas>
   </div>
   <label class="chk" style="margin:0;font-size:11.5px;opacity:.9">
@@ -98,7 +104,20 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
   <label class="chk" style="margin:2px 0 0;font-size:11.5px;opacity:.9">
    <input type="checkbox" id="cSpikeClean" checked>접기 스파이크 정리 — 접기·REST 중 <b>참값</b>을 예측점 평면에서 숨김 (접기 β̇ 킥이 예측점을 튕기는 실제 물리 · 표시만 정리, 판정·물리 불변)</label>
   <label class="chk" style="margin:2px 0 0;font-size:11.5px;opacity:.9">
-   <input type="checkbox" id="cPick" checked>🖱 평면 집기 — <b>원위치</b>: hover=자세·클릭=시작 (Shift=모드선·Alt=수직) / <b>예측점</b>: 클릭·드래그=속도0 자세만, 실행(Space)=시작</label>
+   <input type="checkbox" id="cPick" checked>🖱 평면 집기 (두 평면·전체화면·별도창 동일) — 클릭·드래그=속도0 자세, 실행(Space)=시작 · Shift=선 위 구속 · Alt=수직 · 휠=줌 · 우클릭=이동 · 더블클릭=복귀</label>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
+   <div style="font-size:11px;color:#ff9f43;margin-bottom:4px">실측 반영 — 실측 ②(안정모드선)·③(λ) 기입 (문서 46·53·57)</div>
+   <label class="chk" style="margin:0;font-size:11.5px"><input type="checkbox" id="cMeas">실측선 표시 (주황 — 모델 초록선과 대조)</label>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:10px;color:var(--dim);margin-top:3px">
+    <label>기울기 r<input id="iMr" type="number" step="0.01" value="-1.64"></label>
+    <label>절편 c(φ) °<input id="iMc" type="number" step="0.05" value="0"></label>
+    <label>λ /s<input id="iMl" type="number" step="0.1" value="5.3"></label>
+   </div>
+   <div id="measW" style="font-size:10px;color:#ff9f43;margin-top:3px;font-family:Consolas"></div>
+   <div style="font-size:10px;color:var(--dim);margin-top:2px">β̂ 재구성 P2R 실측 0.417 (문서 57) · 절편 = A 오프셋 정본 (문서 50 §Z2)</div>
+   <label class="chk" style="margin:5px 0 0;font-size:11.5px"><input type="checkbox" id="cAnkN">실측 발목잡음 주입 σ
+    <input id="iAnkN" type="number" step="0.01" value="0.223" style="width:56px">° (문서 54 — 베어링 교체 후 갱신)</label>
+  </div>
   <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
    <div style="font-size:11px;color:var(--cyan);margin-bottom:4px">정확 상태 입력 — 예측점 평면은 숫자의 평면 (속도 포함 4D)</div>
    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:10px;color:var(--dim)">
@@ -321,13 +340,12 @@ let hist = [];              // [t, φ, α, θ, δ, A, Ae, τ, cur, α̂, θ̂,
                             //  11 β 12 φ 13 β_pred 14 φ_pred (참),
                             //  15 β̂ 16 φ̂ 17 β̂_pred 18 φ̂_pred (추정)]
 let running=false, lastView=null;
-// [v21 1A] 평면 집기 상태 + drawPlane 스케일 저장소
-const pick = {cur:null, hovering:false, lastSend:0, snap:null, anchor:null, readout:null};
+// [v21 D2] 평면 집기 상태(두 평면 공통) + drawPlane 스케일 저장소 — frame() 첫 호출 전에 선언(TDZ)
+const PICK = {active:false, cur:null, kind:null, snap:null, anchor:null, lastSend:0, pan:null};
 const PLSCALE = {};
-const PLPOP = {pl1:null, pl2:null};   // [v21 D1] 평면 별도 창 {win, ctx} — frame() 첫 호출 전에 선언(TDZ)
-const PLVIEW = {pl2:{on:false, m:2, b:0, f:0}};        // [v21 D1] 예측점 평면 수동 뷰 (휠 줌·우클릭 팬)
-PLVIEW.pl2pop = PLVIEW.pl2;                            // 별도 창은 본창과 같은 뷰 공유
-const pickP2 = {active:false, cur:null, lastSend:0, pan:null};  // [v21 D1] 예측점 평면 집기(속도0)·팬 상태
+const PLPOP = {pl1:null, pl2:null};   // 별도 창 {win, ctx(평면), rctx(로봇 미러)}
+const PLVIEW = {pl1:{on:false, m:2, b:0, f:0}, pl2:{on:false, m:2, b:0, f:0}};  // 수동 뷰 (휠 줌·우클릭 팬)
+PLVIEW.pl1pop = PLVIEW.pl1; PLVIEW.pl2pop = PLVIEW.pl2;  // 별도 창은 본창과 같은 뷰 공유
 let PLEPS = null;
 const DM = {kind:null, t0:0, dur:0, dmax:30, base:null, lastSend:0};  // [v21 1C] frame() 첫 호출 전에 선언
 const WIN = 8.0;            // 그래프 창 [s]
@@ -751,6 +769,26 @@ function drawPlane(ctx, opts){
   if(opts.dashed) ctx.setLineDash([7*DPR,5*DPR]);
   ctx.beginPath(); ctx.moveTo(X(bL), Y(sl*bL)); ctx.lineTo(X(bR), Y(sl*bR)); ctx.stroke();
   ctx.setLineDash([]);
+  // --- [v21 4] 실측선 오버레이 (주황): φ = r_meas·β + c_meas, 예측점 평면엔 실측 트리거 띠도 ---
+  if(el("cMeas") && el("cMeas").checked){
+    const rM=+el("iMr").value, cM=+el("iMc").value;
+    if(isFinite(rM) && rM!==0){
+      ctx.strokeStyle="#ff9f43"; ctx.lineWidth=2.0*DPR; ctx.setLineDash([2.5*DPR,3*DPR]);
+      ctx.beginPath(); ctx.moveTo(X(bL), Y(rM*bL+cM)); ctx.lineTo(X(bR), Y(rM*bR+cM)); ctx.stroke();
+      if(opts.showTrig){                       // 실측 w 기준 트리거 띠: w_φ = −1/r → 폭 = A_trig·|r|
+        const At=+(el("vTrig").textContent)||0.6, offM=Math.abs(At*rM);
+        ctx.lineWidth=1.2*DPR; ctx.globalAlpha=0.75;
+        for(const sgn of [1,-1]){
+          ctx.beginPath();
+          ctx.moveTo(X(bL), Y(rM*bL+cM+sgn*offM)); ctx.lineTo(X(bR), Y(rM*bR+cM+sgn*offM)); ctx.stroke();
+        }
+        ctx.globalAlpha=1.0;
+      }
+      ctx.setLineDash([]);
+      ctx.fillStyle="#ff9f43"; ctx.font=`${10*DPR}px Consolas`;
+      ctx.fillText("실측선", X(bR)-46*DPR, Y(rM*bR+cM)-4*DPR);
+    }
+  }
   ctx.restore();
 
   ctx.save(); ctx.beginPath(); ctx.rect(cx-R,cy-R,2*R,2*R); ctx.clip();
@@ -811,14 +849,15 @@ function drawPlane(ctx, opts){
                  Math.min(X(qb)+6*DPR, W-90*DPR), Y(qf)-6*DPR);
   }
 
-  // --- [v21 1A] 집기 십자선 + 스냅 가이드 ---
-  if(opts.pick && pick.cur && el("cPick") && el("cPick").checked){
-    const b=pick.cur.b, f=pick.cur.f;
-    if(pick.snap==='perp' && pick.anchor){
-      const sl2=PL.r, tl=3*m;
+  // --- [v21 D2] 집기 십자선 + 스냅 가이드 (두 평면 공통 — 드래그 중 표시) ---
+  const pkKind = opts.id ? (opts.id.startsWith('pl1')?'pl1':'pl2') : null;
+  if(pkKind && PICK.active && PICK.kind===pkKind && PICK.cur){
+    const b=PICK.cur.b, f=PICK.cur.f;
+    if(PICK.snap==='perp' && PICK.anchor){
+      const sl2=opts.slope, tl=3*m;
       ctx.strokeStyle="rgba(255,100,180,.5)"; ctx.lineWidth=1.2*DPR; ctx.setLineDash([3*DPR,3*DPR]);
-      ctx.beginPath(); ctx.moveTo(X(pick.anchor.b - sl2*tl), Y(pick.anchor.f + tl));
-      ctx.lineTo(X(pick.anchor.b + sl2*tl), Y(pick.anchor.f - tl)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(X(PICK.anchor.b - sl2*tl), Y(PICK.anchor.f + tl));
+      ctx.lineTo(X(PICK.anchor.b + sl2*tl), Y(PICK.anchor.f - tl)); ctx.stroke(); ctx.setLineDash([]);
     }
     const Apos = PL.wq[0]*f + PL.wq[1]*b;      // 속도 0 상태의 A [β환산 °]
     const At = +(el("vTrig").textContent)||0.6;
@@ -827,22 +866,12 @@ function drawPlane(ctx, opts){
     ctx.beginPath();
     ctx.moveTo(X(b)-9*DPR,Y(f)); ctx.lineTo(X(b)+9*DPR,Y(f));
     ctx.moveTo(X(b),Y(f)-9*DPR); ctx.lineTo(X(b),Y(f)+9*DPR); ctx.stroke();
-    pick.readout={b,f,A:Apos,c:cch};
+    ctx.fillStyle=cch; ctx.font=`${10.5*DPR}px Consolas`;
+    ctx.fillText(`속도0 설정: β ${b.toFixed(2)}° φ ${f.toFixed(2)}° A ${Apos.toFixed(2)}°`+
+      (PICK.snap==='line'?'  [모드선 위]':PICK.snap==='perp'?'  [수직 이동]':'')+
+      '  — 실행(Space)=시작', 6*DPR, 26*DPR);
   }
 
-  // --- [v21 D1] 예측점 평면 집기 십자선 (속도 0 자세 설정 중) ---
-  if(opts.id && opts.id.startsWith('pl2') && pickP2.cur && pickP2.active){
-    const b=pickP2.cur.b, f=pickP2.cur.f;
-    const Apos = PL.wq[0]*f + PL.wq[1]*b;
-    const At=+(el("vTrig").textContent)||0.6;
-    ctx.strokeStyle = Math.abs(Apos)<=At? "#06d6a0":"#ffbe0b"; ctx.lineWidth=1.3*DPR;
-    ctx.beginPath();
-    ctx.moveTo(X(b)-9*DPR,Y(f)); ctx.lineTo(X(b)+9*DPR,Y(f));
-    ctx.moveTo(X(b),Y(f)-9*DPR); ctx.lineTo(X(b),Y(f)+9*DPR); ctx.stroke();
-    ctx.fillStyle=ctx.strokeStyle; ctx.font=`${10.5*DPR}px Consolas`;
-    ctx.fillText(`속도0 설정: β ${b.toFixed(2)}° φ ${f.toFixed(2)}° A ${Apos.toFixed(2)}° — 실행(Space)으로 시작`,
-                 6*DPR, 40*DPR);
-  }
   ctx.restore();
   // --- 눈금·라벨 ---
   ctx.font=`${10.5*DPR}px Consolas`;
@@ -852,12 +881,6 @@ function drawPlane(ctx, opts){
   ctx.fillText(opts.ylab, cx+6*DPR, cy-R+13*DPR);
   if(V) ctx.fillText(`🔍 수동 뷰 — 더블클릭 초기화`, cx-R+4*DPR, cy-R+13*DPR+(opts.ylab? 13*DPR:0));
   ctx.fillStyle=opts.lineColor; ctx.fillText(opts.lineLab, 6*DPR, H-8*DPR);
-  if(opts.pick && pick.readout){
-    ctx.fillStyle=pick.readout.c;
-    ctx.fillText(`β ${pick.readout.b.toFixed(2)}°  φ ${pick.readout.f.toFixed(2)}°  A ${pick.readout.A.toFixed(2)}°`+
-      (pick.snap==='line'?'  [모드선 위]':pick.snap==='perp'?'  [수직 이동]':''), 6*DPR, 26*DPR);
-    pick.readout=null;
-  }
 }
 
 // ============================== 렌더 루프 ==============================
@@ -883,6 +906,16 @@ step ${v.step}`;
     el("fallen").style.display = v.fallen? "block":"none";
   }
   renderer.render(scene,camera);
+  // [v21 D2] 3D 로봇 미러 — 전체화면 plbox 왼쪽 + 별도 창 왼쪽 (render 직후 동기 복사)
+  if(typeof drawRobotMirror==="function"){
+    const fsb=document.fullscreenElement;
+    if(fsb && fsb.classList && fsb.classList.contains("plbox")){
+      const fr=fsb.querySelector(".fsrobot"); if(fr) drawRobotMirror(fr.getContext("2d"));
+    }
+    for(const k of ["pl1","pl2"]){
+      const pp=PLPOP[k]; if(pp && !pp.win.closed && pp.rctx) drawRobotMirror(pp.rctx);
+    }
+  }
   drawChart(G1,[1,2,3,4],["#3a86ff","#06d6a0","#8338ec","#ffbe0b"],["φ","α","θ","δ"],"°",0);
   drawChart(G2,[5,6,7],["#ff006e","#ff9f43","#4cc9f0"],["A","Â","τ"],"",0);
   if(PL){
@@ -937,6 +970,26 @@ el("cFwPipe").onchange=e=>{
   send({cmd:"nominal",k:"DT",       v: on? 0.005: 0.002});   // ★제어주기도 같이 (리빌드)
 };
 el("cShowEst").onchange=()=>{ if(typeof frame==="function") frame(); };
+// [v21 4] 실측 반영 배선
+function measWText(){
+  const r=+el("iMr").value, l=+el("iMl").value;
+  if(!isFinite(r)||!r||!isFinite(l)||!l){ el("measW").textContent=""; return; }
+  const w=[-1/r, 1, -1/(r*l), 1/l];
+  el("measW").textContent = `실측 w = [${w.map(v=>v.toFixed(4)).join(", ")}]  (w=[−1/r, 1, −1/(rλ), 1/λ])`;
+}
+["iMr","iMc","iMl"].forEach(id=>el(id).oninput=measWText);
+el("cMeas").onchange=measWText; measWText();
+function sendAnkN(){
+  const on=el("cAnkN").checked, sig=+el("iAnkN").value||0;
+  send({cmd:"real", k:"enc_noise_ank_deg", v: on? sig : 0.0});
+}
+el("cAnkN").onchange=sendAnkN;
+el("iAnkN").onchange=()=>{ if(el("cAnkN").checked) sendAnkN(); };
+// 프리셋 버튼은 서버 real 을 초기화하므로, 켜져 있으면 잡음을 자동 재적용
+["bPreset","bPresetAsync","bPresetAsyncM"].forEach(id=>{
+  const h=el(id).onclick;
+  el(id).onclick=()=>{ h(); if(el("cAnkN").checked) setTimeout(sendAnkN, 700); };
+});
 el("cServo").onchange=e=>send({cmd:"real",k:"servo_on",v:e.target.checked});
 el("cSensor").onchange=e=>send({cmd:"real",k:"sensor_on",v:e.target.checked});
 
@@ -1064,78 +1117,140 @@ el("bDmFold").onclick=()=>dmStart('fold');
 el("bDmFWE").onclick=()=>dmStart('fwe');
 slider("sDmD","vDmD",v=>v.toFixed(0),()=>{});
 
-// ============================== [v21 1A] 평면 집기 ==============================
-const pl1cv = el("pl1");
-function planeFromEvent(ev){
-  const sc = PLSCALE.pl1; if(!sc || !PL) return null;
-  const r = pl1cv.getBoundingClientRect();
+// ============================== [v21 D2] 평면 조작 통일 (두 평면·전체화면·별도 창 공통) ==============================
+// 좌클릭/드래그 = 속도0·δ=0 자세(pose, clear 없음) → 놓으면 x0 확정(리셋 리플레이) → 실행(Space)=물리 시작
+// 휠 = 마우스 지점 줌 · 우클릭 드래그 = 이동 · 더블클릭 = 자동 범위 복귀
+// Shift = 그 평면의 초록 선 위로 구속 · Alt = 누른 순간의 선위 점을 지나는 수직 방향 구속
+function pickOn(){ return el("cPick").checked; }
+function plSlope(kind){ return kind==='pl1'? PL.r : PL.slopeA0; }
+function planeXY(cv, scaleId, ev, snap){
+  const sc = PLSCALE[scaleId]; if(!sc || !PL) return null;
+  const r = cv.getBoundingClientRect();
   const px=(ev.clientX-r.left)*devicePixelRatio, py=(ev.clientY-r.top)*devicePixelRatio;
-  let b=(px-sc.cx)/sc.R*sc.m, f=(sc.cy-py)/sc.R*sc.m;
-  if(pick.snap==='line'){                       // 안정모드선 위로 사영
-    const sl=PL.r, t=(b+sl*f)/(1+sl*sl); b=t; f=sl*t;
-  }else if(pick.snap==='perp' && pick.anchor){  // 앵커점 지나는 수직방향으로 사영
-    const sl=PL.r, db=b-pick.anchor.b, df=f-pick.anchor.f;
-    const t=(-sl*db+df)/(1+sl*sl);
-    b=pick.anchor.b-sl*t; f=pick.anchor.f+t;
+  let b=(sc.vb||0)+(px-sc.cx)/sc.R*sc.m, f=(sc.vf||0)+(sc.cy-py)/sc.R*sc.m;
+  if(snap){
+    const sl = plSlope(snap.kind);
+    if(PICK.snap==='line'){ const t=(b+sl*f)/(1+sl*sl); b=t; f=sl*t; }
+    else if(PICK.snap==='perp' && PICK.anchor){
+      const db=b-PICK.anchor.b, df=f-PICK.anchor.f;
+      const t=(-sl*db+df)/(1+sl*sl); b=PICK.anchor.b-sl*t; f=PICK.anchor.f+t;
+    }
   }
   return {b,f};
 }
-function pickOn(){ return el("cPick").checked; }
-pl1cv.addEventListener("mousemove", ev=>{
-  if(!pickOn()) return;
-  const p=planeFromEvent(ev); if(!p) return;
-  pick.cur=p;
-  if(running) return;                            // 러닝 중엔 미리보기 없음 (클릭만)
-  if(!pick.hovering){ pick.hovering=true; send({cmd:"pose_begin"}); }
+function poseSend(p){
   const now=performance.now();
-  if(now-pick.lastSend>50){ pick.lastSend=now;
-    send({cmd:"pose", phi0:p.f, alpha0:p.b, theta0:p.b}); }   // δ=0·속도0 → β=α
-});
-pl1cv.addEventListener("mouseleave", ()=>{
-  pick.cur=null;
-  if(pick.hovering){ pick.hovering=false; send({cmd:"pose_end"}); }
-});
-pl1cv.addEventListener("click", ev=>{
-  if(!pickOn()) return;
-  const p=planeFromEvent(ev); if(!p) return;
-  pick.hovering=false;                           // 확정 — pose_end 복원 생략
-  send({cmd:"x0", phi0:p.f, alpha0:p.b, theta0:p.b});
-  send({cmd:"run"});
-});
-window.addEventListener("keydown", e=>{
-  if(e.key==="Shift" && pick.snap!=='line'){ pick.snap='line'; }
+  if(now-PICK.lastSend<50) return;
+  PICK.lastSend=now;
+  send({cmd:"pose", phi0:p.f, alpha0:p.b, theta0:p.b});   // δ=0·속도0 → β=α
+}
+function attachPlaneCtl(cv, kind, scaleId){
+  cv.addEventListener("wheel", ev=>{
+    ev.preventDefault();
+    const sc=PLSCALE[scaleId]; if(!sc) return;
+    const v=PLVIEW[kind];
+    if(!v.on){ v.on=true; v.m=sc.m; v.b=sc.vb||0; v.f=sc.vf||0; }
+    const p=planeXY(cv,scaleId,ev,null); if(!p) return;
+    const k = ev.deltaY>0 ? 1.25 : 0.8;
+    const m2 = Math.min(60, Math.max(0.15, v.m*k));
+    v.b = p.b-(p.b-v.b)*(m2/v.m); v.f = p.f-(p.f-v.f)*(m2/v.m); v.m = m2;
+  }, {passive:false});
+  cv.addEventListener("contextmenu", ev=>ev.preventDefault());
+  cv.addEventListener("dblclick", ()=>{ PLVIEW[kind].on=false; });
+  cv.addEventListener("mousedown", ev=>{
+    if(ev.button===2){                             // 우클릭 = 팬
+      const sc=PLSCALE[scaleId]; if(!sc) return;
+      const v=PLVIEW[kind];
+      if(!v.on){ v.on=true; v.m=sc.m; v.b=sc.vb||0; v.f=sc.vf||0; }
+      PICK.pan={x:ev.clientX, y:ev.clientY, scaleId, kind};
+      return;
+    }
+    if(ev.button!==0 || !pickOn()) return;         // 좌클릭 = 속도0 자세 설정
+    const p=planeXY(cv,scaleId,ev,{kind}); if(!p) return;
+    if(running) send({cmd:"pause"});               // 집는 순간 물리 정지 — 실행으로 재개
+    PICK.active=true; PICK.kind=kind; PICK.cur=p; PICK.lastSend=0; poseSend(p);
+  });
+  cv.addEventListener("mousemove", ev=>{
+    if(PICK.pan && PICK.pan.scaleId===scaleId){
+      const sc=PLSCALE[scaleId], v=PLVIEW[kind];
+      if(sc && v.on){
+        v.b -= (ev.clientX-PICK.pan.x)*devicePixelRatio/sc.R*v.m;
+        v.f += (ev.clientY-PICK.pan.y)*devicePixelRatio/sc.R*v.m;
+      }
+      PICK.pan={x:ev.clientX, y:ev.clientY, scaleId, kind};
+      return;
+    }
+    if(!PICK.active || PICK.kind!==kind) return;
+    const p=planeXY(cv,scaleId,ev,{kind}); if(!p) return;
+    PICK.cur=p; poseSend(p);
+  });
+  (cv.ownerDocument.defaultView||window).addEventListener("mouseup", ev=>{
+    if(ev.button===2){ PICK.pan=null; return; }
+    if(!PICK.active || PICK.kind!==kind) return;
+    PICK.active=false;
+    const p=PICK.cur; PICK.cur=null;
+    if(p) send({cmd:"x0", phi0:p.f, alpha0:p.b, theta0:p.b});  // 확정 — 리셋이 같은 판 리플레이
+  });
+}
+attachPlaneCtl(el("pl1"), "pl1", "pl1");
+attachPlaneCtl(el("pl2"), "pl2", "pl2");
+// Shift/Alt 스냅 — 본창·별도 창 공용 헬퍼
+function snapKeyDown(e){
+  if(e.key==="Shift" && PICK.snap!=='line'){ PICK.snap='line'; }
   else if(e.key==="Alt"){ e.preventDefault();
-    if(pick.snap!=='perp'){
-      if(PL && pick.cur){ const sl=PL.r, t=(pick.cur.b+sl*pick.cur.f)/(1+sl*sl);
-        pick.anchor={b:t, f:sl*t}; }             // 앵커 = 현재점을 모드선에 사영
-      else pick.anchor={b:0,f:0};
-      pick.snap='perp';
+    if(PICK.snap!=='perp'){
+      if(PL && PICK.cur){ const sl=plSlope(PICK.kind||'pl1'), t=(PICK.cur.b+sl*PICK.cur.f)/(1+sl*sl);
+        PICK.anchor={b:t, f:sl*t}; }              // 앵커 = 현재점을 그 평면의 선에 사영
+      else PICK.anchor={b:0,f:0};
+      PICK.snap='perp';
     }
   }
-});
-window.addEventListener("keyup", e=>{
-  if(e.key==="Shift" && pick.snap==='line') pick.snap=null;
-  if(e.key==="Alt" && pick.snap==='perp') pick.snap=null;
-});
+}
+function snapKeyUp(e){
+  if(e.key==="Shift" && PICK.snap==='line') PICK.snap=null;
+  if(e.key==="Alt" && PICK.snap==='perp') PICK.snap=null;
+}
+window.addEventListener("keydown", snapKeyDown);
+window.addEventListener("keyup", snapKeyUp);
 
-// ============================== [v21 D1] 평면 전체화면·별도 창·예측점 평면 조작 ==============================
-function planeFs(which){                     // 전체화면 토글 (캔버스는 clientWidth 기준이라 자동 리사이즈)
+// ============================== [v21 D2] 평면 전체화면·별도 창 (조작 동일 + 왼쪽 로봇 미러) ==============================
+function planeFs(which){                     // 전체화면 토글 — 왼쪽 로봇 미러 + 오른쪽 정사각 평면
   const box = el("box_"+which);
   if(document.fullscreenElement === box) document.exitFullscreen();
   else box.requestFullscreen && box.requestFullscreen();
 }
-function planePop(which, title){             // 별도 창 (표시 전용 미러 — 조작은 본창에서)
+function drawRobotMirror(ctx2){              // 3D WebGL 캔버스를 2D 캔버스로 복사 (렌더 직후 동기 호출)
+  const cv2=ctx2.canvas;
+  const W=cv2.width=cv2.clientWidth*devicePixelRatio, H=cv2.height=cv2.clientHeight*devicePixelRatio;
+  if(!W||!H) return;
+  ctx2.fillStyle="#0d1017"; ctx2.fillRect(0,0,W,H);
+  const sw=canvas.width, sh=canvas.height; if(!sw||!sh) return;
+  const sc=Math.min(W/sw,H/sh), dw=sw*sc, dh=sh*sc;
+  ctx2.drawImage(canvas,(W-dw)/2,(H-dh)/2,dw,dh);
+}
+function planePop(which, title){             // 별도 창: 왼쪽 로봇 미러 + 오른쪽 정사각 평면, 조작 본창과 동일
   const ex = PLPOP[which];
   if(ex && !ex.win.closed){ ex.win.focus(); return; }
-  const w = window.open("", "plpop_"+which, "width=860,height=880");
+  const w = window.open("", "plpop_"+which, "width=1280,height=760");
   if(!w){ alert("팝업이 차단되었습니다 — 이 사이트의 팝업을 허용해 주세요."); return; }
-  w.document.title = title;
-  w.document.body.style.cssText = "margin:0;background:#0f131b;overflow:hidden";
-  w.document.body.innerHTML =
-    '<div style="position:fixed;top:4px;left:10px;color:#4cc9f0;font:12px Consolas;opacity:.75;z-index:2">'
-    + title + ' — 표시 전용 미러 (조작·집기는 본창에서)</div>'
-    + '<canvas id="c" style="position:fixed;left:0;top:0;width:100vw;height:100vh"></canvas>';
-  PLPOP[which] = {win:w, ctx:w.document.getElementById("c").getContext("2d")};
+  const d = w.document;
+  d.title = title;
+  d.body.style.cssText = "margin:0;background:#0f131b;overflow:hidden;height:100vh;display:grid;"
+    + "grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr);gap:8px;padding:8px;box-sizing:border-box";
+  d.body.innerHTML =
+    '<div style="grid-column:1/3;color:#4cc9f0;font:12px Consolas;opacity:.8">' + title +
+    ' — 휠=줌 · 우클릭=이동 · 더블클릭=복귀 · 좌클릭/드래그=속도0 자세 · Space=실행 · R=리셋</div>' +
+    '<canvas id="r" style="grid-row:2;grid-column:1;width:100%;height:100%"></canvas>' +
+    '<canvas id="c" style="grid-row:2;grid-column:2;height:100%;width:auto;aspect-ratio:1/1"></canvas>';
+  const pc=d.getElementById("c"), rc=d.getElementById("r");
+  PLPOP[which] = {win:w, ctx:pc.getContext("2d"), rctx:rc.getContext("2d")};
+  attachPlaneCtl(pc, which, which+"pop");    // 본창과 같은 조작 (뷰·집기 상태 공유)
+  w.addEventListener("keydown", e=>{
+    if(e.code==="Space"){ e.preventDefault(); el("bRun").click(); }
+    else if(e.key==="r"||e.key==="R"){ el("bReset").click(); }
+    else snapKeyDown(e);                     // Shift/Alt 스냅도 별도 창에서 동작
+  });
+  w.addEventListener("keyup", snapKeyUp);
 }
 el("bFs1").onclick=()=>planeFs("pl1");
 el("bFs2").onclick=()=>planeFs("pl2");
@@ -1145,72 +1260,6 @@ document.addEventListener("keydown",e=>{     // F = 예측점 평면 전체화�
   if(e.target.tagName==="INPUT") return;
   if(e.key==="f"||e.key==="F") planeFs("pl2");
 });
-
-// ---- 예측점 평면: 휠 줌 · 우클릭 팬 · 더블클릭 뷰 초기화 · 좌클릭/드래그 = 속도0 자세 설정 ----
-const pl2cv = el("pl2");
-function pl2XY(ev){                          // 화면 → (β_pred, φ_pred) 역변환 (수동 뷰 오프셋 포함)
-  const sc = PLSCALE.pl2; if(!sc || !PL) return null;
-  const r = pl2cv.getBoundingClientRect();
-  const px=(ev.clientX-r.left)*devicePixelRatio, py=(ev.clientY-r.top)*devicePixelRatio;
-  return { b: (sc.vb||0) + (px-sc.cx)/sc.R*sc.m,
-           f: (sc.vf||0) + (sc.cy-py)/sc.R*sc.m };
-}
-pl2cv.addEventListener("wheel", ev=>{
-  ev.preventDefault();
-  const sc=PLSCALE.pl2; if(!sc) return;
-  const v=PLVIEW.pl2;
-  if(!v.on){ v.on=true; v.m=sc.m; v.b=sc.vb||0; v.f=sc.vf||0; }
-  const p=pl2XY(ev); if(!p) return;
-  const k = ev.deltaY>0 ? 1.25 : 0.8;
-  const m2 = Math.min(60, Math.max(0.15, v.m*k));
-  v.b = p.b - (p.b - v.b)*(m2/v.m);          // 마우스 지점 고정 줌
-  v.f = p.f - (p.f - v.f)*(m2/v.m);
-  v.m = m2;
-}, {passive:false});
-pl2cv.addEventListener("contextmenu", ev=>ev.preventDefault());
-pl2cv.addEventListener("dblclick", ()=>{ PLVIEW.pl2.on=false; });
-function pl2Pose(p){                         // 속도 0·δ=0 자세 스트림 (pose = clear 없음, 물리 정지 상태 유지)
-  const now=performance.now();
-  if(now - pickP2.lastSend < 50) return;
-  pickP2.lastSend = now;
-  send({cmd:"pose", phi0:p.f, alpha0:p.b, theta0:p.b});
-}
-pl2cv.addEventListener("mousedown", ev=>{
-  if(ev.button===2){                         // 우클릭 = 팬
-    const sc=PLSCALE.pl2; if(!sc) return;
-    const v=PLVIEW.pl2;
-    if(!v.on){ v.on=true; v.m=sc.m; v.b=sc.vb||0; v.f=sc.vf||0; }
-    pickP2.pan={x:ev.clientX, y:ev.clientY};
-    return;
-  }
-  if(ev.button!==0) return;                  // 좌클릭 = 속도0 자세 설정 (드래그로 연속 훑기)
-  if(el("cPick") && !el("cPick").checked) return;   // 집기 스위치 공용 (오클릭 방지)
-  const p=pl2XY(ev); if(!p) return;
-  if(running) send({cmd:"pause"});           // 집는 순간 물리 정지 — 실행 버튼으로 재개
-  pickP2.active=true; pickP2.cur=p; pickP2.lastSend=0; pl2Pose(p);
-});
-pl2cv.addEventListener("mousemove", ev=>{
-  if(pickP2.pan){
-    const sc=PLSCALE.pl2, v=PLVIEW.pl2;
-    if(sc && v.on){
-      v.b -= (ev.clientX-pickP2.pan.x)*devicePixelRatio/sc.R*v.m;
-      v.f += (ev.clientY-pickP2.pan.y)*devicePixelRatio/sc.R*v.m;
-    }
-    pickP2.pan={x:ev.clientX, y:ev.clientY};
-    return;
-  }
-  if(!pickP2.active) return;
-  const p=pl2XY(ev); if(!p) return;
-  pickP2.cur=p; pl2Pose(p);
-});
-window.addEventListener("mouseup", ev=>{
-  if(ev.button===2){ pickP2.pan=null; return; }
-  if(!pickP2.active) return;
-  pickP2.active=false;
-  const p=pickP2.cur; pickP2.cur=null;
-  if(p) send({cmd:"x0", phi0:p.f, alpha0:p.b, theta0:p.b});  // 확정 — 리셋 버튼이 같은 판 리플레이
-});
-pl2cv.addEventListener("mouseleave", ()=>{ /* 드래그 유지 — mouseup 은 window 에서 받는다 */ });
 
 // ---- [v21 1B] 4D 정확 상태 입력 ----
 function send4D(){

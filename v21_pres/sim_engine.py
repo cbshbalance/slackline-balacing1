@@ -42,6 +42,7 @@ REAL_DEFAULT = dict(
     b_ankle    = 0.0,
     # --- 센서 ---
     enc_bits   = 14,      # φ 엔코더 (AS5048A)
+    enc_noise_ank_deg = 0.0,  # [v21 4] 발목 엔코더 백색잡음 σ [°] — 실측 0.223(문서 54, 베어링 교체 후 갱신). 0=미사용(RNG 미호출, 결정론 보존)
     hip_enc_quant = 2*np.pi/4096,          # XM430 0.088°
     hip_vel_quant = 0.229*2*np.pi/60.0,    # PRESENT_VELOCITY 0.229 rpm
     acc_noise  = 0.02,    # thAcc 노이즈 [rad] σ
@@ -393,10 +394,14 @@ class SimEngine:
         r = self.real; DT = self.p["DT"]
         d = self.data
         qa = 2*np.pi / (1 << int(r["ankle_enc_bits"]))
+        q_raw = d.qpos[self.qadr["ankle"]]
+        sig_ank = np.deg2rad(r.get("enc_noise_ank_deg", 0.0))
+        if sig_ank > 0.0:
+            q_raw = q_raw + self.rng.normal(0.0, sig_ank)   # [v21 4] 실측 발목잡음 (문서 54)
         if r["sensor_on"]:
-            q_ank = np.round(d.qpos[self.qadr["ankle"]]/qa) * qa
+            q_ank = np.round(q_raw/qa) * qa
         else:
-            q_ank = d.qpos[self.qadr["ankle"]]
+            q_ank = q_raw
         phi = z[0]                       # φ 엔코더
         alpha = q_ank - phi              # α = q_phi+q_ankle, q_phi = −φ
         theta = alpha + z[3]             # θ = α + δ_enc
