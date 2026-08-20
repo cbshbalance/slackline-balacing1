@@ -346,12 +346,14 @@ const PLSCALE = {};
 const PLPOP = {pl1:null, pl2:null};   // 별도 창 {win, ctx(평면), rctx(로봇 미러)}
 const PLVIEW = {pl1:{on:false, m:2, b:0, f:0}, pl2:{on:false, m:2, b:0, f:0}};  // 수동 뷰 (휠 줌·우클릭 팬)
 PLVIEW.pl1pop = PLVIEW.pl1; PLVIEW.pl2pop = PLVIEW.pl2;  // 별도 창은 본창과 같은 뷰 공유
+let SCENES = null, sceneIdx = -1;   // [v21 B] 씬 체인 (scenes/chain.json — 배열 데이터)
 let PLEPS = null;
 const DM = {kind:null, t0:0, dur:0, dmax:30, base:null, lastSend:0};  // [v21 1C] frame() 첫 호출 전에 선언
 const WIN = 8.0;            // 그래프 창 [s]
 
 function handle(m){
   if(m.type==="init"){
+    if(!handle._chainReq){ handle._chainReq=1; send({cmd:"scene_load", name:"chain"}); }  // [v21 B]
     geom = m.geom; rebuildRobot();
     const b=m.build;
     el("minfo").textContent =
@@ -370,7 +372,10 @@ function handle(m){
     el("bRun").textContent = running? "⏸ 정지" : "▶ 시작";
   }else if(m.type==="clear"){ hist=[]; }
   else if(m.type==="rewind"){ const t=m.t; while(hist.length && hist[hist.length-1][0]>t+1e-9) hist.pop(); }
-  else if(m.type==="scene_data"){ ovApplyScene(m.data); }
+  else if(m.type==="scene_data"){
+    if(m.name==="chain"){ SCENES=(m.data&&m.data.scenes)||null; }   // [v21 B] 씬 체인 데이터
+    else ovApplyScene(m.data);
+  }
   else if(m.type==="scene_saved"){ console.log("장면 저장:", m.name); }
   else if(m.type==="scene_list"){ alert("저장된 장면: "+(m.names&&m.names.length? m.names.join(", "):"(없음)")); }
   else if(m.type==="error"){ console.error(m.msg); alert("시뮬 오류: "+m.msg); }
@@ -953,6 +958,8 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="ArrowLeft"){el("bBack").click();}
   else if(e.key==="r"||e.key==="R"){el("bReset").click();}
   else if(e.key==="h"||e.key==="H"){document.body.classList.toggle("presmode");}   // [v21 3] 발표 모드
+  else if(e.key==="]"){sceneGo(sceneIdx+1);}                                       // [v21 B] 다음 씬
+  else if(e.key==="["){sceneGo(sceneIdx-1);}                                       // [v21 B] 이전 씬
 });
 document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("[data-mode]").forEach(x=>x.classList.remove("on"));
@@ -1213,6 +1220,35 @@ function snapKeyUp(e){
 window.addEventListener("keydown", snapKeyDown);
 window.addEventListener("keyup", snapKeyUp);
 
+// ============================== [v21 B] 씬 체인 — scenes/chain.json ==============================
+// 씬 = 데이터(배열). ] = 다음 씬, [ = 이전 씬. 순서·내용 교체는 chain.json 만 수정 (문서 56 §3F·63).
+function sceneApply(sc){
+  for(const a of (sc.actions||[])){
+    try{
+      if(a.do==="click"){ const b=el(a.id); if(b) b.click(); }
+      else if(a.do==="check"){ const c=el(a.id);
+        if(c && c.checked!==!!a.on){ c.checked=!!a.on; c.dispatchEvent(new Event("change")); } }
+      else if(a.do==="send"){ send(a.cmd); }
+      else if(a.do==="dm"){ dmStart(a.kind); }
+      else if(a.do==="fs"){ if(a.plane) planeFs(a.plane);
+        else if(document.fullscreenElement) document.exitFullscreen(); }
+      else if(a.do==="presmode"){ document.body.classList.toggle("presmode", !!a.on); }
+    }catch(err){ console.warn("scene action 실패:", a, err); }
+  }
+}
+function sceneGo(i){
+  if(!SCENES || !SCENES.length) return;
+  sceneIdx = Math.max(0, Math.min(SCENES.length-1, i));
+  const sc = SCENES[sceneIdx];
+  sceneApply(sc);
+  const hud = el("sceneHud");
+  hud.style.display = "block"; hud.style.opacity = "1";
+  hud.innerHTML = `<b>씬 ${sceneIdx+1}/${SCENES.length}</b>  ${sc.title||""}`
+    + (sc.note? `<br><span style="opacity:.7">${sc.note}</span>` : "");
+  clearTimeout(sceneGo._t);
+  sceneGo._t = setTimeout(()=>{ hud.style.opacity = "0.25"; }, 5000);
+}
+
 // ============================== [v21 D2] 평면 전체화면·별도 창 (조작 동일 + 왼쪽 로봇 미러) ==============================
 function planeFs(which){                     // 전체화면 토글 — 왼쪽 로봇 미러 + 오른쪽 정사각 평면
   const box = el("box_"+which);
@@ -1274,5 +1310,8 @@ el("b4dGo").onclick=()=>{ send4D(); send({cmd:"run"}); };
 
 connect();
 </script>
+<div id="sceneHud" style="position:fixed;left:10px;bottom:10px;z-index:60;background:rgba(10,14,22,.88);
+ border:1px solid #2a3350;border-radius:8px;padding:6px 11px;font-size:12.5px;color:#cfe0ff;display:none;
+ transition:opacity .4s;max-width:46vw"></div>
 </body>
 </html>
