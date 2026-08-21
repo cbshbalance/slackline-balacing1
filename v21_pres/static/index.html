@@ -128,6 +128,8 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
    <input type="range" id="sLog" min="0" max="0" value="0" style="width:100%;margin-top:3px">
    <div id="logInfo" style="font-size:10px;color:var(--dim)">로그 없음 — 열: t_ms + alpha_deg + (del_now_deg 또는 theta_deg) [+ phi_deg]</div>
    <label class="chk" style="margin:2px 0 0;font-size:11px"><input type="checkbox" id="cLogPose" checked>스크럽 시 3D 로봇이 로그 자세를 따라감 (물리 정지 상태)</label>
+   <label class="chk" style="margin:2px 0 0;font-size:11px"><input type="checkbox" id="cLogSm" checked>평활 참고값(흰 점선 — 앞뒤 샘플을 쓰는 <b>비인과</b> 준참값, 로봇은 실시간엔 못 봄) 창
+    <input id="iSmW" type="number" step="10" value="50" style="width:46px">ms</label>
   </div>
   <div style="border:1px solid var(--border);border-radius:8px;padding:7px;margin-top:6px">
    <div style="font-size:11px;color:var(--cyan);margin-bottom:4px">정확 상태 입력 — 예측점 평면은 숫자의 평면 (속도 포함 4D)</div>
@@ -841,6 +843,16 @@ function drawPlane(ctx, opts){
     const px=X(xs[end]), py=Y(ys[end]);
     ctx.beginPath(); ctx.moveTo(px,py-5*DPR); ctx.lineTo(px+5*DPR,py); ctx.lineTo(px,py+5*DPR); ctx.lineTo(px-5*DPR,py); ctx.closePath(); ctx.fill();
     ctx.font=`${10*DPR}px Consolas`; ctx.fillText("실기 로그", 6*DPR, H-22*DPR);
+    // 평활 참고값 (흰 점선) — 비인과 준참값: 로봇이 본 금색과의 벌어짐 = 그 순간의 추정 오차
+    if(RLOG.sb && el("cLogSm") && el("cLogSm").checked){
+      const xs2 = lgKind==='pl1'? RLOG.sb : RLOG.sbp, ys2 = lgKind==='pl1'? RLOG.sf : RLOG.sfp;
+      ctx.strokeStyle="rgba(240,245,255,.8)"; ctx.lineWidth=1.2*DPR; ctx.setLineDash([3*DPR,3*DPR]);
+      ctx.beginPath();
+      for(let i=0;i<=end;i++){ const x=X(xs2[i]), y=Y(ys2[i]); if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+      ctx.stroke(); ctx.setLineDash([]);
+      ctx.strokeStyle="#ffffff"; ctx.lineWidth=1.4*DPR;
+      ctx.beginPath(); ctx.arc(X(xs2[end]), Y(ys2[end]), 4.2*DPR, 0, 7); ctx.stroke();
+    }
   }
 
   // --- 현재 점 (lastView 기준 — pose 미리보기·리셋 직후에도 따라온다) ---
@@ -1288,6 +1300,42 @@ function unwrapDeg(a){
   }
   return out;
 }
+function smoothCentered(t, x, W){          // 중심 이동평균 (비인과, 지연 0) — 창 W [s]
+  const n=x.length, out=new Array(n);
+  let lo=0, hi=0, sum=0, cnt=0;
+  for(let i=0;i<n;i++){
+    while(hi<n && t[hi]<=t[i]+W/2){ sum+=x[hi]; cnt++; hi++; }
+    while(t[lo]<t[i]-W/2){ sum-=x[lo]; cnt--; lo++; }
+    out[i]=sum/cnt;
+  }
+  return out;
+}
+function centralVel(t, x, W){              // 같은 창 폭의 중앙 차분 속도 (지연 0)
+  const n=x.length, out=new Array(n);
+  let j1=0, j2=0;
+  for(let i=0;i<n;i++){
+    while(j2<n-1 && t[j2]<t[i]+W/2) j2++;
+    while(j1<i && t[j1]<t[i]-W/2) j1++;
+    const dt=t[j2]-t[j1];
+    out[i]= dt>1e-6? (x[j2]-x[j1])/dt : 0;
+  }
+  return out;
+}
+function computeLogSmooth(){               // 평활 참고값: 위치·속도 모두 비인과 재구성 → 준참값 예측점까지
+  if(!RLOG || !RLOG.raw || !PL) return;
+  const {t,al,th,ph}=RLOG.raw, n=t.length;
+  const W=Math.max(0.01, (+el("iSmW").value||50)/1000);
+  const alS=smoothCentered(t,al,W), thS=smoothCentered(t,th,W), phS=smoothCentered(t,ph,W);
+  const aldS=centralVel(t,alS,W), thdS=centralVel(t,thS,W), phdS=centralVel(t,phS,W);
+  const sb=[], sf=[], sbp=[], sfp=[];
+  for(let i=0;i<n;i++){
+    const bb=PL.p1r*alS[i]+PL.p2r*thS[i], bd=PL.p1r*aldS[i]+PL.p2r*thdS[i];
+    sb.push(bb); sf.push(phS[i]);
+    sfp.push(phS[i] + PL.P[0][0]*phdS[i] + PL.P[0][1]*bd);
+    sbp.push(bb    + PL.P[1][0]*phdS[i] + PL.P[1][1]*bd);
+  }
+  Object.assign(RLOG, {sb,sf,sbp,sfp});
+}
 function loadLogText(txt, name){
   if(!PL){ el("logInfo").textContent="서버 연결 후 다시 시도"; return; }
   const lines=txt.split(/\r?\n/); let hdr=null, rows=[];
@@ -1329,7 +1377,8 @@ function loadLogText(txt, name){
     fp.push(ph[i] + PL.P[0][0]*phd[i] + PL.P[0][1]*bd);
     bp.push(bb    + PL.P[1][0]*phd[i] + PL.P[1][1]*bd);
   }
-  RLOG={t,b,f,bp,fp,al,th,ph,n}; rlogIdx=n-1; rlogPlay=false;
+  RLOG={t,b,f,bp,fp,al,th,ph,n, raw:{t,al,th,ph}}; rlogIdx=n-1; rlogPlay=false;
+  computeLogSmooth();
   el("sLog").max=n-1; el("sLog").value=n-1;
   // 뷰를 로그 범위에 자동 맞춤 (더블클릭 = 자동 범위 복귀)
   const fit=(xs,ys,kind)=>{
@@ -1346,6 +1395,8 @@ el("fLog").onchange=ev=>{
   rd.readAsText(file);
 };
 el("bLogClr").onclick=()=>{ RLOG=null; rlogPlay=false; el("sLog").max=0; el("logInfo").textContent="로그 없음"; };
+el("iSmW").onchange=()=>computeLogSmooth();
+el("cLogSm").onchange=()=>{};              // 표시 토글 — drawPlane 이 매 프레임 읽음
 function rlogPose(){
   if(!RLOG || !el("cLogPose").checked) return;
   const i=rlogIdx;
