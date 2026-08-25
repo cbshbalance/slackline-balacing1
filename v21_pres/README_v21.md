@@ -96,7 +96,9 @@ http://localhost:8210
 - 발표 멘트도 이 구조가 좋다: "선 위 = 오래 버틴다, 선 밖 = 곧장 넘어진다, 우리 제어 = 다 잡는다."
 
 ### E1 — 실기 로그 재생 (8/20)
-- CSV(p2r_logger 형식: `t_ms, alpha_deg, del_now_deg 또는 theta_deg [, phi_deg]`)를 읽어
+- CSV 두 형식 지원: **p2r_logger**(`t_ms, alpha_deg, del_now_deg/theta_deg [, phi_deg]`) 및
+  **fold_logger**(`t_ms,phi,ank,alpha,beta,dphi,dbeta,Ahat,hold,del_now,phase,…` — 펌웨어 계산
+  속도·Â·phase 를 그대로 사용, 스크럽 시 t·Â·phase·hold 판독 표시). 로그를 읽어
   **두 평면에 금색 궤적**으로 얹는다. **±180° 자동 언랩**(실기 엔코더 래핑 대응 — 문서 61 정정의 교훈).
 - 속도는 실기 파이프라인과 같은 규약(25 ms 기저차분 + EMA τ28 ms)으로 재구성해 예측점 평면에도 표시.
 - 슬라이더 스크럽 + ▶ 실시간 재생. **스크럽하면 3D 로봇이 로그의 실제 자세를 따라간다**(pose, 물리 정지).

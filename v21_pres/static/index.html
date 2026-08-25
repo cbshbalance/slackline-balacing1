@@ -126,7 +126,8 @@ body.presmode #overlay{font-size:15px;line-height:1.7}
     <button class="btn" id="bLogClr">지우기</button>
    </div>
    <input type="range" id="sLog" min="0" max="0" value="0" style="width:100%;margin-top:3px">
-   <div id="logInfo" style="font-size:10px;color:var(--dim)">로그 없음 — 열: t_ms + alpha_deg + (del_now_deg 또는 theta_deg) [+ phi_deg]</div>
+   <div id="logInfo" style="font-size:10px;color:var(--dim)">로그 없음 — p2r_logger·fold_logger CSV 모두 지원</div>
+   <div id="logCur" style="font-size:10.5px;color:#ffd166;font-family:Consolas"></div>
    <label class="chk" style="margin:2px 0 0;font-size:11px"><input type="checkbox" id="cLogPose" checked>스크럽 시 3D 로봇이 로그 자세를 따라감 (물리 정지 상태)</label>
    <label class="chk" style="margin:2px 0 0;font-size:11px"><input type="checkbox" id="cLogSm" checked>평활 참고값(흰 점선 — 앞뒤 샘플을 쓰는 <b>비인과</b> 준참값, 로봇은 실시간엔 못 봄) 창
     <input id="iSmW" type="number" step="10" value="50" style="width:46px">ms</label>
@@ -1338,25 +1339,33 @@ function computeLogSmooth(){               // 평활 참고값: 위치·속도 �
 }
 function loadLogText(txt, name){
   if(!PL){ el("logInfo").textContent="서버 연결 후 다시 시도"; return; }
-  const lines=txt.split(/\r?\n/); let hdr=null, rows=[];
+  const lines=txt.split(/\r?\n/); let hdr=null, rows=[], srows=[];
   for(const ln of lines){
     const c=ln.split(",");
     if(!hdr){ if(ln.includes("t_ms")) hdr=c.map(x=>x.trim()); continue; }
     if(c.length<hdr.length) continue;
     const v=c.map(Number); if(!isFinite(v[0])) continue;
-    rows.push(v);
+    rows.push(v); srows.push(c);            // phase 등 문자열 열은 원본에서 읽는다
   }
   if(!hdr || rows.length<5){ el("logInfo").textContent="읽기 실패 — t_ms 헤더/데이터 행 확인"; return; }
   const col=n=>hdr.indexOf(n);
-  const iT=col("t_ms"), iAl=col("alpha_deg"), iTh=col("theta_deg"),
-        iDl=col("del_now_deg"), iPh=col("phi_deg");
-  if(iT<0 || iAl<0 || (iTh<0 && iDl<0)){ el("logInfo").textContent="필수 열 없음 (t_ms, alpha_deg, del_now_deg/theta_deg)"; return; }
+  const pick=(...ns)=>{ for(const nm of ns){ const i=col(nm); if(i>=0) return i; } return -1; };
+  // p2r_logger 형식(…_deg)과 fold_logger 형식(짧은 이름 + 펌웨어 계산열) 모두 지원
+  const iT=pick("t_ms"), iAl=pick("alpha_deg","alpha"), iTh=pick("theta_deg","theta"),
+        iDl=pick("del_now_deg","del_now"), iPh=pick("phi_deg","phi"),
+        iBe=pick("beta"), iDph=pick("dphi"), iDbe=pick("dbeta"),
+        iAh=pick("Ahat"), iPhz=pick("phase"), iHo=pick("hold");
+  if(iT<0 || iAl<0 || (iTh<0 && iDl<0)){ el("logInfo").textContent="필수 열 없음 (t_ms, alpha[_deg], del_now/theta)"; return; }
   const t=rows.map(r=>r[iT]/1000);
   let al=unwrapDeg(rows.map(r=>r[iAl]));
   let th=iTh>=0? unwrapDeg(rows.map(r=>r[iTh])) : al.map((a,i)=>a+rows[i][iDl]);
   if(iTh<0) th=unwrapDeg(th);
   let ph=iPh>=0? unwrapDeg(rows.map(r=>r[iPh])) : new Array(rows.length).fill(0);
   const n=t.length, b=[], f=[], bp=[], fp=[];
+  const hasFw = (iDph>=0 && iDbe>=0);    // 펌웨어 계산 속도열 존재 — 로봇이 쓴 값 그대로 사용
+  const ah   = iAh>=0?  rows.map(r=>r[iAh])  : null;
+  const phz  = iPhz>=0? srows.map(r=>String(r[iPhz]).trim()) : null;
+  const hold = iHo>=0?  rows.map(r=>r[iHo])  : null;
   // 속도: 25 ms 기저차분 + EMA τ28 ms (실기 파이프라인과 동일 규약)
   const vOf=x=>{
     const raw=new Array(n).fill(0), ema=new Array(n).fill(0);
@@ -1370,14 +1379,16 @@ function loadLogText(txt, name){
     }
     return ema;
   };
-  const ald=vOf(al), thd=vOf(th), phd=vOf(ph);
+  const ald=hasFw?null:vOf(al), thd=hasFw?null:vOf(th), phd=hasFw?null:vOf(ph);
   for(let i=0;i<n;i++){
-    const bb=PL.p1r*al[i]+PL.p2r*th[i], bd=PL.p1r*ald[i]+PL.p2r*thd[i];
+    const bb = iBe>=0? rows[i][iBe] : PL.p1r*al[i]+PL.p2r*th[i];
+    const bd = hasFw? rows[i][iDbe] : PL.p1r*ald[i]+PL.p2r*thd[i];
+    const fd = hasFw? rows[i][iDph] : phd[i];
     b.push(bb); f.push(ph[i]);
-    fp.push(ph[i] + PL.P[0][0]*phd[i] + PL.P[0][1]*bd);
-    bp.push(bb    + PL.P[1][0]*phd[i] + PL.P[1][1]*bd);
+    fp.push(ph[i] + PL.P[0][0]*fd + PL.P[0][1]*bd);
+    bp.push(bb    + PL.P[1][0]*fd + PL.P[1][1]*bd);
   }
-  RLOG={t,b,f,bp,fp,al,th,ph,n, raw:{t,al,th,ph}}; rlogIdx=n-1; rlogPlay=false;
+  RLOG={t,b,f,bp,fp,al,th,ph,n, ah, phz, hold, hasFw, raw:{t,al,th,ph}}; rlogIdx=n-1; rlogPlay=false;
   computeLogSmooth();
   el("sLog").max=n-1; el("sLog").value=n-1;
   // 뷰를 로그 범위에 자동 맞춤 (더블클릭 = 자동 범위 복귀)
@@ -1386,7 +1397,9 @@ function loadLogText(txt, name){
     PLVIEW[kind].on=true; PLVIEW[kind].m=m*1.15; PLVIEW[kind].b=0; PLVIEW[kind].f=0;
   };
   fit(b,f,'pl1'); fit(bp,fp,'pl2');
-  el("logInfo").textContent=`${name}: ${n}행 · ${(t[n-1]-t[0]).toFixed(1)}s · φ열 ${iPh>=0?"있음":"없음(0으로 표시)"} — 뷰를 로그에 맞춤(더블클릭=복귀)`;
+  el("logInfo").textContent=`${name}: ${n}행 · ${(t[n-1]-t[0]).toFixed(1)}s · `
+    +(hasFw? "펌웨어 속도열(dphi·dbeta·Â) 사용":"속도 재구성(25ms+EMA)")
+    +` — 뷰를 로그에 맞춤(더블클릭=복귀)`;
 }
 el("fLog").onchange=ev=>{
   const file=ev.target.files[0]; if(!file) return;
@@ -1405,7 +1418,16 @@ function rlogPose(){
   if(now-(rlogPose._t||0)<60) return; rlogPose._t=now;
   send({cmd:"pose", phi0:RLOG.ph[i], alpha0:RLOG.al[i], theta0:RLOG.th[i]});
 }
-el("sLog").oninput=()=>{ if(!RLOG) return; rlogIdx=Math.min(+el("sLog").value, RLOG.n-1); rlogPose(); };
+function rlogReadout(){
+  if(!RLOG) return;
+  const i=rlogIdx, ex=[];
+  ex.push(`t=${RLOG.t[i].toFixed(2)}s`);
+  if(RLOG.ah)   ex.push(`Â=${(+RLOG.ah[i]).toFixed(2)}°`);
+  if(RLOG.phz)  ex.push(`phase=${RLOG.phz[i]}`);
+  if(RLOG.hold) ex.push(`hold=${(+RLOG.hold[i]).toFixed(1)}°`);
+  el("logCur").textContent=ex.join("  ·  ");
+}
+el("sLog").oninput=()=>{ if(!RLOG) return; rlogIdx=Math.min(+el("sLog").value, RLOG.n-1); rlogPose(); rlogReadout(); };
 el("bLogPlay").onclick=()=>{
   if(!RLOG) return;
   rlogPlay=!rlogPlay;
@@ -1416,7 +1438,7 @@ el("bLogPlay").onclick=()=>{
       if(!rlogPlay || !RLOG) return;
       const tt=performance.now()/1000 - t0 + RLOG.t[0];
       while(rlogIdx<RLOG.n-1 && RLOG.t[rlogIdx+1]<=tt) rlogIdx++;
-      el("sLog").value=rlogIdx; rlogPose();
+      el("sLog").value=rlogIdx; rlogPose(); rlogReadout();
       if(rlogIdx>=RLOG.n-1){ rlogPlay=false; return; }
       requestAnimationFrame(tick);
     })();
