@@ -274,5 +274,18 @@ void loop() {
       if ((int32_t)(ms - log_next_ms) > 100) log_next_ms = ms;
       logLine();
     }
+  } else {                                                 // 정지 중: 4 Hz 모니터 (부호·영점 눈 확인용)
+    static uint32_t mon_next = 0;
+    uint32_t ms = millis();
+    if ((int32_t)(ms - mon_next) >= 0) {
+      mon_next = ms + 250;
+      Serial.print("f=");    Serial.print(phi_d, 2);       // φ (피벗)
+      Serial.print(" k=");   Serial.print(ank_d, 2);       // 발목
+      Serial.print(" d=");   Serial.print(delta_now, 2);   // δ (모터)
+      Serial.print(" | a="); Serial.print(alpha_d, 2);
+      Serial.print(" b=");   Serial.print(beta_d, 2);
+      Serial.print(" A=");   Serial.print(Ahat, 3);
+      Serial.print(" hold="); Serial.println(hold, 1);
+    }
   }
 }
