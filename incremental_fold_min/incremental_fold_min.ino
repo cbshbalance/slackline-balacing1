@@ -10,6 +10,10 @@
  *           IDLE 에서 |Â|<rel 이고 |hold|>1° 면 3°/s 로 천천히 편다
  *
  *  명령(115200): z 영점(완전히 멎은 뒤)  |  g 시작  |  h 정지(토크 유지)
+ *               1 단발접기 모드 토글 — 첫 트리거에서 한 번만 접고 δ 고정(펴기도 없음), 로그는 계속
+ *                 γ·λ 검증용: 접기 직전→직후 Â 비율이 γ 의 성적표(0 근처면 deadbeat,
+ *                 같은 부호 남으면 γ 부족, 부호 넘어가 크면 과대), 그 뒤 ln|Â| 의
+ *                 기울기가 λ 실측치다 (E1 재생·smoothed 참값으로 적합)
  *  로그: 실행 중 50 Hz CSV — finale6 과 같은 형식(fold_logger·E1 재생 호환)
  *
  *  ⚠⚠ 줄 위에 올리기 전에 FOLD_SIGN 을 눈으로 확인할 것 (finale6 헤더의 바닥 시험).
@@ -73,6 +77,7 @@ const float A_OFFSET  =  LINE_C / R_SLOPE;
 enum Phase { IDLE = 0, FOLD = 1, REST = 2 };
 Phase phase = IDLE;
 bool  running = false, motor_ok = false;
+bool  once_mode = false, once_done = false;   // 1: 단발접기 — 첫 접기 후 δ 고정 (γ·λ 검증)
 float home_tick = 0;  uint16_t phi_zero = 0, ank_zero = 0;
 float hold = 0, delta_now = 0;
 float phi_d = 0, ank_d = 0, alpha_d = 0, beta_d = 0, dphi = 0, dbeta = 0, Ahat = 0;
@@ -146,6 +151,7 @@ void controlStep() {
   uint32_t now = millis();
   switch (phase) {
     case IDLE:
+      if (once_mode && once_done) break;               // 단발접기 완료 — δ 고정, 관찰만
       if (fabsf(Ahat) > A_TRIG) {
         float step = FOLD_SIGN * RHO * GAMMA * Ahat;
         if (step >  STEP_LIM) step =  STEP_LIM;
@@ -157,6 +163,7 @@ void controlStep() {
         float fw = profileMs(step) * 1.3f + 20.0f;
         fold_wait_ms = (uint32_t)((fw > FOLD_TMAX) ? FOLD_TMAX : fw);
         phase = FOLD;  phase_t0 = now;
+        if (once_mode) { once_done = true; Serial.println("# 단발접기 실행 — 이후 delta 고정"); }
       } else if (fabsf(Ahat) < A_RELAX && fabsf(hold) > HOLD_DEAD) {
         hold += (hold > 0 ? -1 : 1) * RELAX_RATE * DT_S;   // 천천히 펴기 — 안전할 때만
         if (++relax_thr >= 10) { relax_thr = 0; writeGoal(hold); }
@@ -218,7 +225,7 @@ void setup() {
     Serial.println("# 모터 OK");
   } else Serial.println("# !!! 모터 응답 없음 — 배터리/RS-485 확인");
 
-  Serial.println("# incremental_fold_min — z 영점 / g 시작 / h 정지");
+  Serial.println("# incremental_fold_min — z 영점 / g 시작 / h 정지 / 1 단발접기 토글");
   Serial.println("# D,t_ms,phi,ank,alpha,beta,dphi,dbeta,Ahat,hold,del_now,phase,cue,err");
   t0 = millis();  next_us = micros();
 }
@@ -236,10 +243,15 @@ void loop() {
         dxl.torqueOn(DXL_ID);
       }
       hold = 0; delta_now = 0; primed = false; dphi = dbeta = 0; Ahat = 0; phase = IDLE;
+      once_done = false;
       Serial.println("# ZERO");
     }
-    else if (c == 'g') { phase = IDLE; running = true;  Serial.println("# GO"); }
+    else if (c == 'g') { phase = IDLE; once_done = false; running = true;
+                         Serial.println(once_mode ? "# GO (단발접기 모드)" : "# GO"); }
     else if (c == 'h') { running = false;               Serial.println("# STOP (토크 유지)"); }
+    else if (c == '1') { once_mode = !once_mode; once_done = false;
+                         Serial.println(once_mode ? "# 단발접기 모드 ON — 첫 트리거에서 한 번만 접는다"
+                                                  : "# 단발접기 모드 OFF (연속 증분접기)"); }
   }
 
   uint32_t now = micros();
