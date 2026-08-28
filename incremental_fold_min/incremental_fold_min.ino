@@ -33,6 +33,11 @@ const float R_SLOPE   = -1.506f;   // 실측② 안정모드선 기울기
 const float LINE_C    = 0.0f;      // 실측② 절편 [deg] — 매달림 영점(문서 66)이 0 을 만든다
 const float FOLD_SIGN = +1.0f;     // ★바닥 시험으로 확인
 
+// ---- 엔코더 채널 부호 (문서 65 원칙: 센서 읽는 줄에서만 적용, 정적 체크로만 정한다) ----
+//   재조립·재배선으로 채널의 물리 방향이 뒤집혔으면 그 채널만 −1. 행동 보고 뒤집기 금지.
+const float PHI_SIGN = +1.0f;      // 피벗 엔코더
+const float ANK_SIGN = +1.0f;      // 발목 엔코더
+
 // ---- 노브 4 ----
 const float GAMMA      = 11.0f;    // 접기 이득 γ (고원 4~12)
 const float T_REST     = 60.0f;    // REST [ms]
@@ -125,8 +130,8 @@ float profileMs(float deg) {                     // 프로파일 소요시간 �
 
 // ---- 상태 읽기 → Â ----
 void readState() {
-  phi_d = rawToDeg(as5047_raw(PHI_CS), phi_zero);
-  ank_d = rawToDeg(as5047_raw(ANK_CS), ank_zero);
+  phi_d = PHI_SIGN * rawToDeg(as5047_raw(PHI_CS), phi_zero);
+  ank_d = ANK_SIGN * rawToDeg(as5047_raw(ANK_CS), ank_zero);
   delta_now = readDelta();
   alpha_d = ank_d - phi_d;                       // ★문서 69 정정: −
   beta_d  = alpha_d + P2R * delta_now;
