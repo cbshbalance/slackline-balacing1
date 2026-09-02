@@ -114,28 +114,42 @@ def test_analysis():
     r2 = an.run(ds, "p2r", dict(avg_s=2.0, seg_mode="events"))
     check("P2R MOVE 이벤트 분할도 0.428~0.434", r2["ok"] and 0.428 < r2["result"]["P2R"] < 0.434, str(r2.get("result", {}).get("P2R")))
     ds = Dataset(); ds.load_text(open(LAMBDA_CSV, encoding="utf-8").read(), "lambda")
-    tr = an.run(ds, "trials", dict(phi_eq=1.40, reldet=1.0))
+    tr = an.run(ds, "trials", dict(phi_eq=1.40))
     T = tr["result"]
-    check("시행 분할 (유효 ≥ 10)", tr["ok"] and T["n_valid"] >= 10, str(T))
+    check("시행 분할 (유효 ≥ 10, 정지→이탈 감지)", tr["ok"] and T["n_valid"] >= 10 and T["mode"] == "rel", str(T))
+    k0 = tr["table"][1]
+    check("놓기점 = 손 뗀 순간 (t0 < 문턱통과 t_thr, φ₀ 가 정지평균 근처)", k0["t0"] < k0["t_thr"] and abs(k0["phi0"] - k0["phi_q"]) < 0.6, str(k0))
     check("λ (φ_eq=1.40) 방향 평균 4.8~6.3 (문서 70: 5.33/5.54)", 4.8 < T["lam_plus"] < 6.3 and 4.8 < T["lam_minus"] < 6.3, f"{T['lam_plus']}/{T['lam_minus']}")
     check("방향 갈림 < 20 %", T["dir_split_pct"] < 20, str(T["dir_split_pct"]))
-    tr0 = an.run(ds, "trials", dict(phi_eq=0.0, reldet=1.0))["result"]
+    tr0 = an.run(ds, "trials", dict(phi_eq=0.0))["result"]
     check("φ_eq=0 이면 방향 갈림 커짐 (문서 70 §5 재현)", tr0["dir_split_pct"] is None or tr0["dir_split_pct"] > T["dir_split_pct"], str(tr0))
     k = tr["table"][1]
     lam = an.run(ds, "lambda", dict(t0=k["t0"] - 0.05, t1=k["t1"], phi_eq=1.40))
     check("단일 시행 λ 적합 + 통과시각 + 오버레이", lam["ok"] and lam["result"]["lam"] > 3 and lam["result"]["t_cross"] and lam["overlay"], str(lam.get("result")))
-    pe = an.run(ds, "phi_eq", dict(grid_lo=-1, grid_hi=4, step=0.1, phi_eq=1.4, reldet=1.0))
+    pe = an.run(ds, "phi_eq", dict(grid_lo=-1, grid_hi=4, step=0.1, phi_eq=1.4))
     check("φ_eq 훑기 0.5~2.5° (문서 70: 1.40)", pe["ok"] and 0.5 < pe["result"]["phi_eq_best"] < 2.5, str(pe.get("result")))
-    bd = an.run(ds, "boundary", dict(phi_eq=1.4, reldet=1.0))
-    check("놓기 경계 도구 (r 고정 분리 0 오류)", bd["ok"] and bd["result"]["errors"] == 0 and bd["plane"], str(bd.get("result")))
+    bd = an.run(ds, "boundary", dict(phi_eq=1.4))
+    check("놓기 경계 도구 (방향유효 시행 ≥ 10, 평면 오버레이)", bd["ok"] and bd["result"]["n"] >= 10 and bd["plane"], str(bd.get("result")))
     st = an.run(ds, "stats", dict(t0=0, t1=5))
     check("구간 통계", st["ok"] and any(r["ch"] == "u_phi" for r in st["table"]))
-    sid = an.run(ds, "sysid", dict(phi_max=5.0, smooth_ms=200.0, phi_eq=1.4, reldet=1.0))
+    sid = an.run(ds, "sysid", dict(phi_max=5.0, smooth_ms=200.0, phi_eq=1.4))
     check("시스템 동정 실행 (수치 확인용 — 정본은 64회 놓기)", sid["ok"] and sid["result"]["n"] > 100, str(sid.get("msg") or sid["result"].get("lam")))
     bad = an.run(ds, "osc", dict(t0=0, t1=0.05))
     check("실패는 메시지로 (앱 안 죽음)", bad["ok"] is False and bad.get("msg"))
     unk = an.run(ds, "nope", {})
     check("모르는 도구", unk["ok"] is False)
+    # 합성 r 실험: φ=+3° 에서 잡고 있다가 놓아 발산 — 절대 문턱이 아니라 정지→이탈로 잡혀야 한다
+    dsr = Dataset(); dsr.set_header("t_ms,phi,ank,del_now".split(","))
+    rows = []
+    for k in range(3000):
+        tt = k * 0.01; c = tt % 10.0
+        if c < 3.0: ph = 3.0 + 0.03 * np.sin(50 * tt)
+        elif c < 5.0: ph = 3.0 + 0.5 * np.exp(5.5 * (c - 3.0)); ph = min(ph, 12.0)
+        else: ph = 0.0 + 0.03 * np.sin(50 * tt)
+        rows.append(f"{int(tt*1000)},{ph:.4f},{ph*0.33:.4f},0")
+    for r in rows: dsr.add_data_row(r)
+    trr = an.run(dsr, "trials", dict(phi_eq=0.0))
+    check("φ=+3° 정지에서 놓기 감지 (놓기점 φ₀≈3.0)", trr["ok"] and trr["result"]["n_dir_valid"] >= 3 and abs(trr["table"][0]["phi0"] - 3.0) < 0.2, str(trr["result"]) + " " + str(trr["table"][:1]))
     # 합성 신호로 osc
     dsyn = Dataset(); dsyn.set_header("t_ms,phi,ank,del_now".split(","))
     w, z = 4.86, 0.03

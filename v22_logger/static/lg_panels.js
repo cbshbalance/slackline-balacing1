@@ -261,14 +261,14 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
 
   // ================= 분석 패널 =================
   const CH_OPTS = ["u_phi", "u_ank", "del", "a_alpha", "a_beta", "a_theta", "a_dphi", "a_dbeta", "a_Ahat", "a_psi", "s_phi", "s_beta", "alpha_fw", "beta_fw", "Ahat_fw", "dphi_fw", "dbeta_fw", "hold", "phase"];
-  const TRIAL_P = [{ k: "mode", l: "시행 모드", v: "auto", t: "sel", o: ["auto", "phase", "psi"] }, { k: "phi_eq", l: "φ_eq (빈칸=파이프)", v: "" }, { k: "reldet", l: "놓기 |ψ| 문턱", v: 1.0 },
-                   { k: "fcatch", l: "종료 |ψ|", v: 8.5 }, { k: "quiet_s", l: "직전 정지 s", v: 0.4 }, { k: "max_rise_s", l: "최대 상승 s", v: 2.0 }, { k: "min_peak", l: "최소 진폭", v: 4.0 }, { k: "min_r2", l: "최소 R²", v: 0.9 }];
+  const TRIAL_P = [{ k: "mode", l: "시행 모드", v: "auto", t: "sel", o: ["auto", "phase", "rel"] }, { k: "phi_eq", l: "φ_eq (빈칸=파이프)", v: "" }, { k: "reldet", l: "놓기 이탈 문턱 °", v: 1.0 },
+                   { k: "fcatch", l: "종료 |φ−φ_q|", v: 8.5 }, { k: "quiet_s", l: "직전 정지 s", v: 0.5 }, { k: "quiet_tol", l: "정지 허용폭 °", v: 0.35 }, { k: "max_rise_s", l: "최대 상승 s", v: 2.0 }, { k: "min_peak", l: "최소 진폭", v: 4.0 }, { k: "min_r2", l: "최소 R²", v: 0.9 }];
   const TOOLS = {
     stats: { label: "구간 통계 · 잡음 바닥", win: true, help: "평균·표준편차·드리프트, hp_rms = 이동평균을 뺀 잔차 rms (문서 54 잡음 바닥 방식)", p: [{ k: "hp_ms", l: "고역 창 ms", v: 100 }] },
     linfit: { label: "선형 적합 y = a + b·x", win: true, help: "구간 전 표본 점별 최소제곱. x=del, y=α 이면 P2R = −b 도 표시", p: [{ k: "xch", l: "x 열", v: "del", t: "chan" }, { k: "ych", l: "y 열", v: "a_alpha", t: "chan" }] },
     p2r: { label: "P2R — 실측① (평탄구간 평균 → α 대 δ)", win: true, help: "문서 64 p2r_fit 절차: hold 평탄구간(또는 MOVE 이벤트)으로 나눠 각 구간 끝 avg_s 평균점을 적합. 상행/하행/원점강제/인접차분 교차검산", p: [{ k: "avg_s", l: "구간 끝 평균 s", v: 2.0 }, { k: "seg_mode", l: "구간 나누기", v: "auto", t: "sel", o: ["auto", "hold", "events"] }, { k: "min_seg_s", l: "최소 구간 s", v: 1.5 }, { k: "ych", l: "y 열", v: "a_alpha", t: "chan" }] },
     lambda: { label: "λ — 실측③ (ln|ψ| 직선적합)", win: true, help: "ψ = φ − φ_eq. |ψ| 가 lo 를 위로 지나 hi 에 닿기까지의 상승 구간만 씀. lam24/lam48 = 펌웨어 R행 방식 비교", p: [{ k: "phi_eq", l: "φ_eq (빈칸=파이프)", v: "" }, { k: "lo", l: "밴드 하한 °", v: 2.0 }, { k: "hi", l: "밴드 상한 °", v: 9.0 }, { k: "ch", l: "채널", v: "u_phi", t: "chan" }, { k: "smooth_ms", l: "평활 ms (0=없음)", v: 0 }] },
-    trials: { label: "시행 나누기 (놓기 → 발산 → 잡기)", win: "opt", help: "phase 열(4/5/6)이 있으면 phase, 아니면 |ψ| 문턱으로 자동 분할. 시행마다 놓기점·방향·λ. 유효 판정에 걸리면 표에 남기되 평균에서 제외", p: TRIAL_P },
+    trials: { label: "시행 나누기 (놓기 → 발산 → 잡기)", win: "opt", help: "정지(손에 잡힘) → 이탈로 놓기를 찾는다. φ=±3° 에서 놓아도 된다. 놓기점 = 손 뗀 순간의 자세. dir_valid = 방향 확실(놓기 경계용), valid = λ 적합까지 좋음(λ 평균용)", p: TRIAL_P },
     phi_eq: { label: "φ_eq 훑기 (방향별 λ 일치점)", win: "opt", help: "문서 70 §5 — +낙하 λ 와 −낙하 λ 가 만나는 φ_eq. 양방향 시행이 있어야 한다", p: [{ k: "lo", l: "밴드 하한", v: 2.0 }, { k: "hi", l: "밴드 상한", v: 9.0 }, { k: "grid_lo", l: "격자 시작", v: -3 }, { k: "grid_hi", l: "격자 끝", v: 4 }, { k: "step", l: "격자 간격", v: 0.05 }, ...TRIAL_P.slice(2)] },
     osc: { label: "감쇠 진동 (ω, ζ, c_φ) — 매달림 자유흔들기", win: true, help: "영점 교차 → 주기, 봉우리 → 대수감쇠율, 정밀화 = 감쇠 사인 비선형 적합", p: [{ k: "ch", l: "채널", v: "u_phi", t: "chan" }, { k: "smooth_ms", l: "평활 ms", v: 0 }, { k: "refine", l: "정밀화", v: true, t: "bool" }, { k: "I_r", l: "I_r kg·m²", v: 0.0045 }] },
     boundary: { label: "놓기 경계 r·c₀ — 실측② 경로②", win: "opt", help: "놓기점 (φ₀, β₀) 와 낙하 방향만 사용 (미분·모델 없음). r 고정 시 절편 c₀ 분리 문턱, r 격자 훑기 포함", p: [{ k: "r_fixed", l: "r 고정 (빈칸=파이프)", v: "" }, { k: "grid_lo", l: "r 격자 시작", v: -3 }, { k: "grid_hi", l: "r 격자 끝", v: -0.8 }, { k: "step", l: "간격", v: 0.01 }, ...TRIAL_P.slice(1)] },
@@ -331,7 +331,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
     if (res.table && res.table.length) {
       const cols = [...new Set(res.table.flatMap(r => Object.keys(r)))].filter(c => !c.startsWith("i") || c === "ia" || c === "ib").filter(c => !["ia", "ib", "i0", "i1"].includes(c));
       h += `<table class="tb"><tr>${cols.map(c => `<th>${esc(c)}</th>`).join("")}</tr>`;
-      for (const r of res.table) h += `<tr class="${r.valid === false ? "bad" : ""}">${cols.map(c => `<td>${fmtV(r[c])}</td>`).join("")}</tr>`;
+      for (const r of res.table) h += `<tr class="${(r.dir_valid === false || (r.valid === false && r.dir_valid === undefined)) ? "bad" : ""}">${cols.map(c => `<td>${fmtV(r[c])}</td>`).join("")}</tr>`;
       h += `</table>`;
     }
     if (res.trace) h += `<pre class="hint">${esc(res.trace)}</pre>`;
@@ -340,7 +340,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
     LG.chartOverlay = res.overlay || []; LG.planeOverlay = res.plane || [];
     if (res.tool === "trials" && res.ok) {
       LG.lastTrials = res.table; const s = el("anTrial"); s.innerHTML = `<option value="">시행…</option>`;
-      for (const r of res.table) { const o = document.createElement("option"); o.value = r.k; o.textContent = `시행 ${r.k} ${r.dir > 0 ? "+" : "−"} ${r.t0}s${r.valid ? "" : " ✗"}`; s.appendChild(o); }
+      for (const r of res.table) { const o = document.createElement("option"); o.value = r.k; o.textContent = `시행 ${r.k} ${r.dir > 0 ? "+" : "−"} ${r.t0}s (β${r.beta0}, φ${r.phi0})${r.valid ? "" : (r.dir_valid ? " λ✗" : " ✗")}`; s.appendChild(o); }
     }
   }
   LG.on("analysis", res => {
@@ -386,7 +386,10 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
       const i = LG.cur();
       if (i >= 0) {
         const p = LG.poseAt(i), ph = LG.val("phase", i), A = LG.val("a_Ahat", i), Af = LG.val("Ahat_fw", i);
-        el("ov3d").textContent = `t = ${fmt(LG.tOf(i), 3)} s   [${isFinite(ph) ? LG.phaseName(ph) : "—"}]\nφ = ${fmt(p.phi)}°   ank = ${fmt(LG.val("u_ank", i))}°\nα = ${fmt(p.alpha)}°   θ = ${fmt(p.theta)}°   δ = ${fmt(LG.val("del", i))}°\nβ = ${fmt(LG.val("a_beta", i))}°   Â = ${fmt(A, 3)}° (펌 ${fmt(Af, 3)})   |Â|/trig = ${fmt(Math.abs(A) / LG.trig, 2)}\nφ̇ = ${fmt(LG.val("a_dphi", i), 1)}  β̇ = ${fmt(LG.val("a_dbeta", i), 1)} °/s`;
+        let tgt = "";
+        if (el("cTgt").checked) { const tb = +el("iTgtB").value || 0, tf = +el("iTgtF").value || 0, db = LG.val("a_beta", i) - tb, df = p.phi - tf;
+          tgt = `\n목표 (β ${tb.toFixed(1)}, φ ${tf.toFixed(1)}) 까지  Δβ ${db >= 0 ? "+" : ""}${fmt(db)}  Δφ ${df >= 0 ? "+" : ""}${fmt(df)}  ${Math.abs(db) < 0.2 && Math.abs(df) < 0.2 ? "● 놓아도 됨" : "○"}`; }
+        el("ov3d").textContent = `t = ${fmt(LG.tOf(i), 3)} s   [${isFinite(ph) ? LG.phaseName(ph) : "—"}]\nφ = ${fmt(p.phi)}°   ank = ${fmt(LG.val("u_ank", i))}°\nα = ${fmt(p.alpha)}°   θ = ${fmt(p.theta)}°   δ = ${fmt(LG.val("del", i))}°\nβ = ${fmt(LG.val("a_beta", i))}°   Â = ${fmt(A, 3)}° (펌 ${fmt(Af, 3)})   |Â|/trig = ${fmt(Math.abs(A) / LG.trig, 2)}\nφ̇ = ${fmt(LG.val("a_dphi", i), 1)}  β̇ = ${fmt(LG.val("a_dbeta", i), 1)} °/s` + tgt;
         el("tTime").textContent = `t = ${fmt(LG.tOf(i), 3)} s  [${i + 1}/${LG.ds.n}]`;
         if (LG.follow) el("sIdx").value = LG.ds.n - 1; else el("sIdx").value = i;
         updateTables();

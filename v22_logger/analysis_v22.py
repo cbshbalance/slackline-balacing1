@@ -348,9 +348,28 @@ def lambda_fit(ds, t0=None, t1=None, phi_eq=None, lo=2.0, hi=9.0, ch="u_phi", sm
 
 
 # ---------------------------------------------------------------- 4. 시행 나누기
-def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.4, min_len_s=0.15, t0=None, t1=None,
-                max_rise_s=2.0, min_peak=4.0, min_r2=0.9):
-    """놓기 시행 자동 분할. mode: auto(phase 열이 4/5/6 을 쓰면 phase, 아니면 psi) / phase / psi"""
+def _quiet_mask(phi, w, tol):
+    """뒤쪽 w 표본 창의 최대−최소 < tol 이면 '정지' (창이 안 차는 앞부분은 False)."""
+    n = len(phi)
+    q = np.zeros(n, dtype=bool)
+    if n < w or w < 2:
+        return q
+    from numpy.lib.stride_tricks import sliding_window_view
+    win = sliding_window_view(phi, w)
+    rng = win.max(axis=1) - win.min(axis=1)
+    q[w - 1:] = rng < tol
+    return q
+
+
+def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.5, quiet_tol=0.35, min_len_s=0.15,
+                t0=None, t1=None, max_rise_s=2.0, min_peak=4.0, min_r2=0.9):
+    """놓기 시행 자동 분할.
+       mode auto: phase 열이 5(발산) 를 쓰면 phase 로, 아니면 rel(정지→이탈) 로.
+       rel: quiet_s 동안 φ 의 최대−최소 < quiet_tol 이면 '손에 잡혀 정지' 로 보고, 그 정지 평균 φ_q 에서
+            reldet 이상 벗어나는 순간이 놓기. ★놓기점 = 정지에서 벗어나기 시작한 표본 (손 뗀 순간의 자세).
+            φ_q 가 0 이 아니어도 된다 — r 실험처럼 φ=±3° 에서 놓아도 잡는다.
+       유효 판정 두 가지: dir_valid(방향이 확실: 놓기 뒤 max_rise_s 안에 min_peak 이상 벗어남) / lam_valid(+λ 적합 R²≥min_r2).
+       놓기 경계(r·c₀)는 dir_valid, λ 평균·φ_eq·동정은 lam_valid 만 쓴다."""
     t, i0, i1 = _win(ds, t0, t1)
     if i1 - i0 < 10:
         return dict(tool="trials", ok=False, msg="표본 부족")
@@ -359,7 +378,7 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
     phi = ds.arr("u_phi"); ank = ds.arr("u_ank"); beta = ds.arr("a_beta"); A = ds.arr("a_Ahat")
     ph = ds.arr("phase")
     psi = phi - phi_eq
-    trials = []
+    trials = []                      # (rel, s0, e, phi_q)
     used_mode = mode
     if mode in ("auto", "phase") and np.isfinite(ph[i0:i1]).any() and np.any(ph[i0:i1] == 5):
         used_mode = "phase"
@@ -369,80 +388,114 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
                 e = k
                 while e < i1 and ph[e] == 5:
                     e += 1
-                trials.append((k, e))
+                rel = max(i0, k - 1)
+                trials.append((rel, k, e, float(phi[rel])))
                 k = e
             else:
                 k += 1
     else:
-        used_mode = "psi"
-        a = np.abs(psi)
-        k = i0
-        quiet_from = None
-        while k < i1:
-            if a[k] < reldet:
-                if quiet_from is None:
-                    quiet_from = k
+        used_mode = "rel"
+        dt = float(np.median(np.diff(t[i0:i1]))) if i1 - i0 > 2 else 0.01
+        w = max(3, int(round(quiet_s / max(dt, 1e-4))))
+        quiet = _quiet_mask(phi[i0:i1], w, quiet_tol)
+        k = 0
+        n = i1 - i0
+        while k < n:
+            if not quiet[k]:
                 k += 1
                 continue
-            # 문턱 초과: 직전에 quiet_s 이상 조용했어야 놓기다
-            if quiet_from is not None and t[k] - t[quiet_from] >= quiet_s:
-                s0 = k
-                e = k
-                pk = a[k]
-                while e + 1 < i1:
-                    e += 1
-                    pk = max(pk, a[e])
-                    if a[e] >= fcatch or (pk > reldet * 2 and a[e] < 0.5 * pk) or (np.sign(psi[e]) != np.sign(psi[s0]) and a[e] > reldet):
-                        break
-                if t[e] - t[s0] >= min_len_s:
-                    trials.append((s0, e))
-                k = e + 1
-                quiet_from = None
-            else:
-                quiet_from = None
-                k += 1
+            q_end = k
+            while q_end + 1 < n and quiet[q_end + 1]:
+                q_end += 1
+            seg = phi[i0 + q_end - w + 1: i0 + q_end + 1]
+            phi_q = float(seg.mean()); sig = float(seg.std())
+            s0 = q_end + 1
+            found = False
+            while s0 < n:
+                if abs(phi[i0 + s0] - phi_q) >= reldet:
+                    found = True
+                    break
+                if quiet[s0] and (t[i0 + s0] - t[i0 + q_end]) > quiet_s:     # 다시 정지 — 놓기 아님
+                    break
+                s0 += 1
+            if not found:
+                k = max(s0, q_end + 1)
+                continue
+            thr = max(3.0 * sig, 0.15)
+            rel = s0
+            while rel - 1 > q_end - w and abs(phi[i0 + rel - 1] - phi_q) > thr:
+                rel -= 1
+            rel = max(rel - 1, 0)
+            sgn = 1.0 if phi[i0 + s0] - phi_q >= 0 else -1.0
+            e = s0; pk = abs(phi[i0 + s0] - phi_q)
+            ended_quiet = False
+            while e + 1 < n:
+                e += 1
+                d = phi[i0 + e] - phi_q; ad = abs(d); pk = max(pk, ad)
+                if ad >= fcatch or (pk > 2 * reldet and ad < 0.5 * pk) or (np.sign(d) != sgn and ad > reldet):
+                    break
+                if quiet[e] and e - s0 >= w:          # 다른 자세로 옮겨 잡고 다시 정지 — 놓기가 아니라 이동
+                    e = e - w + 1; ended_quiet = True
+                    break
+            if t[i0 + e] - t[i0 + rel] >= min_len_s:
+                trials.append((i0 + rel, i0 + s0, i0 + e, phi_q))
+            k = e if ended_quiet else e + 1
     rows = []
-    for m, (s0, e) in enumerate(trials):
-        j = max(i0, s0 - 1)
+    for m, (rel, s0, e, phi_q) in enumerate(trials):
         ee = min(e, ds.n - 1)
-        d = 1 if psi[ee - 1] >= 0 else -1
-        sub = lambda_fit(ds, float(t[s0]) - 0.05, float(t[ee]), phi_eq=phi_eq)
-        dur = float(t[ee] - t[s0]); pk = float(np.abs(psi[s0:e]).max())
-        why = []
-        if dur > max_rise_s:
-            why.append(f"느림 {dur:.1f}s>{max_rise_s}s")
+        dep = phi[rel:ee + 1] - phi_q
+        d = 1 if dep[-1] >= 0 else -1
+        adep = np.abs(dep)
+        pk = float(adep.max()) if len(adep) else 0.0
+        reach = np.nonzero(adep >= min_peak)[0]
+        t_reach = float(t[rel + reach[0]] - t[rel]) if len(reach) else None
+        sub = lambda_fit(ds, float(t[rel]), float(t[ee]), phi_eq=phi_eq)
+        dur = float(t[ee] - t[rel])
+        why_dir, why_lam = [], []
         if pk < min_peak:
-            why.append(f"진폭 {pk:.1f}°<{min_peak}°")
-        if sub.get("ok") and sub["result"]["r2"] is not None and sub["result"]["r2"] < min_r2:
-            why.append(f"R² {sub['result']['r2']:.2f}<{min_r2}")
-        rows.append(dict(k=m + 1, i0=int(s0), i1=int(e), t0=_r(t[s0], 3), t1=_r(t[ee], 3),
-                         dur=_r(dur, 3), dir=d, valid=not why, why=" · ".join(why),
-                         phi0=_r(phi[j], 3), ank0=_r(ank[j], 3), beta0=_r(beta[j], 3), A0=_r(A[j], 3),
+            why_dir.append(f"진폭 {pk:.1f}°<{min_peak}°")
+        elif t_reach is not None and t_reach > max_rise_s:
+            why_dir.append(f"느림 {t_reach:.1f}s>{max_rise_s}s")
+        if not sub.get("ok"):
+            why_lam.append("λ 적합 실패")
+        elif sub["result"]["r2"] is not None and sub["result"]["r2"] < min_r2:
+            why_lam.append(f"R² {sub['result']['r2']:.2f}<{min_r2}")
+        dir_valid = not why_dir
+        lam_valid = dir_valid and not why_lam
+        rows.append(dict(k=m + 1, i0=int(rel), i1=int(e), t0=_r(t[rel], 3), t_thr=_r(t[s0], 3), t1=_r(t[ee], 3),
+                         dur=_r(dur, 3), dir=d, dir_valid=dir_valid, valid=lam_valid, why=" · ".join(why_dir + why_lam),
+                         phi_q=_r(phi_q, 3), phi0=_r(phi[rel], 3), ank0=_r(ank[rel], 3), beta0=_r(beta[rel], 3), A0=_r(A[rel], 3),
                          lam=sub["result"]["lam"] if sub.get("ok") else None,
                          lam_r2=sub["result"]["r2"] if sub.get("ok") else None,
                          lam_n=sub["result"]["n"] if sub.get("ok") else None,
-                         peak=_r(pk, 2)))
+                         peak=_r(pk, 2), t_reach=_r(t_reach, 3) if t_reach is not None else None))
     lam_p = [r["lam"] for r in rows if r["dir"] > 0 and r["lam"] and r["valid"]]
     lam_n = [r["lam"] for r in rows if r["dir"] < 0 and r["lam"] and r["valid"]]
-    res = dict(n_trials=len(rows), n_valid=int(sum(1 for r in rows if r["valid"])), mode=used_mode, phi_eq=_r(phi_eq, 3),
+    res = dict(n_trials=len(rows), n_dir_valid=int(sum(1 for r in rows if r["dir_valid"])),
+               n_valid=int(sum(1 for r in rows if r["valid"])), mode=used_mode, phi_eq=_r(phi_eq, 3),
                lam_plus=_r(np.mean(lam_p), 3) if lam_p else None, n_plus=len(lam_p),
                lam_minus=_r(np.mean(lam_n), 3) if lam_n else None, n_minus=len(lam_n))
     if lam_p and lam_n:
         lo_, hi_ = min(res["lam_plus"], res["lam_minus"]), max(res["lam_plus"], res["lam_minus"])
         res["dir_split_pct"] = _r(100 * (hi_ - lo_) / lo_, 1) if lo_ > 0 else None
     steps = [f"모드 {used_mode}: " + ("phase==5(발산) 구간을 시행으로" if used_mode == "phase" else
-             f"|ψ|<{reldet}° 가 {quiet_s}s 이상 이어진 뒤 {reldet}° 를 넘는 순간 = 놓기, |ψ|≥{fcatch}° 또는 되돌아오면 종료"),
-             "놓기점 = 놓기 직전 표본의 (φ, ank, β, Â)  — 문서 70 §4-2 경로② 의 입력",
-             "시행별 λ = lambda 도구(밴드 2~9°, 같은 φ_eq) — 방향별 평균이 20 % 넘게 갈리면 φ_eq 의심 (문서 79 §3)",
-             f"유효 판정: 상승 {max_rise_s}s 이내 · 최대 |ψ| ≥ {min_peak}° · 적합 R² ≥ {min_r2} 아니면 표에 남기되 평균에서 제외 (손 접촉·느린 표류 걸러내기, 문서 70 §6-3)"]
-    overlay = [dict(kind="band", t0=r["t0"], t1=r["t1"], label=f"시행 {r['k']} {'+' if r['dir']>0 else '−'}" + ("" if r["valid"] else " ✗"),
-                    color=("rgba(255,0,110,.10)" if r["dir"] > 0 else "rgba(58,134,255,.12)") if r["valid"] else "rgba(255,255,255,.06)") for r in rows]
-    vr = [r for r in rows if r["valid"]]
+             f"φ 가 {quiet_s}s 동안 {quiet_tol}° 안에 머물면 정지(손에 잡힘)로 보고, 정지 평균 φ_q 에서 {reldet}° 벗어나는 순간 = 놓기, {fcatch}° 이상 또는 되돌아오면 종료"),
+             "★놓기점 (φ₀, ank₀, β₀, Â₀) = 정지에서 벗어나기 시작한 표본 — 손 뗀 순간의 자세 (t0). t_thr = 문턱 통과 시각",
+             f"방향 유효(dir_valid): 놓기 뒤 {max_rise_s}s 안에 |φ−φ_q| ≥ {min_peak}° — 놓기 경계(r·c₀)는 이것만 본다",
+             f"λ 유효(valid): 방향 유효 + λ 적합 R² ≥ {min_r2} — 방향별 λ 평균·φ_eq 훑기는 이것만 쓴다",
+             "시행별 λ = lambda 도구(밴드 2~9°, 같은 φ_eq). 방향별 평균이 20 % 넘게 갈리면 φ_eq 의심 (문서 79 §3)"]
+    overlay = []
+    for r in rows:
+        col = ("rgba(255,0,110,.10)" if r["dir"] > 0 else "rgba(58,134,255,.12)") if r["dir_valid"] else "rgba(255,255,255,.06)"
+        overlay.append(dict(kind="band", t0=r["t0"], t1=r["t1"], label=f"시행 {r['k']} {'+' if r['dir']>0 else '−'}" + ("" if r["dir_valid"] else " ✗"), color=col))
+        overlay.append(dict(kind="vline", t=r["t0"], label=f"놓기 {r['k']}", color="rgba(255,209,102,.8)"))
+    vr = [r for r in rows if r["dir_valid"]]
     plane = [dict(kind="points", plane="pl1", x=[r["beta0"] for r in vr], y=[r["phi0"] for r in vr],
                   dir=[r["dir"] for r in vr], label="놓기점 (β₀, φ₀) 색=낙하 방향")]
     return dict(tool="trials", ok=True, window=[_r(t[i0]), _r(t[i1 - 1])], used=[[r["i0"], r["i1"]] for r in rows],
                 n=len(rows), steps=steps, result=res, table=rows,
-                params=dict(mode=used_mode, phi_eq=phi_eq, reldet=reldet, fcatch=fcatch, quiet_s=quiet_s),
+                params=dict(mode=used_mode, phi_eq=phi_eq, reldet=reldet, fcatch=fcatch, quiet_s=quiet_s, quiet_tol=quiet_tol,
+                            max_rise_s=max_rise_s, min_peak=min_peak, min_r2=min_r2),
                 overlay=overlay, plane=plane, curves=[])
 
 
@@ -576,7 +629,7 @@ def boundary_fit(ds, trials=None, r_fixed=None, grid_lo=-3.0, grid_hi=-0.8, step
         tres = find_trials(ds, **kw)
         if not tres.get("ok"):
             return tres
-        tr = [r for r in tres["table"] if r.get("valid", True)]
+        tr = [r for r in tres["table"] if r.get("dir_valid", r.get("valid", True))]
     pts = [(r["phi0"], r["beta0"], r["dir"]) for r in tr if r.get("phi0") is not None and r.get("beta0") is not None]
     if len(pts) < 3:
         return dict(tool="boundary", ok=False, msg="놓기점 3개 미만")
@@ -629,7 +682,7 @@ def boundary_fit(ds, trials=None, r_fixed=None, grid_lo=-3.0, grid_hi=-0.8, step
                            xlab="r", ylab="", vline=float(xs[kbest])))
     for (p, b, dd), cc in zip(pts, phi0 - r_use * beta0):
         rows.append(dict(phi0=_r(p, 3), beta0=_r(b, 3), dir=int(dd), c_i=_r(cc, 3)))
-    steps = [f"놓기점 {len(pts)} 개 (φ₀, β₀) 와 낙하 방향 — 미분·모델 미사용 (문서 70 §4-2 경로②)",
+    steps = [f"놓기점 {len(pts)} 개 (φ₀, β₀ = 손 뗀 순간의 자세) 와 낙하 방향 — 미분·모델 미사용 (문서 70 §4-2 경로②). 방향 유효 시행만",
              f"(a) 놓기점 회귀 β₀ = s·φ₀ + b: s = {lr['b']:.4f}, 상관 {corr:.3f} → r = 1/s = {r_reg:.3f}  (놓은 자리가 경계 근처일 때만 의미)",
              f"(b) 기울기 r = {r_use:.4f} 고정, 각 점의 절편 c_i = φ₀ − r·β₀ 를 정렬 → 방향이 갈리는 문턱 = c₀ (오분류 {err}, 여유 {gap:.3f}°)",
              "(c) r 를 격자로 훑어 오분류 최소·여유 최대인 r 도 함께 (양방향 시행이 있을 때만)",

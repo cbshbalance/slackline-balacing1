@@ -105,6 +105,14 @@
         ctx.beginPath(); ctx.moveTo(px, py - 6 * DPR); ctx.lineTo(px + 6 * DPR, py); ctx.lineTo(px, py + 6 * DPR); ctx.lineTo(px - 6 * DPR, py); ctx.closePath(); ctx.fill();
       }
     }
+    // 놓기 목표점 십자선 (속도 0 놓기 → 예측점 = 원위치이므로 두 평면 같은 자리)
+    if (LG.el("cTgt") && LG.el("cTgt").checked) {
+      const tb = +LG.el("iTgtB").value || 0, tf = +LG.el("iTgtF").value || 0;
+      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.4 * DPR; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(X(tb) - 10 * DPR, Y(tf)); ctx.lineTo(X(tb) + 10 * DPR, Y(tf)); ctx.moveTo(X(tb), Y(tf) - 10 * DPR); ctx.lineTo(X(tb), Y(tf) + 10 * DPR); ctx.stroke();
+      ctx.strokeStyle = "rgba(255,255,255,.45)"; ctx.beginPath(); ctx.arc(X(tb), Y(tf), Math.abs(X(tb + 0.3) - X(tb)), 0, 7); ctx.stroke();
+      ctx.fillStyle = "#ffffff"; ctx.font = `${10 * DPR}px Consolas`; ctx.fillText(`목표 (${tb.toFixed(1)}, ${tf.toFixed(1)})`, X(tb) + 12 * DPR, Y(tf) - 6 * DPR);
+    }
     // 분석 오버레이 (놓기점·경계선)
     if (LG.showOverlay) for (const o of LG.planeOverlay) {
       if (o.plane !== kind) continue;
