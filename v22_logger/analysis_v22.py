@@ -997,9 +997,123 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
                 params=dict(off=off, off_min=off_min, beta_set=bset, r_guess=r_guess, step_max=step_max), overlay=[], plane=plane, curves=curves, next=nxt)
 
 
+
+# ---------------------------------------------------------------- 9. 접기 성적표 (γ) — 접기-유지 맵 A⁺ = G·A⁻ − g·Δδ
+def fold_report(ds, lock_ms=250.0, pre_ms=40.0, lam=None, min_dd=1.0, use="app", t0=None, t1=None):
+    """단일접기(또는 수동 fold) 시행마다 접기 직전 Â(A⁻), 실제 접힌 Δδ, 관측창 lock_ms 뒤 Â(A⁺) 를 잘라
+       G = e^{λ·lock}, g = (G·A⁻ − A⁺)/Δδ, γ = G/g (= A⁺ 를 0 으로 만드는 이득, ρ 없음) 를 낸다.
+       접기 사건은 E행 FOLD(펌웨어) 우선, 없으면 hold 열의 계단(≥ min_dd°)으로 찾는다.
+       use='app' 이면 앱이 다시 계산한 Â(a_Ahat), 'fw' 면 펌웨어 열(Ahat_fw)."""
+    t, i0, i1 = _win(ds, t0, t1)
+    if ds.n < 10:
+        return dict(tool="fold", ok=False, msg="표본 부족")
+    if lam is None:
+        lam = float(ds.pipe.get("lam", 5.66))
+    Ach = "a_Ahat" if use == "app" else "Ahat_fw"
+    A = ds.arr(Ach); Afw = ds.arr("Ahat_fw"); Aapp = ds.arr("a_Ahat")
+    hold = ds.arr("hold"); dl = ds.arr("del"); tms = ds.arr("t_ms")
+    # --- 접기 사건 찾기
+    folds = []                                   # (i_f, dd_cmd, src)
+    for e in ds.events:
+        if e[1] == "FOLD":
+            j = int(np.searchsorted(tms, e[0]))
+            if i0 <= j < i1:
+                try:
+                    dd = float(str(e[2]).split()[0])
+                except (ValueError, IndexError):
+                    dd = float("nan")
+                folds.append((j, dd, "E행"))
+    if not folds and np.isfinite(hold).any():
+        dh = np.diff(hold[i0:i1])
+        k = 0
+        while k < len(dh):
+            if abs(dh[k]) >= min_dd:
+                j = i0 + k + 1
+                # 같은 접기의 연속 계단 합치기 (프로파일 중 hold 는 즉시 바뀌므로 보통 한 칸)
+                folds.append((j, float(hold[min(j + 2, ds.n - 1)] - hold[max(j - 1, 0)]), "hold 계단"))
+                k += 5
+            else:
+                k += 1
+    if not folds:
+        return dict(tool="fold", ok=False, msg="접기 사건이 없음 (E행 FOLD 도, hold 계단도 없음) — mode 1 로 g 한 뒤 놓았는지, hold 열이 있는지")
+    G = math.exp(lam * lock_ms / 1000.0)
+    rows, overlay = [], []
+    for m, (jf, dd_cmd, src) in enumerate(folds):
+        tf = float(t[jf])
+        pre = (t >= tf - pre_ms / 1000.0) & (t < tf)
+        post_t = tf + lock_ms / 1000.0
+        post = (t >= post_t - 0.012) & (t <= post_t + 0.012)
+        if pre.sum() < 2 or post.sum() < 1:
+            rows.append(dict(k=m + 1, t_fold=_r(tf, 3), src=src, why="창 밖(관측창이 데이터 끝을 넘음)"))
+            continue
+        # A⁻ = 접기 순간의 Â: 직전 창의 표본을 e^{λ(t_f − t)} 로 접는 순간에 투영해 평균 (창 안에서도 Â 가 자라므로 단순 평균은 20 % 낮다)
+        proj = np.exp(lam * (tf - t[pre]))
+        A_pre = float(np.nanmean(A[pre] * proj)); A_post = float(np.nanmean(A[post]))
+        A_pre_fw = float(np.nanmean(Afw[pre] * proj)) if np.isfinite(Afw[pre]).any() else None
+        A_post_fw = float(np.nanmean(Afw[post])) if np.isfinite(Afw[post]).any() else None
+        d0 = float(np.nanmean(dl[pre]))
+        settle = (t >= post_t - 0.03) & (t <= post_t)
+        d1 = float(np.nanmean(dl[settle])) if settle.sum() else float(dl[np.searchsorted(t, post_t) - 1])
+        dd_act = d1 - d0
+        if not np.isfinite(dd_cmd):
+            dd_cmd = float(hold[min(jf + 2, ds.n - 1)] - hold[max(jf - 1, 0)])
+        # 도착 시간: |del − hold| < 2° 가 처음 되는 순간
+        arr = np.nonzero((t >= tf) & (t <= post_t) & (np.abs(dl - hold) < 2.0))[0]
+        fold_ms = float((t[arr[0]] - tf) * 1000.0) if len(arr) else None
+        ok = abs(dd_act) >= 0.3 and abs(A_pre) > 1e-4
+        g = (G * A_pre - A_post) / dd_act if ok else float("nan")
+        gam = G / g if ok and g > 1e-6 else float("nan")
+        ratio = A_post / A_pre if abs(A_pre) > 1e-6 else float("nan")
+        gam_used = dd_act / A_pre if abs(A_pre) > 1e-6 else float("nan")
+        if not ok:
+            verdict = "Δδ 또는 A⁻ 너무 작음"
+        elif abs(ratio) < 0.15:
+            verdict = "deadbeat 근처"
+        elif ratio > 0:
+            verdict = "부족 — γ 올릴 것"
+        else:
+            verdict = "과대 — γ 내릴 것 (부호 넘어감)"
+        rows.append(dict(k=m + 1, t_fold=_r(tf, 3), src=src, A_pre=_r(A_pre, 4), A_post=_r(A_post, 4), ratio=_r(ratio, 3),
+                         dd_cmd=_r(dd_cmd, 2), dd_act=_r(dd_act, 2), d0=_r(d0, 2), fold_ms=_r(fold_ms, 0) if fold_ms is not None else None,
+                         g=_r(g, 4), gamma=_r(gam, 3), gamma_used=_r(gam_used, 3), verdict=verdict,
+                         A_pre_fw=_r(A_pre_fw, 4), A_post_fw=_r(A_post_fw, 4), valid=bool(ok and np.isfinite(gam) and gam > 0)))
+        overlay.append(dict(kind="vline", t=_r(tf, 3), label=f"FOLD {m+1}", color="rgba(255,0,110,.8)"))
+        overlay.append(dict(kind="band", t0=_r(tf, 3), t1=_r(post_t, 3), label=f"관측창 {lock_ms:.0f}ms", color="rgba(255,0,110,.10)"))
+        overlay.append(dict(kind="points", ch=Ach, t=[_r(tf - pre_ms / 2000.0, 3), _r(post_t, 3)], y=[_r(A_pre, 4), _r(A_post, 4)], label="A⁻·A⁺", color="#ffd166"))
+    good = [r for r in rows if r.get("valid")]
+    res = dict(n_folds=len(rows), n_valid=len(good), G=_r(G, 4), lam=_r(lam, 3), lock_ms=lock_ms)
+    curves = []
+    if good:
+        gs = np.array([r["gamma"] for r in good]); ws = np.array([abs(r["A_pre"]) for r in good])
+        gstar = float(np.average(gs, weights=ws))
+        res.update(gamma_star=_r(gstar, 3), gamma_median=_r(float(np.median(gs)), 3),
+                   gamma_se=_r(float(gs.std(ddof=1) / math.sqrt(len(gs))), 3) if len(gs) > 1 else None,
+                   g_mean=_r(float(np.mean([r["g"] for r in good])), 4))
+        x = np.array([r["dd_act"] / r["A_pre"] for r in good]); y = np.array([r["ratio"] for r in good])
+        if len(good) >= 4 and (x.max() - x.min()) >= 0.5 * abs(x.mean()):
+            lr = linreg(x, y)                     # A⁺/A⁻ = G − g·(Δδ/A⁻)  — Δδ/A⁻ 가 시행마다 달라야 절편·기울기가 갈린다
+            res.update(G_fit=_r(lr["a"], 3), g_fit=_r(-lr["b"], 4), gamma_fit=_r(lr["a"] / (-lr["b"]), 3) if lr["b"] < 0 else None, fit_r2=_r(lr["r2"], 3))
+            xs = np.linspace(min(x.min(), 0), x.max() * 1.1, 20)
+            curves.append(dict(kind="xy", label="A⁺/A⁻ vs Δδ/A⁻  (절편 = G, 기울기 = −g)", x=[_r(v) for v in x], y=[_r(v) for v in y],
+                               fit_x=[_r(v) for v in xs], fit_y=[_r(lr["a"] + lr["b"] * v) for v in xs], xlab="Δδ/A⁻ [°/°]", ylab="A⁺/A⁻"))
+        res["next_gam"] = res["gamma_star"]
+    steps = [f"접기 사건 {len(folds)} 개 ({folds[0][2]}). Â 는 {'앱 재계산(a_Ahat)' if use=='app' else '펌웨어 열(Ahat_fw)'}",
+             f"A⁻ = 접기 직전 {pre_ms:.0f} ms 표본을 e^(λ(t_f−t)) 로 접는 순간에 투영한 평균(= 접는 순간의 Â), d0 = 그때 δ.  A⁺ = 접기 시작 {lock_ms:.0f} ms 뒤 ±12 ms 의 Â 평균, Δδ_act = 그때의 δ − d0",
+             f"G = e^(λ·lock) = e^({lam:.2f}·{lock_ms/1000:.3f}) = {G:.3f} — 접지 않았을 때 A 가 관측창 동안 자라는 배율",
+             "g = (G·A⁻ − A⁺)/Δδ_act,  γ = G/g  = A⁺ 를 0 으로 만드는 이득 (ρ 없음).  ratio = A⁺/A⁻ (0 이면 deadbeat, 같은 부호면 부족, 반대면 과대)",
+             "γ* = |A⁻| 가중 평균. 3회 이상이고 Δδ/A⁻ 가 시행마다 다르면(γ 를 바꾸거나 fdeg 고정 접기) A⁺/A⁻ 대 Δδ/A⁻ 회귀의 절편이 G(검산), 기울기가 −g",
+             "정본 대조: 모델 GAMMA_FOLD 7.385, 시뮬 측정 7.06(작은 접기)~8.4(55°), 실기 캘리브 18.6 (문서 40·46)"]
+    out = dict(tool="fold", ok=bool(good), msg=None if good else "유효한 접기 없음 (Δδ<0.3° 또는 관측창 밖)", window=None, used=[],
+               n=len(rows), steps=steps, result=res, table=rows, params=dict(lock_ms=lock_ms, pre_ms=pre_ms, lam=lam, use=use, min_dd=min_dd),
+               overlay=overlay, plane=[], curves=curves)
+    if good:
+        out["next_cmd"] = f"gam {res['gamma_star']:.2f}"
+        out["next_note"] = f"펌웨어 γ 를 {res['gamma_star']:.2f} 로 (현재 시행의 γ_used 평균 {np.mean([r['gamma_used'] for r in good]):.2f})"
+    return out
+
 # ---------------------------------------------------------------- 디스패치
 TOOLS = dict(stats=stats, linfit=linfit, p2r=p2r_fit, **{"lambda": lambda_fit}, trials=find_trials,
-             phi_eq=phi_eq_scan, osc=osc_fit, boundary=boundary_fit, sysid=sysid, recommend=recommend)
+             phi_eq=phi_eq_scan, osc=osc_fit, boundary=boundary_fit, sysid=sysid, recommend=recommend, fold=fold_report)
 
 
 def run(ds, tool, args=None):

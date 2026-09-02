@@ -24,7 +24,7 @@ import numpy as np
 PIPE_DEFAULT = dict(
     p2r=0.4285, r=-1.506, c0=0.0, lam=5.66, wf=0.1945, wb=0.3049, vg=1.0, phi_eq=0.0,
     diff_ms=25.0, tau_ms=28.0, smooth_ms=50.0, alpha_mode="ank-phi", unwrap=True, snap=True,
-    phi_off=0.0, ank_off=0.0,
+    phi_off=0.0, ank_off=0.0, om=5.3, wmode="closed", kv=1.0,
 )
 PIPE_DOC = {
     "p2r": "β = α + P2R·δ 의 질량배분비 (실측① 0.4285, 문서 70)",
@@ -365,7 +365,12 @@ class Dataset:
         dphi, dbeta = self._ema_dphi, self._ema_dbeta
 
         r = p["r"] if abs(p["r"]) > 1e-9 else -1e9
-        Ahat = (-1.0 / r) * u_phi + beta + p["vg"] * p["wf"] * dphi + p["vg"] * p["wb"] * dbeta + p["c0"] / r
+        if str(p.get("wmode", "closed")) == "closed":
+            lam_ = max(float(p["lam"]), 1e-3)
+            w_f = p["kv"] * (-1.0 / (r * lam_)); w_b = p["kv"] / lam_
+        else:
+            w_f = p["vg"] * p["wf"]; w_b = p["vg"] * p["wb"]
+        Ahat = (-1.0 / r) * u_phi + beta + w_f * dphi + w_b * dbeta + p["c0"] / r
         psi = u_phi - p["phi_eq"]
         P = self._P()
         fp = u_phi + P[0][0] * dphi + P[0][1] * dbeta

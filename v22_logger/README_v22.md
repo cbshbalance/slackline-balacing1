@@ -70,6 +70,7 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 | **φ_eq 훑기** | φ_eq 격자마다 방향별 λ 곡선 → 만나는 점 | 문서 70 §5 (+낙하/−낙하 갈림 → 1.40°) |
 | 감쇠 진동 | 영점교차→주기, 봉우리→대수감쇠율→ζ, 감쇠사인 비선형 정밀화, c_φ=2ζω_n·I_r | 문서 16 방식 |
 | **놓기 경계 r·c₀** | 놓기점(φ₀,β₀)+낙하방향만 — r 고정 분리 문턱 c₀, r 격자 훑기 | 문서 70 §4-2 경로② |
+| **★ 접기 성적표 (γ)** | 단일접기 시행마다 접기 직전 Â(A⁻)·실제 Δδ·관측창 뒤 Â(A⁺) → G=e^{λ·lock}, g=(G·A⁻−A⁺)/Δδ, γ=G/g (deadbeat 이득, ρ 없음). γ* 를 「펌웨어로 보내기」(gam). 합성 폐루프: γ=6/10 으로 접어도 γ* 동일, γ* 로 접으면 A⁺≈0 | 문서 46 접기-유지 맵 (9/3 정의 확정) |
 | **★ 다음 놓기 추천** | 놓기마다 부호 있는 거리 s(발산 초기진폭 A', 놓기 순간은 진동 위상으로) → β 열별 영점(할선) → r̂·ĉ₀ → 다음 놓기점(관측 적은 열의 영점 ± 벗어남, 0.5°에서 추정 불확실성까지 자동 축소). 합성 폐루프: 8회에 r ±0.1 | 신규 (사용자 제안, 9/2) |
 | 시스템 동정 | (φ̈,β̈)~(φ,β,φ̇,β̇,1) 회귀 → 4×4 고유값 λ, 좌고유벡터 → r, wf, wb, c₀ | 문서 70 §4-2 경로① — ⚠표본 적으면 흔들린다. R²·고유값을 같이 본다 |
 
@@ -106,9 +107,11 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 
 ## 다음 단계 — 새 펌웨어 요구사양 (이 앱이 기대하는 것)
 
-초안이 `firmware/v22_raw/v22_raw.ino` 에 있다 (★미컴파일·실물검증 대기 — I/O 코드는 incremental_fold_min 에서 그대로).
-제어 없이 원시값(+ 영점 전 14비트 원각·서보 tick)을 200 Hz 로 읽어 100 Hz 로 찍고, z/u/k/δ/m/s/p/t 와 loghz·vel·acc·ilim 만 받는다.
-δ 명령마다 `E,t,MOVE,값` 을 찍어 P2R 구간 경계가 된다. 명령 팔레트 프로파일 `v22_raw` 가 붙어 있다.
+`firmware/v22_raw/v22_raw.ino` **v2** (★미컴파일·실물검증 대기 — I/O 코드는 incremental_fold_min 에서 그대로): 원시값(+ 영점 전 14비트 원각·서보 tick)
+200 Hz 읽기 → 100 Hz D행, `mode 0` 측정 / `mode 1` 단일접기(γ 실험: 첫 |Â|>trig 에서 한 번 접고 δ 고정, E행 FOLD·F행 요약) /
+`mode 2` 증분접기(본 제어). **γ 하나, ρ 없음.** w 는 r·λ 닫힌형(kv 배율)이 기본, `wmode 1` 이면 수동 wf·wb.
+명령: z u k <정수> m s p t w e swap hdr · mode N g h x y fold X · `이름 값`(gam trig rel vrel dead dstep dlim rest alim sgn fdeg lock r lam c0 kv wmode wf wb p2r loghz vel acc ilim).
+명령 팔레트 프로파일 `v22_raw` 가 붙어 있다. 부호 확인은 `y`(dry-run) + `mode 2` + `g` 로 FOLD E행의 부호를 본다.
 
 1. **원시값만 찍는다**: `D,t_ms,phi,ank,del_now,hold,phase,err[,cur_mA,volt]` — α·β·속도·Â 는 앱이 만든다.
    (있어도 된다 — `_fw` 열로 나란히 표시된다. 그러나 정본은 원시.) 열 이름은 `# D,…` 헤더 주석으로 알린다.

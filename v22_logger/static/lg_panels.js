@@ -119,7 +119,8 @@ a_alpha = u_ank − u_phi            (alpha_mode)
 a_theta = a_alpha + del
 a_beta  = a_alpha + P2R·del
 a_dphi, a_dbeta = diff_ms 기저차분 → EMA(tau_ms)
-a_Ahat  = (−1/r)·u_phi + a_beta + vg·wf·a_dphi + vg·wb·a_dbeta + c0/r
+a_Ahat  = (−1/r)·u_phi + a_beta + w_f·a_dphi + w_b·a_dbeta + c0/r
+          wmode closed: w_f = kv·(−1/(rλ)), w_b = kv/λ   |  manual: vg·wf, vg·wb
 a_psi   = u_phi − phi_eq
 a_fp, a_bp = (φ, β) + P·(φ̇, β̇)      P = (λI−D̂)⁻¹ (시뮬) / I·(1/λ)
 s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
@@ -133,6 +134,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
       let inp;
       if (typeof PIPE_DEFAULT[k] === "boolean") { inp = document.createElement("input"); inp.type = "checkbox"; inp.checked = !!v; inp.style.width = "auto"; }
       else if (k === "alpha_mode") { inp = document.createElement("select"); for (const o of ["ank-phi", "ank+phi", "fw"]) { const op = document.createElement("option"); op.value = o; op.textContent = o; inp.appendChild(op); } inp.value = v; }
+      else if (k === "wmode") { inp = document.createElement("select"); for (const o of ["closed", "manual"]) { const op = document.createElement("option"); op.value = o; op.textContent = o; inp.appendChild(op); } inp.value = v; }
       else { inp = document.createElement("input"); inp.type = "number"; inp.step = "any"; inp.value = v; }
       inp.dataset.k = k; lab.appendChild(document.createTextNode(k + (LG.PIPEDOC && LG.PIPEDOC[k] ? " — " + LG.PIPEDOC[k].split(" (")[0].slice(0, 26) : ""))); lab.appendChild(inp); row.appendChild(lab);
     }
@@ -272,6 +274,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
     phi_eq: { label: "φ_eq 훑기 (방향별 λ 일치점)", win: "opt", help: "문서 70 §5 — +낙하 λ 와 −낙하 λ 가 만나는 φ_eq. 양방향 시행이 있어야 한다", p: [{ k: "lo", l: "밴드 하한", v: 2.0 }, { k: "hi", l: "밴드 상한", v: 9.0 }, { k: "grid_lo", l: "격자 시작", v: -3 }, { k: "grid_hi", l: "격자 끝", v: 4 }, { k: "step", l: "격자 간격", v: 0.05 }, ...TRIAL_P.slice(2)] },
     osc: { label: "감쇠 진동 (ω, ζ, c_φ) — 매달림 자유흔들기", win: true, help: "영점 교차 → 주기, 봉우리 → 대수감쇠율, 정밀화 = 감쇠 사인 비선형 적합", p: [{ k: "ch", l: "채널", v: "u_phi", t: "chan" }, { k: "smooth_ms", l: "평활 ms", v: 0 }, { k: "refine", l: "정밀화", v: true, t: "bool" }, { k: "I_r", l: "I_r kg·m²", v: 0.0045 }] },
     recommend: { label: "★ 다음 놓기 추천 (r 적응 탐색)", win: "opt", help: "놓을 때마다 s = 방향×발산 초기진폭(선까지 거리) 를 얻어 놓기점에 회귀 → r̂·ĉ₀. 다음 점 = 점이 적은 β 열의 추정선 ± off°. 실행할 때마다 시행을 다시 찾는다", p: [{ k: "off", l: "처음 벗어남 °", v: 0.5 }, { k: "off_min", l: "최소 벗어남 °", v: 0.15 }, { k: "beta_set", l: "β 열 (쉼표)", v: "2,-2,1,-1,0", t: "text" }, { k: "first_phi", l: "첫 시행 φ", v: 0.7 }, { k: "r_guess", l: "r 초기 가정 (빈칸=파이프)", v: "" }, { k: "lam_fixed", l: "λ 고정 (빈칸=파이프)", v: "" }, ...TRIAL_P.slice(1)] },
+    fold: { label: "★ 접기 성적표 (γ) — A⁺ = G·A⁻ − g·Δδ", win: "opt", help: "mode 1 단일접기(또는 fold X) 시행마다 접기 직전 Â, 실제 Δδ, 관측창 뒤 Â 를 잘라 G=e^(λ·lock), g, γ=G/g 를 낸다. γ* 가 펌웨어에 넣을 gam", p: [{ k: "lock_ms", l: "관측창 ms", v: 250 }, { k: "pre_ms", l: "직전 평균 ms", v: 40 }, { k: "lam", l: "λ (빈칸=파이프)", v: "" }, { k: "use", l: "Â", v: "app", t: "sel", o: ["app", "fw"] }, { k: "min_dd", l: "hold 계단 최소 °", v: 1.0 }] },
     boundary: { label: "놓기 경계 r·c₀ — 실측② 경로②", win: "opt", help: "놓기점 (φ₀, β₀) 와 낙하 방향만 사용 (미분·모델 없음). r 고정 시 절편 c₀ 분리 문턱, r 격자 훑기 포함", p: [{ k: "r_fixed", l: "r 고정 (빈칸=파이프)", v: "" }, { k: "grid_lo", l: "r 격자 시작", v: -3 }, { k: "grid_hi", l: "r 격자 끝", v: -0.8 }, { k: "step", l: "간격", v: 0.01 }, ...TRIAL_P.slice(1)] },
     sysid: { label: "시스템 동정 4×4 — 실측② 경로①", win: "opt", help: "(φ̈, β̈) 를 (φ, β, φ̇, β̇, 1) 로 회귀 → 고유값 λ, 좌고유벡터 → r, wf, wb, c₀. 표본이 적거나 잡음이 크면 흔들린다 — R² 와 고유값을 꼭 볼 것", p: [{ k: "phi_max", l: "|φ| 상한 °", v: 5.0 }, { k: "smooth_ms", l: "SG 창 ms", v: 120 }, { k: "poly", l: "SG 차수", v: 3 }, ...TRIAL_P.slice(1)] },
   };
@@ -317,7 +320,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
   el("bAnRun").onclick = runTool;
   const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   function fmtV(v) { if (v == null) return "—"; if (typeof v === "number") return Number.isInteger(v) ? String(v) : (Math.abs(v) >= 100 ? v.toFixed(1) : v.toFixed(4)); if (Array.isArray(v)) return "[" + v.map(x => Array.isArray(x) ? "(" + x.map(fmtV).join(",") + ")" : fmtV(x)).join(", ") + "]"; if (typeof v === "object") return ""; return esc(v); }
-  const BIG = { lam: 1, P2R: 1, r: 1, c0: 1, next_beta: 1, next_phi: 1, phi_eq_best: 1, zeta: 1, omega_n: 1, slope: 1, T2_ms: 1, lam_plus: 1, lam_minus: 1, n_trials: 1, r_used: 1, r_grid_best: 1, c0_grid_best: 1 };
+  const BIG = { lam: 1, P2R: 1, r: 1, c0: 1, next_beta: 1, next_phi: 1, gamma_star: 1, G: 1, n_valid: 1, phi_eq_best: 1, zeta: 1, omega_n: 1, slope: 1, T2_ms: 1, lam_plus: 1, lam_minus: 1, n_trials: 1, r_used: 1, r_grid_best: 1, c0_grid_best: 1 };
   function renderResult(res) {
     const T = TOOLS[res.tool] || { label: res.tool };
     let h = `<div><b style="color:${res.ok ? "#06d6a0" : "#ff8080"}">${esc(T.label)}</b> ${res.ok ? "" : "— 실패: " + esc(res.msg || "")}${res.window ? ` <span style="color:var(--dim)">구간 ${res.window[0]}–${res.window[1]} s</span>` : ""}${res.n != null ? ` <span style="color:var(--dim)">n=${res.n}</span>` : ""}</div>`;
@@ -337,6 +340,12 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
       h += `</table>`;
     }
     if (res.trace) h += `<pre class="hint">${esc(res.trace)}</pre>`;
+    if (res.next_cmd) {
+      h = `<div style="border:1px solid var(--pink);border-radius:8px;padding:8px 10px;margin-bottom:8px;background:rgba(255,0,110,.07)">
+        <div style="font-size:11px;color:var(--pink)">펌웨어에 넣을 값</div>
+        <div style="font-family:Consolas;font-size:15px;color:#fff;margin:3px 0">${esc(res.next_cmd)} <button class="btn accent sm" id="bSendNext">펌웨어로 보내기</button></div>
+        <div style="font-size:11px;color:var(--dim)">${esc(res.next_note || "")}</div></div>` + h;
+    }
     if (res.next) {
       const nx = res.next;
       h = `<div style="border:1px solid var(--cyan);border-radius:8px;padding:8px 10px;margin-bottom:8px;background:rgba(76,201,240,.08)">
@@ -346,6 +355,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
       if (el("cAutoTgt").checked) { el("cTgt").checked = true; el("iTgtB").value = (+nx.beta).toFixed(2); el("iTgtF").value = (+nx.phi).toFixed(2); }
     }
     el("anOut").innerHTML = h;
+    if (res.next_cmd && el("bSendNext")) el("bSendNext").onclick = () => LG.send({ cmd: "send", text: res.next_cmd });
     LG.drawCurve(el("anCurve"), res.curves && res.curves[0]);
     LG.chartOverlay = res.overlay || []; LG.planeOverlay = res.plane || [];
     if (res.tool === "trials" && res.ok) {

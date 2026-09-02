@@ -1,6 +1,6 @@
 {
   "_doc": "명령 팔레트. 펌웨어별 프로파일. 버튼 한 개 = 시리얼로 보낼 텍스트 한 줄. danger=true 는 확인 창. 파일만 고치면 앱 버튼이 바뀐다 (코드 무변경).",
-  "default": "hangcal_fold",
+  "default": "v22_raw",
   "profiles": {
     "hangcal_fold": {
       "title": "hangcal_fold.ino (매달림 영점 + 자유비행 실측 + 증분접기, 2026-08-26)",
@@ -392,15 +392,15 @@
       "err_bits": ""
     },
     "v22_raw": {
-      "title": "v22_raw.ino (측정 전용 원시값 스트리밍 — 초안, 미컴파일)",
+      "title": "v22_raw v2 (측정 + 단일접기/증분접기 — γ 하나, ρ 없음, w = r·λ 닫힌형)",
       "groups": [
         {
-          "name": "동작",
+          "name": "측정",
           "items": [
             {
               "label": "z 영점",
               "cmd": "z",
-              "help": "완전히 멎은 뒤. 매달림이면 양쪽 정착 두 번(문서 66) — 두 번째 z 로 덮어쓰이므로 E행 ZERO 값을 앱에서 평균"
+              "help": "완전히 멎은 뒤. 매달림이면 양쪽 정착 두 번(문서 66)"
             },
             {
               "label": "u 토크해제",
@@ -419,11 +419,6 @@
               "help": "D행 출력 토글 (기본 ON)"
             },
             {
-              "label": "s 출력",
-              "cmd": "s",
-              "help": "화면 출력 정지/재개"
-            },
-            {
               "label": "p 1회",
               "cmd": "p",
               "help": "D행 한 줄"
@@ -431,19 +426,12 @@
             {
               "label": "t 상태",
               "cmd": "t",
-              "help": ""
+              "help": "모드·w·γ·영점 상태"
             },
             {
-              "label": "e 엔코더진단",
-              "cmd": "e",
-              "help": "두 AS5047 의 DIAAGC(AGC·MagL/MagH)·ERRFL·각도 레지스터를 읽어 배선/자석/기구 중 어디가 문제인지 판독",
-              "accent": true
-            },
-            {
-              "label": "swap CS교환",
-              "cmd": "swap",
-              "help": "φ↔발목 CS 핀을 런타임에 바꾼다. 고정값이 phi 열로 따라가면 채널(배선·센서) 문제",
-              "danger": true
+              "label": "w 파라미터",
+              "cmd": "w",
+              "help": "파라미터 전체 목록"
             },
             {
               "label": "hdr 헤더",
@@ -451,17 +439,179 @@
               "help": "헤더 다시 출력"
             }
           ]
+        },
+        {
+          "name": "접기 실험·제어",
+          "items": [
+            {
+              "label": "mode 0 측정",
+              "cmd": "mode 0",
+              "help": "접지 않음 (λ·r 놓기, 영점, P2R)"
+            },
+            {
+              "label": "mode 1 단일접기",
+              "cmd": "mode 1",
+              "help": "g 로 무장 → 첫 |Â|>trig 에서 한 번 접고 δ 고정 → 자유 발산 (γ 실험)",
+              "accent": true
+            },
+            {
+              "label": "mode 2 증분접기",
+              "cmd": "mode 2",
+              "help": "본 제어: |Â|>trig 마다 hold += sgn·γ·Â, |Â|<rel 이면 천천히 펴기",
+              "accent": true
+            },
+            {
+              "label": "g 시작",
+              "cmd": "g",
+              "help": "무장(제어 시작). 놓기 전에 누른다. hold = 현재 δ",
+              "accent": true
+            },
+            {
+              "label": "h 정지",
+              "cmd": "h",
+              "help": "정지 (토크·자세 유지)",
+              "accent": true
+            },
+            {
+              "label": "x 비상정지",
+              "cmd": "x",
+              "help": "토크 OFF — 줄 끝을 안 기다리고 즉시",
+              "danger": true
+            },
+            {
+              "label": "y dry-run",
+              "cmd": "y",
+              "help": "모터 명령 안 나감 — 손으로 기울여 Â·접기 방향(sgn) 확인용 토글"
+            }
+          ]
+        },
+        {
+          "name": "진단",
+          "items": [
+            {
+              "label": "e 엔코더진단",
+              "cmd": "e",
+              "help": "두 AS5047 의 DIAAGC(AGC·MagL/MagH)·ERRFL·각도 레지스터 판독",
+              "accent": true
+            },
+            {
+              "label": "swap CS교환",
+              "cmd": "swap",
+              "help": "φ↔발목 CS 핀 런타임 교환 (채널 vs 코드 판별)",
+              "danger": true
+            }
+          ]
         }
       ],
       "delta_move": {
-        "help": "δ 명령 [°] — MOVE E행이 같이 찍혀 P2R 구간 경계가 된다",
+        "help": "δ 명령 [°] (정지 중). MOVE E행 → P2R 구간 경계. 무장 중 즉시 접기는 콘솔에 'fold 6'",
         "min": -55,
         "max": 55
       },
       "params": [
         {
+          "name": "gam",
+          "what": "접기 이득 γ [°접기/°Â] — 접기 성적표로 잰다 (ρ 없음)",
+          "unit": ""
+        },
+        {
+          "name": "trig",
+          "what": "트리거 문턱",
+          "unit": "deg"
+        },
+        {
+          "name": "rel",
+          "what": "펴기 게이트 (mode 2)",
+          "unit": "deg"
+        },
+        {
+          "name": "vrel",
+          "what": "펴기 속도 (mode 2)",
+          "unit": "deg/s"
+        },
+        {
+          "name": "dead",
+          "what": "펴기 데드밴드",
+          "unit": "deg"
+        },
+        {
+          "name": "dstep",
+          "what": "접기 1회 상한",
+          "unit": "deg"
+        },
+        {
+          "name": "dlim",
+          "what": "힙 기구한계",
+          "unit": "deg"
+        },
+        {
+          "name": "rest",
+          "what": "REST 대기",
+          "unit": "ms"
+        },
+        {
+          "name": "alim",
+          "what": "넘어짐 한계각 (토크 OFF)",
+          "unit": "deg"
+        },
+        {
+          "name": "sgn",
+          "what": "접기 방향 ±1 (y+g 바닥 시험으로 확정)",
+          "unit": ""
+        },
+        {
+          "name": "fdeg",
+          "what": "고정 접기량 (0 = γ·Â)",
+          "unit": "deg"
+        },
+        {
+          "name": "lock",
+          "what": "접기 뒤 A_post 관측창",
+          "unit": "ms"
+        },
+        {
+          "name": "r",
+          "what": "안정모드선 기울기 (실측)",
+          "unit": ""
+        },
+        {
+          "name": "lam",
+          "what": "발산율 λ (실측)",
+          "unit": "1/s"
+        },
+        {
+          "name": "c0",
+          "what": "절편 (실측)",
+          "unit": "deg"
+        },
+        {
+          "name": "kv",
+          "what": "닫힌형 속도항 배율 (문서 70 §7 κ)",
+          "unit": ""
+        },
+        {
+          "name": "wmode",
+          "what": "0 닫힌형 / 1 수동 wf·wb",
+          "unit": ""
+        },
+        {
+          "name": "wf",
+          "what": "수동 w φ̇ (wmode 1)",
+          "unit": ""
+        },
+        {
+          "name": "wb",
+          "what": "수동 w β̇ (wmode 1)",
+          "unit": ""
+        },
+        {
+          "name": "p2r",
+          "what": "β = α + P2R·δ",
+          "unit": ""
+        },
+        {
           "name": "loghz",
-          "what": "CSV 주기 (115200 에서 100 권장)",
+          "what": "CSV 주기",
           "unit": "Hz"
         },
         {
@@ -481,9 +631,13 @@
         }
       ],
       "phases": {
-        "0": "—"
+        "0": "IDLE",
+        "1": "FOLD",
+        "2": "REST",
+        "3": "STOP",
+        "4": "대기"
       },
-      "err_bits": "err = phi등급 + 4·ank등급 + 16·dxl  (등급1 = 0/16383 레일, 등급2 = 2 s 값불변 고착)"
+      "err_bits": "err = phi등급 + 4·ank등급 + 16·dxl  (등급1 = 0/16383 레일, 등급2 = 2 s 값불변 고착) · cue 1 = 단일접기 완료"
     }
   }
 }

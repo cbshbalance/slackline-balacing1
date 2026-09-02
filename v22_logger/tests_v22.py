@@ -161,6 +161,17 @@ def test_analysis():
     trW = an.run(W.ds, "trials", dict(lam_fixed=5.5))
     k1 = trW["table"][0]
     check("놓기 자세 = 정지 중앙값 (β₀ 오차 < 0.05°)", abs(k1["beta0"] - 0.0) < 0.35 and k1["t_r"] is not None, str({k: k1[k] for k in ("beta0", "phi0", "t_r", "s", "B_osc")}))
+    # 접기 성적표 폐루프: γ=6(부족)·γ=10(과대) 로 접어도 γ* 추정이 같아야 하고, γ* 로 접으면 A⁺≈0
+    from sim_recommend import run_fold
+    rep6, W6 = run_fold(6, seed=0, gamma=6.0, verbose=False)
+    rep10, _ = run_fold(6, seed=1, gamma=10.0, verbose=False)
+    g6, g10 = rep6["result"]["gamma_star"], rep10["result"]["gamma_star"]
+    check("접기 성적표: γ=6 → 전부 '부족'", rep6["ok"] and all("부족" in r["verdict"] for r in rep6["table"]), str([r["verdict"] for r in rep6["table"]]))
+    check("접기 성적표: γ=10 → 전부 '과대'", rep10["ok"] and all("과대" in r["verdict"] for r in rep10["table"]), str([r["verdict"] for r in rep10["table"]]))
+    check("γ* 추정이 쓴 γ 와 무관 (±15 %)", abs(g6 - g10) / max(g6, g10) < 0.15, f"{g6} vs {g10}")
+    repS, _ = run_fold(5, seed=2, gamma=float(g6), verbose=False)
+    check("γ* 로 접으면 deadbeat (|A⁺/A⁻| < 0.3)", repS["ok"] and all(abs(r["ratio"]) < 0.3 for r in repS["table"]), str([r["ratio"] for r in repS["table"]]))
+    check("접기 성적표 next_cmd = gam …", repS.get("next_cmd", "").startswith("gam "), repS.get("next_cmd"))
     # 합성 신호로 osc
     dsyn = Dataset(); dsyn.set_header("t_ms,phi,ank,del_now".split(","))
     w, z = 4.86, 0.03
