@@ -126,6 +126,11 @@
       } else if (o.kind === "line") {
         ctx.strokeStyle = o.color || "#ff9f43"; ctx.lineWidth = 2 * DPR; ctx.beginPath();
         ctx.moveTo(X(o.x[0]), Y(o.y[0])); ctx.lineTo(X(o.x[1]), Y(o.y[1])); ctx.stroke();
+      } else if (o.kind === "target") {
+        ctx.strokeStyle = "#4cc9f0"; ctx.lineWidth = 2 * DPR; ctx.beginPath();
+        ctx.arc(X(o.x), Y(o.y), 7 * DPR, 0, 7); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(X(o.x) - 12 * DPR, Y(o.y)); ctx.lineTo(X(o.x) + 12 * DPR, Y(o.y)); ctx.moveTo(X(o.x), Y(o.y) - 12 * DPR); ctx.lineTo(X(o.x), Y(o.y) + 12 * DPR); ctx.stroke();
+        ctx.fillStyle = "#4cc9f0"; ctx.font = `${10 * DPR}px Consolas`; ctx.fillText(o.label || "다음", X(o.x) + 10 * DPR, Y(o.y) + 14 * DPR);
       }
     }
     ctx.restore();

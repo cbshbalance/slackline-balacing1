@@ -93,6 +93,12 @@ with sync_playwright() as p:
     pe = pg.evaluate("LG.results[0].res.result")
     check("φ_eq 훑기 결과 + 곡선", pe and pe["phi_eq_best"] is not None and pg.evaluate("LG.results[0].res.curves.length") == 1, str(pe and pe["phi_eq_best"]))
     pg.screenshot(path=os.path.join(OUT, "s5_phieq.png"))
+    # 다음 놓기 추천 → 목표점 자동 입력
+    pg.select_option("#anTool", "recommend"); pg.click("#bAnRun")
+    pg.wait_for_function("() => LG.results.length >= 5 && LG.results[0].res.tool === 'recommend'", timeout=60000)
+    rc = pg.evaluate("LG.results[0].res")
+    check("다음 놓기 추천 결과 (next·추정선·목표점)", rc["ok"] and rc["next"] and pg.evaluate("LG.el('cTgt').checked") and abs(float(pg.input_value("#iTgtB")) - rc["next"]["beta"]) < 0.01, str(rc.get("result")))
+    check("추천 배너 렌더", "다음 놓기" in (pg.text_content("#anOut") or ""))
     # 스크럽·재생
     pg.evaluate("LG.setCursor(3000)"); time.sleep(0.2)
     check("스크럽 → 커서·3D 자세", pg.evaluate("LG.cur()") == 3000 and "t = " in pg.text_content("#ov3d"))

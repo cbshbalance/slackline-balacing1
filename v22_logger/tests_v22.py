@@ -150,6 +150,17 @@ def test_analysis():
     for r in rows: dsr.add_data_row(r)
     trr = an.run(dsr, "trials", dict(phi_eq=0.0))
     check("φ=+3° 정지에서 놓기 감지 (놓기점 φ₀≈3.0)", trr["ok"] and trr["result"]["n_dir_valid"] >= 3 and abs(trr["table"][0]["phi0"] - 3.0) < 0.2, str(trr["result"]) + " " + str(trr["table"][:1]))
+    # 다음 놓기 추천 폐루프: 합성 세계(참값 r=-1.5, c0=0.4)에서 추천대로 8회 놓으면 r̂ 이 ±0.2 안
+    from sim_recommend import run as sim_run
+    hist, W = sim_run(8, seed=1, verbose=False)
+    last = hist[-1]
+    check("추천 루프 8회 → r̂ ≈ −1.5 (±0.2), ĉ₀ ≈ 0.4 (±0.3)", abs(last["r"] + 1.5) < 0.2 and abs(last["c0"] - 0.4) < 0.3, f"r̂={last['r']} ĉ₀={last['c0']} SE={last['se_r']}")
+    check("추천 루프: 열 3개 이상·SE 계산", last["n"] >= 8 and last["se_r"] is not None, str(last))
+    rec0 = an.run(Dataset(), "recommend", {})
+    check("빈 데이터 추천 = 첫 시행 (0, +0.7)", rec0["ok"] and rec0["next"]["beta"] == 0.0 and abs(rec0["next"]["phi"] - 0.7) < 1e-9, str(rec0.get("next")))
+    trW = an.run(W.ds, "trials", dict(lam_fixed=5.5))
+    k1 = trW["table"][0]
+    check("놓기 자세 = 정지 중앙값 (β₀ 오차 < 0.05°)", abs(k1["beta0"] - 0.0) < 0.35 and k1["t_r"] is not None, str({k: k1[k] for k in ("beta0", "phi0", "t_r", "s", "B_osc")}))
     # 합성 신호로 osc
     dsyn = Dataset(); dsyn.set_header("t_ms,phi,ank,del_now".split(","))
     w, z = 4.86, 0.03

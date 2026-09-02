@@ -67,6 +67,22 @@ def linreg(x, y):
     return dict(b=b, a=a, r2=r2, se_b=se_b, se_a=se_a, n=n, resid=resid)
 
 
+def _wlinreg(x, y, w):
+    """가중 최소제곱 y = a + b·x (w 는 상대 가중). linreg 와 같은 키를 돌려준다."""
+    x = np.asarray(x, float); y = np.asarray(y, float); w = np.asarray(w, float)
+    n = len(x)
+    if n < 2 or w.sum() <= 0:
+        return linreg(x, y)
+    xm = (w * x).sum() / w.sum(); ym = (w * y).sum() / w.sum()
+    sxx = (w * (x - xm) ** 2).sum(); sxy = (w * (x - xm) * (y - ym)).sum()
+    b = sxy / sxx if sxx > 0 else float("nan"); a = ym - b * xm
+    resid = y - (a + b * x); sse = (w * resid ** 2).sum()
+    se_b = math.sqrt(sse / (n - 2) / sxx) if n > 2 and sxx > 0 else float("nan")
+    se_a = se_b * math.sqrt((w * x ** 2).sum() / w.sum()) if n > 2 and sxx > 0 else float("nan")
+    sst = (w * (y - ym) ** 2).sum()
+    return dict(b=b, a=a, r2=1 - sse / sst if sst > 0 else float("nan"), se_b=se_b, se_a=se_a, n=n, resid=resid)
+
+
 def _smooth(t, x, W):
     from dataset_v22 import centered_smooth_and_deriv
     if not W or W <= 0:
@@ -361,8 +377,54 @@ def _quiet_mask(phi, w, tol):
     return q
 
 
+
+def _dep_fit(t, phi, rel, e, phi_q, lam_fixed, lo=2.5, hi=8.0):
+    """놓기점(정지 평균 φ_q)에서의 이탈 |φ−φ_q| 를 e^{λ(t−t_rel)} 로 적합.
+       λ 를 lam_fixed 로 고정하고 진폭 A0 = exp(mean(ln d − λ(t−t_rel))) — 시행 간 비교 가능한 '선까지의 거리' 척도.
+       자유 λ 적합(lam_rel, r2_rel)도 같이. 봉우리 이전의 상승부만 쓴다."""
+    d = np.abs(phi[rel:e + 1] - phi_q)
+    tt = t[rel:e + 1] - t[rel]
+    if len(d) < 4:
+        return None
+    jpk = int(np.argmax(d))
+    m = (d >= lo) & (d <= hi)
+    m[jpk + 1:] = False
+    if m.sum() < 3:
+        return None
+    y = np.log(d[m]); x = tt[m]
+    A0 = float(np.exp(np.mean(y - lam_fixed * x)))
+    lr = linreg(x, y)
+    return dict(A0=A0, lam_rel=float(lr["b"]), r2_rel=float(lr["r2"]), n=int(m.sum()), lam_fixed=float(lam_fixed))
+
+
+def _dep_fit3(t, phi, q_start, q_end, e, lam, om, tr_lo=-0.8, tr_hi=0.15, step=0.01):
+    """놓기 순간 t_r 을 모르는 채로, 정지 구간 끝(q_end) 앞뒤로 t_r 을 훑으며
+       φ(t) − φ_q = A'·(cosh λτ − 1) + B'·(cos ωτ − 1),  τ = t − t_r (τ<0 이면 0)
+       을 선형 최소제곱으로 맞춰 RSS 최소인 t_r 을 고른다. A' = 불안정모드 초기진폭(부호 있음, φ 단위) ∝ 선까지 거리.
+       안정모드 진동(B')의 위상이 t_r 을 고정해 준다 (β≠0 놓기에서 특히). φ_q = 정지 구간 중앙값."""
+    i_a = q_start; i_b = e
+    if i_b - i_a < 8:
+        return None
+    seg_q = phi[q_start:max(q_start + 1, q_end - 2)]
+    phi_q = float(np.median(seg_q))
+    tt = t[i_a:i_b + 1]; y = phi[i_a:i_b + 1] - phi_q
+    t_end_q = t[q_end]
+    best = None
+    for tr_ in np.arange(t_end_q + tr_lo, t_end_q + tr_hi + 1e-9, step):
+        tau = np.clip(tt - tr_, 0.0, None)
+        c1 = np.cosh(np.minimum(lam * tau, 30.0)) - 1.0
+        c2 = np.cos(om * tau) - 1.0
+        X = np.column_stack([c1, c2])
+        coef, *_ = np.linalg.lstsq(X, y, rcond=None)
+        rss = float(((y - X @ coef) ** 2).sum())
+        if best is None or rss < best[0]:
+            best = (rss, float(tr_), float(coef[0]), float(coef[1]))
+    rss, tr_, A, B = best
+    sst = float(((y - y.mean()) ** 2).sum())
+    return dict(A=A, B=B, t_r=tr_, r2=1 - rss / sst if sst > 0 else float("nan"), phi_q=phi_q)
+
 def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.5, quiet_tol=0.35, min_len_s=0.15,
-                t0=None, t1=None, max_rise_s=2.0, min_peak=4.0, min_r2=0.9):
+                t0=None, t1=None, max_rise_s=2.0, min_peak=4.0, min_r2=0.9, lam_fixed=None, max_trial_s=3.0):
     """놓기 시행 자동 분할.
        mode auto: phase 열이 5(발산) 를 쓰면 phase 로, 아니면 rel(정지→이탈) 로.
        rel: quiet_s 동안 φ 의 최대−최소 < quiet_tol 이면 '손에 잡혀 정지' 로 보고, 그 정지 평균 φ_q 에서
@@ -378,7 +440,7 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
     phi = ds.arr("u_phi"); ank = ds.arr("u_ank"); beta = ds.arr("a_beta"); A = ds.arr("a_Ahat")
     ph = ds.arr("phase")
     psi = phi - phi_eq
-    trials = []                      # (rel, s0, e, phi_q)
+    trials = []                      # (rel, s0, e, phi_q, q_start, q_end)
     used_mode = mode
     if mode in ("auto", "phase") and np.isfinite(ph[i0:i1]).any() and np.any(ph[i0:i1] == 5):
         used_mode = "phase"
@@ -389,7 +451,7 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
                 while e < i1 and ph[e] == 5:
                     e += 1
                 rel = max(i0, k - 1)
-                trials.append((rel, k, e, float(phi[rel])))
+                trials.append((rel, k, e, float(phi[rel]), rel, rel))
                 k = e
             else:
                 k += 1
@@ -404,11 +466,13 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
             if not quiet[k]:
                 k += 1
                 continue
+            q_start = max(0, k - w + 1)          # 정지 창이 처음 찬 곳의 창 시작 = 정지 구간 시작
             q_end = k
             while q_end + 1 < n and quiet[q_end + 1]:
                 q_end += 1
-            seg = phi[i0 + q_end - w + 1: i0 + q_end + 1]
-            phi_q = float(seg.mean()); sig = float(seg.std())
+            # 정지 구간 전체의 중앙값 — 창 끝은 작은 발산이 섞여 있을 수 있어 평균 대신 중앙값
+            seg = phi[i0 + q_start: i0 + q_end + 1]
+            phi_q = float(np.median(seg)); sig = float(np.median(np.abs(seg - phi_q)) * 1.4826 + 1e-6)
             s0 = q_end + 1
             found = False
             while s0 < n:
@@ -426,26 +490,30 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
             while rel - 1 > q_end - w and abs(phi[i0 + rel - 1] - phi_q) > thr:
                 rel -= 1
             rel = max(rel - 1, 0)
-            sgn = 1.0 if phi[i0 + s0] - phi_q >= 0 else -1.0
             e = s0; pk = abs(phi[i0 + s0] - phi_q)
             ended_quiet = False
             while e + 1 < n:
                 e += 1
                 d = phi[i0 + e] - phi_q; ad = abs(d); pk = max(pk, ad)
-                if ad >= fcatch or (pk > 2 * reldet and ad < 0.5 * pk) or (np.sign(d) != sgn and ad > reldet):
+                if ad >= fcatch or (t[i0 + e] - t[i0 + s0]) > max_trial_s:   # 잡기 문턱 또는 시간 상한
                     break
-                if quiet[e] and e - s0 >= w:          # 다른 자세로 옮겨 잡고 다시 정지 — 놓기가 아니라 이동
+                if quiet[e] and e - s0 >= w:          # 다시 정지(잡았거나 다른 자세로 옮김) — 정지 시작에서 끊는다
                     e = e - w + 1; ended_quiet = True
                     break
             if t[i0 + e] - t[i0 + rel] >= min_len_s:
-                trials.append((i0 + rel, i0 + s0, i0 + e, phi_q))
+                trials.append((i0 + rel, i0 + s0, i0 + e, phi_q, i0 + q_start, i0 + q_end))
             k = e if ended_quiet else e + 1
     rows = []
-    for m, (rel, s0, e, phi_q) in enumerate(trials):
+    om = float(ds.pipe.get("om", 5.3))
+    for m, (rel, s0, e, phi_q, q_start, q_end) in enumerate(trials):
         ee = min(e, ds.n - 1)
+        # 놓기 자세 = 정지 구간(마지막 창 절반 제외)의 중앙값 — 손에 잡혀 있던 자세 그대로
+        qa, qb = q_start, max(q_start + 1, q_end - w // 2 if used_mode == "rel" else q_end)
+        pose_i = slice(qa, qb + 1)
         dep = phi[rel:ee + 1] - phi_q
-        d = 1 if dep[-1] >= 0 else -1
         adep = np.abs(dep)
+        jpk = int(np.argmax(adep)) if len(adep) else 0
+        d = 1 if dep[jpk] >= 0 else -1                 # 방향 = 가장 멀리 벗어난 순간의 부호 (되돌려 잡는 동작에 안 속는다)
         pk = float(adep.max()) if len(adep) else 0.0
         reach = np.nonzero(adep >= min_peak)[0]
         t_reach = float(t[rel + reach[0]] - t[rel]) if len(reach) else None
@@ -462,9 +530,17 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
             why_lam.append(f"R² {sub['result']['r2']:.2f}<{min_r2}")
         dir_valid = not why_dir
         lam_valid = dir_valid and not why_lam
+        lf = float(lam_fixed) if lam_fixed else float(ds.pipe.get("lam", 5.66))
+        dep = _dep_fit(t, phi, rel, ee, phi_q, lf)
+        f3 = _dep_fit3(t, phi, q_start, q_end, ee, lf, om) if used_mode == "rel" else None
         rows.append(dict(k=m + 1, i0=int(rel), i1=int(e), t0=_r(t[rel], 3), t_thr=_r(t[s0], 3), t1=_r(t[ee], 3),
                          dur=_r(dur, 3), dir=d, dir_valid=dir_valid, valid=lam_valid, why=" · ".join(why_dir + why_lam),
-                         phi_q=_r(phi_q, 3), phi0=_r(phi[rel], 3), ank0=_r(ank[rel], 3), beta0=_r(beta[rel], 3), A0=_r(A[rel], 3),
+                         amp0=_r(abs(f3["A"]), 4) if f3 else (_r(dep["A0"], 4) if dep else None),
+                         s=_r(f3["A"], 4) if f3 else (_r(d * dep["A0"], 4) if dep else None),
+                         t_r=_r(f3["t_r"], 3) if f3 else None, B_osc=_r(f3["B"], 3) if f3 else None, fit_r2=_r(f3["r2"], 4) if f3 else None,
+                         lam_rel=_r(dep["lam_rel"], 3) if dep else None, r2_rel=_r(dep["r2_rel"], 4) if dep else None,
+                         phi_q=_r(phi_q, 3), phi0=_r(float(np.median(phi[pose_i])), 3), ank0=_r(float(np.median(ank[pose_i])), 3),
+                         beta0=_r(float(np.median(beta[pose_i])), 3), A0=_r(float(np.median(A[pose_i])), 3),
                          lam=sub["result"]["lam"] if sub.get("ok") else None,
                          lam_r2=sub["result"]["r2"] if sub.get("ok") else None,
                          lam_n=sub["result"]["n"] if sub.get("ok") else None,
@@ -479,11 +555,12 @@ def find_trials(ds, mode="auto", phi_eq=None, reldet=1.0, fcatch=8.5, quiet_s=0.
         lo_, hi_ = min(res["lam_plus"], res["lam_minus"]), max(res["lam_plus"], res["lam_minus"])
         res["dir_split_pct"] = _r(100 * (hi_ - lo_) / lo_, 1) if lo_ > 0 else None
     steps = [f"모드 {used_mode}: " + ("phase==5(발산) 구간을 시행으로" if used_mode == "phase" else
-             f"φ 가 {quiet_s}s 동안 {quiet_tol}° 안에 머물면 정지(손에 잡힘)로 보고, 정지 평균 φ_q 에서 {reldet}° 벗어나는 순간 = 놓기, {fcatch}° 이상 또는 되돌아오면 종료"),
+             f"φ 가 {quiet_s}s 동안 {quiet_tol}° 안에 머물면 정지(손에 잡힘)로 보고, 정지 평균 φ_q 에서 {reldet}° 벗어나는 순간 = 놓기. 종료 = |φ−φ_q| ≥ {fcatch}° 또는 다시 정지 또는 {max_trial_s}s. 방향 = 가장 멀리 벗어난 순간의 부호"),
              "★놓기점 (φ₀, ank₀, β₀, Â₀) = 정지에서 벗어나기 시작한 표본 — 손 뗀 순간의 자세 (t0). t_thr = 문턱 통과 시각",
              f"방향 유효(dir_valid): 놓기 뒤 {max_rise_s}s 안에 |φ−φ_q| ≥ {min_peak}° — 놓기 경계(r·c₀)는 이것만 본다",
              f"λ 유효(valid): 방향 유효 + λ 적합 R² ≥ {min_r2} — 방향별 λ 평균·φ_eq 훑기는 이것만 쓴다",
-             "시행별 λ = lambda 도구(밴드 2~9°, 같은 φ_eq). 방향별 평균이 20 % 넘게 갈리면 φ_eq 의심 (문서 79 §3)"]
+             "시행별 λ = lambda 도구(밴드 2~9°, 같은 φ_eq). 방향별 평균이 20 % 넘게 갈리면 φ_eq 의심 (문서 79 §3)",
+             f"s = 불안정모드 초기진폭 A' [°]: φ−φ_q = A'(cosh λτ−1) + B'(cos ωτ−1), τ=t−t_r (λ={lf:.2f}, ω={om:.2f} 고정, t_r 은 RSS 최소로 탐색 — 진동 위상이 t_r 을 고정) — 선까지의 부호 있는 거리 척도. A0 는 놓기 순간의 Â"]
     overlay = []
     for r in rows:
         col = ("rgba(255,0,110,.10)" if r["dir"] > 0 else "rgba(58,134,255,.12)") if r["dir_valid"] else "rgba(255,255,255,.06)"
@@ -767,9 +844,157 @@ def sysid(ds, windows=None, phi_max=5.0, smooth_ms=120.0, poly=3, t0=None, t1=No
                 params=dict(phi_max=phi_max, smooth_ms=smooth_ms, poly=poly, windows=windows), overlay=[], plane=[], curves=[])
 
 
+
+# ---------------------------------------------------------------- 8. 다음 놓기 추천 (r 적응 탐색)
+def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, lam_fixed=None, first_phi=0.7,
+              step_max=1.0, phi_max=6.0, **kw):
+    """다음 놓기 추천 (r 적응 탐색 — 경사하강 식).
+       각 시행: s = dir·amp0 (선까지의 부호 있는 거리; 발산 초기진폭). 발산 없음 = s 0.
+       β 열마다 s(φ) 의 영점 φ_c 를 할선법으로 추정(관측 1개면 기울기 k̂ 로 한 걸음, 걸음 폭 ≤ step_max),
+       열들의 (β, φ_c) 를 직선으로 이어 r̂·ĉ₀ (열이 하나면 r 은 r_guess).
+       다음 점 = 관측이 가장 적은 열의 φ_c ± off (같은 열에서는 직전 낙하 방향의 반대쪽). |φ| ≤ phi_max 로 클립."""
+    if trials is None:
+        tres = find_trials(ds, lam_fixed=lam_fixed, **kw)
+        tr = tres["table"] if tres.get("ok") else []
+    else:
+        tr = trials
+    if r_guess is None:
+        r_guess = float(ds.pipe.get("r", -1.506))
+    try:
+        bset = [float(v) for v in str(beta_set).replace(";", ",").split(",") if v.strip() != ""]
+    except ValueError:
+        bset = [2.0, -2.0, 1.0, -1.0, 0.0]
+    pts = []
+    for r in tr:
+        if r.get("beta0") is None or r.get("phi0") is None:
+            continue
+        if r.get("s") is not None and r.get("dir_valid"):
+            sv = float(r["s"])
+            if r.get("t_r") is None:                 # 옛 방식(부호 없는 진폭)이면 방향을 곱한다
+                sv = r["dir"] * abs(sv)
+            # 진동(B')이 작으면 t_r 이 덜 잡혀 A' 이 불확실 → 가중 낮춤 (β≈0 놓기)
+            bw = abs(float(r["B_osc"])) if r.get("B_osc") is not None else 1.0
+            pts.append(dict(k=r["k"], beta=r["beta0"], phi=r["phi0"], dir=r["dir"], s=sv, w=float(min(1.0, max(0.25, bw / 0.5))), kind="발산"))
+        elif r.get("dir_valid") is False and (r.get("peak") or 0) < 4.0:
+            pts.append(dict(k=r["k"], beta=r["beta0"], phi=r["phi0"], dir=0, s=0.0, w=0.5, kind="선 위(무발산)"))
+    n = len(pts)
+    steps = ["각 시행의 s = 불안정모드 초기진폭 A' (부호 있음, 선에서 멀수록 큼). 놓기 순간 t_r 은 안정모드 진동의 위상으로 맞춘다. 발산 없음 = s 0"]
+    # --- 전역 기울기 k̂ (s 가 선까지 거리에 비례하는 계수): 같은 열 안의 쌍에서 |Δs/Δφ|
+    ks = []
+    cols = {}
+    for p in pts:
+        b = min(bset, key=lambda x: abs(x - p["beta"])) if bset else round(p["beta"])
+        if abs(b - p["beta"]) > 0.6:
+            b = round(p["beta"] * 2) / 2
+        cols.setdefault(b, []).append(p)
+    for b, ps in cols.items():
+        if len(ps) >= 2:
+            pp = np.array([q["phi"] for q in ps]); ss = np.array([q["s"] for q in ps])
+            if pp.max() - pp.min() > 0.15:
+                lr = linreg(pp, ss)
+                if np.isfinite(lr["b"]) and lr["b"] > 0.05:
+                    ks.append(lr["b"])
+    k_hat = float(np.median(ks)) if ks else 0.6            # 기본 0.6: A0 ≈ 0.6·(선까지 φ 거리) — 첫 걸음만 쓴다
+    steps.append(f"거리 계수 k̂ = {k_hat:.3f} (열 안의 두 점에서 Δs/Δφ, {len(ks)}개 열" + (")" if ks else " — 아직 없어 기본값)"))
+    # --- 열마다 영점 φ_c
+    roots = {}
+    for b, ps in cols.items():
+        pp = np.array([q["phi"] for q in ps]); ss = np.array([q["s"] for q in ps]); wq = np.array([q.get("w", 1.0) for q in ps])
+        if len(ps) == 1:
+            phi_c = pp[0] - ss[0] / k_hat
+            phi_c = pp[0] + float(np.clip(phi_c - pp[0], -step_max, step_max))
+            roots[b] = dict(phi_c=float(phi_c), n=1, how="한 걸음", se=None)
+        else:
+            lr = _wlinreg(pp, ss, wq)
+            if np.isfinite(lr["b"]) and lr["b"] > 0.05 and (pp.max() - pp.min()) > 0.15:
+                phi_c = -lr["a"] / lr["b"]
+                if (ss.min() < 0 < ss.max()):
+                    how = "할선(브래킷)"
+                else:
+                    how = "할선(외삽)"
+                    phi_c = float(np.clip(phi_c, pp.min() - step_max, pp.max() + step_max))
+                roots[b] = dict(phi_c=float(phi_c), n=len(ps), how=how,
+                                se=float(abs(lr["se_a"] / lr["b"])) if np.isfinite(lr["se_a"]) and len(ps) > 2 else None)
+            else:
+                j = int(np.argmin(np.abs(ss)))
+                phi_c = pp[j] - ss[j] / k_hat
+                roots[b] = dict(phi_c=float(pp[j] + np.clip(phi_c - pp[j], -step_max, step_max)), n=len(ps), how="한 걸음(같은 부호)", se=None)
+    # --- 전역 직선: (β, φ_c) 회귀. 열이 하나면 r 가정
+    est = dict(r=r_guess, c0=0.0, se_r=None, se_c0=None, method="가정")
+    if len(roots) >= 2:
+        bb = np.array(sorted(roots)); cc = np.array([roots[b]["phi_c"] for b in bb]); ww = np.array([roots[b]["n"] for b in bb], float)
+        if bb.max() - bb.min() >= 0.8:
+            X = np.column_stack([bb, np.ones(len(bb))]) * np.sqrt(ww)[:, None]; y = cc * np.sqrt(ww)
+            coef, *_ = np.linalg.lstsq(X, y, rcond=None)
+            r_hat, c_hat = float(coef[0]), float(coef[1])
+            se_r = se_c = None
+            if len(bb) >= 3:
+                resid = y - X @ coef; s2 = float((resid ** 2).sum()) / (len(bb) - 2)
+                try:
+                    cov = s2 * np.linalg.inv(X.T @ X); se_r = float(np.sqrt(cov[0, 0])); se_c = float(np.sqrt(cov[1, 1]))
+                except np.linalg.LinAlgError:
+                    pass
+            est = dict(r=r_hat, c0=c_hat, se_r=se_r, se_c0=se_c, method=f"열 {len(bb)}개 영점 회귀")
+        else:
+            b0 = float(bb[0]); est = dict(r=r_guess, c0=float(cc[0] - r_guess * b0), se_r=None, se_c0=None, method="열 1개 + r 가정")
+    elif len(roots) == 1:
+        b0 = list(roots)[0]; est = dict(r=r_guess, c0=float(roots[b0]["phi_c"] - r_guess * b0), se_r=None, se_c0=None, method="열 1개 + r 가정")
+    for b in sorted(roots):
+        rt = roots[b]
+        steps.append(f"β={b:+.1f} 열: 점 {rt['n']}개 → 영점 φ_c = {rt['phi_c']:+.3f} ({rt['how']})")
+    steps.append(f"추정선 φ = {est['r']:.3f}·β + {est['c0']:.3f}  [{est['method']}]" + (f", SE(r) {est['se_r']:.3f}" if est.get("se_r") else ""))
+    # --- 다음 점
+    if n == 0:
+        nxt = dict(beta=0.0, phi=float(first_phi), side=+1, reason="첫 시행: 평형 근처, 선 위쪽 (λ 시행과 같은 자리)")
+    else:
+        counts = {b: len(cols.get(b, [])) for b in bset}
+        beta_next = sorted(bset, key=lambda b: (counts[b], -abs(b)))[0]
+        col = [p for p in cols.get(beta_next, []) if p["kind"] == "발산"]
+        if col:
+            side = -1 if col[-1]["dir"] >= 0 else 1
+        else:
+            last = [p for p in pts if p["kind"] == "발산"]
+            side = (-1 if last[-1]["dir"] >= 0 else 1) if last else 1
+        if beta_next in roots:
+            phi_line = roots[beta_next]["phi_c"]; why = f"그 열의 영점 {phi_line:+.2f}"
+        else:
+            phi_line = est["r"] * beta_next + est["c0"]; why = f"추정선 {est['r']:.2f}·β+{est['c0']:.2f}"
+        phi_n = float(np.clip(phi_line + side * off, -phi_max, phi_max))
+        nxt = dict(beta=float(beta_next), phi=phi_n, side=side,
+                   reason=f"β={beta_next:+.1f} 열(점 {counts[beta_next]}개) — {why} 의 {'위' if side>0 else '아래'} {off}°")
+    nxt["ank"] = float(nxt["beta"] + nxt["phi"])
+    done = est.get("se_r") is not None and est["se_r"] < 0.05 and n >= 8
+    res = dict(n=n, r=_r(est["r"], 4), c0=_r(est["c0"], 3), se_r=_r(est.get("se_r"), 4), se_c0=_r(est.get("se_c0"), 3),
+               k=_r(k_hat, 4), method=est["method"], r_ref=-1.506, n_cols=len(roots),
+               next_beta=_r(nxt["beta"], 2), next_phi=_r(nxt["phi"], 2), next_ank=_r(nxt["ank"], 2),
+               next_side="위(+)" if nxt["side"] > 0 else "아래(−)", enough=bool(done))
+    steps.append("다음 점 = 점이 가장 적은 β 열의 영점 ± off° (선 위에 정확히 놓으면 발산이 없어 숫자가 안 나온다). 같은 열에서는 직전 낙하 방향의 반대쪽")
+    steps.append("정지 조건: 8점 이상, 열 3개 이상, SE(r) < 0.05. 정본 r = −1.506 ± 0.074 (문서 70)")
+    table = [dict(k=p["k"], beta0=_r(p["beta"], 3), phi0=_r(p["phi"], 3), dir=p["dir"], s=_r(p["s"], 4), kind=p["kind"]) for p in pts]
+    for b in sorted(roots):
+        table.append(dict(k=f"β{b:+.1f} 영점", beta0=b, phi0=_r(roots[b]["phi_c"], 3), dir="", s="", kind=roots[b]["how"]))
+    plane = []
+    if pts:
+        plane.append(dict(kind="points", plane="pl1", x=[p["beta"] for p in pts], y=[p["phi"] for p in pts], dir=[p["dir"] for p in pts], label="놓기점 (색=낙하 방향)"))
+    for b in roots:
+        plane.append(dict(kind="points", plane="pl1", x=[b], y=[roots[b]["phi_c"]], dir=[0], label=""))
+    bl, br_ = -3.0, 3.0
+    plane.append(dict(kind="line", plane="pl1", x=[bl, br_], y=[est["r"] * bl + est["c0"], est["r"] * br_ + est["c0"]],
+                      label=f"추정선 φ={est['r']:.3f}β+{est['c0']:.2f} ({est['method']})", color="#4cc9f0"))
+    plane.append(dict(kind="target", plane="pl1", x=nxt["beta"], y=nxt["phi"], label=f"다음 ({nxt['beta']:+.1f}, {nxt['phi']:+.2f})"))
+    curves = []
+    if n >= 2:
+        dist = [p["phi"] - est["r"] * p["beta"] - est["c0"] for p in pts]
+        xs = np.linspace(min(dist + [-0.1]), max(dist + [0.1]), 20)
+        curves.append(dict(kind="xy", label="s (부호·발산세기) vs 추정선까지 거리", x=[_r(v) for v in dist], y=[_r(p["s"]) for p in pts],
+                           fit_x=[_r(v) for v in xs], fit_y=[_r(k_hat * v) for v in xs], xlab="φ₀ − r̂β₀ − ĉ₀ [°]", ylab="s"))
+    return dict(tool="recommend", ok=True, window=None, used=[], n=n, steps=steps, result=res, table=table,
+                params=dict(off=off, beta_set=bset, r_guess=r_guess, step_max=step_max), overlay=[], plane=plane, curves=curves, next=nxt)
+
+
 # ---------------------------------------------------------------- 디스패치
 TOOLS = dict(stats=stats, linfit=linfit, p2r=p2r_fit, **{"lambda": lambda_fit}, trials=find_trials,
-             phi_eq=phi_eq_scan, osc=osc_fit, boundary=boundary_fit, sysid=sysid)
+             phi_eq=phi_eq_scan, osc=osc_fit, boundary=boundary_fit, sysid=sysid, recommend=recommend)
 
 
 def run(ds, tool, args=None):
