@@ -24,6 +24,7 @@ import numpy as np
 PIPE_DEFAULT = dict(
     p2r=0.4285, r=-1.506, c0=0.0, lam=5.66, wf=0.1945, wb=0.3049, vg=1.0, phi_eq=0.0,
     diff_ms=25.0, tau_ms=28.0, smooth_ms=50.0, alpha_mode="ank-phi", unwrap=True, snap=True,
+    phi_off=0.0, ank_off=0.0,
 )
 PIPE_DOC = {
     "p2r": "β = α + P2R·δ 의 질량배분비 (실측① 0.4285, 문서 70)",
@@ -36,6 +37,8 @@ PIPE_DOC = {
     "smooth_ms": "비인과 평활 창 [ms] (사후 분석용)",
     "alpha_mode": "α 공식: ank-phi (정본, 문서 70 §2) / ank+phi (옛 부호) / fw (펌웨어 열 그대로)",
     "unwrap": "±180° 언랩", "snap": "감김수 스냅 (|u−w|>180 이고 |w|<90 이면 원가지로)",
+    "phi_off": "φ 오프셋 [°] — 매달림 영점으로 세우면 φ≈±180 → 180 을 넣어 직립 0 으로 (펌웨어 fphi 대응)",
+    "ank_off": "발목 오프셋 [°] (보통 0)",
 }
 ALIASES = {
     "t_ms": ("t_ms", "t", "time_ms"),
@@ -306,7 +309,11 @@ class Dataset:
         dl = self.col("del", i)
         if not math.isfinite(dl):
             dl = 0.0
-        # 언랩 (+감김수 스냅)
+        # 오프셋(직립 변환) → 언랩 (+감김수 스냅)
+        if math.isfinite(phi):
+            phi = wrap180(phi + p["phi_off"])
+        if math.isfinite(ank):
+            ank = wrap180(ank + p["ank_off"])
         if not math.isfinite(phi):
             phi = self._prev_phi if self._prev_phi is not None else 0.0
         if not math.isfinite(ank):

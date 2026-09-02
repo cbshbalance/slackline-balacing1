@@ -32,6 +32,12 @@ sys.path.insert(0, HERE)
 import numpy as np
 from aiohttp import web, WSMsgType
 
+try:                                    # 윈도우 cmd(cp949)에서 한글 print 가 예외를 내지 않게 (hangcal_logger 와 동일)
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
 import serial_bridge as sb
 from dataset_v22 import Dataset, PIPE_DEFAULT, PIPE_DOC, DERIVED
 import analysis_v22 as an
@@ -91,6 +97,7 @@ class LoggerHub:
         self.rate_win = collections.deque()                # 호스트 시각 (D행) — Hz 계산
         self.last_link = 0.0
         self.err = None
+        self._nohdr_warned = False
         self.commands = self._load_commands()
         self.profile = self.commands.get("default")
         os.makedirs(LOGS, exist_ok=True)
@@ -134,6 +141,8 @@ class LoggerHub:
 
     def _after_connect(self, name):
         self.err = None
+        self._nohdr_warned = False
+        self.sink = sb.LineSink()                # 새 연결 = 새 헤더 상태
         if self.ds.source in ("file", "upload") and self.ds.n:
             self.ds.clear()                      # 파일 분석 중이던 버퍼는 라이브와 섞지 않는다
             self.say("파일 버퍼 비움 → 라이브 버퍼 시작", "app")
@@ -296,6 +305,12 @@ class LoggerHub:
                 if self.ds.header is None or self.ds.header != self.sink.headers.get("D", self.ds.header):
                     if self.sink.headers.get("D"):
                         self.ds.set_header(self.sink.headers["D"])
+                if not self.sink.headers.get("D") and not self._nohdr_warned:
+                    self._nohdr_warned = True
+                    ncol = payload.count(",") + 1
+                    self.say(f"!! D행이 헤더 없이 온다 ({ncol}열) — 보드가 이미 돌고 있어 '# D,…' 를 놓쳤다. "
+                             + ("기본 13열 이름을 가정한다. " if ncol >= 13 else "★열 수가 기본(13)보다 적어 행을 버린다. ")
+                             + "펌웨어에 hdr (v22_raw) 또는 m 두 번(hangcal: CSV 껐다 켜기)을 보내 헤더를 다시 받을 것", "err")
                 if self.ds.add_data_row(payload):
                     self.rate_win.append(host_t)
             elif kind == "header":

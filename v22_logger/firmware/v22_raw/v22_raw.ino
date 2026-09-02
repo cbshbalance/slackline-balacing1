@@ -12,10 +12,12 @@
  *      phi_raw/ank_raw = AS5047 14비트 원각(영점 전), dxl_raw = 서보 present position tick — 영점을 사후에 검토할 수 있다.
  *
  *  【명령】 115200. 줄바꿈 또는 200 ms 조용하면 실행.
- *      z        영점 (완전히 멎은 뒤. 매달림이면 문서 66 대로 양쪽 정착 두 번 → 앱 평균)
+ *      z        영점 — 두 번 눌러 완성 (문서 66: 왼쪽에서 정착 → z, 오른쪽에서 정착 → z → 두 원각의 원형 평균).
+ *               세 번째 z 는 처음부터 다시. 한 번만 누르고 쓰면 1차값이 임시 영점이다.
  *      u / k    토크 해제 / 토크 켜기(현재 위치 유지)
  *      <정수>   δ 명령 [°] (dlim 클립)          m  CSV 토글     s  화면출력 토글
- *      p        한 줄 출력                       t  상태
+ *      p        한 줄 출력                       t  상태        hdr  헤더 다시 출력 (앱이 늦게 붙었을 때)
+ *      (헤더는 20 s 마다 자동으로 다시 찍는다 — 앱은 같은 헤더를 무시한다)
  *      loghz N  CSV 주기 (115200 에서 100 권장)  vel N / acc N  프로파일   ilim N  전류제한
  *  I/O 코드는 incremental_fold_min.ino(실기 검증됨)에서 그대로 가져왔다. 파이프라인 상수도 같다.
  * ============================================================================
@@ -50,12 +52,17 @@ using namespace ControlTableItem;
 // ---- 상태 ----
 bool  motor_ok = false, csv_on = true, out_on = true;
 float home_tick = 0;  uint16_t phi_zero = 0, ank_zero = 0, phi_raw = 0, ank_raw = 0;
+int   zero_stage = 0;  uint16_t phi_z1 = 0, ank_z1 = 0;          // 2단 영점 (문서 66 양방향 정착 평균)
+uint16_t circMean14(uint16_t a, uint16_t b) {                      // 14비트 원각 두 개의 원형 평균
+  int16_t d = (int16_t)((b - a) & 0x3FFF); if (d > 8191) d -= 16384;
+  return (uint16_t)((a + d / 2) & 0x3FFF);
+}
 float dxl_raw = 0;
 float hold = 0, delta_now = 0;
 float phi_d = 0, ank_d = 0, alpha_d = 0, beta_d = 0, dphi = 0, dbeta = 0, Ahat = 0;
 float phi_hist[VEL_N + 1], beta_hist[VEL_N + 1];
 int   hist_i = 0;  bool primed = false;
-uint32_t t0 = 0, next_us = 0, log_next_ms = 0, mon_next = 0;
+uint32_t t0 = 0, next_us = 0, log_next_ms = 0, mon_next = 0, hdr_next_ms = 0;
 char  linebuf[48]; uint8_t linelen = 0; uint32_t last_rx_ms = 0;
 int   err_code = 0;
 
@@ -145,6 +152,7 @@ void printStatus() {
   Serial.print("  vel "); Serial.print(VEL_UNIT); Serial.print("  acc "); Serial.print(ACC_UNIT);
   Serial.print("  ilim "); Serial.println(CUR_LIMIT);
   Serial.print("영점 raw: phi "); Serial.print(phi_zero); Serial.print("  ank "); Serial.print(ank_zero);
+  Serial.print("  (단계 "); Serial.print(zero_stage); Serial.print("/2)");
   Serial.print("  home_tick "); Serial.println(home_tick, 0);
 }
 
@@ -164,18 +172,30 @@ void handleLine(char* s) {
     return;
   }
   char* rest = s + 1;  while (*rest == ' ') rest++;
+  if (!strncmp(s, "hdr", 3))   { logHeader(); return; }
   if (!strncmp(s, "loghz", 5)) { LOG_HZ = atof(s + 5); if (LOG_HZ < 1) LOG_HZ = 1; if (LOG_HZ > 200) LOG_HZ = 200; Serial.print("# loghz "); Serial.println(LOG_HZ, 0); return; }
   if (!strncmp(s, "vel", 3))   { VEL_UNIT = atoi(s + 3); if (motor_ok) dxl.writeControlTableItem(PROFILE_VELOCITY, DXL_ID, VEL_UNIT); Serial.print("# vel "); Serial.println(VEL_UNIT); return; }
   if (!strncmp(s, "acc", 3))   { ACC_UNIT = atoi(s + 3); if (motor_ok) dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL_ID, ACC_UNIT); Serial.print("# acc "); Serial.println(ACC_UNIT); return; }
   if (!strncmp(s, "ilim", 4))  { CUR_LIMIT = atoi(s + 4); if (motor_ok) { dxl.torqueOff(DXL_ID); dxl.writeControlTableItem(CURRENT_LIMIT, DXL_ID, CUR_LIMIT); dxl.torqueOn(DXL_ID); } Serial.print("# ilim "); Serial.println(CUR_LIMIT); return; }
   switch (c) {
-    case 'z':
-      phi_zero = as5047_raw(PHI_CS);  ank_zero = as5047_raw(ANK_CS);
+    case 'z': {
+      uint16_t pz = as5047_raw(PHI_CS), az = as5047_raw(ANK_CS);
+      if (zero_stage == 0) {                                    // 1차: 임시 영점으로 바로 쓴다
+        phi_z1 = pz; ank_z1 = az; phi_zero = pz; ank_zero = az; zero_stage = 1;
+        Serial.println("# ZERO 1차 기록 — 반대쪽에서 정착시킨 뒤 z 한 번 더 (지금은 1차값이 임시 영점)");
+      } else if (zero_stage == 1) {                             // 2차: 두 정착의 원형 평균
+        phi_zero = circMean14(phi_z1, pz); ank_zero = circMean14(ank_z1, az); zero_stage = 2;
+        Serial.print("# ZERO 완성 — 데드밴드 phi "); Serial.print(fabsf((int16_t)((pz - phi_z1) & 0x3FFF) > 8191 ? 0 : (int16_t)((pz - phi_z1) & 0x3FFF)) * 360.0f / 16384.0f, 2);
+        Serial.println(" deg (양쪽 정착 차)");
+      } else {                                                  // 3차: 처음부터
+        phi_z1 = pz; ank_z1 = az; phi_zero = pz; ank_zero = az; zero_stage = 1;
+        Serial.println("# ZERO 다시 시작 — 1차 기록");
+      }
       if (motor_ok) { home_tick = dxl.getPresentPosition(DXL_ID); if (home_tick == 0.0f) Serial.println("# !! 영점 순간 모터가 안 읽혔다 — z 다시"); }
       hold = 0; delta_now = 0; primed = false; dphi = dbeta = 0;
-      Serial.print("E,"); Serial.print(millis() - t0); Serial.print(",ZERO,"); Serial.print(phi_zero); Serial.print('/'); Serial.println(ank_zero);
-      Serial.println("# ZERO");
+      Serial.print("E,"); Serial.print(millis() - t0); Serial.print(",ZERO,"); Serial.print(pz); Serial.print('/'); Serial.println(az);
       break;
+    }
     case 'u': if (motor_ok) dxl.torqueOff(DXL_ID); Serial.println("# 토크 해제"); break;
     case 'k': if (motor_ok) { home_tick = dxl.getPresentPosition(DXL_ID); hold = 0; dxl.setGoalPosition(DXL_ID, home_tick); dxl.torqueOn(DXL_ID); } Serial.println("# 토크 ON (현재 위치 유지, δ=0 재정의)"); break;
     case 'm': csv_on = !csv_on; if (csv_on) logHeader(); Serial.print("# CSV "); Serial.println(csv_on ? "ON" : "OFF"); break;
@@ -233,6 +253,7 @@ void loop() {
   if ((int32_t)(micros() - next_us) >= 0) next_us = micros() + DT_US;
   readState();
   uint32_t ms = millis();
+  if (csv_on && out_on && (int32_t)(ms - hdr_next_ms) >= 0) { hdr_next_ms = ms + 20000; logHeader(); }
   if (csv_on && out_on) {
     if ((int32_t)(ms - log_next_ms) >= 0) {
       log_next_ms += (uint32_t)(1000.0f / LOG_HZ);

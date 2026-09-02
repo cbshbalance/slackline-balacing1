@@ -2,7 +2,7 @@
 "use strict";
 (function () {
   const el = LG.el, fmt = LG.fmt;
-  const PIPE_DEFAULT = { p2r: 0.4285, r: -1.506, c0: 0.0, lam: 5.66, wf: 0.1945, wb: 0.3049, vg: 1.0, phi_eq: 0.0, diff_ms: 25, tau_ms: 28, smooth_ms: 50, alpha_mode: "ank-phi", unwrap: true, snap: true };
+  const PIPE_DEFAULT = { p2r: 0.4285, r: -1.506, c0: 0.0, lam: 5.66, wf: 0.1945, wb: 0.3049, vg: 1.0, phi_eq: 0.0, diff_ms: 25, tau_ms: 28, smooth_ms: 50, alpha_mode: "ank-phi", unwrap: true, snap: true, phi_off: 0, ank_off: 0 };
 
   // ================= 탭 =================
   document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
@@ -114,7 +114,7 @@
   };
 
   // ================= 파이프라인 =================
-  const FORMULA = `u_phi, u_ank : ±180° 언랩 (+감김수 스냅)
+  const FORMULA = `u_phi, u_ank : (phi+phi_off, ank+ank_off) ±180° 언랩 (+감김수 스냅)
 a_alpha = u_ank − u_phi            (alpha_mode)
 a_theta = a_alpha + del
 a_beta  = a_alpha + P2R·del

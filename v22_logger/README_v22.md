@@ -42,7 +42,7 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
   파라미터 설정/읽기, 자유 텍스트. 접속 직후 아무것도 보내지 않는다(문서 77 §6). 위험 명령(x, b)은 확인 창.
 - **파일**: logs/ 와 기존 CSV(루트·lambda test·p2r test·r test)를 불러오거나(연결 끊은 뒤) 브라우저에서 업로드(+events.csv).
   p2r_logger 형식(`t_ms,phi_deg,…`)과 fold/hangcal 형식(`D,` 접두어, `# D,…` 헤더) 모두 읽는다.
-- **파이프라인 탭**: P2R·r·c0·λ·wf·wb·vg·φ_eq·diff_ms·tau_ms·smooth_ms·alpha_mode·unwrap·snap. 바꾸면 서버가
+- **파이프라인 탭**: P2R·r·c0·λ·wf·wb·vg·φ_eq·diff_ms·tau_ms·smooth_ms·alpha_mode·unwrap·snap·**phi_off/ank_off**(매달림 영점→직립 +180). 바꾸면 서버가
   파생열 전부를 다시 계산해 보낸다. 식은 탭 위에 그대로 적혀 있다.
 
 ## 앱 파생열 (dataset_v22.py)
@@ -88,6 +88,11 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 - `python server.py --fake --port 8231 &  ;  python e2e_v22.py 8231` — Playwright: 로드·JS 오류 0·라이브·명령·마크·파일 로드·
   P2R/시행/λ/φ_eq/통계·스크럽·재생·구간 선택·파이프라인·숨김·재연결. 스크린샷 `e2e_shots/`. **ALL PASS**
 - `python tests_v21.py` — v21 회귀 (물리 불변) **ALL PASS**
+
+## 실물 브링업
+
+순서는 `../docs/v22_실물_브링업_절차_20260902.md` — 가짜 소스로 화면 확인 → 기존 hangcal_fold 펌웨어로 연결(m 으로 CSV ON) →
+손으로 움직여 부호·트윈 확인 → v22_raw 업로드 → 매달림 영점·자유흔들기·P2R·놓기 시행을 앱 버튼으로.
 
 ## 알아둘 것
 
