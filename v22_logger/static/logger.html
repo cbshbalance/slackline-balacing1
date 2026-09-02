@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v22 로거·측정 앱 — 어름이 디지털 트윈</title>
+<style>
+:root{--bg:#0d1017;--panel:#151a24;--border:rgba(255,255,255,.09);--fg:#dde2ea;--dim:rgba(255,255,255,.45);
+--blue:#3a86ff;--cyan:#4cc9f0;--pink:#ff006e;--green:#06d6a0;--purple:#8338ec;--yellow:#ffbe0b;--red:#ef4444;--gold:#ffd166;--orange:#ff9f43;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Segoe UI','Malgun Gothic',sans-serif;font-size:12.5px;display:flex;flex-direction:column;overflow:hidden}
+.hdr{display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid var(--border);background:#0f131b;flex:none;flex-wrap:wrap}
+.hdr h1{font-size:14px;margin-right:6px}
+.chip{font-family:Consolas,monospace;font-size:11px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);background:#151a24;color:var(--dim);white-space:nowrap}
+.chip.on{color:#06d6a0;border-color:rgba(6,214,160,.5)}
+.chip.rec{color:#ff6b6b;border-color:rgba(239,68,68,.5)}
+.chip.warn{color:var(--yellow);border-color:rgba(255,190,11,.5)}
+.hdr .sp{flex:1}
+.btn{background:#232a38;color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:12px;white-space:nowrap}
+.btn:hover{background:#2d3648}.btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.accent{border-color:rgba(6,214,160,.6);color:#9ff5dc}.btn.danger{border-color:rgba(239,68,68,.6);color:#ff9b9b}
+.btn.sm{padding:2px 6px;font-size:11px}
+.btn:disabled{opacity:.4;cursor:default}
+select,input[type=text],input[type=number]{background:#0d1117;color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:11.5px}
+input[type=number]{width:70px}
+input[type=range]{accent-color:var(--blue)}
+label.chk{display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:11.5px;margin-right:6px}
+.main{flex:1;display:grid;grid-template-columns:minmax(0,1.15fr) 330px 400px;grid-template-rows:minmax(0,1fr);min-height:0}
+.sim{position:relative;border-right:1px solid var(--border);min-width:0}
+#c3d{width:100%;height:100%;display:block}
+#ov3d{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-family:Consolas,monospace;font-size:12px;line-height:1.6;pointer-events:none;white-space:pre}
+.simbtns{position:absolute;bottom:8px;right:8px;display:flex;gap:4px}
+.simhint{position:absolute;bottom:8px;left:8px;font-size:10.5px;color:rgba(255,255,255,.35);pointer-events:none}
+.planes{display:flex;flex-direction:column;gap:6px;padding:6px;border-right:1px solid var(--border);background:#0f131b;min-height:0}
+.plbox{flex:1;display:flex;flex-direction:column;min-height:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#10141d}
+.plbox .ttl{font-size:11px;padding:4px 8px;color:var(--cyan);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline}
+.plbox .ttl small{color:var(--dim);font-size:10px}
+.plbox canvas{flex:1;width:100%;min-height:0;display:block}
+.plopts{font-size:11px;color:var(--dim);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.right{display:flex;flex-direction:column;min-height:0;background:var(--panel)}
+.tabs{display:flex;border-bottom:1px solid var(--border);flex:none}
+.tabs button{flex:1;background:none;border:none;color:var(--dim);padding:6px 4px;cursor:pointer;font-size:12px;border-bottom:2px solid transparent}
+.tabs button.on{color:var(--cyan);border-bottom-color:var(--cyan)}
+.pane{display:none;flex:1;overflow-y:auto;padding:8px;min-height:0}
+.pane.on{display:block}
+.sec{border:1px solid var(--border);border-radius:8px;padding:7px;margin-bottom:8px}
+.sec h3{font-size:11.5px;color:var(--cyan);margin-bottom:6px;letter-spacing:.3px;display:flex;justify-content:space-between;align-items:baseline}
+.sec h3 small{color:var(--dim);font-weight:normal;font-size:10px}
+.row{display:flex;gap:4px;margin-bottom:5px;flex-wrap:wrap;align-items:center}
+.hint{font-size:10.5px;color:var(--dim);line-height:1.45;margin:3px 0}
+table.kv{width:100%;border-collapse:collapse;font-family:Consolas,monospace;font-size:11.5px}
+table.kv td{padding:1px 4px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap}
+table.kv td.k{color:var(--dim);width:38%}
+table.kv td.v{text-align:right;color:#fff}
+table.kv td.d{text-align:right;color:var(--orange);font-size:10.5px}
+table.kv tr.hl td.v{color:var(--gold)}
+.cmdgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.cmdgrid .btn{padding:5px 3px;font-size:11.5px;text-align:center}
+.console{flex:none;height:150px;border-top:1px solid var(--border);display:flex;flex-direction:column;background:#0b0e14}
+.console .lines{flex:1;overflow-y:auto;font-family:Consolas,monospace;font-size:11px;line-height:1.35;padding:4px 6px;white-space:pre-wrap;word-break:break-all}
+.console .lines .rx{color:#cfd8e3}.console .lines .tx{color:#9ff5dc}.console .lines .app{color:var(--gold)}.console .lines .err{color:#ff8080}
+.console .in{display:flex;gap:4px;padding:4px 6px;border-top:1px solid var(--border)}
+.console .in input{flex:1;font-family:Consolas,monospace}
+.bottom{flex:none;height:var(--bottomH,36vh);min-height:160px;display:grid;grid-template-columns:minmax(0,1fr) 430px;border-top:1px solid var(--border)}
+.splitter{flex:none;height:6px;cursor:row-resize;background:#141a26;border-top:1px solid var(--border)}
+.splitter:hover{background:#22304a}
+.chartcol{display:flex;flex-direction:column;min-width:0;min-height:0}
+.transport{display:flex;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid var(--border);flex-wrap:wrap;flex:none}
+.transport input[type=range]{flex:1;min-width:120px}
+.transport .t{font-family:Consolas,monospace;font-size:11.5px;color:var(--gold);white-space:nowrap}
+#chart{flex:1;width:100%;min-height:0;display:block;cursor:crosshair}
+.chanbar{display:flex;gap:2px 8px;flex-wrap:wrap;padding:2px 8px;font-size:10.5px;border-top:1px solid var(--border);flex:none}
+.chanbar label{display:inline-flex;align-items:center;gap:3px;cursor:pointer}
+.chanbar .sw{width:10px;height:3px;display:inline-block}
+.an{display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--border);background:var(--panel)}
+.an .top{padding:6px 8px;border-bottom:1px solid var(--border);flex:none}
+.an .out{flex:1;overflow-y:auto;padding:6px 8px;font-size:11.5px;min-height:0}
+.an ol{padding-left:18px;line-height:1.45;color:#cfe0ff}
+.an .res{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-family:Consolas,monospace;font-size:11.5px;margin:6px 0}
+.an .res .k{color:var(--dim)}.an .res .v{color:#fff;text-align:right}
+.an .res .big{color:var(--gold);font-size:13px}
+.an table.tb{border-collapse:collapse;font-family:Consolas,monospace;font-size:10.5px;width:100%;margin-top:4px}
+.an table.tb th,.an table.tb td{border:1px solid rgba(255,255,255,.08);padding:1px 4px;text-align:right;white-space:nowrap}
+.an table.tb th{color:var(--cyan);font-weight:normal}
+.an table.tb tr.bad td{color:var(--dim)}
+#anCurve{width:100%;height:140px;display:block;margin-top:6px;flex:none}
+.an .top .row{margin-bottom:3px}
+.hist{font-size:11px;color:var(--dim);border-top:1px solid var(--border);padding:4px 8px;max-height:70px;overflow-y:auto;flex:none}
+.hist span{cursor:pointer;color:#cfe0ff;margin-right:8px}
+.params{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;font-size:11px;margin:4px 0}
+.params label{display:flex;justify-content:space-between;align-items:center;gap:4px;color:var(--dim)}
+.params input,.params select{width:78px}
+#toast{position:fixed;right:12px;top:44px;z-index:99;display:flex;flex-direction:column;gap:4px}
+.toast{background:rgba(20,26,36,.95);border:1px solid var(--border);border-left:3px solid var(--cyan);padding:6px 10px;border-radius:6px;font-size:12px;max-width:380px}
+.toast.err{border-left-color:var(--red)}
+.pipe .row label{display:flex;flex-direction:column;font-size:10.5px;color:var(--dim);width:calc(50% - 4px)}
+.pipe .row label input,.pipe .row label select{width:100%}
+.formula{font-family:Consolas,monospace;font-size:10.5px;color:#cfe0ff;line-height:1.5;background:#0b0e14;padding:5px;border-radius:5px;white-space:pre-wrap}
+body.hide .right,body.hide .an{display:none}
+body.hide .main{grid-template-columns:minmax(0,1fr) 380px}
+body.hide .bottom{grid-template-columns:minmax(0,1fr)}
+kbd{font-family:Consolas,monospace;font-size:10px;border:1px solid var(--border);border-radius:3px;padding:0 3px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="hdr">
+ <h1>🎪 v22 로거·측정 앱</h1>
+ <span class="chip" id="hWs">서버 연결 중…</span>
+ <span class="chip" id="hConn">연결 없음</span>
+ <span class="chip" id="hRec">기록 없음</span>
+ <span class="chip" id="hBuf">버퍼 0 행</span>
+ <span class="sp"></span>
+ <select id="portSel" style="min-width:150px"><option value="">포트 자동</option></select>
+ <button class="btn sm" id="bPorts" title="포트 목록 새로고침">↻</button>
+ <input id="iBaud" type="number" value="115200" step="1" style="width:80px" title="baud">
+ <button class="btn accent" id="bConnect">연결</button>
+ <button class="btn" id="bDisc">끊기</button>
+ <button class="btn" id="bFakeSynth" title="장치 없이 합성 신호로 (개발·리허설)">가짜: 합성</button>
+ <button class="btn" id="bFakeFile" title="기록 탭에서 고른 파일을 실시간 재생 소스로">가짜: 파일</button>
+ <a class="btn" href="/pres" target="_blank" title="v21 발표 시뮬레이터 (그대로)">/pres ↗</a>
+ <button class="btn sm" id="bHide" title="H: 오른쪽 패널 숨김">H</button>
+</div>
+
+<div class="main">
+ <div class="sim">
+  <canvas id="c3d"></canvas>
+  <div id="ov3d"></div>
+  <div class="simhint">🖱 드래그 회전 · 우클릭 이동 · 휠 줌 — 자세 = 실기 엔코더 (φ, α=ank−φ, θ=α+δ)</div>
+  <div class="simbtns"><button class="btn sm" id="bCamSide">📐 사이드</button><button class="btn sm" id="bCamIso">🎥 3D</button></div>
+ </div>
+ <div class="planes">
+  <div class="plbox"><div class="ttl"><span>원위치 평면 (β, φ)</span><small>금색=앱 인과 · 흰 점선=평활</small></div><canvas id="pl1"></canvas></div>
+  <div class="plbox"><div class="ttl"><span>예측점 평면 (β_pred, φ_pred)</span><small>q + P·q̇ — 판정의 평면</small></div><canvas id="pl2"></canvas></div>
+  <div class="plopts">
+   <label class="chk"><input type="checkbox" id="cPlSmooth" checked>평활 점선</label>
+   <label class="chk"><input type="checkbox" id="cPlFw">펌웨어 β (하늘)</label>
+   <label class="chk">트리거 ±<input id="iTrig" type="number" value="0.6" step="0.1" style="width:52px">°</label>
+   <span title="휠 줌 · 우클릭 이동 · 더블클릭 복귀">🖱</span>
+  </div>
+ </div>
+ <div class="right">
+  <div class="tabs">
+   <button class="on" data-tab="data">데이터</button><button data-tab="cmd">명령</button><button data-tab="rec">기록·파일</button><button data-tab="pipe">파이프라인</button>
+  </div>
+  <div class="pane on" id="pane_data">
+   <div class="sec"><h3>원본값 (펌웨어가 보낸 열 그대로) <small id="dsInfo"></small></h3>
+    <table class="kv"><tbody id="rawTable"><tr><td class="k">—</td><td class="v">데이터 없음</td></tr></tbody></table></div>
+   <div class="sec"><h3>앱 파생값 <small>원시 열에서 앱이 다시 계산 · Δ = 앱 − 펌웨어</small></h3>
+    <table class="kv"><tbody id="derTable"></tbody></table>
+    <div class="hint" id="dsNotes"></div></div>
+   <div class="sec"><h3>시행표 (펌웨어 R행) <small id="trialInfo"></small></h3><div id="trialTable" class="hint">없음</div></div>
+  </div>
+  <div class="pane" id="pane_cmd">
+   <div class="sec"><h3>명령 팔레트 <small><select id="profileSel"></select></small></h3>
+    <div id="cmdGroups"></div>
+    <div class="row" id="deltaRow" style="margin-top:6px"><span class="hint" style="margin:0">δ 수동 이동</span><input id="iDelta" type="number" value="0" step="1"><button class="btn sm" id="bDeltaGo">보내기</button><span class="hint" id="deltaHelp" style="margin:0"></span></div>
+    <div class="row" id="paramRow"><span class="hint" style="margin:0">값 바꾸기</span><select id="paramSel" style="max-width:150px"></select><input id="paramVal" type="text" style="width:70px" placeholder="값"><button class="btn sm" id="bParamSet">설정</button><button class="btn sm" id="bParamGet">읽기</button></div>
+    <div class="hint" id="paramHelp"></div>
+    <div class="hint">펌웨어는 200 ms 조용하면 한 줄을 실행한다. 아래 콘솔 입력창에는 아무 텍스트나 칠 수 있다 (<kbd>#</kbd> 로 시작하면 보내지 않고 메모).</div>
+   </div>
+  </div>
+  <div class="pane" id="pane_rec">
+   <div class="sec"><h3>기록 <small>연결하면 자동으로 logs/ 에 4파일 기록</small></h3>
+    <div id="recInfo" class="hint">기록 없음</div>
+    <div class="row"><input id="iRecName" type="text" placeholder="새 파일 이름 (예: 0902_hang_r1)" style="flex:1"><button class="btn accent" id="bRecNew">새 파일</button><button class="btn" id="bRecStop">기록 정지</button></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="cAutoRec" checked>연결 시 자동 기록</label></div>
+    <div class="row"><input id="iMark" type="text" placeholder="마크 (예: RELEASE 왼손)" style="flex:1"><button class="btn" id="bMark">마크 <kbd>M</kbd></button></div>
+    <div class="hint">마크는 E행(t_ms,event,value)으로 events.csv 와 그래프에 남는다.</div>
+   </div>
+   <div class="sec"><h3>파일 <small>logs/ + 기존 CSV</small></h3>
+    <div class="row"><select id="fileList" style="flex:1"></select><button class="btn sm" id="bFiles">↻</button></div>
+    <div class="row"><button class="btn accent" id="bFileLoad">불러오기 (재생·분석)</button><a class="btn" id="dlLink" href="/logs/" target="_blank">logs/ 열기</a><button class="btn danger" id="bClear">버퍼 비움</button></div>
+    <div class="row"><input type="file" id="fUpload" accept=".csv,.txt" multiple style="font-size:10.5px;max-width:100%"></div>
+    <div class="hint">불러오기는 연결을 끊은 뒤에. 업로드는 CSV + (같은 이름).events.csv 를 함께 골라도 된다.</div>
+   </div>
+  </div>
+  <div class="pane pipe" id="pane_pipe">
+   <div class="sec"><h3>앱 파이프라인 <small>원시 → 파생 (전부 여기서 바꾼다)</small></h3>
+    <div class="formula" id="pipeFormula"></div>
+    <div id="pipeForm"></div>
+    <div class="row"><button class="btn accent" id="bPipeApply">적용 (전부 재계산)</button><button class="btn" id="bPipeReset">기본값</button></div>
+    <div class="hint" id="simNote"></div>
+   </div>
+  </div>
+  <div class="console"><div class="lines" id="console"></div>
+   <div class="in"><input id="iLine" type="text" placeholder="로봇에 보낼 한 줄 (Enter) — 예: g, h, t, c0 -0.4, 20"><button class="btn sm" id="bLine">보냄</button></div></div>
+ </div>
+</div>
+
+<div class="splitter" id="splitter" title="드래그로 아래 영역 높이 조절"></div>
+<div class="bottom">
+ <div class="chartcol">
+  <div class="transport">
+   <span class="chip" id="tMode">LIVE</span>
+   <button class="btn sm" id="bFollow" title="F">따라가기</button>
+   <button class="btn sm" id="bStepB10" title="←×10">⏮</button><button class="btn sm" id="bStepB" title="←">◀</button>
+   <button class="btn sm" id="bPlay" title="Space">▶</button>
+   <button class="btn sm" id="bStepF" title="→">▶︎|</button><button class="btn sm" id="bStepF10" title="→×10">⏭</button>
+   <select id="selSpeed"><option value="0.1">0.1×</option><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+   <input type="range" id="sIdx" min="0" max="0" value="0">
+   <span class="t" id="tTime">t = —</span>
+   <span class="hint" style="margin:0">창<input id="iWin" type="number" value="10" step="1" style="width:52px">s</span>
+   <span class="t" id="tSel" style="color:#4cc9f0"></span>
+   <button class="btn sm" id="bSelClear" title="Esc">선택 지움</button>
+  </div>
+  <canvas id="chart"></canvas>
+  <div class="chanbar" id="chanBox"></div>
+ </div>
+ <div class="an">
+  <div class="top">
+   <div class="row">
+    <select id="anTool" style="flex:1"></select>
+    <button class="btn accent" id="bAnRun">실행</button>
+    <label class="chk"><input type="checkbox" id="cOverlay" checked>오버레이</label>
+   </div>
+   <div class="row">
+    <span class="hint" style="margin:0">구간</span><input id="anT0" type="number" step="0.01" placeholder="t0"><input id="anT1" type="number" step="0.01" placeholder="t1">
+    <button class="btn sm" id="bAnSel" title="차트에서 Shift+드래그한 구간">선택구간</button><button class="btn sm" id="bAnAll">전체</button>
+    <select id="anTrial" style="max-width:130px"><option value="">시행…</option></select>
+    <label class="chk" id="anWinOptWrap" style="display:none"><input type="checkbox" id="cAnWin">구간 한정</label>
+   </div>
+   <div class="params" id="anParams"></div>
+   <div class="hint" id="anHelp"></div>
+  </div>
+  <div class="out" id="anOutWrap"><div id="anOut"><div class="hint">도구를 고르고 구간을 정한 뒤 실행. 결과에는 쓴 구간·점·식·잔차가 그대로 나온다. 차트 <kbd>Shift</kbd>+드래그 = 구간 선택 · <kbd>Enter</kbd> = 실행.</div></div>
+  <canvas id="anCurve"></canvas></div>
+  <div class="hist" id="anHist">결과 기록 —</div>
+ </div>
+</div>
+<div id="toast"></div>
+<script src="/three.min.js"></script>
+<script src="/static/lg_core.js"></script>
+<script src="/static/lg_3d.js"></script>
+<script src="/static/lg_plane.js"></script>
+<script src="/static/lg_chart.js"></script>
+<script src="/static/lg_panels.js"></script>
+</body>
+</html>

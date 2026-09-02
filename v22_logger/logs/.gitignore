@@ -1,0 +1,6 @@
+# 자동 이름 세션 파일은 git 에 안 올린다 (이름을 지어 나눈 파일은 올린다)
+*_auto.csv
+*_auto.trials.csv
+*_auto.folds.csv
+*_auto.events.csv
+*_auto.raw.txt
