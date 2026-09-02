@@ -51,7 +51,7 @@ with sync_playwright() as p:
     # 명령 팔레트
     pg.click(".tabs button[data-tab=cmd]")
     check("명령 팔레트 버튼 생성", pg.locator("#cmdGroups .btn").count() >= 10, str(pg.locator("#cmdGroups .btn").count()))
-    pg.locator("#cmdGroups .btn", has_text="p 1회출력").click(); time.sleep(0.4)
+    pg.locator("#cmdGroups .btn", has_text="p 1회").click(); time.sleep(0.4)
     check("팔레트 버튼 → 전송", "명령 수신: p" in (pg.text_content("#console") or ""))
     # 파일 로드 (끊은 뒤)
     pg.click("#bDisc"); time.sleep(0.6)
