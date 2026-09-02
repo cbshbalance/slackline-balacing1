@@ -432,6 +432,23 @@
               "label": "t 상태",
               "cmd": "t",
               "help": ""
+            },
+            {
+              "label": "e 엔코더진단",
+              "cmd": "e",
+              "help": "두 AS5047 의 DIAAGC(AGC·MagL/MagH)·ERRFL·각도 레지스터를 읽어 배선/자석/기구 중 어디가 문제인지 판독",
+              "accent": true
+            },
+            {
+              "label": "swap CS교환",
+              "cmd": "swap",
+              "help": "φ↔발목 CS 핀을 런타임에 바꾼다. 고정값이 phi 열로 따라가면 채널(배선·센서) 문제",
+              "danger": true
+            },
+            {
+              "label": "hdr 헤더",
+              "cmd": "hdr",
+              "help": "헤더 다시 출력"
             }
           ]
         }
@@ -466,7 +483,7 @@
       "phases": {
         "0": "—"
       },
-      "err_bits": "err = phi고착1 + ank고착4 + dxl16"
+      "err_bits": "err = phi등급 + 4·ank등급 + 16·dxl  (등급1 = 0/16383 레일, 등급2 = 2 s 값불변 고착)"
     }
   }
 }

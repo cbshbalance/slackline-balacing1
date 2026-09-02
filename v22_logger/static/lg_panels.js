@@ -165,9 +165,21 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
                ["s_phi", "φ 평활"], ["s_beta", "β 평활"], ["phase", "phase", null, "phase"], ["err", "err", null, "err"], ["cue", "cue"]];
   const derRows = [];
   (function () { const tb = el("derTable"); for (const d of DER) { const tr = document.createElement("tr"); tr.innerHTML = `<td class="k">${d[1]}</td><td class="v">—</td><td class="d"></td>`; if (d[0] === "a_Ahat" || d[0] === "u_phi" || d[0] === "a_beta") tr.className = "hl"; tb.appendChild(tr); derRows.push([d, tr.children[1], tr.children[2]]); } })();
+  function stuck(a, i) {                        // 최근 2 s 동안 값이 전혀 안 변했으면 true (엔코더 고착 표시)
+    if (!a || i < 10) return false;
+    const t = LG.ds.data.t; const j0 = Math.max(0, LG.idxOfT(t[i] - 2.0));
+    if (i - j0 < 10) return false;
+    const v = a[i]; if (!isFinite(v)) return false;
+    for (let k = j0; k < i; k += 2) if (a[k] !== v) return false;
+    return true;
+  }
   function updateTables() {
     const i = LG.cur(); if (i < 0) return;
-    for (const [nm, td] of rawRows) { const a = LG.ds.data[nm]; td.textContent = a ? fmt(a[i], nm === "t_ms" ? 0 : 3) : "—"; }
+    for (const [nm, td] of rawRows) {
+      const a = LG.ds.data[nm]; td.textContent = a ? fmt(a[i], nm === "t_ms" ? 0 : 3) : "—";
+      if (/^(phi|ank|phi_raw|ank_raw|del_now|dxl_raw|phi_deg|ank_deg|del_now_deg)$/.test(nm)) {
+        const s = stuck(a, i); td.style.color = s ? "#ff8080" : ""; if (s) td.textContent += "  ⚠고착 2s"; }
+    }
     for (const [d, tv, tdiff] of derRows) {
       const v = LG.val(d[0], i);
       if (d[3] === "phase") { tv.textContent = isFinite(v) ? `${v | 0} ${LG.phaseName(v)}` : "—"; continue; }

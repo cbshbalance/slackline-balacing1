@@ -16,7 +16,10 @@
  *               세 번째 z 는 처음부터 다시. 한 번만 누르고 쓰면 1차값이 임시 영점이다.
  *      u / k    토크 해제 / 토크 켜기(현재 위치 유지)
  *      <정수>   δ 명령 [°] (dlim 클립)          m  CSV 토글     s  화면출력 토글
- *      p        한 줄 출력                       t  상태        hdr  헤더 다시 출력 (앱이 늦게 붙었을 때)
+ *      p        한 줄 출력                       t  상태        hdr  헤더 다시 출력 (앱이 늦게 붙았을 때)
+ *      e        ★엔코더 진단 — 두 AS5047 의 ERRFL·DIAAGC(AGC, MagL/MagH/COF/LF)·ANGLEUNC·ANGLECOM 을 읽어 판독
+ *      swap     ★CS 핀 교환 (φ↔발목) — 재업로드 없이 "채널(배선·센서) 문제 vs 코드" 를 가른다
+ *      err 열:  phi 등급 + 4·ank 등급 + 16·dxl,  등급 1 = 0/16383 고착(레일), 2 = 2 s 이상 값 불변(고착)
  *      (헤더는 20 s 마다 자동으로 다시 찍는다 — 앱은 같은 헤더를 무시한다)
  *      loghz N  CSV 주기 (115200 에서 100 권장)  vel N / acc N  프로파일   ilim N  전류제한
  *  I/O 코드는 incremental_fold_min.ino(실기 검증됨)에서 그대로 가져왔다. 파이프라인 상수도 같다.
@@ -43,7 +46,8 @@ const int   VEL_N = 5;  const float EMA_A = 0.15f;
 // ---- 하드웨어 (문서 17·52 배선) ----
 #define DXL_SERIAL  Serial3
 #define DXL_DIR_PIN 84
-const uint8_t DXL_ID = 1, PHI_CS = 10, ANK_CS = 9;
+const uint8_t DXL_ID = 1;
+uint8_t PHI_CS = 10, ANK_CS = 9;                 // swap 명령으로 런타임 교환 가능 (진단용)
 const int   MOTOR_DIR = +1;
 const float TICK_PER_DEG = 4096.0f / 360.0f;
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
@@ -58,6 +62,8 @@ uint16_t circMean14(uint16_t a, uint16_t b) {                      // 14비트 �
   return (uint16_t)((a + d / 2) & 0x3FFF);
 }
 float dxl_raw = 0;
+uint16_t phi_last = 0xFFFF, ank_last = 0xFFFF;  uint32_t phi_chg_ms = 0, ank_chg_ms = 0;   // 고착 판정
+const uint32_t STUCK_MS = 2000;
 float hold = 0, delta_now = 0;
 float phi_d = 0, ank_d = 0, alpha_d = 0, beta_d = 0, dphi = 0, dbeta = 0, Ahat = 0;
 float phi_hist[VEL_N + 1], beta_hist[VEL_N + 1];
@@ -78,6 +84,55 @@ uint16_t as5047_raw(uint8_t cs) {
   digitalWrite(cs, HIGH);
   SPI.endTransaction();
   return v & 0x3FFF;
+}
+// ---- AS5047P 레지스터 읽기 (진단) — 명령 프레임: bit15 짝수패리티, bit14 읽기=1, bit13..0 주소. 응답은 다음 프레임에 온다.
+uint16_t as5047_frame(uint8_t cs, uint16_t frame) {
+  uint16_t v;
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
+  digitalWrite(cs, LOW);  delayMicroseconds(1);
+  v = SPI.transfer16(frame);
+  digitalWrite(cs, HIGH); delayMicroseconds(1);
+  SPI.endTransaction();
+  return v;
+}
+uint16_t as5047_parity(uint16_t v) {              // bit14..0 의 1 개수가 홀수면 bit15 세움
+  uint16_t x = v & 0x7FFF; int n = 0;
+  while (x) { n += x & 1; x >>= 1; }
+  return (n & 1) ? 0x8000 : 0;
+}
+uint16_t as5047_reg(uint8_t cs, uint16_t addr, bool* ef) {   // 레지스터 값 (14비트) + 응답 EF 비트
+  uint16_t cmd = 0x4000 | (addr & 0x3FFF);  cmd |= as5047_parity(cmd);
+  as5047_frame(cs, cmd);
+  uint16_t r = as5047_frame(cs, 0x0000);        // NOP 로 응답을 클럭아웃
+  if (ef) *ef = (r & 0x4000) != 0;
+  return r & 0x3FFF;
+}
+void encDiag(const char* name, uint8_t cs) {
+  bool ef1, ef2, ef3, ef4;
+  uint16_t com  = as5047_reg(cs, 0x3FFF, &ef1);  // ANGLECOM (보정각)
+  uint16_t unc  = as5047_reg(cs, 0x3FFE, &ef2);  // ANGLEUNC (미보정각)
+  uint16_t diag = as5047_reg(cs, 0x3FFC, &ef3);  // DIAAGC
+  uint16_t errf = as5047_reg(cs, 0x0001, &ef4);  // ERRFL (읽으면 지워짐)
+  Serial.print("# ENC "); Serial.print(name); Serial.print(" (CS D"); Serial.print(cs); Serial.print("): ");
+  Serial.print("ANGLECOM="); Serial.print(com); Serial.print(" ANGLEUNC="); Serial.print(unc);
+  Serial.print(" | DIAAGC raw="); Serial.print(diag);
+  Serial.print(" AGC="); Serial.print(diag & 0xFF);
+  Serial.print(" LF="); Serial.print((diag >> 8) & 1);
+  Serial.print(" COF="); Serial.print((diag >> 9) & 1);
+  Serial.print(" MagH="); Serial.print((diag >> 10) & 1);
+  Serial.print(" MagL="); Serial.print((diag >> 11) & 1);
+  Serial.print(" | ERRFL="); Serial.print(errf);
+  Serial.print(" EF="); Serial.println((ef1 || ef2 || ef3 || ef4) ? 1 : 0);
+  if ((diag == 0 && com == 0) || (diag == 0x3FFF && com == 0x3FFF))
+    Serial.println("#    → 응답 없음(전부 0 또는 16383): MISO/CS/전원 배선·커넥터 (문서 52)");
+  else if ((diag >> 11) & 1 || (diag & 0xFF) == 0xFF)
+    Serial.println("#    → MagL/AGC=255: 자석이 멀거나 없음 — 자석 마운트·갭 확인");
+  else if ((diag >> 10) & 1 || (diag & 0xFF) == 0)
+    Serial.println("#    → MagH/AGC=0: 자석이 너무 가까움");
+  else if (!((diag >> 8) & 1))
+    Serial.println("#    → LF=0: 내부 보정 루프 미완 — 전원 직후거나 자석 불안정");
+  else
+    Serial.println("#    → 센서는 정상 응답 (자석·통신 OK). 값이 안 변하면 자석이 관절과 같이 돌지 않는 기구 문제");
 }
 float rawToDeg(uint16_t raw, uint16_t zero) {
   int16_t d = (int16_t)((raw - zero) & 0x3FFF);
@@ -100,9 +155,14 @@ float readDelta() {
 // ---- 읽기 + 펌웨어 파생값 (_fw 열) ----
 void readState() {
   phi_raw = as5047_raw(PHI_CS);  ank_raw = as5047_raw(ANK_CS);
+  uint32_t nowms = millis();
+  if (phi_raw != phi_last) { phi_last = phi_raw; phi_chg_ms = nowms; }
+  if (ank_raw != ank_last) { ank_last = ank_raw; ank_chg_ms = nowms; }
   err_code = 0;
-  if (phi_raw == 0 || phi_raw == 0x3FFF) err_code |= 1;      // MISO 고착 (문서 52)
+  if (phi_raw == 0 || phi_raw == 0x3FFF) err_code |= 1;      // 레일 고착 = MISO 배선 (문서 52)
+  else if (nowms - phi_chg_ms > STUCK_MS) err_code |= 2;     // 값 불변 고착
   if (ank_raw == 0 || ank_raw == 0x3FFF) err_code |= 4;
+  else if (nowms - ank_chg_ms > STUCK_MS) err_code |= 8;
   phi_d = PHI_SIGN * rawToDeg(phi_raw, phi_zero);
   ank_d = ANK_SIGN * rawToDeg(ank_raw, ank_zero);
   delta_now = readDelta();
@@ -173,6 +233,10 @@ void handleLine(char* s) {
   }
   char* rest = s + 1;  while (*rest == ' ') rest++;
   if (!strncmp(s, "hdr", 3))   { logHeader(); return; }
+  if (!strncmp(s, "swap", 4))  { uint8_t t = PHI_CS; PHI_CS = ANK_CS; ANK_CS = t; primed = false;
+                                 Serial.print("# CS 교환: phi←D"); Serial.print(PHI_CS); Serial.print("  ank←D"); Serial.println(ANK_CS);
+                                 Serial.println("#   지금 'phi' 열이 예전 발목 채널이다. 12000 고정이 phi 로 옮겨가면 채널(배선·센서) 문제, 그대로면 코드 쪽");
+                                 Serial.print("E,"); Serial.print(millis() - t0); Serial.print(",SWAP,"); Serial.println(PHI_CS); return; }
   if (!strncmp(s, "loghz", 5)) { LOG_HZ = atof(s + 5); if (LOG_HZ < 1) LOG_HZ = 1; if (LOG_HZ > 200) LOG_HZ = 200; Serial.print("# loghz "); Serial.println(LOG_HZ, 0); return; }
   if (!strncmp(s, "vel", 3))   { VEL_UNIT = atoi(s + 3); if (motor_ok) dxl.writeControlTableItem(PROFILE_VELOCITY, DXL_ID, VEL_UNIT); Serial.print("# vel "); Serial.println(VEL_UNIT); return; }
   if (!strncmp(s, "acc", 3))   { ACC_UNIT = atoi(s + 3); if (motor_ok) dxl.writeControlTableItem(PROFILE_ACCELERATION, DXL_ID, ACC_UNIT); Serial.print("# acc "); Serial.println(ACC_UNIT); return; }
@@ -201,6 +265,12 @@ void handleLine(char* s) {
     case 'm': csv_on = !csv_on; if (csv_on) logHeader(); Serial.print("# CSV "); Serial.println(csv_on ? "ON" : "OFF"); break;
     case 's': out_on = !out_on; Serial.println(out_on ? "# 출력 재개" : "# 출력 정지"); break;
     case 'p': logLine(); break;
+    case 'e':
+      Serial.println("# ---- 엔코더 진단 (AS5047P 레지스터) ----");
+      encDiag("phi", PHI_CS);  encDiag("ank", ANK_CS);
+      Serial.print("# 현재 raw: phi "); Serial.print(phi_raw); Serial.print("  ank "); Serial.print(ank_raw);
+      Serial.print("   마지막 변화: phi "); Serial.print(millis() - phi_chg_ms); Serial.print(" ms 전, ank "); Serial.print(millis() - ank_chg_ms); Serial.println(" ms 전");
+      break;
     case 't': printStatus(); break;
     default:  Serial.print("# 모르는 명령: "); Serial.println(s); break;
   }
@@ -240,7 +310,7 @@ void setup() {
     home_tick = dxl.getPresentPosition(DXL_ID);
     Serial.println("# 모터 OK (토크는 켜지 않았다 — 매달림 영점은 이대로, 잡으려면 k)");
   } else Serial.println("# !!! 모터 응답 없음 — 배터리/RS-485 확인 (엔코더 스트리밍은 계속)");
-  Serial.println("# v22_raw — z 영점 / u 토크해제 / k 토크ON / <정수> δ / m CSV / s 출력 / p / t / loghz vel acc ilim");
+  Serial.println("# v22_raw — z 영점 / u 토크해제 / k 토크ON / <정수> δ / m CSV / s 출력 / p / t / e 엔코더진단 / swap CS교환 / hdr / loghz vel acc ilim");
   logHeader();
   t0 = millis();  next_us = micros();
 }
