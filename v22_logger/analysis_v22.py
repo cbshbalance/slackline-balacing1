@@ -847,7 +847,7 @@ def sysid(ds, windows=None, phi_max=5.0, smooth_ms=120.0, poly=3, t0=None, t1=No
 
 # ---------------------------------------------------------------- 8. 다음 놓기 추천 (r 적응 탐색)
 def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, lam_fixed=None, first_phi=0.7,
-              step_max=1.0, phi_max=6.0, **kw):
+              step_max=1.0, phi_max=6.0, off_min=0.15, **kw):
     """다음 놓기 추천 (r 적응 탐색 — 경사하강 식).
        각 시행: s = dir·amp0 (선까지의 부호 있는 거리; 발산 초기진폭). 발산 없음 = s 0.
        β 열마다 s(φ) 의 영점 φ_c 를 할선법으로 추정(관측 1개면 기울기 k̂ 로 한 걸음, 걸음 폭 ≤ step_max),
@@ -959,16 +959,21 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
             phi_line = roots[beta_next]["phi_c"]; why = f"그 열의 영점 {phi_line:+.2f}"
         else:
             phi_line = est["r"] * beta_next + est["c0"]; why = f"추정선 {est['r']:.2f}·β+{est['c0']:.2f}"
-        phi_n = float(np.clip(phi_line + side * off, -phi_max, phi_max))
-        nxt = dict(beta=float(beta_next), phi=phi_n, side=side,
-                   reason=f"β={beta_next:+.1f} 열(점 {counts[beta_next]}개) — {why} 의 {'위' if side>0 else '아래'} {off}°")
+        # 벗어남은 추정선의 불확실성에 맞춰 줄인다: 선의 φ 오차 ≈ √((SE_r·β)² + SE_c0²) 의 2배, off_min 이상 off 이하.
+        off_eff = off
+        if est.get("se_r") is not None and est.get("se_c0") is not None:
+            unc = math.sqrt((est["se_r"] * beta_next) ** 2 + est["se_c0"] ** 2)
+            off_eff = float(np.clip(2.0 * unc, off_min, off))
+        phi_n = float(np.clip(phi_line + side * off_eff, -phi_max, phi_max))
+        nxt = dict(beta=float(beta_next), phi=phi_n, side=side, off=off_eff,
+                   reason=f"β={beta_next:+.1f} 열(점 {counts[beta_next]}개) — {why} 의 {'위' if side>0 else '아래'} {off_eff:.2f}°")
     nxt["ank"] = float(nxt["beta"] + nxt["phi"])
     done = est.get("se_r") is not None and est["se_r"] < 0.05 and n >= 8
     res = dict(n=n, r=_r(est["r"], 4), c0=_r(est["c0"], 3), se_r=_r(est.get("se_r"), 4), se_c0=_r(est.get("se_c0"), 3),
                k=_r(k_hat, 4), method=est["method"], r_ref=-1.506, n_cols=len(roots),
                next_beta=_r(nxt["beta"], 2), next_phi=_r(nxt["phi"], 2), next_ank=_r(nxt["ank"], 2),
-               next_side="위(+)" if nxt["side"] > 0 else "아래(−)", enough=bool(done))
-    steps.append("다음 점 = 점이 가장 적은 β 열의 영점 ± off° (선 위에 정확히 놓으면 발산이 없어 숫자가 안 나온다). 같은 열에서는 직전 낙하 방향의 반대쪽")
+               next_side="위(+)" if nxt["side"] > 0 else "아래(−)", next_off=_r(nxt.get("off", off), 3), enough=bool(done))
+    steps.append(f"다음 점 = 점이 가장 적은 β 열의 영점 ± 벗어남. 벗어남은 처음 {off}° 에서 추정선 불확실성(2·√((SE_r·β)²+SE_c0²))까지 줄어든다 (최소 {off_min}°) — 선에 가까울수록 늦게 넘어져 s 가 작고 잡음에 묻히므로, 확실한 만큼만 다가간다. 같은 열에서는 직전 낙하 방향의 반대쪽")
     steps.append("정지 조건: 8점 이상, 열 3개 이상, SE(r) < 0.05. 정본 r = −1.506 ± 0.074 (문서 70)")
     table = [dict(k=p["k"], beta0=_r(p["beta"], 3), phi0=_r(p["phi"], 3), dir=p["dir"], s=_r(p["s"], 4), kind=p["kind"]) for p in pts]
     for b in sorted(roots):
@@ -989,7 +994,7 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
         curves.append(dict(kind="xy", label="s (부호·발산세기) vs 추정선까지 거리", x=[_r(v) for v in dist], y=[_r(p["s"]) for p in pts],
                            fit_x=[_r(v) for v in xs], fit_y=[_r(k_hat * v) for v in xs], xlab="φ₀ − r̂β₀ − ĉ₀ [°]", ylab="s"))
     return dict(tool="recommend", ok=True, window=None, used=[], n=n, steps=steps, result=res, table=table,
-                params=dict(off=off, beta_set=bset, r_guess=r_guess, step_max=step_max), overlay=[], plane=plane, curves=curves, next=nxt)
+                params=dict(off=off, off_min=off_min, beta_set=bset, r_guess=r_guess, step_max=step_max), overlay=[], plane=plane, curves=curves, next=nxt)
 
 
 # ---------------------------------------------------------------- 디스패치
