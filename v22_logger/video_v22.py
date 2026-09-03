@@ -328,7 +328,7 @@ def scenario(D):
     res = D.run_tool("fold")
     rr = res.get("result", {})
     D.cap(f"「접기 성적표」: 시행별 A⁻(접기 직전 Â), Δδ, A⁺(관측창 뒤) → A⁺ = G·A⁻ − g·Δδ,  G = e^(λ·lock) = {fmt(rr.get('G'))}, "
-          f"g = {fmt(rr.get('g'))} → γ* = G/g = {fmt(rr.get('gamma_star'))}",
+          f"g = {fmt(rr.get('g_mean'))} → γ* = G/g = {fmt(rr.get('gamma_star'))}  (시행 {rr.get('n_valid')}회, γ 중앙값 {fmt(rr.get('gamma_median'))} ± {fmt(rr.get('gamma_se'))})",
           "γ* 는 한 번 접기로 예측점을 선 위에 올리는(deadbeat) 이득. 「펌웨어로 보내기」가 gam 명령을 보낸다", hold=5.0)
     if res.get("next_cmd"):
         D.click("#bSendNext")
