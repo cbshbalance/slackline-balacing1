@@ -105,7 +105,7 @@
   const CAM_R = { az: 51.6, el: 20.1, dist: 2.6, fov: 42, roll: 0, ty: 0, tz: 0.85 };
   const G_HUM = { D: 11.59, Hs: 2.49, R: 0.70, L1: 0.703, L2: 1.017, footY: 2.75, sag: 0.149 };
   const G_ROB = { D: 0.60, Hs: 1.245, R: 0.433, L1: 0.259, L2: 0.375, footY: 0.0, sag: 0.433 };
-  const OVS = { thk: 2.6, body: 1.7, morphT: 0, pose: [0, 0, 0], cam: Object.assign({}, CAM_J) };
+  const OVS = { thk: 2.6, body: 1.35, morphT: 0, pose: [0, 0, 0], cam: Object.assign({}, CAM_J), shift: [0, 0] };
   const jr = new THREE.WebGLRenderer({ canvas: ovc, antialias: true, alpha: true });
   jr.setClearColor(0x000000, 0);
   const jscene = new THREE.Scene();
@@ -164,22 +164,33 @@
     if (ovc.width !== pw || ovc.height !== ph) { jr.setSize(pw, ph, false); jcam.aspect = pw / ph; jcam.updateProjectionMatrix(); }
   }
   // ---- 휘청 추적 데이터 (tools/track_jultagi.py → /media/jultagi_trace.json) ----
-  const TR = { ok: false, t: [], phi: [], beta: [], loop: [3.6, 5.8], sPhi: 1, sTilt: 1 };
+  const TR = { ok: false, t: [], phi: [], alpha: [], theta: [], loop: [3.6, 5.8], sPhi: 1, sTilt: 1, mpp: null };
   fetch("/media/jultagi_trace.json").then(r => r.ok ? r.json() : null).then(j => { if (j) buildTrace(j); }).catch(() => {});
   function buildTrace(j) {
-    const n = j.n || j.t.length; const fx = j.foot_x, tl = j.tilt_deg;
+    const n = j.n || j.t.length; const fx = j.foot_x, tl = j.tilt_deg, up = j.upper_deg || null;
     const lp = j.loop && isFinite(j.loop.t_a) ? [j.loop.t_a, j.loop.t_b] : TR.loop;
-    // 발 x → φ: 줄 span 픽셀이 있으면 m/px 로, 없으면 반복 구간에서 최대 진폭 3° 로 정규화
-    let mpp = null; if (j.rope && j.rope.span_px) mpp = G_HUM.D / j.rope.span_px;
+    // 발 x → φ: 줄 span(기둥 사이 픽셀) 으로 m/px 를 잡는다 (D = 11.59 m). 없으면 반복 구간 진폭 3° 로 정규화
+    let mpp = null;
+    try { const rs = j.rope && (j.rope.summary || j.rope); const L = rs.rope_end_left_mean, Rr = rs.rope_end_right_mean; if (L && Rr) mpp = G_HUM.D / Math.abs(Rr[0] - L[0]); } catch (e) {}
+    if (!mpp && j.rope && j.rope.span_px) mpp = G_HUM.D / j.rope.span_px;
     const idx = []; for (let k = 0; k < n; k++) if (j.t[k] >= lp[0] - 0.3 && j.t[k] <= lp[1] + 0.3) idx.push(k);
-    const mean = arr => idx.reduce((s, k) => s + arr[k], 0) / Math.max(1, idx.length);
-    const fx0 = mean(fx), tl0 = mean(tl);
+    const meanOf = (arr, ks) => ks.reduce((s, k) => s + arr[k], 0) / Math.max(1, ks.length);
+    const tail = []; for (let k = Math.max(0, n - 10); k < n; k++) tail.push(k);      // 마지막 0.3 s = 정합 사진의 '정지' 자세 = 모델 (0,0,0)
+    const fx0 = meanOf(fx, idx), tl0 = meanOf(tl, tail), up0 = up ? meanOf(up, tail) : 0;
     let phi = fx.map(v => mpp ? Math.asin(Math.max(-0.99, Math.min(0.99, (v - fx0) * mpp / G_HUM.R))) / RAD : (v - fx0));
     if (!mpp) { const amp = Math.max(1e-6, ...idx.map(k => Math.abs(phi[k]))); phi = phi.map(v => v / amp * 3.0); }
-    const beta = tl.map(v => (v - tl0));
-    TR.t = j.t; TR.phi = phi; TR.beta = beta; TR.loop = lp; TR.ok = true;
+    const alpha = tl.map(v => (v - tl0));
+    const theta = up ? up.map(v => (v - up0)) : alpha.slice();
+    TR.t = j.t; TR.phi = phi; TR.alpha = alpha; TR.theta = theta; TR.loop = lp; TR.ok = true; TR.mpp = mpp;
+    // 정렬·표류 보정용: 추적한 발(서 있는 동안 평균)과 프레임별 줄 끝(기둥)
+    TR.foot = j.mean_foot_px || null;
+    if (j.rope && j.rope.rope_end_left && j.rope.rope_end_right) {
+      const L = j.rope.rope_end_left, Rr = j.rope.rope_end_right, m = L.length;
+      TR.mid = L.map((p, k) => [(p[0] + Rr[k][0]) / 2, (p[1] + Rr[k][1]) / 2]);
+      const ref = TR.mid.slice(Math.max(0, m - 10)); TR.midRef = [ref.reduce((s, p) => s + p[0], 0) / ref.length, ref.reduce((s, p) => s + p[1], 0) / ref.length];
+    }
     calibSigns();
-    LG.toast(`휘청 추적 ${n} 프레임, 반복 ${lp[0].toFixed(2)}–${lp[1].toFixed(2)} s`);
+    LG.toast(`휘청 추적 ${n} 프레임, 반복 ${lp[0].toFixed(2)}–${lp[1].toFixed(2)} s` + (mpp ? ` · ${(1 / mpp).toFixed(1)} px/m` : ""));
   }
   // 화면 방향 보정: 모델의 φ>0 · 기울기>0 가 영상에서 발·상체가 움직인 쪽과 같게
   function calibSigns() {
@@ -193,9 +204,8 @@
   function tracePose(t) {
     if (!TR.ok) { const w = 2 * Math.PI / 1.15; const phi = 2.2 * Math.sin(w * t), beta = phi / -2.1; return [phi, beta, beta]; }
     const T = TR.t; let lo = 0, hi = T.length - 1; if (t <= T[0]) lo = hi = 0; else if (t >= T[hi]) lo = hi; else { while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T[m] <= t) lo = m; else hi = m; } }
-    const u = hi > lo ? (t - T[lo]) / (T[hi] - T[lo]) : 0;
-    const phi = (TR.phi[lo] + (TR.phi[hi] - TR.phi[lo]) * u) * TR.sPhi, beta = (TR.beta[lo] + (TR.beta[hi] - TR.beta[lo]) * u) * TR.sTilt;
-    return [phi, beta, beta];
+    const u = hi > lo ? (t - T[lo]) / (T[hi] - T[lo]) : 0, L = (a) => a[lo] + (a[hi] - a[lo]) * u;
+    return [L(TR.phi) * TR.sPhi, L(TR.alpha) * TR.sTilt, L(TR.theta) * TR.sTilt];
   }
   // ---- 모드 ----
   let loopTimer = null, morphAnim = null;
@@ -231,6 +241,21 @@
       const i = LG.cur(); if (i >= 0) { const p = LG.poseAt(i); OVS.pose = [p.phi, p.alpha, p.theta]; } else OVS.pose = tracePose(vid.currentTime);
     } else { const i = LG.cur(); if (i >= 0 && LG.link.connected) { const p = LG.poseAt(i); OVS.pose = [p.phi, p.alpha, p.theta]; } else OVS.pose = tracePose(vid.currentTime); }
     jcamUpdate(); jBuild(); jr.render(jscene, jcam);
+    // 모델 발(정지 자세)을 추적한 발 위치에 맞추고, 프레임별 기둥 표류만큼 따라간다 (안정화 영상의 잔여 움직임)
+    let sx = 0, sy = 0;
+    if (TR.ok && OVS.morphT < 1e-3) {
+      const k = parseFloat(ovc.style.width) / VM.vw;                          // 영상 px → 화면 px
+      if (TR.foot) {
+        const kin = jKin(G_HUM, [0, 0, 0]); const v = new THREE.Vector3(...kin.foot).project(jcam);
+        const mx = (v.x + 1) / 2 * parseFloat(ovc.style.width), my = (1 - v.y) / 2 * parseFloat(ovc.style.height);
+        sx += TR.foot[0] * k - mx; sy += (TR.foot[1] - VM.cy) * k - my;
+      }
+      if (TR.mid && TR.midRef) {
+        const T = TR.t; const t = vid.currentTime; let lo = 0, hi = T.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T[m] <= t) lo = m; else hi = m; }
+        sx += (TR.mid[lo][0] - TR.midRef[0]) * k; sy += (TR.mid[lo][1] - TR.midRef[1]) * k;
+      }
+    }
+    if (Math.abs(sx - OVS.shift[0]) > 0.2 || Math.abs(sy - OVS.shift[1]) > 0.2) { OVS.shift = [sx, sy]; ovc.style.transform = `translate(${sx.toFixed(1)}px, ${sy.toFixed(1)}px)`; }
   }
 
   // ================= 키 (비상용) =================
