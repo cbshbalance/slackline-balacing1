@@ -420,6 +420,12 @@ def main(argv=None):
             print("mp4:", mp4, f"{os.path.getsize(mp4) / 1e6:.1f} MB")
         else:
             print("mp4 변환 실패 (rc", rc, ") — webm 은 있다")
+        # 공유용 (crf 29, 같은 해상도) — 4~5 분에 ~17 MB. 30 MiB 업로드 한도 안.
+        small = os.path.join(OUT, a.name + "_small.mp4")
+        rc = subprocess.call([ff, "-y", "-loglevel", "error", "-i", dst, "-c:v", "libx264", "-preset", "slow", "-crf", "29",
+                              "-pix_fmt", "yuv420p", "-r", "25", "-movflags", "+faststart", small])
+        if rc == 0 and os.path.exists(small):
+            print("mp4(공유용):", small, f"{os.path.getsize(small) / 1e6:.1f} MB")
     else:
         print("ffmpeg 없음 — webm 만 남긴다 (pip install imageio-ffmpeg)")
     return 0

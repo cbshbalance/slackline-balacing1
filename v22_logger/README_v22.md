@@ -92,8 +92,8 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
   연결: 헤더 「가짜: MuJoCo」 버튼, `python server.py --mujoco`, WS `{cmd:"mujoco"}` · `{cmd:"robot", text:"release 1 0"}`.
 - `video_v22.py` — 리허설 영상 감독 스크립트. 서버를 띄우고 Playwright 로 앱을 **진짜 마우스로** 조작하며 녹화한다
   (커서·클릭 파문·자막·🤚 사람 동작 카드 오버레이). 시나리오 = 연결·영점 → λ 놓기 3회 → r 추천 루프 6회 → γ 단일접기 3회 +
-  접기 성적표 + gam 보내기 → mode 2 증분접기. `python video_v22.py` → `video_out/v22_rehearsal.mp4` (webm 원본도 남김,
-  H.264 변환은 `pip install imageio-ffmpeg`).
+  접기 성적표 + gam 보내기 → mode 2 증분접기. `python video_v22.py` → `video_out/v22_rehearsal.mp4` (+ `_small.mp4` 공유용 ~17 MB, webm 원본도 남김,
+  H.264 변환은 `pip install imageio-ffmpeg`). 4차 녹화 결과: r̂ −1.63 ± 0.11 (9회, 모델 −1.645), γ* 9.11 (3회), 증분접기 유지.
 - 추천 도구 정정(같은 날): **부호 규약** — 선 위(Â>0)에서 놓으면 φ 는 −로 넘어진다(s 는 φ 가 커질수록 줄어든다, k<0). 9/2 판의
   합성 세계(`sim_recommend.World`, r_u=+0.7)는 이 부호가 거꾸로였고 추천 도구도 같은 가정을 해 서로 맞아 보였다 → 둘 다 정정
   (r_u=−0.5). 열별 영점은 regula falsi(브래킷 안), 안정모드 진동수 ω 는 시행 전체 공통 적합(`_fit_omega`, 결과 `om_hat`).
