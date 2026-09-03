@@ -55,7 +55,7 @@
     if (cam === "iso") LG.cam.iso(ST.mirror); else LG.cam.side(ST.mirror);
     // 세로 화면: 프레임(1.22 m)이 위 칸을 채우게 가까이
     const tb = el("twinBox"); const portrait = tb.clientHeight > tb.clientWidth * 0.9;
-    if (portrait) LG.cam.set({ dist: a.dist || (plane === "none" ? 1.45 : 1.6), tz: 0.78 });
+    if (portrait) LG.cam.set({ dist: a.dist || (plane === "none" ? 1.75 : 1.95), tz: 0.72 });
     if (ST.scale && ST.scale.mm_w && ST.scale.px_w && !a.only) {
       // 1:1 축척 — 프레임 높이 1.22 m 가 화면에서 1220 mm 로 보이게 카메라 거리 조정 (원근 fov 그대로)
       const mmPerPx = ST.scale.mm_w / ST.scale.px_w, hPx = el("twinBox").clientHeight;

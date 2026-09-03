@@ -13,9 +13,9 @@ body.cursor{cursor:default}
 .view.on{display:block}
 /* 실사 영상 + 오버랩 */
 #vVideo{background:#000}
-#vid{position:absolute;object-fit:contain}
-#ovc{position:absolute;pointer-events:none}
-#vidVeil{position:absolute;inset:0;background:#07090f;opacity:0;pointer-events:none;transition:opacity .4s}
+#vid{position:absolute;object-fit:contain;z-index:0}
+#vidVeil{position:absolute;inset:0;background:#07090f;opacity:0;pointer-events:none;transition:opacity .4s;z-index:1}
+#ovc{position:absolute;pointer-events:none;z-index:2}
 /* 트윈 + 평면 */
 #vTwin{display:none;grid-template-rows:1fr;background:var(--bg)}
 #vTwin.on{display:grid}
