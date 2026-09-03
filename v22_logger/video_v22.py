@@ -212,7 +212,7 @@ class Director:
         self.click("#bAnRun")
         self.pg.wait_for_function(f"() => LG.results.length > {n0} && LG.results[0].res.tool === '{tool}'", timeout=40000)
         res = self.ev("() => LG.results[0].res")
-        self.log(f"TOOL {tool} ok={res.get('ok')} {str(res.get('result'))[:160]}")
+        self.log(f"TOOL {tool} ok={res.get('ok')} {str(res.get('result'))[:160]}" + ("" if res.get("ok") else f"  msg={res.get('msg')}"))
         return res
 
 

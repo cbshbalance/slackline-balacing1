@@ -1191,13 +1191,36 @@ TOOLS = dict(stats=stats, linfit=linfit, p2r=p2r_fit, **{"lambda": lambda_fit}, 
              phi_eq=phi_eq_scan, osc=osc_fit, boundary=boundary_fit, sysid=sysid, recommend=recommend, fold=fold_report)
 
 
+class _Snapshot:
+    """라이브 버퍼 위에서 도구를 돌릴 때 행 수를 고정한다. 도구는 ds.arr() 를 여러 번 부르는데 그 사이에 서버 루프가
+       행을 붙이면 배열 길이가 어긋난다 (리허설 영상 3차: 'boolean index did not match … 23000 vs 22997'). 나머지 속성은 위임."""
+
+    def __init__(self, ds):
+        self._ds = ds
+        self._n = int(ds.n)
+
+    @property
+    def n(self):
+        return self._n
+
+    def arr(self, name):
+        a = self._ds.arr(name)
+        if len(a) >= self._n:
+            return a[:self._n]
+        out = np.full(self._n, np.nan); out[:len(a)] = a
+        return out
+
+    def __getattr__(self, k):
+        return getattr(self._ds, k)
+
+
 def run(ds, tool, args=None):
     fn = TOOLS.get(tool)
     if fn is None:
         return dict(tool=tool, ok=False, msg=f"모르는 도구: {tool}")
     args = dict(args or {})
     try:
-        out = fn(ds, **args)
+        out = fn(_Snapshot(ds), **args)
     except Exception as ex:          # 분석 실패는 앱을 죽이지 않고 메시지로
         import traceback
         out = dict(tool=tool, ok=False, msg=f"{type(ex).__name__}: {ex}", trace=traceback.format_exc()[-800:])
