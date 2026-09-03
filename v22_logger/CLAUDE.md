@@ -23,6 +23,7 @@ v21 발표 시뮬레이터는 `/pres` 로 그대로 살아 있다 (`static/index
   `dataset_v22.py` 데이터 정본 · `analysis_v22.py` 측정 도구 · `commands.json` 명령 팔레트(펌웨어별 프로파일)
 - `static/logger.html` 레이아웃 · `lg_core.js`(상태·WS·저장소) → `lg_3d.js`(트윈) → `lg_plane.js` → `lg_chart.js` → `lg_panels.js`(패널·트랜스포트·분석 UI·키·프레임 루프) — **이 순서로 로드된다**
 - `logs/` 기록 (4파일 + .folds). `e2e_shots/` 스크린샷.
+- `mujoco_source.py` MuJoCo 가상 로봇(v22_raw v2 펌웨어 흉내, `sim release β φ`) · `video_v22.py` 리허설 영상 감독(Playwright 녹화, `video_out/`).
 
 ## 함정
 

@@ -84,9 +84,27 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 - 데이터는 바이너리 프레임 `[u32 헤더길이][JSON][float32 열우선]` — `ds_full`(교체) / `ds_append`(증분).
 - `serial_bridge.py`: 포트 자동탐지·D/R/F/E/# 분류(`LineSink`)·4파일 기록기(`Recorder`)·`SerialSource`/`FakeSource`.
 
+## MuJoCo 가상 로봇 소스 · 리허설 영상 (2026-09-03)
+
+- `mujoco_source.py` — v21 `SimEngine`(물리 무수정, 실측 프리셋)을 실시간 200 Hz 로 돌리고 그 위에 **v22_raw v2 펌웨어 로직을
+  파이썬으로 그대로 얹은** 가상 로봇. D/F/E 행·Â·mode 0/1/2·파라미터 표·명령 문법이 펌웨어와 같다(엔진 자체 트리거는 잠그고
+  위치 서보만 빌린다). 사람 동작은 `sim release β φ [T]` / `sim hold β φ` / `sim catch` / `sim free` 지시로 시킨다.
+  연결: 헤더 「가짜: MuJoCo」 버튼, `python server.py --mujoco`, WS `{cmd:"mujoco"}` · `{cmd:"robot", text:"release 1 0"}`.
+- `video_v22.py` — 리허설 영상 감독 스크립트. 서버를 띄우고 Playwright 로 앱을 **진짜 마우스로** 조작하며 녹화한다
+  (커서·클릭 파문·자막·🤚 사람 동작 카드 오버레이). 시나리오 = 연결·영점 → λ 놓기 3회 → r 추천 루프 6회 → γ 단일접기 3회 +
+  접기 성적표 + gam 보내기 → mode 2 증분접기. `python video_v22.py` → `video_out/v22_rehearsal.mp4` (webm 원본도 남김,
+  H.264 변환은 `pip install imageio-ffmpeg`).
+- 추천 도구 정정(같은 날): **부호 규약** — 선 위(Â>0)에서 놓으면 φ 는 −로 넘어진다(s 는 φ 가 커질수록 줄어든다, k<0). 9/2 판의
+  합성 세계(`sim_recommend.World`, r_u=+0.7)는 이 부호가 거꾸로였고 추천 도구도 같은 가정을 해 서로 맞아 보였다 → 둘 다 정정
+  (r_u=−0.5). 열별 영점은 regula falsi(브래킷 안), 안정모드 진동수 ω 는 시행 전체 공통 적합(`_fit_omega`, 결과 `om_hat`).
+  MuJoCo 폐루프(`python sim_recommend.py mujoco 10 2`): 12회 놓기로 r̂ −1.656 ± 0.024 (모델 −1.645), ω̂ 6.7 (7.03).
+- 시행 나누기 개선(같은 날): 정지 판정을 φ **와 발목** 둘 다로(φ 는 두고 β 만 옮기는 손동작이 정지에 안 섞임), 놓기점은
+  정지 구간 **꼬리 1 s** 의 중앙값, 손으로 옮기는 동작은 **끝속도**(잡히기 직전 100 ms 최대 φ̇ < 0.35·λ·|φ−φ_q|)로 방향 무효
+  (`min_vend`, `quiet_ank` 인자). 0822 실측 18/18 시행 유지, 합성·가상 로봇 모두 손 이동 0건 오인.
+
 ## 시험
 
-- `python tests_v22.py` — 행 분류·기록기 / Dataset(두 형식, 언랩, 라이브 append == rebuild 결정론) / 분석 정본 대조(P2R·λ·φ_eq·경계·진동) / FakeSource→허브→프레임. **ALL PASS (2026-09-02)**
+- `python tests_v22.py`(MuJoCo 가상 로봇 절 포함) — 행 분류·기록기 / Dataset(두 형식, 언랩, 라이브 append == rebuild 결정론) / 분석 정본 대조(P2R·λ·φ_eq·경계·진동) / FakeSource→허브→프레임. **ALL PASS (2026-09-02)**
 - `python server.py --fake --port 8231 &  ;  python e2e_v22.py 8231` — Playwright: 로드·JS 오류 0·라이브·명령·마크·파일 로드·
   P2R/시행/λ/φ_eq/통계·스크럽·재생·구간 선택·파이프라인·숨김·재연결. 스크린샷 `e2e_shots/`. **ALL PASS**
 - `python tests_v21.py` — v21 회귀 (물리 불변) **ALL PASS**

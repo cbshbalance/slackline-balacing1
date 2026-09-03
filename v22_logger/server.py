@@ -5,6 +5,7 @@ server.py — v22 로거·측정 앱 서버 (v21 발표 시뮬레이터를 그�
 실행:  cd v22_logger && python server.py            (기본 포트 8220, V22_PORT 로 변경)
        python server.py --fake                      (장치 없이: 합성 신호)
        python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
+       python server.py --mujoco                    (장치 없이: MuJoCo 가상 로봇 — 리허설·E2E)
 접속:  http://localhost:8220/          측정 앱 (v22)
        http://localhost:8220/pres      v21 발표 시뮬레이터 (그대로)
 
@@ -138,6 +139,22 @@ class LoggerHub:
         self.src.start()
         self.say("가짜 소스 연결: " + (os.path.basename(path) if path else "합성 신호") + f" ×{speed}", "app")
         self._after_connect(name)
+
+    def connect_mujoco(self, name=None, seed=0):
+        """MuJoCo 가상 로봇 (v21 SimEngine + v22_raw v2 펌웨어 흉내) — 리허설·E2E 용."""
+        if self.src is not None:
+            self.disconnect()
+        import mujoco_source as mjs
+        self.src = mjs.MujocoSource(seed=seed)
+        self.src.start()
+        self.say("MuJoCo 가상 로봇 연결 (v21 실측 프리셋, 200 Hz · D행 100 Hz). 사람 동작은 'sim release β φ' 로 지시한다", "app")
+        self._after_connect(name)
+
+    def robot(self, text):
+        """가상 로봇에 무대 지시(sim …)를 콘솔 에코 없이 보낸다 — 실기에는 해당 없음."""
+        if self.src is None or self.src.describe().get("kind") != "mujoco":
+            raise RuntimeError("MuJoCo 가상 로봇에 연결된 상태에서만 쓴다")
+        self.src.write("sim " + text.strip())
 
     def _after_connect(self, name):
         self.err = None
@@ -437,6 +454,10 @@ class LoggerHub:
             self.connect(m.get("port") or None, int(m.get("baud", 115200)), m.get("name") or None)
         elif cmd == "fake":
             self.connect_fake(m.get("file") or None, float(m.get("speed", 1.0)), m.get("name") or None)
+        elif cmd == "mujoco":
+            self.connect_mujoco(m.get("name") or None, int(m.get("seed", 0)))
+        elif cmd == "robot":
+            self.robot(str(m.get("text", "")))
         elif cmd == "disconnect":
             self.disconnect()
         elif cmd == "send":
@@ -550,10 +571,13 @@ def main(argv=None):
     ap.add_argument("--fake", nargs="?", const="synth", default=None,
                     help="장치 없이 시작: 파일 이름(logs/ 또는 기존 CSV) 또는 생략=합성 신호")
     ap.add_argument("--speed", type=float, default=1.0)
+    ap.add_argument("--mujoco", action="store_true", help="장치 없이 시작: MuJoCo 가상 로봇 (v22_raw v2 흉내, 'sim release β φ' 로 사람 동작)")
     ap.add_argument("--no-autorec", action="store_true", help="연결 시 자동 기록 끄기")
     a = ap.parse_args(argv)
     HUB.autorec = not a.no_autorec
-    if a.fake:
+    if a.mujoco:
+        HUB.connect_mujoco()
+    elif a.fake:
         HUB.connect_fake(None if a.fake == "synth" else a.fake, a.speed)
     app = build_app()
     print("=" * 64)

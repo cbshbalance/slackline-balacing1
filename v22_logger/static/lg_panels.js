@@ -15,7 +15,7 @@
   LG.on("ws", ok => { const c = el("hWs"); c.textContent = ok ? "서버 OK" : "서버 끊김 — 재접속 중"; c.className = "chip" + (ok ? " on" : " warn"); });
   LG.on("link", m => {
     const c = el("hConn");
-    if (m.connected) { const s = m.src; c.textContent = (s.kind === "serial" ? `${s.port} @${s.baud}` : `가짜 ${s.file || "합성"} ×${s.speed}`) + ` · ${m.rate_hz} Hz`; c.className = "chip on"; }
+    if (m.connected) { const s = m.src; c.textContent = (s.kind === "serial" ? `${s.port} @${s.baud}` : (s.kind === "mujoco" ? `MuJoCo 가상 로봇 · ${{ held: "손에", moving: "옮기는 중", settle: "놓기 직전", free: "자유" }[s.stage] || s.stage}` : `가짜 ${s.file || "합성"} ×${s.speed}`)) + ` · ${m.rate_hz} Hz`; c.className = "chip on"; }
     else { c.textContent = m.err ? "끊김: " + m.err : "연결 없음"; c.className = "chip" + (m.err ? " warn" : ""); }
     const r = el("hRec");
     if (m.rec) { r.textContent = `● REC ${m.rec.name} · ${m.rec.n_data}행 · ${m.rec.elapsed}s`; r.className = "chip rec"; el("recInfo").innerHTML = `<b style="color:#ff6b6b">● 기록 중</b> logs/${m.rec.name}.csv — D행 ${m.rec.n_data} · R ${m.rec.n_trial} · E ${m.rec.n_event} · ${(m.rec.nbytes / 1024).toFixed(0)} KB · ${m.rec.elapsed}s<br><span style="color:var(--dim)">${(m.rec.files || []).join(" · ")}</span>`; }
@@ -39,6 +39,7 @@
   el("bConnect").onclick = () => LG.send({ cmd: "connect", port: el("portSel").value, baud: +el("iBaud").value || 115200, name: el("iRecName").value.trim() });
   el("bDisc").onclick = () => LG.send({ cmd: "disconnect" });
   el("bFakeSynth").onclick = () => LG.send({ cmd: "fake" });
+  el("bFakeMj").onclick = () => LG.send({ cmd: "mujoco", name: el("iRecName").value.trim() });
   el("bFakeFile").onclick = () => { const f = el("fileList").value; if (!f) { LG.toast("기록·파일 탭에서 파일을 고르세요"); return; } LG.send({ cmd: "fake", file: f, speed: +el("selSpeed").value || 1 }); };
 
   // ================= 명령 팔레트 =================
@@ -264,7 +265,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
   // ================= 분석 패널 =================
   const CH_OPTS = ["u_phi", "u_ank", "del", "a_alpha", "a_beta", "a_theta", "a_dphi", "a_dbeta", "a_Ahat", "a_psi", "s_phi", "s_beta", "alpha_fw", "beta_fw", "Ahat_fw", "dphi_fw", "dbeta_fw", "hold", "phase"];
   const TRIAL_P = [{ k: "mode", l: "시행 모드", v: "auto", t: "sel", o: ["auto", "phase", "rel"] }, { k: "phi_eq", l: "φ_eq (빈칸=파이프)", v: "" }, { k: "reldet", l: "놓기 이탈 문턱 °", v: 1.0 },
-                   { k: "fcatch", l: "종료 |φ−φ_q|", v: 8.5 }, { k: "quiet_s", l: "직전 정지 s", v: 0.5 }, { k: "quiet_tol", l: "정지 허용폭 °", v: 0.35 }, { k: "max_rise_s", l: "최대 상승 s", v: 2.0 }, { k: "min_peak", l: "최소 진폭", v: 4.0 }, { k: "min_r2", l: "최소 R²", v: 0.9 }];
+                   { k: "fcatch", l: "종료 |φ−φ_q|", v: 8.5 }, { k: "quiet_s", l: "직전 정지 s", v: 0.5 }, { k: "quiet_tol", l: "정지 허용폭 °", v: 0.35 }, { k: "max_rise_s", l: "최대 상승 s", v: 4 }, { k: "min_peak", l: "최소 진폭", v: 4.0 }, { k: "min_r2", l: "최소 R²", v: 0.9 }];
   const TOOLS = {
     stats: { label: "구간 통계 · 잡음 바닥", win: true, help: "평균·표준편차·드리프트, hp_rms = 이동평균을 뺀 잔차 rms (문서 54 잡음 바닥 방식)", p: [{ k: "hp_ms", l: "고역 창 ms", v: 100 }] },
     linfit: { label: "선형 적합 y = a + b·x", win: true, help: "구간 전 표본 점별 최소제곱. x=del, y=α 이면 P2R = −b 도 표시", p: [{ k: "xch", l: "x 열", v: "del", t: "chan" }, { k: "ych", l: "y 열", v: "a_alpha", t: "chan" }] },

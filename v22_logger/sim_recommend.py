@@ -4,13 +4,16 @@
 몇 회 만에 r̂ 이 참값 ±0.1 에 드는지 본다.   실행: python sim_recommend.py [N회] [seed]
 """
 import sys
+import time
 import numpy as np
 from dataset_v22 import Dataset
 import analysis_v22 as an
 
 
 class World:
-    def __init__(self, r=-1.5, c0=0.4, lam=5.5, om=5.0, r_u=0.7, noise=0.03, hz=100.0, seed=0):
+    def __init__(self, r=-1.5, c0=0.4, lam=5.5, om=5.0, r_u=-0.5, noise=0.03, hz=100.0, seed=0):
+        # r_u = 불안정모드 φ/β 비. ★음수다 (MuJoCo·0822 실측: 선 위에서 놓으면 β + 로 자라며 φ 는 − 로 넘어진다).
+        #   2026-09-02 판의 +0.7 은 부호가 거꾸로였고, 추천 도구도 같은 가정을 해 서로 맞아 보였다 — 9/3 정정.
         self.r, self.c0, self.lam, self.om, self.r_u, self.noise, self.hz = r, c0, lam, om, r_u, noise, hz
         self.rng = np.random.default_rng(seed)
         self.ds = Dataset(); self.ds.set_header("t_ms,phi,ank,del_now".split(","))
@@ -70,7 +73,7 @@ def run(N=8, seed=0, verbose=True, **kw):
     return hist, W
 
 
-if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] == "fold"):
+if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] in ("fold", "mujoco")):
     N = int(sys.argv[1]) if len(sys.argv) > 1 else 8
     seed = int(sys.argv[2]) if len(sys.argv) > 2 else 0
     run(N, seed)
@@ -82,7 +85,7 @@ if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] == "fold"):
 # 앱과 같은 닫힌형 w 로 Â 를 계산해 |Â|>trig 에서 γ·Â 만큼 접는 '단일접기' 시행을 만든다.
 # ============================================================================
 class World2:
-    def __init__(self, r=-1.5, c0=0.0, lam=5.5, om=5.0, r_u=0.7, kfold=0.35, sC=0.89, p2r=0.4285,
+    def __init__(self, r=-1.5, c0=0.0, lam=5.5, om=5.0, r_u=-0.5, kfold=0.35, sC=0.89, p2r=0.4285,
                  noise=0.03, hz=100.0, seed=0):
         self.r, self.c0, self.lam, self.om, self.r_u, self.kfold, self.sC, self.p2r = r, c0, lam, om, r_u, kfold, sC, p2r
         self.noise, self.hz = noise, hz
@@ -192,3 +195,59 @@ def run_fold(N=5, seed=0, gamma=6.0, lock_ms=250.0, verbose=True):
 import math  # noqa: E402  (World2 에서 씀)
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "fold":
     run_fold(int(sys.argv[2]) if len(sys.argv) > 2 else 5, gamma=float(sys.argv[3]) if len(sys.argv) > 3 else 6.0)
+
+
+
+# ============================================================================
+# MuJoCo 가상 로봇으로 추천 루프 폐루프 검증 (물리 참값: 엔진 평면 r).  python sim_recommend.py mujoco [N] [seed]
+# ============================================================================
+def run_mujoco(N=10, seed=0, verbose=True, first=((1.0, 0.0), (-1.0, 0.0))):
+    import mujoco_source as mjs, serial_bridge as sb
+    src = mjs.MujocoSource(seed=seed, realtime=False); src.start()
+    t0 = time.time()
+    while src.eng is None and not src.eng_err and time.time() - t0 < 60:
+        time.sleep(0.1)
+    if src.eng is None:
+        raise RuntimeError(src.eng_err or "엔진 없음")
+    ds = Dataset(); sink = sb.LineSink()
+    def pump():
+        for _, ln in src.drain():
+            kind, prefix, payload = sink.classify(ln)
+            if kind == "header" and prefix == "D": ds.set_header(payload)
+            elif kind == "data": ds.add_data_row(payload)
+    def until(cond, timeout=60.0):
+        t_ = time.time()
+        while time.time() - t_ < timeout:
+            if cond(): return True
+            time.sleep(0.03)
+        return False
+    def release(b, f):
+        nc = src.n_catch
+        src.write(f"sim release {b:.3f} {f:.3f} 1.0"); until(lambda: src.n_catch > nc and src.stage == "held"); time.sleep(0.12)
+    src.write("z"); src.write("z")
+    for b, f in first:                      # λ 시행과 같은 자리(±1°, φ=0) 둘
+        release(b, f)
+    r_true = float(src.eng.g["mdl"]["modes"]["r"]); om_true = float(src.eng.g["mdl"]["modes"]["w_eff"])
+    hist = []
+    for i in range(N):
+        pump()
+        rec = an.run(ds, "recommend", dict(phi_eq=0.0))
+        nx, R = rec["next"], rec["result"]
+        hist.append(dict(i=i, r=R["r"], c0=R["c0"], se_r=R["se_r"], n=R["n"], om=R.get("om_hat"), method=R["method"], next=(nx["beta"], nx["phi"])))
+        if verbose:
+            print(f"  {i:2d}회 전: n={R['n']} r̂={R['r']} ĉ₀={R['c0']} SE_r={R['se_r']} ω̂={R.get('om_hat')} [{R['method']}] → 다음 (β {nx['beta']:+.2f}, φ {nx['phi']:+.2f})")
+        release(nx["beta"], nx["phi"])
+    pump()
+    rec = an.run(ds, "recommend", dict(phi_eq=0.0)); R = rec["result"]
+    hist.append(dict(i=N, r=R["r"], c0=R["c0"], se_r=R["se_r"], n=R["n"], om=R.get("om_hat"), method=R["method"]))
+    if verbose:
+        print(f"  {N:2d}회 후: n={R['n']} r̂={R['r']} ĉ₀={R['c0']} SE_r={R['se_r']} ω̂={R.get('om_hat')}   (MuJoCo 선형모델 r={r_true:.3f}, ω_eff={om_true:.2f})")
+        for row in rec["table"]:
+            if row.get("dir_valid"): print("     ", {k: row.get(k) for k in ("k", "beta0", "phi0", "dir", "s", "B_osc", "fit_r2")})
+    src.close()
+    return hist, dict(r_true=r_true, om_true=om_true, rec=rec)
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "mujoco":
+    import time
+    run_mujoco(int(sys.argv[2]) if len(sys.argv) > 2 else 10, int(sys.argv[3]) if len(sys.argv) > 3 else 0)

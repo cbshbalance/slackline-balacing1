@@ -4,3 +4,8 @@
 *_auto.folds.csv
 *_auto.events.csv
 *_auto.raw.txt
+*_auto_[0-9]*.csv
+*_auto_[0-9]*.trials.csv
+*_auto_[0-9]*.folds.csv
+*_auto_[0-9]*.events.csv
+*_auto_[0-9]*.raw.txt

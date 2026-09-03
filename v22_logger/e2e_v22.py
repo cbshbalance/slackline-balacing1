@@ -132,6 +132,18 @@ with sync_playwright() as p:
     check("재연결 → 파일 버퍼 비우고 라이브", pg.evaluate("LG.ds.source") == "" or pg.evaluate("LG.ds.n") < 2000)
     pg.click("#bFollow"); time.sleep(0.3)
     check("따라가기 복귀 LIVE", pg.text_content("#tMode").strip() == "LIVE")
+    # MuJoCo 가상 로봇 (리허설 소스)
+    pg.click("#bFakeMj")
+    try:
+        pg.wait_for_function("() => LG.link.connected && LG.link.src.kind === 'mujoco' && LG.ds.n > 50", timeout=25000)
+        check("가짜: MuJoCo 연결 칩", "MuJoCo" in pg.text_content("#hConn"), pg.text_content("#hConn"))
+        pg.evaluate("LG.send({cmd:'robot', text:'release 1.0 0.0 0.8'})"); time.sleep(3.5)
+        pg.select_option("#anTool", "trials"); pg.click("#bAnAll"); pg.click("#bAnRun")
+        pg.wait_for_function("() => LG.results.length >= 1 && LG.results[0].res.tool === 'trials'", timeout=30000)
+        check("가상 로봇 놓기 → 시행 감지", pg.evaluate("LG.results[0].res.result.n_dir_valid") >= 1, str(pg.evaluate("LG.results[0].res.result")))
+        pg.screenshot(path=os.path.join(OUT, "s7_mujoco.png"))
+    except Exception as ex:
+        check("가짜: MuJoCo (mujoco 없으면 실패해도 됨)", False, str(ex)[:120])
     pg.click("#bDisc")
     br.close()
 

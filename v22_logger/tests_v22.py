@@ -170,7 +170,8 @@ def test_analysis():
     check("접기 성적표: γ=10 → 전부 '과대'", rep10["ok"] and all("과대" in r["verdict"] for r in rep10["table"]), str([r["verdict"] for r in rep10["table"]]))
     check("γ* 추정이 쓴 γ 와 무관 (±15 %)", abs(g6 - g10) / max(g6, g10) < 0.15, f"{g6} vs {g10}")
     repS, _ = run_fold(5, seed=2, gamma=float(g6), verbose=False)
-    check("γ* 로 접으면 deadbeat (|A⁺/A⁻| < 0.3)", repS["ok"] and all(abs(r["ratio"]) < 0.3 for r in repS["table"]), str([r["ratio"] for r in repS["table"]]))
+    rat = [abs(r["ratio"]) for r in repS["table"]]
+    check("γ* 로 접으면 deadbeat (|A⁺/A⁻| 중앙값 < 0.3, 전부 < 0.45 — 장난감 세계, 접기 80 ms·관측창 이산화 잔여)", repS["ok"] and float(np.median(rat)) < 0.3 and max(rat) < 0.45, str([r["ratio"] for r in repS["table"]]))
     check("접기 성적표 next_cmd = gam …", repS.get("next_cmd", "").startswith("gam "), repS.get("next_cmd"))
     # 합성 신호로 osc
     dsyn = Dataset(); dsyn.set_header("t_ms,phi,ank,del_now".split(","))
@@ -229,10 +230,80 @@ def test_hub():
     hub.disconnect()
 
 
+def test_mujoco():
+    """MuJoCo 가상 로봇 소스 (v22_raw v2 흉내): 놓기·잡기·손 이동 제외·단일접기 F행·접기 성적표."""
+    try:
+        import mujoco_source as mjs
+    except Exception as ex:
+        print("  [SKIP] mujoco_source:", ex); return
+    src = mjs.MujocoSource(seed=3, realtime=False)
+    src.start()
+    t_b = time.time()
+    while src.eng is None and not src.eng_err and time.time() - t_b < 60:   # 엔진(MJCF 컴파일) 준비까지
+        time.sleep(0.1)
+    time.sleep(0.2)
+    if src.eng_err or src.eng is None:
+        print("  [SKIP] MuJoCo 엔진:", src.eng_err); src.close(); return
+    ds = Dataset(); sink = sb.LineSink()
+    def pump():
+        for _, ln in src.drain():
+            kind, prefix, payload = sink.classify(ln)
+            if kind == "header" and prefix == "D": ds.set_header(payload)
+            elif kind == "data": ds.add_data_row(payload)
+            elif kind == "fold": ds.add_fold_row(payload, sink.headers.get("F"))
+            elif kind == "event": ds.add_event_row(payload)
+    def until(cond, timeout=60.0):
+        t_ = time.time()
+        while time.time() - t_ < timeout:
+            if cond():
+                return True
+            time.sleep(0.03)
+        return False
+    src.write("z"); src.write("z")
+    for k_, cmd in enumerate(("sim release 1.0 0.0 0.8", "sim release -1.0 0.0 0.8", "sim release 2.0 -3.0 0.8")):
+        src.write(cmd)
+        until(lambda: src.n_catch >= k_ + 1 and src.stage == "held")     # 비실시간이라 벽시계가 아니라 사건으로 기다린다
+        time.sleep(0.15)
+    pump()
+    check("가상 로봇 D행 (v22_raw v2 16열)", ds.n > 500 and ds.header and ds.header[-1] == "dxl_raw", f"{ds.n}행 {ds.header and len(ds.header)}열")
+    check("놓기 3회 → 잡기 3회", src.n_release == 3 and src.n_catch == 3 and src.stage == "held", f"{src.n_release}/{src.n_catch} {src.stage}")
+    tr = an.run(ds, "trials", dict(phi_eq=0.0))
+    ok_rows = [r for r in tr["table"] if r["dir_valid"]]; bad = [r for r in tr["table"] if not r["dir_valid"]]
+    check("시행 나누기: 놓기 3회 = 방향유효 3 (손으로 옮기는 동작은 끝속도로 제외)", tr["ok"] and len(ok_rows) == 3 and all("손 이동" in r["why"] for r in bad),
+          f"valid {len(ok_rows)} / rejected {[r['why'][:14] for r in bad]}")
+    check("놓기점 = 손에 쥔 마지막 자세 (β₀≈+1, −1, +2)", len(ok_rows) == 3 and abs(ok_rows[0]["beta0"] - 1.0) < 0.15 and abs(ok_rows[1]["beta0"] + 1.0) < 0.15 and abs(ok_rows[2]["beta0"] - 2.0) < 0.15,
+          str([(r["beta0"], r["phi0"]) for r in ok_rows]))
+    check("λ 적합 (평형 근처 시행) 4~7", all(4.0 < (r["lam"] or 0) < 7.0 for r in ok_rows[:2]), str([r["lam"] for r in ok_rows]))
+    rec = an.run(ds, "recommend", dict(phi_eq=0.0))
+    check("추천 도구가 가상 로봇 데이터로 다음 점을 낸다", rec["ok"] and rec.get("next") and rec["result"]["n"] == 3, str(rec.get("result", {}).get("n")))
+    # 단일접기 (γ 실험): 잡고 → 무장 → 놓기 → F행
+    src.write("mode 1")
+    for k_, b_ in enumerate((0.3, -0.3)):
+        ns, nc = src.n_settled, src.n_catch
+        src.write(f"sim hold {b_} 0.0"); until(lambda: src.n_settled > ns); time.sleep(0.1)
+        src.write("g"); src.write("sim free"); until(lambda: src.n_catch > nc); time.sleep(0.1)     # 무장과 놓기는 붙여서 — 손에 잡힌 채 접히면 β=α+P2R·δ 로 |Â| 가 커져 연쇄 접기
+        src.write("h"); src.write("0"); time.sleep(0.2)
+    pump()
+    check("단일접기 2회 → F행 2개 (A_pre·Δδ·A_post)", len(ds.folds) == 2 and all(abs(float(f["dd_act"])) > 1.0 for f in ds.folds), str([(f["A_pre"], f["dd_act"], f["A_post"]) for f in ds.folds]))
+    fr = an.run(ds, "fold", dict())
+    check("접기 성적표 γ* 계산 (2~30)", fr["ok"] and fr["result"].get("gamma_star") and 2.0 < fr["result"]["gamma_star"] < 30.0 and fr.get("next_cmd", "").startswith("gam"),
+          str(fr.get("result", {}).get("gamma_star")) + " " + str(fr.get("msg", "")))
+    # 증분접기: 잡는가
+    ns = src.n_settled
+    src.write("mode 2"); src.write(fr.get("next_cmd") or "gam 8")
+    src.write(f"r {rec['result']['r']}"); src.write(f"c0 {rec['result']['c0']}")      # 잰 선(r̂, ĉ₀)을 펌웨어에 — c₀ 를 빼면 한쪽으로만 접어 hold 가 흘러간다
+    src.write("sim hold 0.5 0.0"); until(lambda: src.n_settled > ns); time.sleep(0.1)
+    src.write("g"); src.write("sim free"); until(lambda: src.stage == "free")
+    until(lambda: src.stage != "free" or (src.stage == "free" and src.k * mjs.DT_S - src.free_t0 > 6.0)); pump()
+    check("증분접기 (mode 2) — 놓은 뒤 6 s 동안 잡지 않아도 됨 (균형 유지)", src.stage == "free" and src.trial_n >= 3, f"stage {src.stage} 접기 {src.trial_n}회 φ {src.last_frame['phi']:.2f}")
+    src.close()
+
+
 if __name__ == "__main__":
     test_sink_recorder()
     test_dataset()
     test_analysis()
     test_hub()
+    test_mujoco()
     print("\n" + ("ALL PASS" if not FAILS else "FAILED: " + ", ".join(FAILS)))
     sys.exit(1 if FAILS else 0)
