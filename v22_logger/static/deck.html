@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>조종석 · v22</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#0d1017;--panel:#141a24;--line:#232b3a;--fg:#e8edf5;--dim:#8a96aa;--cyan:#4cc9f0;--pink:#ff006e;--gold:#ffd166;--green:#06d6a0}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 "Noto Sans KR","Malgun Gothic",system-ui,sans-serif}
+body{display:grid;grid-template-rows:42px minmax(0,1fr);height:100vh}
+header{display:flex;align-items:center;gap:8px;padding:0 12px;background:var(--panel);border-bottom:1px solid var(--line)}
+header h1{font-size:15px;margin:0 8px 0 0}
+.chip{padding:2px 9px;border-radius:12px;background:#1b2230;border:1px solid var(--line);font-size:11.5px;color:var(--dim);white-space:nowrap}
+.chip.on{background:#123527;border-color:#1f7a4d;color:#7ee2b3}.chip.warn{background:#3a2412;border-color:#8a5a1e;color:#ffc27a}.chip.rec{background:#3a1220;border-color:#8a1e3d;color:#ff9fb8}
+.btn{padding:5px 11px;border:1px solid var(--line);border-radius:7px;background:#1b2230;color:var(--fg);cursor:pointer;font-size:12.5px;white-space:nowrap}
+.btn:hover{background:#26304a}.btn.acc{background:#1f6fe5;border-color:#1f6fe5;color:#fff}.btn.danger{background:#7a1d2e;border-color:#a12a44}.btn.sm{padding:3px 8px;font-size:11.5px}
+.btn.on{outline:2px solid var(--gold)}
+.sp{flex:1}
+main{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);min-height:0}
+.col{display:flex;flex-direction:column;min-height:0;gap:8px;padding:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.card h2{font-size:12.5px;margin:0 0 6px;color:var(--dim);font-weight:600;letter-spacing:.02em}
+#cues{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.cue{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#10161f;cursor:pointer}
+.cue:hover{background:#18202c}.cue.on{border-color:var(--gold);background:#1c2233;box-shadow:0 0 0 1px var(--gold) inset}
+.cue .n{font:700 20px Consolas,monospace;color:var(--gold);text-align:center}
+.cue .t{font-weight:700;font-size:14px}.cue .s{color:var(--dim);font-size:12px;margin-top:2px}
+.cue .v{font:11px Consolas,monospace;color:var(--cyan);white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px}
+.ro{font:14px Consolas,"D2Coding",monospace;line-height:1.7}
+.ro b{color:var(--gold)}
+#stage{font:12.5px Consolas,monospace;color:var(--cyan)}
+#c3d{width:100%;height:240px;display:block;border-radius:8px;background:#0d1017}
+#say{font-size:14px;line-height:1.5;color:#fff;background:#0b1220;border:1px solid #1f2d4a;border-radius:8px;padding:8px 10px;min-height:52px}
+input[type=text],select{padding:4px 7px;border:1px solid var(--line);border-radius:6px;background:#0d1117;color:var(--fg);font-size:12.5px}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:4px 0}
+#toast{position:fixed;right:14px;bottom:14px;display:flex;flex-direction:column;gap:6px;z-index:50}
+.toast{background:#1c2330;color:#fff;padding:7px 11px;border-radius:8px;font-size:12.5px;border:1px solid var(--line)}.toast.err{background:#7a1d2e}
+kbd{font:11px Consolas,monospace;background:#0b1220;border:1px solid var(--line);border-radius:4px;padding:0 4px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header>
+ <h1>조종석</h1>
+ <span class="chip" id="hWs">서버…</span><span class="chip" id="hConn">연결 없음</span><span class="chip" id="hRec">기록 없음</span>
+ <span class="chip" id="hStage">무대: —</span>
+ <span class="sp"></span>
+ <button class="btn" id="bOpenShow" title="세로 모니터로 옮기고 F 로 전체화면">무대 창 열기</button>
+ <button class="btn" id="bOpenLab">측정실 창</button>
+ <a class="btn" href="/" target="v22logger">로거 앱</a>
+ <button class="btn danger" id="bBlack" title="B">무대 검게</button>
+</header>
+<main>
+ <section class="col">
+  <div class="card" style="display:flex;flex-direction:column;min-height:0;flex:1">
+   <h2>큐 — <kbd>→</kbd><kbd>PgDn</kbd><kbd>Space</kbd> 다음 · <kbd>←</kbd><kbd>PgUp</kbd> 이전 · <kbd>1</kbd>~<kbd>9</kbd> 바로 · <kbd>B</kbd> 검게 (발표 리모컨 = PgUp/PgDn)</h2>
+   <div id="cues"></div>
+  </div>
+  <div class="card"><h2>지금 할 말</h2><div id="say">—</div></div>
+ </section>
+ <section class="col">
+  <div class="card">
+   <h2>로봇</h2>
+   <div class="row"><button class="btn acc" id="bConnect">연결</button><button class="btn" id="bMj">가짜: MuJoCo</button><button class="btn" id="bDisc">끊기</button><span class="sp"></span><input type="text" id="iCmd" placeholder="명령 (g, h, gam 9.1 …)" style="width:150px"><button class="btn" id="bCmd">보내기</button></div>
+   <div class="grid" id="robotBtns"></div>
+   <div class="row" style="margin-top:6px"><button class="btn sm" id="bFoldDemo" title="mode 0 · 토크 ON 상태에서 δ 20° 로 접었다 1.5 s 뒤 0° 로 편다 (씬 3 시연)">접기 시연 δ 20→0</button><button class="btn sm" id="bFoldDemoN" title="반대쪽">접기 시연 δ −20→0</button><span class="sp"></span><label><input type="checkbox" id="cMirror"> 무대 좌우 반전</label></div>
+  </div>
+  <div class="card"><h2>지금 상태</h2><div class="ro" id="ro">—</div><div id="stage"></div></div>
+  <div class="card"><h2>트윈 미리보기</h2><canvas id="c3d"></canvas></div>
+  <div class="card">
+   <h2>질의응답 · 무대에 올리기</h2>
+   <div class="grid" id="qaBtns"></div>
+   <div class="row" style="margin-top:6px"><span>옛 버전 시뮬</span><select id="selVer"></select><button class="btn sm" id="bVer">무대에</button><button class="btn sm" id="bVerHere">여기서 열기</button></div>
+   <div class="row"><span>1:1 축척</span><input type="text" id="iMonW" placeholder="모니터 가로 mm" style="width:110px"><input type="text" id="iMonPx" placeholder="가로 px" style="width:80px"><button class="btn sm" id="bScale">적용</button><span class="chip" id="hScale">축척 없음</span></div>
+  </div>
+ </section>
+</main>
+<canvas id="pl1" style="display:none"></canvas><canvas id="pl2" style="display:none"></canvas>
+<div id="toast"></div>
+<script src="/three.min.js"></script>
+<script src="/static/lg_core.js"></script>
+<script src="/static/lg_3d.js"></script>
+<script src="/static/lg_deck.js"></script>
+</body>
+</html>

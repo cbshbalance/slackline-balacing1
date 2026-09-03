@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>측정실 · v22</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#f4f6fa;--card:#ffffff;--line:#d9dee7;--fg:#1c2330;--dim:#6b7484;--acc:#1f6fe5;--sel:rgba(31,111,229,.14);--grid:#e6eaf0;--hl:#fff3c4}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 "Segoe UI","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
+body{display:grid;grid-template-rows:44px minmax(0,1fr) 30px;height:100vh}
+header{display:flex;align-items:center;gap:8px;padding:0 12px;background:#fff;border-bottom:1px solid var(--line)}
+header h1{font-size:15px;margin:0 10px 0 0;font-weight:700}
+.chip{display:inline-block;padding:2px 9px;border-radius:12px;background:#eef1f6;border:1px solid var(--line);font-size:11.5px;color:var(--dim);white-space:nowrap}
+.chip.on{background:#e3f6ec;border-color:#9ad9b7;color:#0f6b3a}.chip.warn{background:#fff1e6;border-color:#f3c39c;color:#9a4b00}.chip.rec{background:#fde8ec;border-color:#f5b1c0;color:#a11a3a}
+.btn{padding:4px 10px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--fg);cursor:pointer;font-size:12px;white-space:nowrap}
+.btn:hover{background:#f0f4fb}.btn.acc{background:var(--acc);border-color:var(--acc);color:#fff}.btn.sm{padding:2px 7px;font-size:11px}
+select,input[type=text],input[type=number]{padding:3px 6px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--fg);font:12px "Segoe UI","Malgun Gothic",sans-serif}
+input[type=number]{width:70px}
+.sp{flex:1}
+main{display:grid;grid-template-columns:var(--leftW,34%) 6px minmax(0,1fr);min-height:0}
+.left{display:flex;flex-direction:column;min-height:0;background:#fff;border-right:1px solid var(--line)}
+.split{cursor:col-resize;background:var(--line)}
+.right{display:flex;flex-direction:column;min-height:0;gap:6px;padding:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;min-height:0}
+.card .bar{display:flex;align-items:center;gap:6px;padding:5px 8px;border-bottom:1px solid var(--line);flex-wrap:wrap;font-size:12px}
+.card .bar b{font-size:12.5px;margin-right:4px}
+.card canvas{flex:1;min-height:0;width:100%;height:100%;display:block;cursor:crosshair}
+.card.tc{flex:1.35}.card.xy{flex:1}
+label.ck{display:inline-flex;align-items:center;gap:3px;margin-right:4px;cursor:pointer;white-space:nowrap}
+label.ck .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
+/* 표 */
+.tbar{display:flex;align-items:center;gap:6px;padding:5px 8px;border-bottom:1px solid var(--line);flex-wrap:wrap;font-size:12px}
+.tbl{flex:1;min-height:0;overflow:auto;position:relative;font-family:Consolas,"D2Coding",monospace;font-size:12px}
+.tbl .hdr{position:sticky;top:0;z-index:2;display:grid;background:#eef1f6;border-bottom:1px solid var(--line)}
+.tbl .hdr div{padding:3px 6px;text-align:right;color:#3a4657;font-weight:600;border-right:1px solid var(--line);white-space:nowrap}
+.tbl .hdr div:first-child{text-align:left}
+.tbl .body{position:relative}
+.tbl .row{position:absolute;left:0;right:0;display:grid;height:20px;line-height:20px;border-bottom:1px solid var(--grid)}
+.tbl .row div{padding:0 6px;text-align:right;border-right:1px solid var(--grid);white-space:nowrap;overflow:hidden}
+.tbl .row div:first-child{text-align:left;color:var(--dim)}
+.tbl .row.sel{background:var(--sel)}.tbl .row.cur{background:var(--hl);font-weight:600}.tbl .row.cur.sel{background:#e2ecff}
+.tbl .row:hover{background:#f6f8fc}
+footer{display:flex;align-items:center;gap:14px;padding:0 12px;background:#fff;border-top:1px solid var(--line);font-family:Consolas,monospace;font-size:12px;color:#2c3545;white-space:nowrap;overflow:hidden}
+footer .k{color:var(--dim)}
+#fits{max-height:120px;overflow:auto;border-top:1px solid var(--line);padding:4px 8px;font-size:12px;font-family:Consolas,"D2Coding",monospace}
+#fits .fit{display:flex;gap:8px;align-items:center;padding:2px 0}
+#fits .fit .eq{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#fits .fit .sw{width:12px;height:3px;border-radius:2px}
+#toast{position:fixed;right:14px;bottom:40px;display:flex;flex-direction:column;gap:6px;z-index:50}
+.toast{background:#1c2330;color:#fff;padding:8px 12px;border-radius:8px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.25)}.toast.err{background:#a11a3a}
+.hint{color:var(--dim);font-size:11.5px}
+dialog{border:1px solid var(--line);border-radius:10px;padding:14px 16px;max-width:560px;font-size:12.5px}
+dialog textarea{width:520px;height:220px;font:11px Consolas,monospace}
+</style>
+</head>
+<body>
+<header>
+ <h1>측정실</h1>
+ <span class="chip" id="hWs">서버…</span><span class="chip" id="hConn">연결 없음</span><span class="chip" id="hRec">기록 없음</span><span class="chip" id="hBuf">버퍼 0 행</span>
+ <span class="sp"></span>
+ <button class="btn acc" id="bConnect" title="OpenCR 포트 자동 선택">연결</button>
+ <button class="btn" id="bMj" title="MuJoCo 가상 로봇 (연습용)">가짜: MuJoCo</button>
+ <button class="btn" id="bDisc">끊기</button>
+ <select id="fileList" style="max-width:260px"><option value="">파일…</option></select>
+ <button class="btn" id="bLoad" title="기록된 CSV 를 불러 검토 (연결은 먼저 끊는다)">불러오기</button>
+ <input type="text" id="iCmd" placeholder="로봇 명령 (g, h, mode 1 …)" style="width:170px">
+ <button class="btn" id="bCmd">보내기</button>
+ <a class="btn" href="/" target="v22logger" title="고급 조작·콘솔·파이프라인은 로거 앱에서">로거 앱 ↗</a>
+</header>
+<main>
+ <section class="left">
+  <div class="tbar">
+   <b>원본 표</b>
+   <span id="colBox"></span>
+   <span class="sp"></span>
+   <button class="btn sm" id="bCopy" title="선택 구간(없으면 보이는 창)을 탭 구분 텍스트로 복사 — 엑셀에 그대로 붙는다">복사 (엑셀)</button>
+   <button class="btn sm" id="bCopyAll">전체 복사</button>
+  </div>
+  <div class="tbl" id="tbl"><div class="hdr" id="thdr"></div><div class="body" id="tbody"></div></div>
+  <div class="hint" style="padding:4px 8px;border-top:1px solid var(--line)">행 클릭 = 커서 · Shift+클릭 = 구간 선택 · 차트 드래그 = 구간 선택 · 더블클릭 = 라이브 따라가기</div>
+ </section>
+ <div class="split" id="split"></div>
+ <section class="right">
+  <div class="card tc">
+   <div class="bar">
+    <b>시간 차트</b><span id="tcSeries"></span>
+    <span class="sp"></span>
+    <span>추세선</span>
+    <select id="tcFit"><option value="lin">선형 y = a·t + b</option><option value="exp">지수 |y−y₀| = A·e^(λt) → λ</option><option value="osc">감쇠 사인 → ω, ζ</option></select>
+    <select id="tcCol"></select>
+    <label id="tcY0Wrap">y₀ <input type="number" id="tcY0" value="0" step="0.1" style="width:56px"></label>
+    <button class="btn sm acc" id="bTcFit">추가</button>
+    <button class="btn sm" id="bTcClear">지우기</button>
+    <label class="ck"><input type="checkbox" id="cFollow" checked>따라가기</label>
+    <label>창 <input type="number" id="iWin" value="10" min="0.5" step="1" style="width:56px"> s</label>
+   </div>
+   <canvas id="tc"></canvas>
+   <div id="fits"></div>
+  </div>
+  <div class="card xy">
+   <div class="bar">
+    <b>XY 차트</b>
+    x <select id="xyX"></select> y <select id="xyY"></select>
+    <label class="ck"><input type="checkbox" id="cXyAll">전체 점도 (흐리게)</label>
+    <span class="sp"></span>
+    <span>추세선</span>
+    <select id="xyFit"><option value="lin">선형 y = a·x + b</option><option value="rel">놓기점 → 경계선 r·c₀</option><option value="rec">다음 놓기 추천</option></select>
+    <button class="btn sm acc" id="bXyFit">추가</button>
+    <button class="btn sm" id="bXyClear">지우기</button>
+   </div>
+   <canvas id="xy"></canvas>
+   <div id="xyFits" style="padding:4px 8px;font-size:12px;font-family:Consolas,monospace;border-top:1px solid var(--line);min-height:22px"></div>
+  </div>
+ </section>
+</main>
+<footer>
+ <span id="fCur">—</span><span class="sp"></span><span id="fSel" class="k"></span><span id="fMode" class="chip">LIVE</span>
+</footer>
+<div id="toast"></div>
+<dialog id="dlg"><div id="dlgMsg" style="margin-bottom:8px"></div><textarea id="dlgText"></textarea><div style="margin-top:8px;text-align:right"><button class="btn" onclick="document.getElementById('dlg').close()">닫기</button></div></dialog>
+<script src="/static/lg_core.js"></script>
+<script src="/static/lg_lab.js"></script>
+</body>
+</html>

@@ -84,6 +84,16 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 - 데이터는 바이너리 프레임 `[u32 헤더길이][JSON][float32 열우선]` — `ds_full`(교체) / `ds_append`(증분).
 - `serial_bridge.py`: 포트 자동탐지·D/R/F/E/# 분류(`LineSink`)·4파일 기록기(`Recorder`)·`SerialSource`/`FakeSource`.
 
+## 발표 창 셋 — 조종석 `/deck` · 무대 `/show` · 측정실 `/lab` (2026-09-03)
+
+- **`/deck` 조종석** (노트북): 큐 8개(발표 시나리오 9/3 확정)·질의응답 버튼·옛 버전 갤러리(V1~V18, `/repo/` 마운트)·로봇 명령·상태 판독·트윈 미리보기.
+  ←/→·PgUp/PgDn(발표 리모컨)·숫자키. 무대 좌우 반전, 1:1 축척(모니터 mm/px).
+- **`/show` 무대** (세로 모니터, F 전체화면): 서버의 장면 상태(`{cmd:"scene", name, args}` → `type=scene` 방송)대로 한 창에서 전환.
+  video(재생·휘청 반복+오버랩·정지·모델 변신) · twin(+pl1|pl2, HUD 유지시간·접기 횟수·접기량 번쩍) · plane(크게, `epsGeom` 라이브 ε* 기하) · frame(iframe) · card · black.
+  실사 오버랩은 /pres 의 8/17 정합 카메라 그대로, 선·몸 굵기 강화(thk 2.6·body 1.7), 광대 추적 궤적(`static/media/jultagi_trace.json`, `tools/track_jultagi.py`)으로 모델 동기.
+- **`/lab` 측정실**: 엑셀 방식. 원본 표(가상 스크롤) · 시간 차트(드래그 = 구간) · XY 차트 · 추세선(선형 / 지수 ln|y−y₀|→λ / 감쇠사인→ω,ζ(서버 osc) / 놓기점→경계선 r·c₀ / 다음 놓기 추천) · 식·R²·n 표시 · 선택 구간 TSV 복사(엑셀 붙여넣기).
+- 운용 절차: `docs/v22_발표_무대_운용_20260903.md`. `lg_plane.js` 에 `LG.PLOPT.epsGeom`(무게중심 불변 직선과 안정모드선의 교점 = 접으면 가는 곳), `lg_3d.js` 에 `LG.cam.set/get`·좌우 반전.
+
 ## MuJoCo 가상 로봇 소스 · 리허설 영상 (2026-09-03)
 
 - `mujoco_source.py` — v21 `SimEngine`(물리 무수정, 실측 프리셋)을 실시간 200 Hz 로 돌리고 그 위에 **v22_raw v2 펌웨어 로직을

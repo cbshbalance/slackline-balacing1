@@ -228,6 +228,9 @@ def test_hub():
     time.sleep(0.5); hub.pump()
     check("합성 신호 소스", hub.ds.n > 10, str(hub.ds.n))
     hub.disconnect()
+    hub.set_scene("plane", dict(which="pl1", epsGeom=True))
+    check("무대 장면 상태 (조종석 → 방송)", hub.scene["name"] == "plane" and hub.scene["args"]["epsGeom"] is True and hub.scene["seq"] == 1 and hub.scene_dirty, str(hub.scene))
+    check("hello 에 장면 포함", hub.hello_msg()["scene"]["name"] == "plane")
 
 
 def test_mujoco():
