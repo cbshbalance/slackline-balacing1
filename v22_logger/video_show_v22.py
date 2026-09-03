@@ -39,12 +39,13 @@ def main(argv=None):
         with sync_playwright() as p:
             br = p.chromium.launch(executable_path="/opt/pw-browsers/chromium",
                                    args=["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--autoplay-policy=no-user-gesture-required", "--lang=ko-KR"])
+            # 무대는 녹화 컨텍스트(세로), 조종석은 녹화 없는 별도 컨텍스트 — 한 컨텍스트에 두 창을 두면 녹화 크기가 섞인다
             ctx = br.new_context(viewport={"width": vw, "height": vh}, record_video_dir=OUT, record_video_size={"width": vw, "height": vh}, locale="ko-KR")
             show = ctx.new_page()
             show.goto(f"http://localhost:{a.port}/show"); show.wait_for_function("() => window.LG && LG.PL", timeout=20000)
-            deck = ctx.new_page(); deck.set_viewport_size({"width": 1200, "height": 800})
+            ctx2 = br.new_context(viewport={"width": 1200, "height": 800}, locale="ko-KR")
+            deck = ctx2.new_page()
             deck.goto(f"http://localhost:{a.port}/deck"); deck.wait_for_function("() => window.LG && LG.PL && LG.ds.n > 20", timeout=20000)
-            show.bring_to_front()
             robot = lambda t: deck.evaluate(f"() => LG.send({{cmd:'robot', text:{t!r}}})")
             cmd = lambda t: deck.evaluate(f"() => LG.send({{cmd:'send', text:{t!r}}})")
             cue = lambda k: (deck.keyboard.press(str(k)), log(f"cue {k}"))
@@ -85,9 +86,9 @@ def main(argv=None):
             deck.locator("#qaBtns .btn", has_text="ε* 카드").click(); time.sleep(4.0)
             deck.locator("#qaBtns .btn", has_text="트윈 크게").click(); time.sleep(4.0)
             cmd("h")
-            show.bring_to_front(); time.sleep(0.5)
+            time.sleep(0.5)
             webm = show.video.path()
-            ctx.close(); br.close()
+            ctx2.close(); ctx.close(); br.close()
     finally:
         if srv: srv.terminate()
     if not webm or not os.path.exists(webm):
