@@ -158,6 +158,13 @@ def test_analysis():
     check("추천 루프: 열 3개 이상·SE 계산", last["n"] >= 8 and last["se_r"] is not None, str(last))
     rec0 = an.run(Dataset(), "recommend", {})
     check("빈 데이터 추천 = 첫 시행 (0, +0.7)", rec0["ok"] and rec0["next"]["beta"] == 0.0 and abs(rec0["next"]["phi"] - 0.7) < 1e-9, str(rec0.get("next")))
+    # 잡은 채 쉬는 자세(β 17°, φ −8°, 무발산)가 '선 위 s=0' 점으로 들어가 r̂ 을 −0.5 로 끌어내린 사고(9/3 측정실 리허설) — 소각 놓기 범위 밖은 제외
+    fake = [dict(k=1, beta0=1.0, phi0=0.0, dir=-1, s=-0.6, dir_valid=True), dict(k=2, beta0=-1.0, phi0=0.0, dir=1, s=0.6, dir_valid=True),
+            dict(k=3, beta0=2.0, phi0=-2.5, dir=-1, s=-0.3, dir_valid=True), dict(k=4, beta0=-2.0, phi0=2.2, dir=1, s=0.4, dir_valid=True),
+            dict(k=5, beta0=16.9, phi0=-8.0, dir=0, s=0.0, dir_valid=False, peak=0.1)]
+    recc = an.recommend(Dataset(), trials=fake, om_fit=False)
+    check("추천: 잡은 자세(β 17°, 무발산)는 제외 — r̂ 이 그 점에 끌리지 않는다", recc["ok"] and recc["result"]["r"] < -1.0 and not any("17" in str(row.get("k")) for row in recc["table"]) and any("제외" in st for st in recc["steps"]),
+          f"r̂={recc['result'].get('r')} steps={[st for st in recc['steps'] if '제외' in st][:1]}")
     trW = an.run(W.ds, "trials", dict(lam_fixed=5.5))
     k1 = trW["table"][0]
     check("놓기 자세 = 정지 중앙값 (β₀ 오차 < 0.05°)", abs(k1["beta0"] - 0.0) < 0.35 and k1["t_r"] is not None, str({k: k1[k] for k in ("beta0", "phi0", "t_r", "s", "B_osc")}))

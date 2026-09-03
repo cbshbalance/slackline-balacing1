@@ -146,7 +146,7 @@ with sync_playwright() as p:
         ctx = pg.context
         lab = ctx.new_page(); lab.on("pageerror", lambda e: ERRS.append("lab pageerror: " + str(e)))
         lab.goto(f"http://localhost:{PORT}/lab"); lab.wait_for_function("() => window.LG && LG.PL && LG.ds.n > 50", timeout=20000); time.sleep(0.8)
-        check("/lab 로드 · 원본 표 행", lab.locator("#tbody .row").count() >= 10, str(lab.locator("#tbody .row").count()))
+        check("/lab 로드 · 원본 표 행", lab.locator("#tbody .row2").count() >= 10, str(lab.locator("#tbody .row2").count()))
         bb = lab.locator("#tc").bounding_box(); y = bb["y"] + bb["height"] * 0.5
         lab.mouse.move(bb["x"] + bb["width"] * 0.4, y); lab.mouse.down(); lab.mouse.move(bb["x"] + bb["width"] * 0.7, y, steps=6); lab.mouse.up(); time.sleep(0.3)
         check("/lab 차트 드래그 = 구간 선택", lab.evaluate("LG.sel && LG.sel.t1 > LG.sel.t0"))

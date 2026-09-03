@@ -1,5 +1,5 @@
-// lg_show.js — 무대 (세로 모니터). 조종석(/deck)이 보내는 장면 신호(type=scene)대로 한 창 안에서 바꾼다.
-//   video : 실사 영상 (재생 / 휘청 구간 반복 + 모델 동기 오버랩 / 정지 / 모델로 변신)
+// lg_show.js — 무대 (큰 모니터, 가로·세로 모두). 조종석(/deck)이 보내는 장면 신호(type=scene)대로 한 창 안에서 바꾼다.
+//   video : 실사 영상 — /pres 구도(사진 띠 y 607~1407 레터박스) 그대로 (재생 / 휘청 구간 반복 + 모델 동기 오버랩 / 정지 / 모델로 변신)
 //   twin  : 3D 트윈 (+ 아래 상태공간 pl1|pl2) · HUD(유지 시간·접기 횟수·접기량)
 //   plane : 상태공간 크게 (pl1|pl2, 라이브 ε* 기하)
 //   frame : iframe (/pres 씬, 옛 버전 시뮬, /lab)
@@ -143,8 +143,8 @@
     const pr = (0.010 + 0.008 * (g.Hs / 2.5)) * OVS.thk;
     jG.add(jrod([0, -g.D / 2, 0], [0, -g.D / 2, g.Hs], pr, 0xdfe6ee, glow));           // 기둥 (밝은 회백)
     jG.add(jrod([0, g.D / 2, 0], [0, g.D / 2, g.Hs], pr, 0xdfe6ee, glow));
-    jG.add(jrod([0, -g.D / 2, g.Hs], k.foot, pr * 0.55, 0xff9f1c, glow));                 // 줄 (주황 — 실사 위에서 또렷하게)
-    jG.add(jrod(k.foot, [0, g.D / 2, g.Hs], pr * 0.55, 0xff9f1c, glow));
+    jG.add(jrod([0, -g.D / 2, g.Hs], k.foot, pr * 0.7, 0xff9f1c, glow));                 // 줄 (주황 — 실사 위에서 또렷하게)
+    jG.add(jrod(k.foot, [0, g.D / 2, g.Hs], pr * 0.7, 0xff9f1c, glow));
     const jbox = (w, d, h, c) => new THREE.Mesh(new THREE.BoxGeometry(w, d, h), jmat(c, glow));
     const bw = OVS.body;
     const lb = jbox(0.147 * g.L1 * bw, 0.309 * g.L1 * bw, g.L1, 0x06b98c); lb.position.set((k.foot[0] + k.hip[0]) / 2, g.footY, (k.foot[2] + k.hip[2]) / 2); lb.rotation.y = k.al; jG.add(lb);
@@ -153,13 +153,12 @@
     const hpr = 0.062 * g.L1 * bw; const hp = new THREE.Mesh(new THREE.CylinderGeometry(hpr, hpr, 0.50 * g.L1 * bw, 14), jmat(0xffbe0b, glow)); hp.position.set(k.hip[0], g.footY, k.hip[2]); jG.add(hp);
     const ft = new THREE.Mesh(new THREE.SphereGeometry(0.05 * g.L1 * bw, 14, 10), jmat(0xe6a817, glow)); ft.position.set(k.foot[0], g.footY, k.foot[2]); jG.add(ft);
   }
-  // 영상 배치: 세로 화면에 contain, 캔버스는 사진 띠(y 607~1407) 위에만 — 정합 카메라가 그대로 맞는다
+  // 영상 배치: /pres 구도 그대로 — 영상의 y 607~1407 띠(사진)를 화면에 contain(레터박스). 영상 요소는 띠가 화면에 오도록 위로 밀고 나머지는 잘린다.
   function layoutVideo() {
-    const W = innerWidth, H = innerHeight; let w = W, h = W * VM.vh / VM.vw; if (h > H) { h = H; w = H * VM.vw / VM.vh; }
-    const L = (W - w) / 2, T = (H - h) / 2;
-    Object.assign(vid.style, { left: L + "px", top: T + "px", width: w + "px", height: h + "px" });
-    const bt = T + h * VM.cy / VM.vh, bh = h * VM.ch / VM.vh;
-    Object.assign(ovc.style, { left: L + "px", top: bt + "px", width: w + "px", height: bh + "px" });
+    const W = innerWidth, H = innerHeight; let w = W, bh = W * VM.ch / VM.vw; if (bh > H) { bh = H; w = H * VM.vw / VM.ch; }
+    const L = (W - w) / 2, T = (H - bh) / 2, k = w / VM.vw;
+    Object.assign(vid.style, { left: L + "px", top: (T - VM.cy * k) + "px", width: w + "px", height: (VM.vh * k) + "px" });
+    Object.assign(ovc.style, { left: L + "px", top: T + "px", width: w + "px", height: bh + "px" });
     const pw = Math.round(w * devicePixelRatio), ph = Math.round(bh * devicePixelRatio);
     if (ovc.width !== pw || ovc.height !== ph) { jr.setSize(pw, ph, false); jcam.aspect = pw / ph; jcam.updateProjectionMatrix(); }
   }

@@ -24,7 +24,7 @@ v21 발표 시뮬레이터는 `/pres` 로 그대로 살아 있다 (`static/index
 - `static/logger.html` 레이아웃 · `lg_core.js`(상태·WS·저장소) → `lg_3d.js`(트윈) → `lg_plane.js` → `lg_chart.js` → `lg_panels.js`(패널·트랜스포트·분석 UI·키·프레임 루프) — **이 순서로 로드된다**
 - `logs/` 기록 (4파일 + .folds). `e2e_shots/` 스크린샷.
 - `mujoco_source.py` MuJoCo 가상 로봇(v22_raw v2 펌웨어 흉내, `sim release β φ`) · `video_v22.py` 리허설 영상 감독(Playwright 녹화, `video_out/`).
-- 발표 창: `static/deck.html`+`lg_deck.js`(조종석, 큐·장면 신호) · `static/show.html`+`lg_show.js`(무대, 장면 전환·실사 오버랩·HUD) · `static/lab.html`+`lg_lab.js`(측정실, 엑셀식 차트·추세선). 서버 `set_scene`/`scene` 방송, 라우트 `/deck /show /lab /pmedia/ /repo/`. 절차 `docs/v22_발표_무대_운용_20260903.md`.
+- 발표 창: `static/deck.html`+`lg_deck.js`(조종석, 큐·장면 신호) · `static/show.html`+`lg_show.js`(무대, 장면 전환·실사 오버랩·HUD) · `static/lab.html`+`lg_lab.js`(측정실 = logger.html 의 모든 id 를 가진 상위집합 + 엑셀식 표·차트·추세선; `lg_panels.js` 가 그대로 돌고 `lg_lab.js` 는 `LG.chart.win/view`·`LG.sel`·`LG.setCursor` 를 공유). 리허설 `video_show_v22.py`(무대) · `video_lab_v22.py`(측정실, video_v22.py 의 Director 상속). 서버 `set_scene`/`scene` 방송, 라우트 `/deck /show /lab /pmedia/ /repo/`. 절차 `docs/v22_발표_무대_운용_20260903.md`.
 
 ## 함정
 
