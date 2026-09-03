@@ -1,0 +1,79 @@
+{
+ "_설명": "발표 씬 체인 v1 (문서 63 초안 기준). ] = 다음, [ = 이전. 순서·내용 교체는 이 파일만 수정 — 코드 무변경. 저장 후 브라우저 새로고침.",
+ "_액션어휘": "click(버튼 id) / check(체크박스 id,on) / send(서버 cmd) / dm(kind: fold|fwe) / fs(plane: pl1|pl2|null=해제) / presmode(on)",
+ "scenes": [
+  {
+   "title": "① 도입 — 실사 영상 → 모델",
+   "note": "1-a 역설: 장대 없이 처진 줄. 손가락은 전시대 로봇 ↔ 영상 왕복. 시퀀스가 오버랩→60cm 모프까지 자동 진행 (2-a까지 커버)",
+   "actions": [
+    {
+     "do": "presmode",
+     "on": true
+    },
+    {
+     "do": "click",
+     "id": "bOvSeqV"
+    }
+   ]
+  },
+  {
+   "title": "② 허리의 발명 — 천천히 접기",
+   "note": "2-b: 접으면 반작용으로 발이 밀린다. 상태점이 회색 CoM 등고선을 따라간다",
+   "actions": [
+    {
+     "do": "dm",
+     "kind": "fold"
+    }
+   ]
+  },
+  {
+   "title": "③ 안정모드선 — 자세 훑기",
+   "note": "2-d: 원위치 평면 전체화면. Shift 누르고 드래그 = 모드선 위 구속 (왼쪽 로봇 미러가 엇갈림 자세)",
+   "actions": [
+    {
+     "do": "check",
+     "id": "cPick",
+     "on": true
+    },
+    {
+     "do": "fs",
+     "plane": "pl1"
+    }
+   ]
+  },
+  {
+   "title": "④ 낙차 카드 (포스터로)",
+   "note": "2-e: 화면 조작 없음 — 전체화면 해제하고 시선을 포스터 중앙으로. 3초 침묵",
+   "actions": [
+    {
+     "do": "fs",
+     "plane": null
+    }
+   ]
+  },
+  {
+   "title": "⑤ 시뮬레이터 그 자체",
+   "note": "3-a: 표준 화면 복귀 — '마찰·지연·눈금까지 넣은 시뮬레이터를 직접 만들었습니다'",
+   "actions": [
+    {
+     "do": "presmode",
+     "on": false
+    }
+   ]
+  },
+  {
+   "title": "⑥ 증분접기 — 실측 러닝",
+   "note": "3-b~d: 예측점 평면에서 접기 반복. 마지막 멘트에 손가락 = 화면 직선 → 전시대 로봇",
+   "actions": [
+    {
+     "do": "presmode",
+     "on": true
+    },
+    {
+     "do": "click",
+     "id": "bPresetAsyncM"
+    }
+   ]
+  }
+ ]
+}
