@@ -1,4 +1,4 @@
 @echo off
 cd /d "%~dp0"
-python server.py --port 8230
-pause
+python launch.py %*
+if errorlevel 1 pause

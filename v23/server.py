@@ -237,6 +237,7 @@ async def local_requests(request,handler):
 
 def app():
     a=web.Application(client_max_size=128*1024*1024,middlewares=[local_requests])
+    a.router.add_get('/health',lambda r:web.json_response(dict(app='eoreumi-v23',workspace=str(HERE))))
     a.router.add_get('/',lambda r:web.FileResponse(STATIC/'index.html'))
     a.router.add_get('/ws23',ws_handler)
     a.router.add_route('*','/api/{action}',api)
@@ -252,8 +253,12 @@ def app():
     a.cleanup_ctx.append(lifecycle)
     return a
 
-if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=8230);args=ap.parse_args()
+def run(port=8230,sock=None):
     path=HERE/'reports/baseline.json'
     if path.exists():HUB.session=json.loads(path.read_text(encoding='utf-8'))
-    web.run_app(app(),host='127.0.0.1',port=args.port)
+    if sock is None:web.run_app(app(),host='127.0.0.1',port=port)
+    else:web.run_app(app(),sock=sock)
+
+if __name__=='__main__':
+    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=8230);args=ap.parse_args()
+    run(port=args.port)

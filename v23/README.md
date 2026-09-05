@@ -11,11 +11,13 @@ v21 실측 비동기 FWE를 기준으로 새 OpenCR 펌웨어와 같은 입력�
 ```powershell
 python -m pip install -r v23/requirements.txt
 python v23/validation.py --suite
-python v23/server.py --port 8230
+python v23/launch.py
 ```
 
 브라우저: http://127.0.0.1:8230
-`run_v23.bat`로도 실행할 수 있다. 포트가 사용 중이면 `--port 8231`처럼 바꾼다.
+`run_v23.bat`로도 실행할 수 있다. 이미 같은 작업 폴더의 v23이 실행 중이면 기존 화면을 연다.
+다른 프로그램이 8230을 쓰면 8231~8249에서 빈 포트를 골라 실행하고 그 주소를 연다.
+다른 프로그램이나 기존 서버를 강제로 종료하지 않는다. `--port 8250`처럼 시작 포트를 바꿀 수도 있다.
 첫 검증 실행은 C++ 공유 라이브러리를 빌드하므로 시간이 걸린다. 도구·빌드·개인 로그는 Git에서 제외한다.
 
 ## 구조와 검증 경계
@@ -78,6 +80,7 @@ USB 출력은 OpenCR 1.5.3의 `CDC_Itf_Write` 단발 호출을 사용한다. 일
 
 ```powershell
 python v23/tests.py
+python v23/test_launch.py
 python v23/validation.py --suite
 python v23/validation.py --startup
 python v23/e2e.py
