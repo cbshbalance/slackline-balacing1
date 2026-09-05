@@ -1,0 +1,6 @@
+numpy
+scipy
+mujoco
+aiohttp
+pyserial
+ziglang==0.13.0

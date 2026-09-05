@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>v23 | 어름이 검증실</title><link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header><strong>어름이 <span>v23 검증실</span></strong><span id="status">연결 중</span><span id="sessionName"></span></header>
+<nav>
+ <select id="files" aria-label="기록 선택"></select><button id="load">기록 열기</button>
+ <button id="upload"><i data-lucide="folder-open"></i><span>파일 열기</span></button><input id="file" type="file" accept=".json,.csv,.txt" hidden>
+ <button id="download" title="설정·이벤트·샘플 저장"><i data-lucide="download"></i></button>
+ <span class="spacer"></span><select id="ports" aria-label="USB 포트"></select>
+ <button id="refresh" title="포트 새로고침"><i data-lucide="refresh-cw"></i></button><button id="connect">USB 연결</button><button id="disconnect">끊기</button>
+</nav>
+<main>
+ <section class="twin"><div class="section-head"><h1>측정 자세</h1><span id="frameState"></span><button id="side" title="측면"><i data-lucide="square"></i></button><button id="iso" title="입체"><i data-lucide="box"></i></button></div><canvas id="c3d"></canvas></section>
+ <section class="planes"><div class="section-head"><h2>상태공간</h2><span class="legend">● 현재 &nbsp; ─ 기준선</span></div>
+   <figure><figcaption>원위치 <span>β / φ [°]</span></figcaption><canvas id="position"></canvas></figure>
+   <figure><figcaption>예측점 <span>β̂ / φ̂ [°]</span></figcaption><canvas id="prediction"></canvas></figure>
+ </section>
+ <aside><div class="section-head"><h2>샘플 검사</h2><span id="sampleNo"></span></div><table id="values"></table>
+ <div class="section-head"><h2>이벤트</h2><button id="firstMismatch" title="첫 불일치로 이동"><i data-lucide="git-compare-arrows"></i></button></div><div id="events"></div></aside>
+ <section class="timeline"><div class="transport">
+ <button id="prev" title="이전 샘플"><i data-lucide="skip-back"></i></button><button id="play" title="재생·정지"><i data-lucide="play"></i></button><button id="next" title="다음 샘플"><i data-lucide="skip-forward"></i></button>
+ <select id="speed" aria-label="재생 속도"><option value=".1">0.1×</option><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+ <input id="scrub" type="range" min="0" max="0" value="0" aria-label="샘플 위치"><output id="time">0.000 s</output><label><input type="checkbox" id="follow"> LIVE</label>
+ </div><canvas id="trace"></canvas><div class="trace-legend"><span>● Â</span><span>● 유지각</span><span>● 실제 힙각</span><span id="result"></span></div></section>
+</main>
+<section class="controls">
+ <div><h2>v21 ↔ 펌웨어 검증</h2><div class="fields">
+ <label>시간 [s]<input id="seconds" type="number" value="12" min="1" max="60"></label>
+ <label>β₀ [°]<input id="beta" type="number" value="0.5" min="-5" max="5" step=".1"></label>
+ <label>φ₀ [°]<input id="phi" type="number" value="0" min="-8" max="8" step=".1"></label>
+ <label>접기 이득<input id="gain" type="number" value="9.5" min=".5" max="30" step=".1"></label>
+ <label>발목 잡음 [°]<input id="noise" type="number" value="0" min="0" max=".3" step=".01"></label>
+ <label>놓기 시점 [ms]<input id="release_ms" type="number" value="0" min="-300" max="500" step="10"></label>
+ <label>제어 시작 [ms]<input id="arm_ms" type="number" value="0" min="-300" max="500" step="10"></label>
+ </div><button id="simulate" class="primary"><i data-lucide="flask-conical"></i>검증 실행</button></div>
+ <div><h2>실물 시작</h2><div class="hardware"><button data-cmd="hdr">상태 받기</button><button data-cmd="zero_hang">매달림 영점</button><button data-cmd="zero">현재 자세 영점</button><button data-cmd="prepare">준비</button><button data-cmd="go">시작 신호</button><button data-cmd="stop">정지·유지</button><button data-cmd="x" class="danger">토크 OFF</button></div>
+ <div class="command"><input id="command" placeholder="명령" aria-label="펌웨어 명령"><button id="send" title="명령 전송"><i data-lucide="send"></i></button></div>
+ <details><summary>설정·기록 정보</summary><pre id="metadata"></pre></details></div>
+ <div><h2>측정 검토</h2><div class="fields"><label>시작 [s]<input id="t0" type="number" value="0" step=".01"></label><label>끝 [s]<input id="t1" type="number" value="12" step=".01"></label></div>
+ <select id="analysisTool" aria-label="분석 도구"><option value="stats">구간 통계</option><option value="p2r">P2R 적합</option><option value="lambda">발산율 λ</option><option value="osc">진동 적합</option></select><button id="analyze">분석</button><pre id="analysisResult"></pre></div>
+</section><footer id="notice" role="status"></footer>
+<script src="/three.min.js"></script><script src="/static/lucide.js"></script><script src="/static/app.js"></script><script src="/twin.js"></script>
+</body></html>

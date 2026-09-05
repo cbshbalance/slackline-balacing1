@@ -1,0 +1,7 @@
+.tools/
+build/
+logs/
+reports/*.csv
+reports/*.json
+reports/*.png
+__pycache__/
