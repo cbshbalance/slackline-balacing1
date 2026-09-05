@@ -224,8 +224,7 @@ async def api(request):
             return web.json_response(clean(result))
         raise ValueError('Unknown operation')
     except Exception as ex:
-        HUB.message=f'{type(ex).__name__}: {ex}'
-        return web.json_response(dict(error=HUB.message),status=400)
+        return web.json_response(dict(error=f'{type(ex).__name__}: {ex}'),status=400)
 
 @web.middleware
 async def local_requests(request,handler):

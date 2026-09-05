@@ -35,6 +35,7 @@ with sync_playwright() as p:
     page.locator('#seconds').fill('2');page.locator('#simulate').click()
     page.wait_for_function("document.getElementById('sampleNo').textContent.endsWith(' / 400')",timeout=60000)
     page.wait_for_function("!document.getElementById('simulate').disabled",timeout=10000)
+    assert page.locator('#analysisResult').inner_text()=='','Stale analysis from previous session'
     assert '동일입력 일치' in page.locator('#result').inner_text()
     for w,h in [(390,844),(1920,1080)]:
         page.set_viewport_size(dict(width=w,height=h));page.wait_for_timeout(200)
