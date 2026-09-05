@@ -1,3 +1,4 @@
+#include "Arduino.h"
 /*
  * v22_raw.ino — v22 로거·측정 앱 전용 펌웨어 (원시값 스트리밍 + 접기 실험) — 2026-09-05 v3
  *   v3: fphi/fank(+180 직립 변환, 매달림 영점 뒤 세울 때) · g 가 토크를 반드시 켠다(꺼져 있으면 접기 명령이 허공에 갔다, hangcal torqueRestoreHere 계승)

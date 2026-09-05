@@ -68,9 +68,12 @@
   });
   canvas.addEventListener("wheel", e => { e.preventDefault(); dist = Math.min(20, Math.max(0.5, dist * (e.deltaY > 0 ? 1.025 : 0.976))); camUpdate(); }, { passive: false });
   LG.cam = {
-    side() { az = 0; elv = 0.02; dist = 2.2; target.set(0, 0, 0.85); camUpdate(); },
-    iso() { az = 0.9; elv = 0.35; dist = 2.4; target.set(0, 0, 0.85); camUpdate(); },
+    side(mirror) { az = mirror ? Math.PI : 0; elv = 0.02; dist = 2.2; target.set(0, 0, 0.85); camUpdate(); },
+    iso(mirror) { az = mirror ? Math.PI - 0.9 : 0.9; elv = 0.35; dist = 2.4; target.set(0, 0, 0.85); camUpdate(); },
+    set(o) { if (o.az != null) az = o.az; if (o.elv != null) elv = o.elv; if (o.dist != null) dist = o.dist; if (o.tz != null) target.set(0, 0, o.tz); if (o.fov != null) { camera.fov = o.fov; camera.updateProjectionMatrix(); } camUpdate(); },
+    get() { return { az, elv, dist, tz: target.z, fov: camera.fov }; },
   };
+  LG.scene3d = scene;   // 무대 페이지가 배경색·조명을 바꿀 수 있게
   const RAD = Math.PI / 180;
   LG.render3d = function () {
     const w = canvas.clientWidth * devicePixelRatio, h = canvas.clientHeight * devicePixelRatio;

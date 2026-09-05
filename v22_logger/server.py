@@ -98,6 +98,8 @@ class LoggerHub:
         self.rate_win = collections.deque()                # 호스트 시각 (D행) — Hz 계산
         self.last_link = 0.0
         self.err = None
+        self.scene = dict(name="twin", args={}, seq=0, t=0.0)   # 무대(/show) 장면 상태 — 조종석(/deck)이 바꾸고 모든 창에 방송
+        self.scene_dirty = False
         self._nohdr_warned = False
         self.commands = self._load_commands()
         self.profile = self.commands.get("default")
@@ -116,6 +118,12 @@ class LoggerHub:
         item = [round(time.time(), 3), text, kind]
         self.console.append(item)
         self.console_new.append(item)
+
+    # ---------- 무대 장면 ----------
+    def set_scene(self, name, args=None):
+        self.scene = dict(name=str(name or "twin"), args=dict(args or {}), seq=int(self.scene.get("seq", 0)) + 1, t=round(time.time(), 3))
+        self.scene_dirty = True
+        self.say(f"무대: {self.scene['name']}" + (f" {json.dumps(self.scene['args'], ensure_ascii=False)}" if self.scene["args"] else ""), "app")
 
     # ---------- 소스 ----------
     def connect(self, port=None, baud=115200, name=None):
@@ -370,7 +378,7 @@ class LoggerHub:
                     counts=dict(self.sink.counts), profile=self.profile)
 
     def hello_msg(self):
-        return dict(type="hello", plane=self.plane, geom=self.geom, sim_note=self.sim_note,
+        return dict(type="hello", plane=self.plane, geom=self.geom, sim_note=self.sim_note, scene=self.scene,
                     pipe=self.ds.pipe, pipe_doc=PIPE_DOC, commands=self.commands, profile=self.profile,
                     derived=DERIVED, console=list(self.console)[-300:], logs_dir=LOGS)
 
@@ -429,6 +437,9 @@ class LoggerHub:
                     if self.aux_dirty:
                         await self.broadcast(dict(type="aux", **self.ds.aux()))
                         self.aux_dirty = False
+                    if self.scene_dirty:
+                        self.scene_dirty = False
+                        await self.broadcast(dict(type="scene", **self.scene))
                     if self.link_dirty or time.time() - self.last_link > 0.5:
                         self.last_link = time.time(); self.link_dirty = False
                         await self.broadcast(self.link_msg())
@@ -454,6 +465,8 @@ class LoggerHub:
             self.connect(m.get("port") or None, int(m.get("baud", 115200)), m.get("name") or None)
         elif cmd == "fake":
             self.connect_fake(m.get("file") or None, float(m.get("speed", 1.0)), m.get("name") or None)
+        elif cmd == "scene":
+            self.set_scene(m.get("name"), m.get("args"))
         elif cmd == "mujoco":
             self.connect_mujoco(m.get("name") or None, int(m.get("seed", 0)))
         elif cmd == "robot":
@@ -540,10 +553,19 @@ async def pres_index(request):
     return web.FileResponse(os.path.join(HERE, "static", "index.html"))
 
 
+def _static_page(name):
+    async def h(request):
+        return web.FileResponse(os.path.join(HERE, "static", name))
+    return h
+
+
 def build_app():
     app = web.Application()
     app.router.add_get("/", logger_index)
     app.router.add_get("/pres", pres_index)
+    app.router.add_get("/lab", _static_page("lab.html"))      # 측정실 (엑셀식 표·차트·추세선)
+    app.router.add_get("/show", _static_page("show.html"))    # 무대 (세로 모니터)
+    app.router.add_get("/deck", _static_page("deck.html"))    # 조종석
     app.router.add_get("/ws2", ws2_handler)
     if simsrv is not None:
         app.router.add_get("/ws", simsrv.ws_handler)
@@ -553,6 +575,10 @@ def build_app():
     os.makedirs(media, exist_ok=True)
     os.makedirs(LOGS, exist_ok=True)
     app.router.add_static("/media/", media)
+    pmedia = os.path.join(HERE, "..", "presentation", "media")               # 실사 영상 (jultagi_6s_stab.webm)
+    if os.path.isdir(pmedia):
+        app.router.add_static("/pmedia/", pmedia)
+    app.router.add_static("/repo/", os.path.abspath(os.path.join(HERE, "..")))   # 옛 버전 시뮬(v1~v18 index.html)을 갤러리로 — 로컬 발표용
     app.router.add_static("/logs/", LOGS, show_index=True)
     app.router.add_static("/static/", os.path.join(HERE, "static"))
 

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v22 측정실 — 로거 전체 기능 + 엑셀식 표·차트</title>
+<style>
+:root{--bg:#0d1017;--panel:#151a24;--border:rgba(255,255,255,.09);--fg:#dde2ea;--dim:rgba(255,255,255,.45);
+--blue:#3a86ff;--cyan:#4cc9f0;--pink:#ff006e;--green:#06d6a0;--purple:#8338ec;--yellow:#ffbe0b;--red:#ef4444;--gold:#ffd166;--orange:#ff9f43;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:'Segoe UI','Malgun Gothic',sans-serif;font-size:12.5px;display:flex;flex-direction:column;overflow:hidden}
+.hdr{display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid var(--border);background:#0f131b;flex:none;flex-wrap:wrap}
+.hdr h1{font-size:14px;margin-right:6px}
+.chip{font-family:Consolas,monospace;font-size:11px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);background:#151a24;color:var(--dim);white-space:nowrap}
+.chip.on{color:#06d6a0;border-color:rgba(6,214,160,.5)}.chip.rec{color:#ff6b6b;border-color:rgba(239,68,68,.5)}.chip.warn{color:var(--yellow);border-color:rgba(255,190,11,.5)}
+.hdr .sp{flex:1}
+.btn{background:#232a38;color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:4px 9px;cursor:pointer;font-size:12px;white-space:nowrap}
+.btn:hover{background:#2d3648}.btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.accent{border-color:rgba(6,214,160,.6);color:#9ff5dc}.btn.danger{border-color:rgba(239,68,68,.6);color:#ff9b9b}
+.btn.sm{padding:2px 6px;font-size:11px}.btn:disabled{opacity:.4;cursor:default}
+select,input[type=text],input[type=number]{background:#0d1117;color:var(--fg);border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:11.5px}
+input[type=number]{width:70px}
+label.chk{display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:11.5px;margin-right:6px}
+/* ---- 위 띠: 트윈 | 평면 | 엑셀 차트 | 오른쪽 스택 ---- */
+.main{flex:1;display:grid;grid-template-columns:minmax(0,.9fr) 250px minmax(0,1.7fr) 320px;grid-template-rows:minmax(0,1fr);min-height:0}
+.sim{position:relative;border-right:1px solid var(--border);min-width:0}
+#c3d{width:100%;height:100%;display:block}
+#ov3d{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font-family:Consolas,monospace;font-size:12px;line-height:1.6;pointer-events:none;white-space:pre}
+.simbtns{position:absolute;bottom:8px;right:8px;display:flex;gap:4px}
+.simhint{position:absolute;bottom:8px;left:8px;font-size:10.5px;color:rgba(255,255,255,.35);pointer-events:none}
+.planes{display:flex;flex-direction:column;gap:6px;padding:6px;border-right:1px solid var(--border);background:#0f131b;min-height:0}
+.plbox{flex:1;display:flex;flex-direction:column;min-height:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#10141d}
+.plbox .ttl{font-size:11px;padding:4px 8px;color:var(--cyan);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline}
+.plbox .ttl small{color:var(--dim);font-size:10px}
+.plbox canvas{flex:1;width:100%;min-height:0;display:block}
+.plopts{font-size:11px;color:var(--dim);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+/* 엑셀 차트 */
+.xl{display:flex;flex-direction:column;min-width:0;min-height:0;gap:6px;padding:6px;background:#f4f6fa;border-right:1px solid var(--border);color:#1c2330}
+.card{background:#fff;border:1px solid #d9dee7;border-radius:8px;display:flex;flex-direction:column;min-height:0}
+.card.tc{flex:1.2}.card.xy{flex:1}
+.card .bar{display:flex;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid #d9dee7;flex-wrap:wrap;font-size:12px;color:#1c2330}
+.card .bar b{font-size:12.5px;margin-right:4px}
+.card .bar select,.card .bar input{background:#fff;color:#1c2330;border:1px solid #d9dee7}
+.card .bar .btn{background:#fff;color:#1c2330;border:1px solid #d9dee7}.card .bar .btn.acc{background:#1f6fe5;border-color:#1f6fe5;color:#fff}.card .bar .btn:hover{background:#eef2f8}
+.card canvas{flex:1;min-height:0;width:100%;height:100%;display:block;cursor:crosshair}
+.card label.ck{display:inline-flex;align-items:center;gap:3px;margin-right:4px;cursor:pointer;white-space:nowrap;color:#1c2330}
+.card label.ck .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
+.fits{max-height:96px;overflow:auto;border-top:1px solid #d9dee7;padding:3px 8px;font-size:11.5px;font-family:Consolas,"D2Coding",monospace;color:#1c2330;min-height:22px}
+.fits .fit{display:flex;gap:8px;align-items:center;padding:1px 0}.fits .fit .eq{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fits .fit .sw{width:12px;height:3px;border-radius:2px}
+.fits .btn{background:#fff;color:#1c2330;border:1px solid #d9dee7}
+.xl .hint{color:#6b7484}
+/* 오른쪽 스택 (탭 없이 전부 보인다) */
+.right{display:flex;flex-direction:column;min-height:0;background:var(--panel)}
+.tabs{display:none}
+.stack{flex:1;overflow-y:auto;min-height:0;padding:6px}
+.pane{display:block;padding:0 0 4px}
+.sec{border:1px solid var(--border);border-radius:8px;padding:7px;margin-bottom:8px}
+.sec h3{font-size:11.5px;color:var(--cyan);margin-bottom:6px;letter-spacing:.3px;display:flex;justify-content:space-between;align-items:baseline}
+.sec h3 small{color:var(--dim);font-weight:normal;font-size:10px}
+.row{display:flex;gap:4px;margin-bottom:5px;flex-wrap:wrap;align-items:center}
+.hint{font-size:10.5px;color:var(--dim);line-height:1.45;margin:3px 0}
+table.kv{width:100%;border-collapse:collapse;font-family:Consolas,monospace;font-size:11.5px}
+table.kv td{padding:1px 4px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap}
+table.kv td.k{color:var(--dim);width:38%}table.kv td.v{text-align:right;color:#fff}table.kv td.d{text-align:right;color:var(--orange);font-size:10.5px}
+table.kv tr.hl td.v{color:var(--gold)}
+.cmdgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.cmdgrid .btn{padding:5px 3px;font-size:11.5px;text-align:center}
+.console{flex:none;height:150px;border-top:1px solid var(--border);display:flex;flex-direction:column;background:#0b0e14}
+.console .lines{flex:1;overflow-y:auto;font-family:Consolas,monospace;font-size:11px;line-height:1.35;padding:4px 6px;white-space:pre-wrap;word-break:break-all}
+.console .lines .rx{color:#cfd8e3}.console .lines .tx{color:#9ff5dc}.console .lines .app{color:var(--gold)}.console .lines .err{color:#ff8080}
+.console .in{display:flex;gap:4px;padding:4px 6px;border-top:1px solid var(--border)}
+.console .in input{flex:1;font-family:Consolas,monospace}
+/* ---- 아래 띠: 원본 표 | 트랜스포트+스트립차트 | 분석 결과 ---- */
+.bottom{flex:none;height:var(--bottomH,34vh);min-height:160px;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr) 460px;border-top:1px solid var(--border)}
+.splitter{flex:none;height:6px;cursor:row-resize;background:#141a26;border-top:1px solid var(--border)}
+.splitter:hover{background:#22304a}
+.tblcol{display:flex;flex-direction:column;min-height:0;min-width:0;background:#fff;color:#1c2330;border-right:1px solid var(--border)}
+.tbar{display:flex;align-items:center;gap:5px;padding:4px 8px;border-bottom:1px solid #d9dee7;flex-wrap:wrap;font-size:11.5px}
+.tbar .btn{background:#fff;color:#1c2330;border:1px solid #d9dee7}
+.tbar label.ck{color:#1c2330;margin-right:3px}
+.tbl{flex:1;min-height:0;overflow:auto;position:relative;font-family:Consolas,"D2Coding",monospace;font-size:11.5px}
+.tbl .hdr2{position:sticky;top:0;z-index:2;display:grid;background:#eef1f6;border-bottom:1px solid #d9dee7}
+.tbl .hdr2 div{padding:2px 6px;text-align:right;color:#3a4657;font-weight:600;border-right:1px solid #d9dee7;white-space:nowrap}
+.tbl .hdr2 div:first-child{text-align:left}
+.tbl .body{position:relative}
+.tbl .row2{position:absolute;left:0;right:0;display:grid;height:19px;line-height:19px;border-bottom:1px solid #e6eaf0}
+.tbl .row2 div{padding:0 6px;text-align:right;border-right:1px solid #e6eaf0;white-space:nowrap;overflow:hidden}
+.tbl .row2 div:first-child{text-align:left;color:#6b7484}
+.tbl .row2.sel{background:rgba(31,111,229,.14)}.tbl .row2.cur{background:#fff3c4;font-weight:600}.tbl .row2.cur.sel{background:#e2ecff}
+.tfoot{font-family:Consolas,monospace;font-size:11px;padding:3px 8px;border-top:1px solid #d9dee7;color:#2c3545;white-space:nowrap;overflow:hidden}
+.chartcol{display:flex;flex-direction:column;min-width:0;min-height:0}
+.transport{display:flex;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid var(--border);flex-wrap:wrap;flex:none}
+.transport input[type=range]{flex:1;min-width:120px}
+.transport .t{font-family:Consolas,monospace;font-size:11.5px;color:var(--gold);white-space:nowrap}
+#chart{flex:1;width:100%;min-height:0;display:block;cursor:crosshair}
+.chanbar{display:flex;gap:2px 8px;flex-wrap:wrap;padding:2px 8px;font-size:10.5px;border-top:1px solid var(--border);flex:none}
+.chanbar label{display:inline-flex;align-items:center;gap:3px;cursor:pointer}.chanbar .sw{width:10px;height:3px;display:inline-block}
+.an{display:flex;flex-direction:column;min-height:0;border-left:1px solid var(--border);background:var(--panel)}
+.an .top{padding:6px 8px;border-bottom:1px solid var(--border);flex:none}
+.an .out{flex:1;overflow-y:auto;padding:6px 8px;font-size:11.5px;min-height:0}
+.an ol{padding-left:18px;line-height:1.45;color:#cfe0ff}
+.an .res{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;font-family:Consolas,monospace;font-size:11.5px;margin:6px 0}
+.an .res .k{color:var(--dim)}.an .res .v{color:#fff;text-align:right}.an .res .big{color:var(--gold);font-size:13px}
+.an table.tb{border-collapse:collapse;font-family:Consolas,monospace;font-size:10.5px;width:100%;margin-top:4px}
+.an table.tb th,.an table.tb td{border:1px solid rgba(255,255,255,.08);padding:1px 4px;text-align:right;white-space:nowrap}
+.an table.tb th{color:var(--cyan);font-weight:normal}.an table.tb tr.bad td{color:var(--dim)}
+#anCurve{width:100%;height:120px;display:block;margin-top:6px;flex:none}
+.hist{font-size:11px;color:var(--dim);border-top:1px solid var(--border);padding:4px 8px;max-height:60px;overflow-y:auto;flex:none}
+.hist span{cursor:pointer;color:#cfe0ff;margin-right:8px}
+.params{display:grid;grid-template-columns:1fr 1fr;gap:3px 8px;font-size:11px;margin:4px 0}
+.params label{display:flex;justify-content:space-between;align-items:center;gap:4px;color:var(--dim)}
+.params input,.params select{width:78px}
+#toast{position:fixed;right:12px;top:44px;z-index:99;display:flex;flex-direction:column;gap:4px}
+.toast{background:rgba(20,26,36,.95);border:1px solid var(--border);border-left:3px solid var(--cyan);padding:6px 10px;border-radius:6px;font-size:12px;max-width:380px;color:#fff}
+.toast.err{border-left-color:var(--red)}
+.pipe .row label{display:flex;flex-direction:column;font-size:10.5px;color:var(--dim);width:calc(50% - 4px)}
+.pipe .row label input,.pipe .row label select{width:100%}
+.formula{font-family:Consolas,monospace;font-size:10.5px;color:#cfe0ff;line-height:1.5;background:#0b0e14;padding:5px;border-radius:5px;white-space:pre-wrap}
+body.hide .right,body.hide .an{display:none}
+body.hide .main{grid-template-columns:minmax(0,.9fr) 250px minmax(0,1.7fr)}
+body.hide .bottom{grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr)}
+kbd{font-family:Consolas,monospace;font-size:10px;border:1px solid var(--border);border-radius:3px;padding:0 3px;color:var(--dim)}
+dialog{border:1px solid #d9dee7;border-radius:10px;padding:14px 16px;font-size:12.5px}
+dialog textarea{width:520px;height:220px;font:11px Consolas,monospace}
+#goCue{position:absolute;right:8px;top:8px;padding:6px 14px;border-radius:10px;font:700 20px/1.2 "Segoe UI","Malgun Gothic",sans-serif;display:none;pointer-events:none;white-space:nowrap}#goCue.on{display:block;background:rgba(6,214,160,.92);color:#04281c}#goCue.wait{display:block;background:rgba(255,190,11,.8);color:#3a2a00;font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="hdr">
+ <h1>🎪 v22 측정실</h1>
+ <span class="chip" id="hWs">서버 연결 중…</span>
+ <span class="chip" id="hConn">연결 없음</span>
+ <span class="chip" id="hRec">기록 없음</span>
+ <span class="chip" id="hBuf">버퍼 0 행</span>
+ <span class="sp"></span>
+ <select id="portSel" style="min-width:150px"><option value="">포트 자동</option></select>
+ <button class="btn sm" id="bPorts" title="포트 목록 새로고침">↻</button>
+ <input id="iBaud" type="number" value="115200" step="1" style="width:80px" title="baud">
+ <button class="btn accent" id="bConnect">연결</button>
+ <button class="btn" id="bDisc">끊기</button>
+ <button class="btn" id="bFakeSynth" title="장치 없이 합성 신호로">가짜: 합성</button>
+ <button class="btn" id="bFakeFile" title="기록 탭에서 고른 파일을 실시간 재생 소스로">가짜: 파일</button>
+ <button class="btn" id="bFakeMj" title="MuJoCo 가상 로봇. 사람 동작은 콘솔에 'sim release β φ'">가짜: MuJoCo</button>
+ <a class="btn" href="/" target="_blank" title="원래 로거 앱 (탭 배치)">로거 앱 ↗</a>
+ <a class="btn" href="/pres" target="_blank">/pres ↗</a>
+ <button class="btn sm" id="bHide" title="H: 오른쪽 패널 숨김">H</button>
+</div>
+
+<div class="main">
+ <div class="sim">
+  <canvas id="c3d"></canvas>
+  <div id="ov3d"></div>
+  <div id="goCue"></div>
+  <div class="simhint">🖱 드래그 회전 · 우클릭 이동 · 휠 줌 — 자세 = 실기 엔코더</div>
+  <div class="simbtns"><button class="btn sm" id="bCamSide">📐 사이드</button><button class="btn sm" id="bCamIso">🎥 3D</button></div>
+ </div>
+ <div class="planes">
+  <div class="plbox"><div class="ttl"><span>원위치 평면 (β, φ)</span><small>금색=앱 · 흰 점선=평활</small></div><canvas id="pl1"></canvas></div>
+  <div class="plbox"><div class="ttl"><span>예측점 평면</span><small>q + P·q̇</small></div><canvas id="pl2"></canvas></div>
+  <div class="plopts">
+   <label class="chk"><input type="checkbox" id="cPlSmooth" checked>평활</label>
+   <label class="chk"><input type="checkbox" id="cPlFw">펌 β</label>
+   <label class="chk">trig<input id="iTrig" type="number" value="0.6" step="0.1" style="width:48px"></label>
+   <label class="chk" title="놓기 목표점 — 십자선, 3D 판독에 목표까지 Δ"><input type="checkbox" id="cTgt">목표 β<input id="iTgtB" type="number" value="0" step="0.1" style="width:48px"> φ<input id="iTgtF" type="number" value="0.7" step="0.1" style="width:48px"></label>
+   <label class="chk" title="놓기 신호음 — 조건이 0.3 s 유지되면 삐 두 번, 그때 놓는다. 조건: 목표 십자선이 켜져 있으면 목표 ±0.2° 도달 + 손 멎음(|φ̇|,|β̇| < v), 아니면 |Â| < A + 손 멎음. g(무장) 뒤 다시 한 번 울린다"><input type="checkbox" id="cBeep" checked>놓기 신호음 A<input id="iBeepA" type="number" value="0.3" step="0.1" style="width:44px"> v<input id="iBeepV" type="number" value="3" step="1" style="width:40px"></label>
+  </div>
+ </div>
+ <div class="xl">
+  <div class="card tc">
+   <div class="bar">
+    <b>시간 차트</b><span id="tcSeries"></span>
+    <span style="flex:1"></span>
+    <span>추세선</span>
+    <select id="tcFit"><option value="lin">선형 y = a·t + b</option><option value="exp">지수 |y−y₀| = A·e^(λt) → λ</option><option value="osc">감쇠 사인 → ω, ζ</option></select>
+    <select id="tcCol"></select>
+    <label id="tcY0Wrap">y₀ <input type="number" id="tcY0" value="0" step="0.1" style="width:52px"></label>
+    <button class="btn sm acc" id="bTcFit" title="차트에서 드래그한 구간(= 분석 구간)에 추세선">추가</button>
+    <button class="btn sm" id="bTcClear">지우기</button>
+    <label>창 <input type="number" id="iXWin" value="10" min="0.5" step="1" style="width:52px"> s</label>
+   </div>
+   <canvas id="tc"></canvas>
+   <div class="fits" id="fits"></div>
+  </div>
+  <div class="card xy">
+   <div class="bar">
+    <b>XY 차트</b> x <select id="xyX"></select> y <select id="xyY"></select>
+    <label class="ck"><input type="checkbox" id="cXyAll">전체 점(흐리게)</label>
+    <span style="flex:1"></span>
+    <span>추세선</span>
+    <select id="xyFit"><option value="lin">선형 y = a·x + b</option><option value="rel">놓기점 → 경계선 r·c₀</option><option value="rec">다음 놓기 추천</option></select>
+    <button class="btn sm acc" id="bXyFit">추가</button><button class="btn sm" id="bXyClear">지우기</button>
+   </div>
+   <canvas id="xy"></canvas>
+   <div class="fits" id="xyFits"></div>
+  </div>
+ </div>
+ <div class="right">
+  <div class="tabs"><button class="on" data-tab="data">데이터</button><button data-tab="cmd">명령</button><button data-tab="rec">기록·파일</button><button data-tab="pipe">파이프라인</button></div>
+  <div class="stack">
+   <div class="pane on" id="pane_cmd">
+    <div class="sec"><h3>① 명령 팔레트 <small><select id="profileSel"></select></small></h3>
+     <div id="cmdGroups"></div>
+     <div class="row" id="deltaRow" style="margin-top:6px"><span class="hint" style="margin:0">δ 이동</span><input id="iDelta" type="number" value="0" step="1"><button class="btn sm" id="bDeltaGo">보내기</button><span class="hint" id="deltaHelp" style="margin:0"></span></div>
+     <div class="row" id="paramRow"><span class="hint" style="margin:0">값</span><select id="paramSel" style="max-width:150px"></select><input id="paramVal" type="text" style="width:60px" placeholder="값"><button class="btn sm" id="bParamSet">설정</button><button class="btn sm" id="bParamGet">읽기</button></div>
+     <div class="hint" id="paramHelp"></div>
+    </div>
+   </div>
+   <div class="an"><div class="top sec"><h3 style="margin-bottom:4px">② 측정 도구 <small>구간 = 차트 드래그 · 결과는 아래 오른쪽</small></h3>
+    <div class="row"><select id="anTool" style="flex:1"></select><button class="btn accent" id="bAnRun">실행 <kbd>Enter</kbd></button></div>
+    <div class="row"><label class="chk"><input type="checkbox" id="cOverlay" checked>차트에 겹치기</label><label class="chk" title="다음 놓기 추천 결과를 평면 목표점에 자동 입력"><input type="checkbox" id="cAutoTgt" checked>추천→목표 십자선</label></div>
+    <div class="row"><span class="hint" style="margin:0">구간</span><input id="anT0" type="number" step="0.01" placeholder="t0" style="width:64px"><input id="anT1" type="number" step="0.01" placeholder="t1" style="width:64px"><button class="btn sm" id="bAnSel" title="차트에서 드래그한 구간">드래그 구간</button><button class="btn sm" id="bAnAll">전체 데이터</button></div>
+    <div class="row"><select id="anTrial" style="max-width:190px"><option value="">시행 고르기…</option></select><label class="chk" id="anWinOptWrap" style="display:none"><input type="checkbox" id="cAnWin">구간 한정</label></div>
+    <div class="params" id="anParams"></div>
+    <div class="hint" id="anHelp"></div>
+   </div></div>
+   <div class="pane" id="pane_rec">
+    <div class="sec"><h3>③ 기록 <small>연결하면 자동 4파일</small></h3>
+     <div id="recInfo" class="hint">기록 없음</div>
+     <div class="row"><input id="iRecName" type="text" placeholder="새 파일 이름" style="flex:1"><button class="btn accent sm" id="bRecNew">새 파일</button><button class="btn sm" id="bRecStop">정지</button></div>
+     <div class="row"><label class="chk"><input type="checkbox" id="cAutoRec" checked>연결 시 자동 기록</label></div>
+     <div class="row"><input id="iMark" type="text" placeholder="마크 (예: RELEASE 왼손)" style="flex:1"><button class="btn sm" id="bMark">마크 <kbd>M</kbd></button></div>
+    </div>
+    <div class="sec"><h3>파일 <small>logs/ + 기존 CSV</small></h3>
+     <div class="row"><select id="fileList" style="flex:1"></select><button class="btn sm" id="bFiles">↻</button></div>
+     <div class="row"><button class="btn accent sm" id="bFileLoad">불러오기</button><a class="btn sm" id="dlLink" href="/logs/" target="_blank">logs/</a><button class="btn danger sm" id="bClear">버퍼 비움</button></div>
+     <div class="row"><input type="file" id="fUpload" accept=".csv,.txt" multiple style="font-size:10.5px;max-width:100%"></div>
+    </div>
+   </div>
+   <div class="pane pipe" id="pane_pipe">
+    <div class="sec"><h3>④ 파이프라인 <small>원시 → 파생 (재계산)</small></h3>
+     <div class="formula" id="pipeFormula"></div>
+     <div id="pipeForm"></div>
+     <div class="row"><button class="btn accent sm" id="bPipeApply">적용</button><button class="btn sm" id="bPipeReset">기본값</button></div>
+     <div class="hint" id="simNote"></div>
+    </div>
+   </div>
+   <div class="pane" id="pane_data">
+    <div class="sec"><h3>원본값 <small id="dsInfo"></small></h3><table class="kv"><tbody id="rawTable"><tr><td class="k">—</td><td class="v">데이터 없음</td></tr></tbody></table></div>
+    <div class="sec"><h3>앱 파생값 <small>Δ = 앱 − 펌웨어</small></h3><table class="kv"><tbody id="derTable"></tbody></table><div class="hint" id="dsNotes"></div></div>
+    <div class="sec"><h3>시행표 (R행) <small id="trialInfo"></small></h3><div id="trialTable" class="hint">없음</div></div>
+   </div>
+  </div>
+  <div class="console"><div class="lines" id="console"></div>
+   <div class="in"><input id="iLine" type="text" placeholder="로봇에 보낼 한 줄 (Enter) — g, h, t, c0 -0.4, 20, sim release 1 0"><button class="btn sm" id="bLine">보냄</button></div></div>
+ </div>
+</div>
+
+<div class="splitter" id="splitter" title="드래그로 아래 영역 높이 조절"></div>
+<div class="bottom">
+ <div class="tblcol">
+  <div class="tbar"><b>원본 표</b><span id="colBox"></span><span style="flex:1"></span><button class="btn sm" id="bCopy" title="드래그 구간(없으면 보이는 창)을 탭 구분으로 복사 — 엑셀에 그대로 붙는다">복사 (엑셀)</button><button class="btn sm" id="bCopyAll">전체 복사</button></div>
+  <div class="tbl" id="tbl"><div class="hdr2" id="thdr"></div><div class="body" id="tbody"></div></div>
+  <div class="tfoot"><span id="fCur">—</span> <span id="fSel" style="color:#1f6fe5"></span></div>
+ </div>
+ <div class="chartcol">
+  <div class="transport">
+   <span class="chip" id="tMode">LIVE</span>
+   <button class="btn sm" id="bFollow" title="F">따라가기</button>
+   <button class="btn sm" id="bStepB10" title="←×10">⏮</button><button class="btn sm" id="bStepB" title="←">◀</button>
+   <button class="btn sm" id="bPlay" title="Space">▶</button>
+   <button class="btn sm" id="bStepF" title="→">▶︎|</button><button class="btn sm" id="bStepF10" title="→×10">⏭</button>
+   <select id="selSpeed"><option value="0.1">0.1×</option><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select>
+   <input type="range" id="sIdx" min="0" max="0" value="0">
+   <span class="t" id="tTime">t = —</span>
+   <span class="hint" style="margin:0">창<input id="iWin" type="number" value="10" step="1" style="width:52px">s</span>
+   <span class="t" id="tSel" style="color:#4cc9f0"></span>
+   <button class="btn sm" id="bSelClear" title="Esc">선택 지움</button>
+  </div>
+  <canvas id="chart"></canvas>
+  <div class="chanbar" id="chanBox"></div>
+ </div>
+ <div class="an">
+  <div class="out" id="anOutWrap"><div id="anOut"><div class="hint">② 측정 도구에서 도구를 고르고 실행하면 결과(쓴 구간·점·식·잔차)가 여기 나온다. 위 시간 차트에서 드래그한 구간이 곧 분석 구간.</div></div>
+  <canvas id="anCurve"></canvas></div>
+  <div class="hist" id="anHist">결과 기록 —</div>
+ </div>
+</div>
+<div id="toast"></div>
+<dialog id="dlg"><div id="dlgMsg" style="margin-bottom:8px"></div><textarea id="dlgText"></textarea><div style="margin-top:8px;text-align:right"><button class="btn" onclick="document.getElementById('dlg').close()">닫기</button></div></dialog>
+<script src="/three.min.js"></script>
+<script src="/static/lg_core.js"></script>
+<script src="/static/lg_3d.js"></script>
+<script src="/static/lg_plane.js"></script>
+<script src="/static/lg_chart.js"></script>
+<script src="/static/lg_panels.js"></script>
+<script src="/static/lg_lab.js"></script>
+</body>
+</html>
