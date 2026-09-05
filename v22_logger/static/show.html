@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>무대 · v22</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--bg:#07090f;--fg:#f2f5fa;--dim:#9fb3c8;--cyan:#4cc9f0;--pink:#ff006e;--gold:#ffd166;--green:#06d6a0}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 "Noto Sans KR","Malgun Gothic",system-ui,sans-serif;overflow:hidden;cursor:none}
+body.cursor{cursor:default}
+.view{position:fixed;inset:0;display:none}
+.view.on{display:block}
+/* 실사 영상 + 오버랩 */
+#vVideo{background:#000;overflow:hidden}
+#vid{position:absolute;object-fit:contain;z-index:0}
+#vidVeil{position:absolute;inset:0;background:#07090f;opacity:0;pointer-events:none;transition:opacity .4s;z-index:1}
+#ovc{position:absolute;pointer-events:none;z-index:2}
+/* 트윈 + 평면 */
+#vTwin{display:none;grid-template-rows:1fr;background:var(--bg)}
+#vTwin.on{display:grid}
+#vTwin.split{grid-template-rows:56% 44%}
+#vTwin.planeonly{grid-template-rows:1fr}
+#twinBox{position:relative;min-height:0}
+#c3d{width:100%;height:100%;display:block}
+#planeBox{position:relative;min-height:0;display:none}
+#vTwin.split #planeBox,#vTwin.planeonly #planeBox{display:block}
+#vTwin.planeonly #twinBox{display:none}
+#planeBox canvas{position:absolute;display:none}
+#planeBox canvas.on{display:block}
+#hud{position:absolute;left:24px;top:64px;font-family:Consolas,"D2Coding",monospace;font-size:22px;line-height:1.5;color:var(--fg);text-shadow:0 2px 6px #000;pointer-events:none}
+#hud .big{font-size:44px;font-weight:700;color:var(--gold)}
+#hud .k{color:var(--dim);font-size:18px}
+#flash{position:absolute;right:26px;top:26px;padding:10px 20px;border-radius:14px;background:rgba(255,0,110,.85);color:#fff;font:700 34px Consolas,monospace;opacity:0;transition:opacity .15s;pointer-events:none}
+#flash.on{opacity:1}
+#planeTitle{position:absolute;left:22px;top:6px;font-size:15px;color:var(--dim);pointer-events:none;white-space:nowrap;overflow:hidden;max-width:calc(100% - 30px)}
+#vTwin.planeonly #planeTitle{top:62px}
+/* 프레임 · 카드 */
+#fr{position:absolute;inset:0;width:100%;height:100%;border:0;background:#0d1017}
+#vCard{display:none;align-items:center;justify-content:center;text-align:center;padding:60px}
+#vCard.on{display:flex}
+#cardBox{max-width:92%}
+#cardBox h1{font-size:56px;margin:0 0 18px;color:var(--cyan);line-height:1.25}
+#cardBox .f{font:600 60px "Cambria Math","Times New Roman",serif;color:#fff;margin:24px 0}
+#cardBox p{font-size:26px;color:var(--dim);margin:8px 0}
+/* 자막 · 배지 */
+#cap{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);width:92%;padding:12px 22px;border-radius:16px;background:rgba(10,14,24,.92);border:2px solid var(--cyan);font-size:26px;font-weight:600;line-height:1.35;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:20}
+#cap.on{opacity:1}
+#cap .sub{display:block;font-size:18px;font-weight:400;color:var(--dim);margin-top:6px}
+#badge{position:fixed;left:22px;top:18px;padding:5px 12px;border-radius:9px;background:rgba(10,14,24,.85);border:1px solid var(--gold);color:var(--gold);font-size:18px;font-weight:700;opacity:0;transition:opacity .3s;z-index:20;pointer-events:none}
+#badge.on{opacity:1}
+#stat{position:fixed;right:14px;bottom:8px;font:12px Consolas,monospace;color:#3b475a;z-index:20}
+#toast{position:fixed;left:14px;bottom:8px;display:flex;flex-direction:column;gap:6px;z-index:30}
+.toast{background:#1c2330;color:#fff;padding:6px 10px;border-radius:8px;font-size:13px}.toast.err{background:#a11a3a}
+</style>
+</head>
+<body>
+<div class="view on" id="vBlack"></div>
+<div class="view" id="vVideo">
+ <video id="vid" muted playsinline preload="auto"><source src="/pmedia/jultagi_6s_stab.webm" type="video/webm"></video>
+ <canvas id="ovc"></canvas>
+ <div id="vidVeil"></div>
+</div>
+<div class="view" id="vTwin">
+ <div id="twinBox"><canvas id="c3d"></canvas><div id="hud"></div><div id="flash"></div></div>
+ <div id="planeBox"><canvas id="pl1"></canvas><canvas id="pl2"></canvas><div id="planeTitle"></div></div>
+</div>
+<div class="view" id="vFrame"><iframe id="fr" src="about:blank"></iframe></div>
+<div class="view" id="vCard"><div id="cardBox"></div></div>
+<div id="badge"></div>
+<div id="cap"></div>
+<div id="stat"></div>
+<div id="toast"></div>
+<script src="/three.min.js"></script>
+<script src="/static/lg_core.js"></script>
+<script src="/static/lg_3d.js"></script>
+<script src="/static/lg_plane.js"></script>
+<script src="/static/lg_show.js"></script>
+</body>
+</html>

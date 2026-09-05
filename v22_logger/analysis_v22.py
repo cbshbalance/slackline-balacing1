@@ -930,7 +930,9 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
         bset = [float(v) for v in str(beta_set).replace(";", ",").split(",") if v.strip() != ""]
     except ValueError:
         bset = [2.0, -2.0, 1.0, -1.0, 0.0]
-    pts = []
+    pts = []; skipped = []
+    peq = kw.get("phi_eq"); peq = float(peq) if peq not in (None, "") else float(ds.pipe.get("phi_eq", 0.0) or 0.0)
+    bmax = max([abs(b) for b in bset] + [2.0]) + 1.0
     for r in tr:
         if r.get("beta0") is None or r.get("phi0") is None:
             continue
@@ -941,10 +943,14 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
             # 진동(B')이 작으면 t_r 이 덜 잡혀 A' 이 불확실 → 가중 낮춤 (β≈0 놓기)
             bw = abs(float(r["B_osc"])) if r.get("B_osc") is not None else 1.0
             pts.append(dict(k=r["k"], beta=r["beta0"], phi=r["phi0"], dir=r["dir"], s=sv, w=float(min(1.0, max(0.25, bw / 0.5))), kind="발산"))
-        elif r.get("dir_valid") is False and (r.get("peak") or 0) < 4.0:
+        elif r.get("dir_valid") is False and (r.get("peak") or 0) < 4.0 \
+                and abs(float(r["phi0"]) - peq) <= phi_max and abs(float(r["beta0"])) <= bmax:
+            # 놓았는데 안 넘어짐 = 선 위 (s 0). 단 소각 놓기일 때만 — 잡은 채 쉬는 자세(β 17°, φ −8° 같은)는 놓기가 아니다
             pts.append(dict(k=r["k"], beta=r["beta0"], phi=r["phi0"], dir=0, s=0.0, w=0.5, kind="선 위(무발산)"))
+        elif r.get("dir_valid") is False and (r.get("peak") or 0) < 4.0:
+            skipped.append(f"시행 {r['k']} (β {float(r['beta0']):+.1f}, φ {float(r['phi0']):+.1f}): 무발산이지만 소각 놓기 범위(|φ−φ_eq| ≤ {phi_max:g}, |β| ≤ {bmax:g}) 밖 — 잡은 자세로 보고 제외")
     n = len(pts)
-    steps = ["각 시행의 s = 불안정모드 초기진폭 A' (부호 있음, 선에서 멀수록 큼). 놓기 순간 t_r 은 안정모드 진동의 위상으로 맞춘다. 발산 없음 = s 0",
+    steps = ["각 시행의 s = 불안정모드 초기진폭 A' (부호 있음, 선에서 멀수록 큼). 놓기 순간 t_r 은 안정모드 진동의 위상으로 맞춘다. 발산 없음 = s 0 (소각 놓기일 때만)",
              f"안정모드 진동수 ω̂ = {om_used:.2f} rad/s — 방향유효 시행 전체의 정규화 RSS 합 최소 (파이프 om {float(ds.pipe.get('om', 5.3)):.2f}" + (", 공통 적합)" if om_fit else " 그대로)"),
              "부호 규약: 선 위(Â>0)에서 놓으면 φ 는 −로 넘어진다 → s 는 φ 가 커질수록 줄어든다 (k<0)"]
     # --- 전역 기울기 k̂ (s 가 선까지 거리에 비례하는 계수): 같은 열 안의 쌍에서 |Δs/Δφ|
@@ -963,6 +969,7 @@ def recommend(ds, trials=None, off=0.5, beta_set="2,-2,1,-1,0", r_guess=None, la
                 if np.isfinite(lr["b"]) and lr["b"] < -0.05:
                     ks.append(lr["b"])
     k_hat = float(np.median(ks)) if ks else -0.6           # 기본 −0.6: s ≈ −0.6·(선 위로 벗어난 φ) — 첫 걸음만 쓴다
+    steps.extend(skipped)
     steps.append(f"거리 계수 k̂ = {k_hat:.3f} (열 안의 두 점에서 Δs/Δφ, {len(ks)}개 열" + (")" if ks else " — 아직 없어 기본값)"))
     # --- 열마다 영점 φ_c
     roots = {}

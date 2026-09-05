@@ -5,6 +5,7 @@
 (function () {
   const TRAIL = LG.store.get("trail", 2.5);
   LG.PLVIEW = { pl1: { on: false, m: 3, b: 0, f: 0 }, pl2: { on: false, m: 3, b: 0, f: 0 } };
+  LG.PLOPT = LG.PLOPT || { epsGeom: false, big: false };   // epsGeom: 현재점에서 무게중심 불변 직선을 그어 안정모드선과 만나는 점(= 접으면 가는 곳)을 그린다
   LG.PLSCALE = {};
   LG.planeOverlay = [];           // 분석 결과의 plane 항목
   const ctxs = { pl1: LG.el("pl1").getContext("2d"), pl2: LG.el("pl2").getContext("2d") };
@@ -103,6 +104,25 @@
         const ph = LG.val("phase", cur) | 0;
         ctx.fillStyle = (ph === 1) ? "#ff006e" : (ph === 5 ? "#ff9f43" : "#ffd166");
         ctx.beginPath(); ctx.moveTo(px, py - 6 * DPR); ctx.lineTo(px + 6 * DPR, py); ctx.lineTo(px, py + 6 * DPR); ctx.lineTo(px - 6 * DPR, py); ctx.closePath(); ctx.fill();
+      }
+    }
+    // 라이브 ε* 기하 (원위치 평면): 현재점을 지나는 무게중심 등고선(기울기 −sCoM)이 안정모드선과 만나는 점 = 접기가 데려가는 곳
+    if (LG.PLOPT.epsGeom && kind === "pl1" && n > 0 && S.x) {
+      const b0 = S.x[cur], f0 = S.y[cur];
+      if (isFinite(b0) && isFinite(f0)) {
+        const rM = (LG.PIPE && isFinite(LG.PIPE.r) && LG.PIPE.r !== 0) ? LG.PIPE.r : PL.r, cM = (LG.PIPE && isFinite(LG.PIPE.c0)) ? LG.PIPE.c0 : 0;
+        const cc = f0 + sC * b0;                       // 등고선: φ = −sC·β + cc
+        const bs = (cc - cM) / (rM + sC), fs = rM * bs + cM;
+        ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 2.2 * DPR; ctx.setLineDash([9 * DPR, 6 * DPR]);
+        ctx.beginPath(); ctx.moveTo(X(bL), Y(-sC * bL + cc)); ctx.lineTo(X(bR), Y(-sC * bR + cc)); ctx.stroke(); ctx.setLineDash([]);
+        ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3 * DPR; ctx.beginPath(); ctx.moveTo(X(b0), Y(f0)); ctx.lineTo(X(bs), Y(fs)); ctx.stroke();
+        ctx.fillStyle = "#06d6a0"; ctx.beginPath(); ctx.arc(X(bs), Y(fs), 7 * DPR, 0, 7); ctx.fill();
+        ctx.strokeStyle = "#0d1017"; ctx.lineWidth = 1.5 * DPR; ctx.stroke();
+        const dd = PL.kFold ? -(bs - b0) / PL.kFold : NaN;
+        ctx.fillStyle = "#ffffff"; ctx.font = `bold ${13 * DPR}px "Malgun Gothic", "Noto Sans KR", sans-serif`;
+        ctx.fillText(`접으면 여기 (Δδ ≈ ${isFinite(dd) ? dd.toFixed(1) : "—"}°)`, X(bs) + 10 * DPR, Y(fs) - 10 * DPR);
+        ctx.font = `${11 * DPR}px "Malgun Gothic", "Noto Sans KR", sans-serif`; ctx.fillStyle = "rgba(255,255,255,.8)";
+        ctx.fillText("흰 점선 = 무게중심 불변 직선 (허리를 접으면 상태가 이 선을 따라 간다)", cx - R + 6 * DPR, cy + R - 20 * DPR);
       }
     }
     // 놓기 목표점 십자선 (속도 0 놓기 → 예측점 = 원위치이므로 두 평면 같은 자리)
