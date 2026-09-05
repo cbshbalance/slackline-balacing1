@@ -84,6 +84,14 @@ python server.py --fake "../lambda test/0822_lambda_test.csv" --speed 2
 - 데이터는 바이너리 프레임 `[u32 헤더길이][JSON][float32 열우선]` — `ds_full`(교체) / `ds_append`(증분).
 - `serial_bridge.py`: 포트 자동탐지·D/R/F/E/# 분류(`LineSink`)·4파일 기록기(`Recorder`)·`SerialSource`/`FakeSource`.
 
+## 펌웨어 v22_raw v3 · 놓기 신호음 (2026-09-05, 실기 첫 연결에서)
+
+- 실기 관찰: 트윈은 맞는데 `g` 직후 `E,FALL`(φ −0.59) → 펌웨어 α 가 180° 틀어짐(앱 ank_off 180 은 앱만 바꾼다) → **`fphi`/`fank` 직립 변환** 추가.
+  `z` 에 "모터가 안 읽혔다", δ 0 고정 → DXL 읽기가 0 반환(버스). FOLD 는 찍히는데 로봇이 안 움직임 → v2 는 넘어진 뒤에만 토크를 켜서 **`g` 가 토크를 반드시 켜게** 고침(hangcal `torqueRestoreHere` 계승).
+  hangcal 에서 "g 누르고 1 초 뒤 손 안에서 접힘" = 무장 유예(200 ms) 동안 `(유예) 문턱을 넘었지만…` 을 찍다가 유예 끝에 접은 것 — 손에 든 채 Â 가 이미 문턱 밖이었다.
+- v3 는 **안전장치를 넣지 않았다**(사용자 방침): FALL 에 α 기록(`E,FALLA`), 5 s 마다 `# stat loop_max/dxl_max/dxl_fail/wr_fail` 계측만. 호스트 문법검사 `bash firmware/hostcheck/check.sh firmware/v22_raw/v22_raw.ino`.
+- 앱 **놓기 신호음**(`lg_panels.js` cueTick, 로거·측정실): 목표 도달(십자선 ON) 또는 |Â| < A, 손 멎음(|φ̇|,|β̇| < v)이 0.3 s 유지되면 삐 두 번 + 「● 놓기!」, `E,GO` 뒤 한 번 더. 판단만, 로봇에 안 보낸다. 절차 `docs/v22_실물_브링업_절차_20260902.md` §4-5.
+
 ## 발표 창 셋 — 조종석 `/deck` · 무대 `/show` · 측정실 `/lab` (2026-09-03)
 
 - **`/deck` 조종석** (노트북): 큐 8개(발표 시나리오 9/3 확정)·질의응답 버튼·옛 버전 갤러리(V1~V18, `/repo/` 마운트)·로봇 명령·상태 판독·트윈 미리보기.

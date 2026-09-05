@@ -101,6 +101,7 @@ body.hide .right,body.hide .an{display:none}
 body.hide .main{grid-template-columns:minmax(0,1fr) 380px}
 body.hide .bottom{grid-template-columns:minmax(0,1fr)}
 kbd{font-family:Consolas,monospace;font-size:10px;border:1px solid var(--border);border-radius:3px;padding:0 3px;color:var(--dim)}
+#goCue{position:absolute;right:8px;top:8px;padding:6px 14px;border-radius:10px;font:700 20px/1.2 "Segoe UI","Malgun Gothic",sans-serif;display:none;pointer-events:none;white-space:nowrap}#goCue.on{display:block;background:rgba(6,214,160,.92);color:#04281c}#goCue.wait{display:block;background:rgba(255,190,11,.8);color:#3a2a00;font-size:14px;font-weight:600}
 </style>
 </head>
 <body>
@@ -127,6 +128,7 @@ kbd{font-family:Consolas,monospace;font-size:10px;border:1px solid var(--border)
  <div class="sim">
   <canvas id="c3d"></canvas>
   <div id="ov3d"></div>
+  <div id="goCue"></div>
   <div class="simhint">🖱 드래그 회전 · 우클릭 이동 · 휠 줌 — 자세 = 실기 엔코더 (φ, α=ank−φ, θ=α+δ)</div>
   <div class="simbtns"><button class="btn sm" id="bCamSide">📐 사이드</button><button class="btn sm" id="bCamIso">🎥 3D</button></div>
  </div>
@@ -138,6 +140,7 @@ kbd{font-family:Consolas,monospace;font-size:10px;border:1px solid var(--border)
    <label class="chk"><input type="checkbox" id="cPlFw">펌웨어 β (하늘)</label>
    <label class="chk">트리거 ±<input id="iTrig" type="number" value="0.6" step="0.1" style="width:52px">°</label>
    <label class="chk" title="놓기 목표점 — 평면에 십자선, 3D 판독에 목표까지 Δ"><input type="checkbox" id="cTgt">목표 β<input id="iTgtB" type="number" value="0" step="0.1" style="width:52px"> φ<input id="iTgtF" type="number" value="0.7" step="0.1" style="width:52px">°</label>
+   <label class="chk" title="놓기 신호음 — 조건이 0.3 s 유지되면 삐 두 번, 그때 놓는다. 조건: 목표 십자선이 켜져 있으면 목표 ±0.2° 도달 + 손 멎음(|φ̇|,|β̇| < v), 아니면 |Â| < A + 손 멎음. g(무장) 뒤 다시 한 번 울린다"><input type="checkbox" id="cBeep" checked>놓기 신호음 A<input id="iBeepA" type="number" value="0.3" step="0.1" style="width:44px"> v<input id="iBeepV" type="number" value="3" step="1" style="width:40px"></label>
    <span title="휠 줌 · 우클릭 이동 · 더블클릭 복귀">🖱</span>
   </div>
  </div>

@@ -395,6 +395,35 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
     window.addEventListener("mouseup", () => { if (d0) { LG.store.set("bottomH", parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottomH")) || null); d0 = null; } });
   })();
 
+  // ================= 놓기 신호음 (g → 삐 → 놓기) =================
+  // 손에 든 채 조건이 0.3 s 유지되면 삐 두 번 — 그때 놓는다. 조건: 목표 십자선 ON 이면 목표 ±0.2° + 손 멎음, 아니면 |Â| < A + 손 멎음.
+  // 펌웨어 GO(E행) 가 오면 다시 한 번 울린다 (g 를 누른 뒤의 신호가 진짜 신호). 판단만 하고 로봇에는 아무것도 보내지 않는다.
+  const CUE = { since: 0, beeped: false, ctx: null, evN: -1 };
+  function audio() { try { if (!CUE.ctx) CUE.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (CUE.ctx.state === "suspended") CUE.ctx.resume(); } catch (e) {} return CUE.ctx; }
+  document.addEventListener("pointerdown", () => audio(), true);
+  LG.beep = function (n) {
+    const c = audio(); if (!c) return; let t = c.currentTime + 0.01;
+    for (let k = 0; k < (n || 2); k++) { const o = c.createOscillator(), g = c.createGain(); o.type = "square"; o.frequency.value = k ? 1320 : 880; o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13); o.start(t); o.stop(t + 0.14); t += 0.17; }
+  };
+  function cueTick(i, p) {
+    const box = el("goCue"); if (!box) return;
+    if (!el("cBeep") || !el("cBeep").checked || !LG.link.connected || !LG.follow) { box.className = ""; box.textContent = ""; CUE.since = 0; return; }
+    const ev = LG.aux.events || []; if (ev.length !== CUE.evN) { if (CUE.evN >= 0 && ev.length && ev[ev.length - 1][1] === "GO") CUE.beeped = false; CUE.evN = ev.length; }
+    const A = LG.val("a_Ahat", i), vf = Math.abs(LG.val("a_dphi", i)), vb = Math.abs(LG.val("a_dbeta", i));
+    const aOk = +el("iBeepA").value || 0.3, vOk = +el("iBeepV").value || 3, still = vf < vOk && vb < vOk;
+    let ready, what;
+    if (el("cTgt").checked) { const db = LG.val("a_beta", i) - (+el("iTgtB").value || 0), df = p.phi - (+el("iTgtF").value || 0); ready = Math.abs(db) < 0.2 && Math.abs(df) < 0.2 && still; what = `목표 Δβ ${fmt(db)} Δφ ${fmt(df)}`; }
+    else { ready = isFinite(A) && Math.abs(A) < aOk && still; what = `|Â| ${fmt(Math.abs(A))} < ${aOk}`; }
+    const ph = LG.val("phase", i), armed = isFinite(ph) && (ph | 0) <= 2;
+    const now = performance.now();
+    if (!ready) { CUE.since = 0; CUE.beeped = false; box.className = "wait"; box.textContent = `잡고 멎기 · ${what}${still ? "" : " · 손 흔들림"}`; return; }
+    if (!CUE.since) CUE.since = now;
+    if (now - CUE.since < 300) { box.className = "wait"; box.textContent = "…"; return; }
+    box.className = "on"; box.textContent = armed ? "● 놓기!" : "● 놓기 (비무장 — g 먼저?)";
+    if (!CUE.beeped) { CUE.beeped = true; LG.beep(2); }
+  }
+
   // ================= 프레임 루프 =================
   let lastRead = 0;
   function frame() {
@@ -411,6 +440,7 @@ s_*     = 중심 이동평균(smooth_ms) + 중앙차분 (비인과, 지연 0)`;
         if (el("cTgt").checked) { const tb = +el("iTgtB").value || 0, tf = +el("iTgtF").value || 0, db = LG.val("a_beta", i) - tb, df = p.phi - tf;
           tgt = `\n목표 (β ${tb.toFixed(1)}, φ ${tf.toFixed(1)}) 까지  Δβ ${db >= 0 ? "+" : ""}${fmt(db)}  Δφ ${df >= 0 ? "+" : ""}${fmt(df)}  ${Math.abs(db) < 0.2 && Math.abs(df) < 0.2 ? "● 놓아도 됨" : "○"}`; }
         el("ov3d").textContent = `t = ${fmt(LG.tOf(i), 3)} s   [${isFinite(ph) ? LG.phaseName(ph) : "—"}]\nφ = ${fmt(p.phi)}°   ank = ${fmt(LG.val("u_ank", i))}°\nα = ${fmt(p.alpha)}°   θ = ${fmt(p.theta)}°   δ = ${fmt(LG.val("del", i))}°\nβ = ${fmt(LG.val("a_beta", i))}°   Â = ${fmt(A, 3)}° (펌 ${fmt(Af, 3)})   |Â|/trig = ${fmt(Math.abs(A) / LG.trig, 2)}\nφ̇ = ${fmt(LG.val("a_dphi", i), 1)}  β̇ = ${fmt(LG.val("a_dbeta", i), 1)} °/s` + tgt;
+        cueTick(i, p);
         el("tTime").textContent = `t = ${fmt(LG.tOf(i), 3)} s  [${i + 1}/${LG.ds.n}]`;
         if (LG.follow) el("sIdx").value = LG.ds.n - 1; else el("sIdx").value = i;
         updateTables();

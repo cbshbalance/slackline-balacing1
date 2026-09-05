@@ -33,3 +33,5 @@ v21 발표 시뮬레이터는 `/pres` 로 그대로 살아 있다 (`static/index
 - 열 이름은 펌웨어가 준 그대로다. canonical 접근은 `LG.col('phi')` / `ds.col('phi', i)` (별칭표 `ALIASES`).
 - 라이브 append 와 rebuild 는 같은 결과여야 한다 (tests_v22 결정론 시험).
 - 서버 프로세스 정리는 포트 기준 (`fuser -k 8220/tcp`).
+- 펌웨어 `firmware/v22_raw/v22_raw.ino` 는 여기서 컴파일 못 한다 — 고치면 `bash firmware/hostcheck/check.sh firmware/v22_raw/v22_raw.ino`(g++ 스텁 문법검사)를 돌리고, 실기 컴파일 오류는 사용자가 붙여 준다.
+- **펌웨어에 안전장치를 임의로 넣지 않는다** (9/5 방침): 기본 동작이 실기에서 확인된 뒤 사용자와 하나씩. hangcal 의 무장 유예·폴링 중단은 "명령은 찍히는데 로봇은 안 움직임/1초 뒤 접힘"의 원인이었다.
