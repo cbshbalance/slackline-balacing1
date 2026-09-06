@@ -46,3 +46,7 @@ downloads/
 *.cab
 .api_keys.json
 *.api_keys.json
+
+# Local installers' backups; live source is tracked separately
+v22_logger/static/twin-test-backup-*/
+v22_logger/zero-fix-backup-*/
